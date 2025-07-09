@@ -6,7 +6,7 @@
 "use client";
 
 import * as React from "react";
-import { useReactTable, getCoreRowModel, getPaginationRowModel, ColumnDef } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shadcnTable/data-table";
 import { Fund } from "./columns";
 
@@ -16,23 +16,83 @@ type Props = {
 };
 
 export function FundsDataTable({ data, columns }: Props) {
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  // State for the global filter (used for searching across all rows, e.g., fund name)
+  const [globalFilter, setGlobalFilter] = React.useState("");
 
-  // Create a table instance with the provided data and columns.
+  // State for column-specific filters.
+  // TanStack Table expects columnFilters to be an array of filter objects,
+  // where each object has at least an 'id' (column key) and a 'value' (filter value).
+  // Example: [{ id: "fund_rating", value: [3, 4, 5] }]
+  // It should NOT be an object/dictionary mapping column keys to values.
+  const [columnFilters, setColumnFilters] = React.useState<any[]>([]);
+
   const table = useReactTable({
     data,
     columns,
-    state: { pagination },
-    onPaginationChange: setPagination,
+    state: {
+      globalFilter,
+      columnFilters,
+      pagination: React.useState({ pageIndex: 0, pageSize: 10 })[0],
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    manualPagination: false, // client-side pagination
-    pageCount: Math.ceil(data.length / pagination.pageSize),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
-  // Render the DataTable component with the table instance.
-  return <DataTable table={table} />;
+  return (
+    <div>
+      {/* Search input for fund name */}
+      <input
+        type="text"
+        placeholder="Search fund name..."
+        value={globalFilter ?? ""}
+        onChange={e => setGlobalFilter(e.target.value)}
+        className="mb-4 p-2 border rounded"
+      />
+
+      {/* Multi-select for rating */}
+      <select
+        multiple
+        value={
+          columnFilters.find(f => f.id === "fund_rating")?.value ?? []
+        }
+        onChange={e => {
+          const values = Array.from(e.target.selectedOptions, option => option.value);
+          setColumnFilters((prev) => [
+            ...prev.filter(f => f.id !== "fund_rating"),
+            ...(values.length ? [{ id: "fund_rating", value: values }] : []),
+          ]);
+        }}
+        className="mb-4 p-2 border rounded"
+      >
+        {[...new Set(data.map(f => f.fund_rating))].map(rating => (
+          <option key={rating} value={rating}>{rating}</option>
+        ))}
+      </select>
+
+      {/* Multi-select for open_for_subscription */}
+      <select
+        multiple
+        value={
+          columnFilters.find(f => f.id === "open_for_subscription")?.value ?? []
+        }
+        onChange={e => {
+          const values = Array.from(e.target.selectedOptions, option => option.value);
+          setColumnFilters((prev) => [
+            ...prev.filter(f => f.id !== "open_for_subscription"),
+            ...(values.length ? [{ id: "open_for_subscription", value: values }] : []),
+          ]);
+        }}
+        className="mb-4 p-2 border rounded"
+      >
+        {[...new Set(data.map(f => f.open_for_subscription))].map(val => (
+          <option key={val} value={val}>{val}</option>
+        ))}
+      </select>
+
+      <DataTable table={table} />
+    </div>
+  );
 }
