@@ -1,20 +1,19 @@
 import { SupabaseListResource } from "@/components/supabase/listRead";
-import Link from "next/link";
-
-type Fund = { fund_id: string; fund_name: string };
+import { columns, Fund } from "./columns";
+import { FundsDataTable } from "./FundsDataTable";
 
 export default function FundsPage() {
   return (
-    <SupabaseListResource<Fund> table="rms_funds" columns="fund_id, fund_name" filters={[]}>
-      {(funds) => (
-        <div>
-          {funds.map((fund) => (
-            <div key={fund.fund_id}>
-              <Link href={`/funds/${fund.fund_id}`}>{fund.fund_name}</Link>
-            </div>
-          ))}
-        </div>
-      )}
+    <SupabaseListResource<Fund> table="rms_funds" columns="fund_id, fund_name, fund_rating, one_yr, three_yr, five_yr, open_for_subscription" filters={[]}>
+      {(funds) => {
+        return (
+          <div>
+            <h1 className="text-2xl font-bold m-10">Funds</h1>
+            <FundsDataTable columns={columns} data={funds} />
+          </div>
+          
+        )
+      }}
     </SupabaseListResource>
   );
 }
