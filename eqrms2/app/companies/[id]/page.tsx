@@ -1,6 +1,7 @@
 import { SupabaseSingleResource } from "@/components/supabase/singleRead";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Link from "next/link";
 
 type Company = { id: string; ime_name: string; sector_id: number; industry: string; coverage: string };
 
@@ -13,10 +14,11 @@ export default function CompanyDetailsPage({ params }: { params: { id: string } 
           <div className="p-4 m-4 bg-gray-600 rounded-lg shadow-md text-center">
           <h1 className="text-2xl font-bold">{company.ime_name}</h1>
            </div>
-          <div>
-          <span className="text-gray-300">Sector: {company.sector_name}  | </span>
-          <span className="text-gray-300">Industry: {company.industry}  | </span>
-          <span className="text-gray-300">Coverage: {company.coverage}</span>
+          <div className="text-center text-gray-700 mb-5">
+          <span>{company.sector_name}  | </span>
+          <span>{company.industry}  | </span>
+          <span>{company.coverage} | </span>
+          <span><Link href={`/companies/${company.id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
           </div>
           <div className="text-sm">
             <div className="text-blue-700 mb-5">

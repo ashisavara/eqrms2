@@ -36,3 +36,19 @@ export async function supabaseListRead<T = any>({table,columns = "*",filters = [
   if (error) throw error;
   return data as T[];
 }
+
+// Update a single row in Supabase (server-side)
+export async function supabaseUpdateRow<T>(
+  table: string,
+  matchKey: string,
+  matchValue: string | number,
+  updateData: T
+): Promise<void> {
+  const supabase = await createClient(); // from ./server
+  const { error } = await supabase
+    .from(table)
+    .update(updateData)
+    .eq(matchKey, matchValue);
+
+  if (error) throw error;
+}
