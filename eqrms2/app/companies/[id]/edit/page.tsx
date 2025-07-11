@@ -2,7 +2,7 @@
 
 import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
 import { EditCompanyForm } from "@/components/forms/EditCompanyForm"; // this is the client-side form
-import { CompanyFormValues } from "@/types/forms"; // optional: type of the form values
+import { CompanySnapshotFormValues } from "@/types/forms"; // optional: type of the form values
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 export default async function EditCompanyPage({ params }: Props) {
   // Fetch existing company data using utility
-  const companyData = await supabaseSingleRead<CompanyFormValues>({
+  const companyData = await supabaseSingleRead<CompanySnapshotFormValues>({
     table: "eq_rms_valscreen",
     filters: [{ column: "rel_company_id", operator: "eq", value: params.id }],
     columns: "*",
