@@ -4,8 +4,7 @@ import { useForm, Controller } from "react-hook-form"; // React Hook Form hooks
 import { Button } from "@/components/ui/button"; // Shadcn UI button
 import { companySnapshotFormSchema, CompanySnapshotFormValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod"; // Bridge between react-hook-form and zod
-import { TextArea } from "./FormFields"; // Our reusable field components
-import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+import { ResizableTextArea, TextInput } from "./FormFields"; // Our reusable field components
 
 // 3️⃣ Define the props that this form component expects
 type Props = {
@@ -25,9 +24,7 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
     try {
       const response = await fetch('/api/update-company-view', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ companyId, data }),
       });
 
@@ -36,7 +33,8 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
       }
 
       const result = await response.json();
-      alert(result.message || 'Saved successfully!');
+      // Redirect to the company page if update is successful
+      window.location.href = `/companies/${companyId}`;
     } catch (error) {
       console.error('Error:', error);
       alert('Error saving company');
@@ -45,14 +43,20 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
 
   // 5️⃣ The JSX form layout
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl w-full mx-auto p-4 space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-6xl w-full mx-auto p-4 space-y-4">
       {/* Reusable textarea fields for each form section */}
       <h3 className="text-2xl font-bold text-center">Edit Company View</h3>
-      <TextArea name="inv_view" label="Investment View" control={control} />
-      <TextArea name="positive" label="Positive" control={control} />
-      <TextArea name="negative" label="Negative" control={control} />
-      <TextArea name="outlook" label="Outlook" control={control} />
-      <TextArea name="snapshot" label="Snapshot" control={control} />
+      <div className="grid grid-cols-3 gap-4">
+        <TextInput name="positive_snapshot" label="Positive Snapshot" control={control} />
+        <TextInput name="negative_snapshot" label="Negative Snapshot" control={control} />
+        <TextInput name="watch_for" label="Watch For" control={control} />
+      </div>
+      
+      <ResizableTextArea name="inv_view" label="Investment View" control={control} />
+      <ResizableTextArea name="positive" label="Positive" control={control} />
+      <ResizableTextArea name="negative" label="Negative" control={control} />
+      <ResizableTextArea name="outlook" label="Outlook" control={control} />
+      <ResizableTextArea name="snapshot" label="Snapshot" control={control} />
       {/* Submit button */}
       <Button type="submit" className="w-full">Save</Button>
     </form>

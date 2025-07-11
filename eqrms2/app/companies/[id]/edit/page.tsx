@@ -20,7 +20,7 @@ export default async function EditCompanyPage({ params }: Props) {
   if (!companyData) return notFound(); // 404 if company not found
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-4">
       <EditCompanyForm companyId={params.id} defaultValues={companyData} />
     </div>
   );

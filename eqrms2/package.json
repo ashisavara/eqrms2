@@ -27,6 +27,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.60.0",
     "react-markdown": "^10.1.0",
+    "react-textarea-autosize": "^8.5.9",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.3.0",
