@@ -1,6 +1,7 @@
 // eqrms2/app/companies/columns-valscreen.ts
 import { ColumnDef } from "@tanstack/react-table";
 import { Company } from "@/types/company-detail";
+import Link from "next/link";
 
 export const columns: ColumnDef<Company>[] = [
   { accessorKey: "company_id", header: "Company ID" },
@@ -8,13 +9,13 @@ export const columns: ColumnDef<Company>[] = [
     accessorKey: "ime_name",
     header: "Company Name",
     cell: ({ row }) => {
-      const companyId = row.original.company_id ?? row.original.id; // Ensure these fields exist in your Company type
+      const companyId = row.original.company_id; // Remove the ?? row.original.id part
       const companyName = row.original.ime_name;
 
       return (
-        <a href={`/companies/${companyId}`} className="text-blue-600 hover:underline">
+        <Link href={`/companies/${companyId}`} className="text-blue-600 hover:underline">
           {companyName}
-        </a>
+        </Link>
       );
     },
   },
