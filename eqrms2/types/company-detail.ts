@@ -1,7 +1,7 @@
 // eqrms2/types/companyDetail.ts
 
 export type Company = {
-  id: string;
+  company_id: string;
   ime_name: string;
   screener_name: string;
   sector_id: number;

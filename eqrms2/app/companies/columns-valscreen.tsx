@@ -1,38 +1,23 @@
-"use client";
-import Link from "next/link";
+// eqrms2/app/companies/columns-valscreen.ts
 import { ColumnDef } from "@tanstack/react-table";
+import { Company } from "@/types/company-detail";
 
-// Define the shape of a Fund object with its properties.
-export type Company = {
-  company_id: string;    
-  ime_name: string; 
-  sector_id: number;
-  industry: string;
-  coverage: string;
-};
-
-// Define the columns configuration for the funds data table.
-// Each object in the array represents a column in the table.
 export const columns: ColumnDef<Company>[] = [
-  {accessorKey: "company_id", header: "Company Id"},
+  { accessorKey: "company_id", header: "Company ID" },
   {
     accessorKey: "ime_name",
-    header: "Company",
+    header: "Company Name",
     cell: ({ row }) => {
-      const companyName = row.getValue("ime_name") as string;
-      const company_id = row.original.company_id; // Renamed to match the data model
-      
+      const companyId = row.original.company_id ?? row.original.id; // Ensure these fields exist in your Company type
+      const companyName = row.original.ime_name;
+
       return (
-        <Link 
-          href={`/companies/${company_id}`} // Updated to use company_id
-          className="text-blue-600 underline hover:text-blue-800"
-        >
+        <a href={`/companies/${companyId}`} className="text-blue-600 hover:underline">
           {companyName}
-        </Link>
+        </a>
       );
     },
   },
-  { accessorKey: "sector_id", header: "Sector" },
+  { accessorKey: "sector_id", header: "Sector ID" },
   { accessorKey: "industry", header: "Industry" },
-  { accessorKey: "coverage", header: "Coverage" },
-]; 
+];

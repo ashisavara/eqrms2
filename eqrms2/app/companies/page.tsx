@@ -1,19 +1,18 @@
-import { SupabaseListResource } from "@/components/supabase/listRead";
-import { columns, Company } from "./columns-valscreen";
-import { ValScreenDataTable } from "./TableValscreen";
+import { TableValscreen } from "./TableValscreen";
+import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
+import { Company } from "@/types/company-detail";
 
-export default function FundsPage() {
+export default async function CompaniesPage() {
+  // Fetch data server-side
+  const companies = await supabaseListRead<Company>({
+    table: "eq_rms_company",
+    columns: "company_id,ime_name,sector_id,industry",
+  });
+
   return (
-    <SupabaseListResource<Company> table="eq_rms_company" columns="company_id,ime_name,sector_id,industry,coverage" filters={[]}>
-      {(companies) => {
-        return (
-          <div>
-            <h1 className="text-2xl font-bold m-10">Companies</h1>
-             <ValScreenDataTable columns={columns} data={companies} />
-          </div>
-          
-        )
-      }}
-    </SupabaseListResource>
+    <div>
+      <h1 className="text-2xl font-bold m-10">Companies</h1>
+      <TableValscreen data={companies} />
+    </div>
   );
 }
