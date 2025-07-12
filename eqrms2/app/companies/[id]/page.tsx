@@ -8,13 +8,15 @@ import SimpleTable from "@/components/tables/singleRowTable";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { QtrNotesForm } from "@/components/forms/QtrNotes";
 
-export default async function CompanyDetailsPage({ params }: { params: { id: string } }) {
+export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params; // Await the params to get the id
+  
   // Fetch options for qtr and result rating
   const qtrOptions = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter");
   const resultRatingOptions = await fetchOptions<string, string>("master", "result_rating", "result_rating");
 
   return (
-    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[{ column: "id", operator: "eq", value: params.id }]}>
+    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[{ column: "id", operator: "eq", value: id }]}>
       {(company) => (
         <div className="p-4">
           <div className="p-4 m-4 bg-gray-600 rounded-lg shadow-md text-center">
@@ -64,7 +66,7 @@ export default async function CompanyDetailsPage({ params }: { params: { id: str
 
           <ToggleVisibility toggleText="Add quarter notes">
             <QtrNotesForm
-              company_id={Number(params.id)}
+              company_id={Number(id)} // Use `id` instead of `params.id`
               qtrOptions={qtrOptions}
               resultRatingOptions={resultRatingOptions}
             />

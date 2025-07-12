@@ -7,14 +7,16 @@ import { notFound } from "next/navigation";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>; // Changed to Promise
 };
 
 export default async function EditCompanyPage({ params }: Props) {
+  const { id } = await params; // Await the params to get the id
+  
   // Fetch existing company data using utility
   const companyData = await supabaseSingleRead<CompanySnapshotFormValues>({
     table: "eq_rms_valscreen",
-    filters: [{ column: "rel_company_id", operator: "eq", value: params.id }],
+    filters: [{ column: "rel_company_id", operator: "eq", value: id }], // Use id instead of params.id
     columns: "*",
   });
 
@@ -22,7 +24,7 @@ export default async function EditCompanyPage({ params }: Props) {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <EditCompanyForm companyId={params.id} defaultValues={companyData} />
+      <EditCompanyForm companyId={id} defaultValues={companyData} /> {/* Use id instead of params.id */}
     </div>
   );
 }
