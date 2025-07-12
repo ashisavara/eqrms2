@@ -47,9 +47,13 @@ export function QtrNotesForm({ company_id, qtrOptions, resultRatingOptions }: Pr
       console.log('Result:', result);
       // Since we often deal with server components, it's a good practice to guard the toast call
       // with typeof window !== "undefined" to ensure it only runs on the client.
-      if (typeof window !== "undefined") {
-        toast.success("Quarterly notes added successfully!");
-      }
+      // Show toast and redirect with hard reload
+    if (typeof window !== "undefined") {
+      toast.success("Quarterly notes added successfully!");
+      setTimeout(() => {
+        window.location.href = `/companies/${company_id}`;
+      }, 1500);
+    }
     } catch (error) {
       console.error('Error:', error);
       alert('Error saving quarterly notes');
