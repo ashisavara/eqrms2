@@ -4,7 +4,7 @@ import { ValScreenDataTable } from "./TableValscreen";
 
 export default function FundsPage() {
   return (
-    <SupabaseListResource<Company> table="eq_rms_company" columns="id,ime_name,sector_id,industry,coverage" filters={[]}>
+    <SupabaseListResource<Company> table="eq_rms_company" columns="company_id,ime_name,sector_id,industry,coverage" filters={[]}>
       {(companies) => {
         return (
           <div>
