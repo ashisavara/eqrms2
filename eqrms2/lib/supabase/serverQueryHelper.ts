@@ -52,3 +52,40 @@ export async function supabaseUpdateRow<T>(
 
   if (error) throw error;
 }
+
+// Insert a single row into Supabase (server-side)
+export async function supabaseInsertRow<T>(
+  table: string,
+  insertData: T
+): Promise<void> {
+  const supabase = await createClient(); // from ./server
+  const { error } = await supabase
+    .from(table)
+    .insert(insertData);
+
+  if (error) throw error;
+}
+
+// Utility function to fetch and map options for select, radio, or checkbox inputs
+// Example usage:
+//   const options = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter");
+//   first argument is table name, second is value column, third is label column
+export async function fetchOptions<T, U>(
+  table: string,
+  valueColumn: string,
+  labelColumn: string
+): Promise<{ value: T; label: U }[]> {
+  const data = await supabaseListRead({
+    table,
+    columns: `${valueColumn}, ${labelColumn}`,
+    filters: [
+      { column: valueColumn, operator: "neq", value: null },
+      { column: labelColumn, operator: "neq", value: null }
+    ]
+  });
+
+  return data.map((item: Record<string, any>) => ({
+    value: item[valueColumn] as T,
+    label: item[labelColumn] as U,
+  }));
+}

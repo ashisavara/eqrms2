@@ -4,6 +4,7 @@ import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
 import { EditCompanyForm } from "@/components/forms/EditCompanyForm"; // this is the client-side form
 import { CompanySnapshotFormValues } from "@/types/forms"; // optional: type of the form values
 import { notFound } from "next/navigation";
+import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 
 type Props = {
   params: { id: string };

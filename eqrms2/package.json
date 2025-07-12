@@ -30,6 +30,7 @@
     "react-textarea-autosize": "^8.5.9",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
+    "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.0",
     "zod": "^3.25.76"
   },

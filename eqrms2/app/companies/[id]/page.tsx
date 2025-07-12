@@ -1,25 +1,31 @@
 import { SupabaseSingleResource } from "@/components/supabase/singleRead";
+import { fetchOptions } from "@/lib/supabase/serverQueryHelper";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import { Company } from "@/types/company-detail";
 import SimpleTable from "@/components/tables/singleRowTable";
+import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
+import { QtrNotesForm } from "@/components/forms/QtrNotes";
 
-export default function CompanyDetailsPage({ params }: { params: { id: string } }) {
-    
+export default async function CompanyDetailsPage({ params }: { params: { id: string } }) {
+  // Fetch options for qtr and result rating
+  const qtrOptions = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter");
+  const resultRatingOptions = await fetchOptions<string, string>("master", "result_rating", "result_rating");
+
   return (
-  <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[{ column: "id", operator: "eq", value: params.id }]}>
-  {(company) => (
-      <div className="p-4">
+    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[{ column: "id", operator: "eq", value: params.id }]}>
+      {(company) => (
+        <div className="p-4">
           <div className="p-4 m-4 bg-gray-600 rounded-lg shadow-md text-center">
-          <h1 className="text-2xl font-bold">{company.ime_name}</h1>
-           </div>
+            <h1 className="text-2xl font-bold">{company.ime_name}</h1>
+          </div>
 
           <div className="text-center text-gray-700 mb-5">
-          <span>{company.sector_name}  | </span>
-          <span>{company.industry}  | </span>
-          <span>{company.coverage} | </span>
-          <span><Link href={`/companies/${company.id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
+            <span>{company.sector_name}  | </span>
+            <span>{company.industry}  | </span>
+            <span>{company.coverage} | </span>
+            <span><Link href={`/companies/${company.id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
           </div>
 
           <div className="mb-5 text-sm">
@@ -38,25 +44,38 @@ export default function CompanyDetailsPage({ params }: { params: { id: string } 
           </div>
 
           <div className="text-sm">
-              <div className="text-blue-900 mb-5">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.inv_view || ""}</ReactMarkdown>
-              </div>
-              
-              <div className="text-green-700 mb-5">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.positive || ""}</ReactMarkdown>
-              </div>
-              <div className="text-red-700 mb-5">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.negative || ""}</ReactMarkdown>
-              </div>
-              <div className="text-orange-700 mb-5">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.outlook || ""}</ReactMarkdown>
-              </div>
-              <div className="text-blue-800 mb-5">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.snapshot || ""}</ReactMarkdown>
-              </div>
+            <div className="text-blue-900 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.inv_view || ""}</ReactMarkdown>
+            </div>
+
+            <div className="text-green-700 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.positive || ""}</ReactMarkdown>
+            </div>
+            <div className="text-red-700 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.negative || ""}</ReactMarkdown>
+            </div>
+            <div className="text-orange-700 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.outlook || ""}</ReactMarkdown>
+            </div>
+            <div className="text-blue-800 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.snapshot || ""}</ReactMarkdown>
             </div>
           </div>
-  )}
-</SupabaseSingleResource>);
+
+          <ToggleVisibility toggleText="Add quarter notes">
+            <QtrNotesForm
+              company_id={Number(params.id)}
+              qtrOptions={qtrOptions}
+              resultRatingOptions={resultRatingOptions}
+            />
+          </ToggleVisibility>
+
+          <ToggleVisibility toggleText="Some other toggle">
+            <p>this is SOME NEW THING</p>
+          </ToggleVisibility>
+        </div>
+      )}
+    </SupabaseSingleResource>
+  );
 }
 
