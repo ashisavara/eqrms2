@@ -1,3 +1,4 @@
+/*
 "use client";
 
 import type { Column, Table } from "@tanstack/react-table";
@@ -147,3 +148,4 @@ function DataTableToolbarFilter<TData>({
     return onFilterRender();
   }
 }
+  */
