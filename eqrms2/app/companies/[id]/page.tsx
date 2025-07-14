@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Company } from "@/types/company-detail";
 import SimpleTable from "@/components/tables/singleRowTable";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
-import { QtrNotesForm } from "@/components/forms/QtrNotes";
+import { QtrNotesForm } from "@/components/forms/AddQtrNotes";
 import { TableQuarterlyNotes } from "./TableQuarterlyNotes";
 import { EditQuarterSheet } from "./EditQuarterSheet";
 import { CompanyQrtNotesValues } from "@/types/forms";
@@ -83,12 +83,13 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
               resultRatingOptions={resultRatingOptions}
             />
           </ToggleVisibility>
-
-          <ToggleVisibility toggleText="Some other toggle">
-            <p>this is SOME NEW THING</p>
-          </ToggleVisibility>
         
-          <TableQuarterlyNotes data={qtrNotes} sheetComponent={EditQuarterSheet} />
+          <TableQuarterlyNotes 
+            data={qtrNotes} 
+            qtrOptions={qtrOptions}
+            resultRatingOptions={resultRatingOptions}
+            sheetComponent={EditQuarterSheet} 
+          />
 
         </div>
 

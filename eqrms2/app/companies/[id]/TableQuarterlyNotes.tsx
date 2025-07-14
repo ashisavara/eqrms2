@@ -9,10 +9,17 @@ import { CompanyQrtNotesValues } from "@/types/forms";
 
 interface TableQuarterlyNotesProps {
   data: CompanyQrtNotesValues[];
-  sheetComponent?: React.ComponentType<{data: CompanyQrtNotesValues | null, onClose: () => void}>;
+  qtrOptions: { value: string; label: string }[];
+  resultRatingOptions: { value: string; label: string }[];
+  sheetComponent?: React.ComponentType<{
+    data: CompanyQrtNotesValues | null, 
+    onClose: () => void,
+    qtrOptions: { value: string; label: string }[],
+    resultRatingOptions: { value: string; label: string }[]
+  }>;
 }
 
-export function TableQuarterlyNotes({ data, sheetComponent: SheetComponent }: TableQuarterlyNotesProps) {
+export function TableQuarterlyNotes({ data, qtrOptions, resultRatingOptions, sheetComponent: SheetComponent }: TableQuarterlyNotesProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selectedData, setSelectedData] = useState<CompanyQrtNotesValues | null>(null);
 
@@ -44,7 +51,9 @@ export function TableQuarterlyNotes({ data, sheetComponent: SheetComponent }: Ta
       {isSheetOpen && SheetComponent && (
         <SheetComponent 
           data={selectedData} 
-          onClose={handleCloseSheet} 
+          onClose={handleCloseSheet}
+          qtrOptions={qtrOptions}
+          resultRatingOptions={resultRatingOptions}
         />
       )}
     </>

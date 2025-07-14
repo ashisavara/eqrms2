@@ -3,11 +3,25 @@ import { supabaseUpdateRow } from '@/lib/supabase/serverQueryHelper';
 
 export async function POST(request: NextRequest) {
   try {
-    const { companyId, data } = await request.json();
-    await supabaseUpdateRow("eq_rms_qrtly_notes_view", "company_id", companyId, data);
-    return NextResponse.json({ message: 'Qtr Notes updated successfully' });
+    const data = await request.json();
+    
+    // Extract the ID for matching and remove it from update data
+    const { quarterly_notes_id, ...updateData } = data;
+    
+    if (!quarterly_notes_id) {
+      return NextResponse.json({ error: 'quarterly_notes_id is required for updates' }, { status: 400 });
+    }
+    
+    await supabaseUpdateRow(
+      "eq_rms_qrtly_notes", 
+      "quarterly_notes_id", 
+      quarterly_notes_id, 
+      updateData
+    );
+    
+    return NextResponse.json({ message: 'Quarterly notes updated successfully' });
   } catch (error) {
-    console.error('Error updating quarter notes:', error);
-    return NextResponse.json({ error: 'Error updating Quarter Notes' }, { status: 500 });
+    console.error('Error updating quarterly notes:', error);
+    return NextResponse.json({ error: 'Error updating quarterly notes' }, { status: 500 });
   }
 }
