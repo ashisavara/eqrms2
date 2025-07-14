@@ -16,7 +16,7 @@ export default async function EditCompanyPage({ params }: Props) {
   // Fetch existing company data using utility
   const companyData = await supabaseSingleRead<CompanySnapshotFormValues>({
     table: "eq_rms_valscreen",
-    filters: [{ column: "rel_company_id", operator: "eq", value: id }], // Use id instead of params.id
+    filters: [(query: any) => query.eq("rel_company_id", id)],
     columns: "*",
   });
 

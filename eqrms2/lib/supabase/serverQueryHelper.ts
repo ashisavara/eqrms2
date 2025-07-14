@@ -1,39 +1,43 @@
 import { createClient } from "./server"; // Make sure this is your server-side client
 
-// Defining types for the filter and query options
-type Filter = {
-  column: string;
-  operator?: "eq" | "neq" | "gt" | "lt" | "gte" | "lte" | "like" | "ilike";
-  value: any;
-};
-
+// Defining types for the query options
 type QueryOptions = {
   table: string;
   columns?: string;
-  filters?: Filter[];
+  filters?: ((query: any) => any)[];
 };
 
 // Fetch a single row from Supabase (server-side)
-export async function supabaseSingleRead<T = any>({table,columns = "*",filters = [],}: QueryOptions): Promise<T | null> {
+export async function supabaseSingleRead<T = any>({ table, columns = "*", filters = [] }: QueryOptions): Promise<T | null> {
   const supabase = await createClient();
   let query = supabase.from(table).select(columns);
 
-  filters.forEach(({ column, operator = "eq", value }) => {query = query.filter(column, operator, value);});
+  filters.forEach((filterFn) => {
+    query = filterFn(query);
+  });
 
   const { data, error } = await query.single();
-  if (error) throw error;
+  if (error) {
+    console.error("Supabase error:", error);
+    throw error;
+  }
   return data as T;
 }
 
 // Fetch a list of rows from Supabase (server-side)
-export async function supabaseListRead<T = any>({table,columns = "*",filters = [],}: QueryOptions): Promise<T[]> {
+export async function supabaseListRead<T = any>({ table, columns = "*", filters = [] }: QueryOptions): Promise<T[]> {
   const supabase = await createClient();
   let query = supabase.from(table).select(columns);
 
-  filters.forEach(({ column, operator = "eq", value }) => {query = query.filter(column, operator, value);});
+  filters.forEach((filterFn) => {
+    query = filterFn(query);
+  });
 
   const { data, error } = await query;
-  if (error) throw error;
+  if (error) {
+    console.error("Supabase error:", error);
+    throw error;
+  }
   return data as T[];
 }
 
@@ -50,7 +54,10 @@ export async function supabaseUpdateRow<T>(
     .update(updateData)
     .eq(matchKey, matchValue);
 
-  if (error) throw error;
+  if (error) {
+    console.error("Supabase error:", error);
+    throw error;
+  }
 }
 
 // Insert a single row into Supabase (server-side)
@@ -63,7 +70,10 @@ export async function supabaseInsertRow<T>(
     .from(table)
     .insert(insertData);
 
-  if (error) throw error;
+  if (error) {
+    console.error("Supabase error:", error);
+    throw error;
+  }
 }
 
 // Utility function to fetch and map options for select, radio, or checkbox inputs
@@ -79,8 +89,8 @@ export async function fetchOptions<T, U>(
     table,
     columns: `${valueColumn}, ${labelColumn}`,
     filters: [
-      { column: valueColumn, operator: "neq", value: null },
-      { column: labelColumn, operator: "neq", value: null }
+      (query) => query.neq(valueColumn, null),
+      (query) => query.neq(labelColumn, null)
     ]
   });
 

@@ -6,7 +6,10 @@ export default async function CompaniesPage() {
   // Fetch data server-side
   const companies = await supabaseListRead<Company>({
     table: "eq_rms_company",
-    columns: "company_id,ime_name,sector_id,industry",
+    columns: "company_id,ime_name,sector_id,industry,coverage",
+    filters: [
+      (query) => query.in('coverage', ['Coverage', 'DV', 'BV'])
+    ]
   });
 
   return (

@@ -16,7 +16,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
   const resultRatingOptions = await fetchOptions<string, string>("master", "result_rating", "result_rating");
 
   return (
-    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[{ column: "id", operator: "eq", value: id }]}>
+    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[(query: any) => query.eq("id", id)]}>
       {(company) => (
         <div className="p-4">
           <div className="p-4 m-4 bg-gray-600 rounded-lg shadow-md text-center">
