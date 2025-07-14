@@ -1,7 +1,7 @@
 // eqrms2/app/companies/TableValscreen.tsx
 "use client";
 
-import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, globalFilterFn } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { columns } from "./columns-valscreen";
 import { Company } from "@/types/company-detail";

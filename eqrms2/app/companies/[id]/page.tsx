@@ -27,7 +27,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <span>{company.sector_name}  | </span>
             <span>{company.industry}  | </span>
             <span>{company.coverage} | </span>
-            <span><Link href={`/companies/${company.id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
+            <span><Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
           </div>
 
           <div className="mb-5 text-sm">
