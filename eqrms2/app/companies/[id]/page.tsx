@@ -1,5 +1,5 @@
 import { SupabaseSingleResource } from "@/components/supabase/singleRead";
-import { fetchOptions } from "@/lib/supabase/serverQueryHelper";
+import { fetchOptions, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
@@ -7,6 +7,9 @@ import { Company } from "@/types/company-detail";
 import SimpleTable from "@/components/tables/singleRowTable";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { QtrNotesForm } from "@/components/forms/QtrNotes";
+import { TableQuarterlyNotes } from "./TableQuarterlyNotes";
+import { EditQuarterSheet } from "./EditQuarterSheet";
+import { CompanyQrtNotesValues } from "@/types/forms";
 
 export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params; // Await the params to get the id
@@ -14,9 +17,18 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
   // Fetch options for qtr and result rating
   const qtrOptions = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter");
   const resultRatingOptions = await fetchOptions<string, string>("master", "result_rating", "result_rating");
+  const qtrNotes = await supabaseListRead<CompanyQrtNotesValues>({
+    table: "eq_rms_qrtly_notes_view",
+    columns: "*",
+    filters: [
+      (query) => query.order("quarter_sort", { ascending: false }),
+      (query) => query.eq("company_id", id)
+    ]
+  });
+
 
   return (
-    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[(query: any) => query.eq("id", id)]}>
+    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[(query: any) => query.eq("company_id", id)]}>
       {(company) => (
         <div className="p-4">
           <div className="p-4 m-4 bg-gray-600 rounded-lg shadow-md text-center">
@@ -75,7 +87,12 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
           <ToggleVisibility toggleText="Some other toggle">
             <p>this is SOME NEW THING</p>
           </ToggleVisibility>
+        
+          <TableQuarterlyNotes data={qtrNotes} sheetComponent={EditQuarterSheet} />
+
         </div>
+
+        
       )}
     </SupabaseSingleResource>
   );
