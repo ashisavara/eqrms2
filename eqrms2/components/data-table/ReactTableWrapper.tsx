@@ -42,7 +42,7 @@ export function ReactTableWrapper<TData>({
       )}
 
       <div className={`w-full overflow-auto rounded-md border ${className}`}>
-        <table className="min-w-full text-sm text-left">
+        <table className="min-w-full">
           {/* ✅ Table Header */}
           <thead className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -89,7 +89,7 @@ export function ReactTableWrapper<TData>({
               <tr>
                 <td
                   colSpan={table.getAllColumns().length}
-                  className="px-4 py-8 text-center text-muted-foreground"
+                  className="px-4 py-8 text-muted-foreground"
                 >
                   {emptyText}
                 </td>

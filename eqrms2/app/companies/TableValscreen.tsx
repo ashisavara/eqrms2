@@ -25,5 +25,5 @@ export function TableValscreen({ data }: TableValscreenProps) {
     },
   });
 
-  return <ReactTableWrapper table={table} />;
+  return <ReactTableWrapper table={table} className="text-xs text-center"/>;
 }
