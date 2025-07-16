@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { MultiSelectFilter } from "./MultiSelectFilter";
 import { useMemo } from "react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
 // ✅ Filter configuration interface
 interface FilterConfig {
@@ -214,21 +215,52 @@ export function ReactTableWrapper<TData>({
           <thead className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="border-b">
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    className="px-4 py-2 font-semibold"
-                  >
-                    {/* ✅ flexRender allows dynamic JSX/strings/functions */}
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
+                {headerGroup.headers.map((header) => {
+                  // Hide columns marked as filter-only
+                  const isFilterOnly = header.column.columnDef.meta?.isFilterOnly;
+                  if (isFilterOnly) return null;
+                  
+                  return (
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className={`px-4 py-2 font-semibold ${
+                        header.column.getCanSort() 
+                          ? 'cursor-pointer select-none hover:bg-muted/50 transition-colors' 
+                          : ''
+                      }`}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {/* ✅ Header content with sort indicators */}
+                      <div className="flex items-center justify-between">
+                        <span>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </span>
+                        {/* ✅ Sort indicators */}
+                        {header.column.getCanSort() && (
+                          <div className="ml-2 flex flex-col">
+                            {header.column.getIsSorted() === 'asc' && (
+                              <ChevronUp className="h-4 w-4 text-primary" />
+                            )}
+                            {header.column.getIsSorted() === 'desc' && (
+                              <ChevronDown className="h-4 w-4 text-primary" />
+                            )}
+                            {!header.column.getIsSorted() && (
+                              <div className="h-4 w-4 opacity-50">
+                                <ChevronUp className="h-3 w-3" />
+                              </div>
+                            )}
+                          </div>
                         )}
-                  </th>
-                ))}
+                      </div>
+                    </th>
+                  );
+                })}
               </tr>
             ))}
           </thead>
@@ -241,21 +273,27 @@ export function ReactTableWrapper<TData>({
                   key={row.id}
                   className="border-b hover:bg-muted/50 transition-colors"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-2">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    // Hide cells for filter-only columns
+                    const isFilterOnly = cell.column.columnDef.meta?.isFilterOnly;
+                    if (isFilterOnly) return null;
+                    
+                    return (
+                      <td key={cell.id} className="px-4 py-2">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))
             ) : (
               // ✅ Shown if there's no data (after filtering, for example)
               <tr>
                 <td
-                  colSpan={table.getAllColumns().length}
+                  colSpan={table.getAllColumns().filter(col => !col.columnDef.meta?.isFilterOnly).length}
                   className="px-4 py-8 text-muted-foreground"
                 >
                   {emptyText}
