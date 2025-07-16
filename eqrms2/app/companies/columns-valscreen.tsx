@@ -42,16 +42,12 @@ export const columns: ColumnDef<Company>[] = [
   { 
     accessorKey: "mt_growth", 
     header: "Growth",
-    filterFn: "arrIncludesSome",
-    enableSorting: true,
-    sortingFn: "text"
+    filterFn: "arrIncludesSome"
   },
   { 
     accessorKey: "market_momentum", 
     header: "Momentum",
-    filterFn: "arrIncludesSome",
-    enableSorting: true,
-    sortingFn: "text"
+    filterFn: "arrIncludesSome"
   },
   { 
     accessorKey: "upside", 
@@ -60,97 +56,67 @@ export const columns: ColumnDef<Company>[] = [
   },
   { 
     accessorKey: "stock_score", 
-    header: "Rating",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "Rating"
   },
   { 
     accessorKey: "cmp", 
-    header: "CMP",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "CMP"
   },
   { 
     accessorKey: "target_price", 
-    header: "TP",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "TP"
   },
   { 
     accessorKey: "multiple", 
-    header: "Multiple",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "Multiple"
   },
   { 
     accessorKey: "pe_t2", 
-    header: "FY27 PE",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "FY27 PE"
   },
   { 
     accessorKey: "gr_t", 
     header: "FY26 gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>,
-    enableSorting: true,
-    sortingFn: "basic"
+    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t1", 
     header: "FY27 gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>,
-    enableSorting: true,
-    sortingFn: "basic"
+    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t2", 
     header: "FY28 gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>,
-    enableSorting: true,
-    sortingFn: "basic"
+    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t3", 
     header: "FY29 gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>,
-    enableSorting: true,
-    sortingFn: "basic"
+    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t4", 
     header: "FY30 gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>,
-    enableSorting: true,
-    sortingFn: "basic"
+    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "1m_return", 
-    header: "1m",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "1m"
   },
   { 
     accessorKey: "3m_return", 
-    header: "3m",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "3m"
   },
   { 
     accessorKey: "1yr_return", 
-    header: "1yr",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "1yr"
   },
   { 
     accessorKey: "3yrs_return", 
-    header: "3yr",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "3yr"
   },
   { 
     accessorKey: "5yrs_return", 
-    header: "5yr",
-    enableSorting: true,
-    sortingFn: "basic"
+    header: "5yr"
   },
 ];
