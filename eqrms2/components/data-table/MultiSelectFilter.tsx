@@ -1,5 +1,18 @@
 "use client";
 
+/**
+ * MultiSelectFilter Component
+ * 
+ * Used in hybrid filtering approach where:
+ * - The 'options' prop is dynamically calculated by ReactTableWrapper
+ * - Options change based on whether this filter has active selections:
+ *   * WITH selections: Shows all original options (enables multi-select)
+ *   * WITHOUT selections: Shows filtered options (enables iterative filtering)
+ * 
+ * This component doesn't need to know about the hybrid logic - it just renders
+ * whatever options are passed to it and reports changes back to the parent.
+ */
+
 import React, { useState } from "react";
 import { ChevronDown, X } from "lucide-react";
 import {

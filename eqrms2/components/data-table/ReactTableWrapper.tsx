@@ -38,16 +38,19 @@ export function ReactTableWrapper<TData>({
   searchPlaceholder = "Search all columns...",
   filters = [],
 }: BasicTableProps<TData>) {
-  // ✅ Generate dynamic filter options from current filtered data
-  const filterOptions = useMemo(() => {
+  // ✅ STEP 1: Generate original options from the FULL dataset (never changes)
+  // This ensures users can always multi-select within the same filter
+  // Example: Can select both "Auto" AND "Pharma" sectors even after filtering
+  const originalOptions = useMemo(() => {
     const options: Record<string, string[]> = {};
     
     if (filters.length > 0) {
-      const currentRows = table.getFilteredRowModel().rows;
+      // Use original data before any filtering
+      const allRows = table.getCoreRowModel().rows;
       
       filters.forEach(filter => {
         const uniqueValues = new Set<string>();
-        currentRows.forEach(row => {
+        allRows.forEach(row => {
           const value = row.getValue(filter.column);
           if (value != null && value !== '') {
             uniqueValues.add(String(value));
@@ -58,13 +61,101 @@ export function ReactTableWrapper<TData>({
     }
     
     return options;
-  }, [table.getFilteredRowModel().rows, filters]);
+  }, [table.getCoreRowModel().rows, filters]);
 
-  // ✅ Handle filter changes
+  // ✅ STEP 2: Generate filtered options for ITERATIVE filtering between different filters
+  // This shows only options that exist in data filtered by OTHER filters (not the current one)
+  // Example: If "Auto" sector selected, Industry dropdown only shows Auto industries
+  const getFilteredOptionsForColumn = useMemo(() => {
+    return (targetColumn: string) => {
+      if (filters.length === 0) return [];
+
+      // Get all current filter states EXCEPT the target column
+      const otherFilters = filters.filter(f => f.column !== targetColumn);
+      
+      // Start with all rows
+      let filteredRows = table.getCoreRowModel().rows;
+      
+      // Apply filters from OTHER columns (not the target column)
+      otherFilters.forEach(filter => {
+        const filterValue = table.getColumn(filter.column)?.getFilterValue();
+        if (Array.isArray(filterValue) && filterValue.length > 0) {
+          filteredRows = filteredRows.filter(row => {
+            const cellValue = row.getValue(filter.column);
+            return filterValue.includes(String(cellValue));
+          });
+        }
+      });
+
+      // Extract unique values for the target column from these filtered rows
+      const uniqueValues = new Set<string>();
+      filteredRows.forEach(row => {
+        const value = row.getValue(targetColumn);
+        if (value != null && value !== '') {
+          uniqueValues.add(String(value));
+        }
+      });
+
+      return Array.from(uniqueValues).sort();
+    };
+  }, [table, filters]);
+
+  // ✅ STEP 3: HYBRID APPROACH - Combine both strategies
+  // 
+  // PROBLEM SOLVED: 
+  // - Users can multi-select within same filter (e.g., "Auto" + "Pharma" sectors)
+  // - Users still get iterative filtering between different filters
+  // 
+  // LOGIC:
+  // - For filters WITH active selections: Show ALL original options (enables multi-select)
+  // - For filters WITHOUT active selections: Show filtered options (enables iterative filtering)
+  //
+  // EXAMPLE: User selects "Auto" sector
+  // - Sector dropdown: Shows all sectors (Auto, Pharma, Tech...) ← Multi-select enabled
+  // - Industry dropdown: Shows only Auto industries ← Iterative filtering enabled
+  const filterOptions = useMemo(() => {
+    const options: Record<string, string[]> = {};
+    
+    filters.forEach(filter => {
+      // Get filtered options based on OTHER filters (not this one)
+      const filteredOptionsForThisColumn = getFilteredOptionsForColumn(filter.column);
+      
+      // Get original options for this column
+      const originalOptionsForThisColumn = originalOptions[filter.column] || [];
+      
+      // HYBRID LOGIC:
+      // If this column has active selections, show ALL original options
+      // (so user can add more selections like "Auto" + "Pharma")
+      // If this column has no selections, show filtered options 
+      // (so user sees only relevant options based on other filters)
+      const currentFilterValue = table.getColumn(filter.column)?.getFilterValue();
+      const hasActiveSelections = Array.isArray(currentFilterValue) && currentFilterValue.length > 0;
+      
+      if (hasActiveSelections) {
+        // Show all original options to allow multi-select within this filter
+        options[filter.column] = originalOptionsForThisColumn;
+      } else {
+        // Show filtered options to enable iterative filtering from other filters
+        options[filter.column] = filteredOptionsForThisColumn.length > 0 
+          ? filteredOptionsForThisColumn 
+          : originalOptionsForThisColumn;
+      }
+    });
+    
+    return options;
+  }, [originalOptions, getFilteredOptionsForColumn, filters, table]);
+
+  // ✅ STEP 4: Handle filter changes
+  // When a filter changes, TanStack Table automatically recalculates filtered data
+  // Our hybrid filterOptions will then update to reflect the new state:
+  // - The changed filter will now show ALL original options (since it has active selections)
+  // - Other filters will update their options based on the new filtered data
   const handleFilterChange = (column: string, selectedValues: string[]) => {
     const columnObj = table.getColumn(column);
     if (columnObj) {
+      // Set the filter value - TanStack Table handles the rest
       columnObj.setFilterValue(selectedValues.length > 0 ? selectedValues : undefined);
+      // Note: filterOptions useMemo will automatically recalculate due to table state change
     }
   };
 
@@ -88,7 +179,19 @@ export function ReactTableWrapper<TData>({
         </div>
       )}
 
-      {/* ✅ Column Filters */}
+      {/* ✅ STEP 5: Render Column Filters with Hybrid Behavior
+          User Experience:
+          1. Initially: All filters show options from full dataset
+          2. Select "Auto" in Sector: 
+             - Sector dropdown still shows all sectors (Auto, Pharma, Tech, etc.) for multi-select
+             - Industry dropdown updates to show only Auto industries
+          3. Add "Pharma" to Sector selection:
+             - Sector dropdown still shows all sectors
+             - Industry dropdown now shows Auto + Pharma industries combined
+          4. Clear Sector selections:
+             - Sector dropdown shows all sectors again
+             - Industry dropdown shows all industries again
+      */}
       {filters.length > 0 && (
         <div className="flex flex-wrap gap-4 py-4">
           {filters.map((filter) => (
