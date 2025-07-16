@@ -33,6 +33,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <a href="/companies">Val Screen</a>
             {children}
           </ThemeProvider>
       </body>

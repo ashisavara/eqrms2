@@ -36,6 +36,7 @@ export const columns: ColumnDef<Company>[] = [
   { accessorKey: "gr_t4", header: "FY30 gr", cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>  },
   { accessorKey: "1m_return", header: "1m" },
   { accessorKey: "3m_return", header: "3m" },
+  { accessorKey: "1yr_return", header: "1yr" },
   { accessorKey: "3yrs_return", header: "3yr" },
   { accessorKey: "5yrs_return", header: "5yr" },
 ];

@@ -22,9 +22,14 @@ export default async function EditCompanyPage({ params }: Props) {
 
   if (!companyData) return notFound(); // 404 if company not found
 
+  // Convert null values to empty strings while maintaining type
+  const sanitizedData = Object.fromEntries(
+    Object.entries(companyData).map(([key, value]) => [key, value ?? (typeof value === 'number' ? null : "")])
+  ) as CompanySnapshotFormValues;
+
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <EditCompanyForm companyId={id} defaultValues={companyData} /> {/* Use id instead of params.id */}
+      <EditCompanyForm companyId={id} defaultValues={sanitizedData} /> {/* Use id instead of params.id */}
     </div>
   );
 }

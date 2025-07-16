@@ -31,30 +31,47 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
     <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[(query: any) => query.eq("company_id", id)]}>
       {(company) => (
         <div className="p-4">
-          <div className="p-4 m-4 bg-gray-600 rounded-lg shadow-md text-center">
+          <div className="p-4 m-4 bg-gray-400 rounded-lg shadow-md text-center">
             <h1 className="text-2xl font-bold">{company.ime_name}</h1>
           </div>
 
-          <div className="text-center text-gray-700 mb-5">
-            <span>{company.sector_name}  | </span>
-            <span>{company.industry}  | </span>
-            <span>{company.coverage} | </span>
-            <span><Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
-          </div>
-
-          <div className="mb-5 text-sm">
-            <SimpleTable
-              headers={[
-                { label: "Positive Snapshot"},
-                { label: "Negative Snapshot"},
-                { label: "Watch For"}
-              ]}
-              body={[
-                { value: company.positive_snapshot, className: 'bg-green-100'  },
-                { value: company.negative_snapshot, className: 'bg-red-100'  },
-                { value: company.watch_for, className: 'bg-orange-100'  }
-              ]}
-            />
+          <div className="mb-5 text-xs grid grid-cols-2 gap-x-6 gap-y-8">
+            <div>
+              <SimpleTable 
+                headers = {[{label:"CMP"},{label:"Target"},{label:"Upside"},{label:"Multiple"}]}
+                body = {[{value:company.cmp},{value:company.target_price},{value:company.upside},{value:company.multiple}]}
+              />
+            </div>
+            <div className="text-center text-gray-800 mb-5 text-base">
+              <span>{company.sector_name}  | </span>
+              <span>{company.industry}  | </span>
+              <span>{company.coverage} | </span>
+              <span><Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
+            </div>
+            <div>
+              <SimpleTable 
+                headers = {[{label:"FY27pe"},{label:"FY26gr"},{label:"FY27gr"},{label:"FY28gr"},{label:"FY29gr"}]}
+                body = {[{value:Math.round(company.pe_t2)},{value:Math.round(company.gr_t1)},{value:Math.round(company.gr_t2)},{value:Math.round(company.gr_t3)},{value:Math.round(company.gr_t4)}]}
+              />
+            </div>
+            <div>
+              <SimpleTable 
+                headers = {[{label:"1m"},{label:"3m"},{label:"1yr"},{label:"3yr"},{label:"5yr"}]}
+                body = {[{value:company["1m_return"]},{value:company["3m_return"]},{value:company["1yr_return"]},{value:company["3yrs_return"]},{value:company["5yrs_return"]}]}
+              />
+            </div>
+            <div>
+              <SimpleTable
+              headers={[{ label: "Positive Snapshot"},{ label: "Negative Snapshot"},{ label: "Watch For"}]}
+              body={[{ value: company.positive_snapshot, className: 'bg-green-100'  },{ value: company.negative_snapshot, className: 'bg-red-100'  },{ value: company.watch_for, className: 'bg-orange-100'  }]}
+              />
+            </div>
+            <div>
+              <SimpleTable 
+                headers = {[{label:"Quality"},{label:"Growth"},{label:"Momentum"},{label:"Score"}]}
+                body = {[{value:company.quality},{value:company.mt_growth},{value:company.market_momentum},{value:company.stock_score}]}
+              />
+            </div>
           </div>
 
           <div className="text-sm">
@@ -84,12 +101,14 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             />
           </ToggleVisibility>
         
-          <TableQuarterlyNotes 
-            data={qtrNotes} 
-            qtrOptions={qtrOptions}
-            resultRatingOptions={resultRatingOptions}
-            sheetComponent={EditQuarterSheet} 
-          />
+          <div className="flex w-screen text-xs text-center">
+            <TableQuarterlyNotes 
+              data={qtrNotes} 
+              qtrOptions={qtrOptions}
+              resultRatingOptions={resultRatingOptions}
+              sheetComponent={EditQuarterSheet} 
+            />
+          </div>
 
         </div>
 

@@ -6,15 +6,15 @@ import { z } from "zod";
 
 // Defining the zodSchema for companySnapshot
 export const companySnapshotFormSchema = z.object({
-  company_id: z.number().optional(),
-  snapshot: z.string().optional(),
-  positive: z.string().optional(),
-  negative: z.string().optional(),
-  outlook: z.string().optional(),
-  inv_view: z.string().optional(),
-  positive_snapshot: z.string().optional(),
-  negative_snapshot: z.string().optional(),
-  watch_for: z.string().optional(),
+  company_id: z.number().nullable(),
+  snapshot: z.string().nullable(),
+  positive: z.string().nullable(),
+  negative: z.string().nullable(),
+  outlook: z.string().nullable(),
+  inv_view: z.string().nullable(),
+  positive_snapshot: z.string().nullable(),
+  negative_snapshot: z.string().nullable(),
+  watch_for: z.string().nullable(),
 });
 
 // TypeScript type inferred from the schema. It defines the shape of actual data

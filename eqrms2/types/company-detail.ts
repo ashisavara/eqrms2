@@ -60,9 +60,9 @@ export type Company = {
   target_price: number;
   upside: number;
   stock_score: number;
-  quality: number;
-  mt_growth: number;
-  market_momentum: number;
+  quality: string;
+  mt_growth: string;
+  market_momentum: string;
   positive_snapshot: string;
   negative_snapshot: string;
   watch_for: string;

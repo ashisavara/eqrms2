@@ -29,14 +29,14 @@ import React from 'react';
 
 type SimpleTableProps = {
   headers: { label: string; className?: string }[];
-  body: { value: string; className?: string }[];
+  body: { value: string | number; className?: string }[]; // Allow both string and number types in body
 };
 
 const SimpleTable: React.FC<SimpleTableProps> = ({ headers, body }) => {
   return (
     <table className="w-full border-collapse table-fixed">
       <thead>
-        <tr className="bg-blue-800 text-white">
+        <tr className="bg-blue-900 text-white">
           {headers.map((header, index) => (
             <th key={index} className={`p-2 ${header.className || ''}`}>
               {header.label}
