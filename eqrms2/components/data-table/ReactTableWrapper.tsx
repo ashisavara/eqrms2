@@ -7,6 +7,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { MultiSelectFilter } from "./MultiSelectFilter";
+import { useMemo } from "react";
+
+// ✅ Filter configuration interface
+interface FilterConfig {
+  column: string;
+  title: string;
+  placeholder?: string;
+}
 
 // ✅ This is the reusable table component you can call from any page.
 //    It receives a TanStack `table` instance and renders a complete <table>.
@@ -17,6 +26,7 @@ interface BasicTableProps<TData> {
   showPagination?: boolean;    // Toggle pagination controls
   showSearch?: boolean;        // Toggle search input
   searchPlaceholder?: string;  // Custom search placeholder
+  filters?: FilterConfig[];    // Column filters configuration
 }
 
 export function ReactTableWrapper<TData>({
@@ -26,7 +36,44 @@ export function ReactTableWrapper<TData>({
   showPagination = true,
   showSearch = true,
   searchPlaceholder = "Search all columns...",
+  filters = [],
 }: BasicTableProps<TData>) {
+  // ✅ Generate dynamic filter options from current filtered data
+  const filterOptions = useMemo(() => {
+    const options: Record<string, string[]> = {};
+    
+    if (filters.length > 0) {
+      const currentRows = table.getFilteredRowModel().rows;
+      
+      filters.forEach(filter => {
+        const uniqueValues = new Set<string>();
+        currentRows.forEach(row => {
+          const value = row.getValue(filter.column);
+          if (value != null && value !== '') {
+            uniqueValues.add(String(value));
+          }
+        });
+        options[filter.column] = Array.from(uniqueValues).sort();
+      });
+    }
+    
+    return options;
+  }, [table.getFilteredRowModel().rows, filters]);
+
+  // ✅ Handle filter changes
+  const handleFilterChange = (column: string, selectedValues: string[]) => {
+    const columnObj = table.getColumn(column);
+    if (columnObj) {
+      columnObj.setFilterValue(selectedValues.length > 0 ? selectedValues : undefined);
+    }
+  };
+
+  // ✅ Get current filter values
+  const getCurrentFilterValues = (column: string): string[] => {
+    const filterValue = table.getColumn(column)?.getFilterValue();
+    return Array.isArray(filterValue) ? filterValue : [];
+  };
+
   return (
     <div className="space-y-4">
       {/* ✅ Search Input */}
@@ -38,6 +85,23 @@ export function ReactTableWrapper<TData>({
             onChange={(event) => table.setGlobalFilter(String(event.target.value))}
             className="max-w-sm"
           />
+        </div>
+      )}
+
+      {/* ✅ Column Filters */}
+      {filters.length > 0 && (
+        <div className="flex flex-wrap gap-4 py-4">
+          {filters.map((filter) => (
+            <div key={filter.column} className="min-w-[200px]">
+              <MultiSelectFilter
+                title={filter.title}
+                options={filterOptions[filter.column] || []}
+                selectedValues={getCurrentFilterValues(filter.column)}
+                onSelectionChange={(values) => handleFilterChange(filter.column, values)}
+                placeholder={filter.placeholder || `Filter ${filter.title}...`}
+              />
+            </div>
+          ))}
         </div>
       )}
 

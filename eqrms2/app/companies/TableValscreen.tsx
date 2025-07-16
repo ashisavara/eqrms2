@@ -18,6 +18,13 @@ export function TableValscreen({ data }: TableValscreenProps) {
     getPaginationRowModel: getPaginationRowModel(), // Enable pagination
     getFilteredRowModel: getFilteredRowModel(), // Enable filtering
     globalFilterFn: 'includesString', // Global filter function
+    filterFns: {
+      // Custom filter function for multi-select
+      arrIncludesSome: (row, columnId, value) => {
+        const cellValue = row.getValue(columnId);
+        return value.includes(cellValue);
+      },
+    },
     initialState: {
       pagination: {
         pageSize: 30, // Set default page size
@@ -25,5 +32,13 @@ export function TableValscreen({ data }: TableValscreenProps) {
     },
   });
 
-  return <ReactTableWrapper table={table} className="text-xs text-center"/>;
+  const filters = [
+    { column: "sector_name", title: "Sector", placeholder: "Sectors" },
+    { column: "industry", title: "Industry", placeholder: "Industry" },
+    { column: "quality", title: "Quality", placeholder: "Quality" },
+    { column: "mt_growth", title: "Growth", placeholder: "Growth" },
+    { column: "market_momentum", title: "Momentum", placeholder: "Momentum" },
+  ];
+
+  return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
 }

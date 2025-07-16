@@ -20,9 +20,31 @@ export const columns: ColumnDef<Company>[] = [
       );
     },
   },
-  { accessorKey: "quality", header: "Quality"},
-  { accessorKey: "mt_growth", header: "Growth" },
-  { accessorKey: "market_momentum", header: "Momentum" },
+  { 
+    accessorKey: "sector_name", 
+    header: "Sector",
+    filterFn: "arrIncludesSome"
+  },
+  { 
+    accessorKey: "industry", 
+    header: "Industry",
+    filterFn: "arrIncludesSome"
+  },
+  { 
+    accessorKey: "quality", 
+    header: "Quality",
+    filterFn: "arrIncludesSome"
+  },
+  { 
+    accessorKey: "mt_growth", 
+    header: "Growth",
+    filterFn: "arrIncludesSome"
+  },
+  { 
+    accessorKey: "market_momentum", 
+    header: "Momentum",
+    filterFn: "arrIncludesSome"
+  },
   { accessorKey: "upside", header: "Upside", cell: ({ getValue }) => <div className="text-blue-500 font-bold"> {getValue() as string} </div>  },
   { accessorKey: "stock_score", header: "Rating" },
   { accessorKey: "cmp", header: "CMP" },
