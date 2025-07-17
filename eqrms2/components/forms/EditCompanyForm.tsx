@@ -15,7 +15,7 @@ type Props = {
 // 4️⃣ The actual form component
 export function EditCompanyForm({ companyId, defaultValues }: Props) {
   // Initialize react-hook-form with default values and Zod schema validation
-  const { control, handleSubmit } = useForm<CompanySnapshotFormValues>({
+  const { control, handleSubmit, formState: { errors } } = useForm<CompanySnapshotFormValues>({
     defaultValues,
     resolver: zodResolver(companySnapshotFormSchema),
   });  
@@ -29,15 +29,15 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorText = await response.text();
+        throw new Error(`Network response was not ok: ${response.status} ${errorText}`);
       }
 
-      const result = await response.json();
       // Redirect to the company page if update is successful
       window.location.href = `/companies/${companyId}`;
     } catch (error) {
       console.error('Error:', error);
-      alert('Error saving company');
+      alert(`Error saving company: ${error}`);
     }
   };
 
@@ -58,6 +58,13 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
       <ResizableTextArea name="outlook" label="Outlook" control={control} />
       <ResizableTextArea name="snapshot" label="Snapshot" control={control} />
       {/* Submit button */}
+      {Object.keys(errors).length > 0 && (
+        <div className="text-red-500">
+          {Object.entries(errors).map(([field, error]) => (
+            <div key={field}>{field}: {(error as any).message}</div>
+          ))}
+        </div>
+      )}
       <Button type="submit" className="w-full">Save</Button>
     </form>
   );

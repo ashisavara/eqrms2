@@ -33,7 +33,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <a href="/companies">Val Screen</a>
+            <p className="font-bold text-blue-700 p-6"><a href="/companies">Val Screen</a></p>
             {children}
           </ThemeProvider>
       </body>

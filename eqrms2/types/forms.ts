@@ -6,7 +6,6 @@ import { z } from "zod";
 
 // Defining the zodSchema for companySnapshot
 export const companySnapshotFormSchema = z.object({
-  company_id: z.number().nullable(),
   snapshot: z.string().nullable(),
   positive: z.string().nullable(),
   negative: z.string().nullable(),
