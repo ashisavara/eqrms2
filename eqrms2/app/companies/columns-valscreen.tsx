@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Company } from "@/types/company-detail";
 import Link from "next/link";
+import { CompQualityRating, RatingDisplay, NumberRating } from "@/components/conditional-formatting";
 
 export const columns: ColumnDef<Company>[] = [
   {
@@ -28,6 +29,16 @@ export const columns: ColumnDef<Company>[] = [
     meta: { isFilterOnly: true }
   },
   { 
+    accessorKey: "stock_score", 
+    header: "Rating",
+    cell : ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+  },
+  { 
+    accessorKey: "upside", 
+    header: "Upside", 
+    cell: ({ getValue }) => <NumberRating rating={getValue() as number} />
+  },
+  { 
     accessorKey: "industry", 
     header: "Industry",
     filterFn: "arrIncludesSome",
@@ -37,26 +48,20 @@ export const columns: ColumnDef<Company>[] = [
   { 
     accessorKey: "quality", 
     header: "Quality",
-    filterFn: "arrIncludesSome"
+    filterFn: "arrIncludesSome",
+    cell : ({ getValue }) => <CompQualityRating rating={getValue() as string} />
   },
   { 
     accessorKey: "mt_growth", 
     header: "Growth",
-    filterFn: "arrIncludesSome"
+    filterFn: "arrIncludesSome",
+    cell : ({ getValue }) => <CompQualityRating rating={getValue() as string} />
   },
   { 
     accessorKey: "market_momentum", 
     header: "Momentum",
-    filterFn: "arrIncludesSome"
-  },
-  { 
-    accessorKey: "upside", 
-    header: "Upside", 
-    cell: ({ getValue }) => <div className="text-blue-500 font-bold"> {getValue() as string} </div>
-  },
-  { 
-    accessorKey: "stock_score", 
-    header: "Rating"
+    filterFn: "arrIncludesSome",
+    cell : ({ getValue }) => <CompQualityRating rating={getValue() as string} />
   },
   { 
     accessorKey: "cmp", 
@@ -68,7 +73,8 @@ export const columns: ColumnDef<Company>[] = [
   },
   { 
     accessorKey: "multiple", 
-    header: "Multiple"
+    header: "Multiple",
+    size:200
   },
   { 
     accessorKey: "pe_t2", 

@@ -10,6 +10,7 @@ import { QtrNotesForm } from "@/components/forms/AddQtrNotes";
 import { TableQuarterlyNotes } from "./TableQuarterlyNotes";
 import { EditQuarterSheet } from "./EditQuarterSheet";
 import { CompanyQrtNotesValues } from "@/types/forms";
+import { RatingDisplay,CompQualityRating } from "@/components/conditional-formatting";
 
 export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params; // Await the params to get the id
@@ -69,7 +70,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div>
               <SimpleTable 
                 headers = {[{label:"Quality"},{label:"Growth"},{label:"Momentum"},{label:"Score"}]}
-                body = {[{value:company.quality},{value:company.mt_growth},{value:company.market_momentum},{value:company.stock_score}]}
+                body = {[{value:<CompQualityRating rating={company.quality}/>},{value:<CompQualityRating rating={company.mt_growth}/>},{value:<CompQualityRating rating={company.market_momentum}/>},{value: <RatingDisplay rating={company.stock_score} />}]}
               />
             </div>
           </div>

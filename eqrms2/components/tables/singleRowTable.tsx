@@ -29,7 +29,7 @@ import React from 'react';
 
 type SimpleTableProps = {
   headers: { label: string; className?: string }[];
-  body: { value: string | number; className?: string }[]; // Allow both string and number types in body
+  body: { value: string | number | React.ReactNode; className?: string }[]; // Allow both string and number types in body
 };
 
 const SimpleTable: React.FC<SimpleTableProps> = ({ headers, body }) => {

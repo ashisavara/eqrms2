@@ -279,7 +279,7 @@ export function ReactTableWrapper<TData>({
                     if (isFilterOnly) return null;
                     
                     return (
-                      <td key={cell.id} className="px-4 py-2">
+                      <td key={cell.id} className="px-1 py-1">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
