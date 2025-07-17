@@ -224,7 +224,7 @@ export function ReactTableWrapper<TData>({
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
-                      className={`px-4 py-2 font-semibold ${
+                      className={`px-1 py-2 font-semibold ${
                         header.column.getCanSort() 
                           ? 'cursor-pointer select-none hover:bg-muted/50 transition-colors' 
                           : ''
@@ -232,7 +232,7 @@ export function ReactTableWrapper<TData>({
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       {/* ✅ Header content with sort indicators */}
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-center justify-center gap-0.5">
                         <span>
                           {header.isPlaceholder
                             ? null
@@ -243,16 +243,16 @@ export function ReactTableWrapper<TData>({
                         </span>
                         {/* ✅ Sort indicators */}
                         {header.column.getCanSort() && (
-                          <div className="ml-2 flex flex-col">
+                          <div className="h-3">
                             {header.column.getIsSorted() === 'asc' && (
-                              <ChevronUp className="h-4 w-4 text-primary" />
+                              <ChevronUp className="h-3 w-3 text-primary" />
                             )}
                             {header.column.getIsSorted() === 'desc' && (
-                              <ChevronDown className="h-4 w-4 text-primary" />
+                              <ChevronDown className="h-3 w-3 text-primary" />
                             )}
                             {!header.column.getIsSorted() && (
-                              <div className="h-4 w-4 opacity-50">
-                                <ChevronUp className="h-3 w-3" />
+                              <div className="h-3 w-3 opacity-50">
+                                <ChevronUp className="h-2 w-2" />
                               </div>
                             )}
                           </div>

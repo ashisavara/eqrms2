@@ -82,47 +82,47 @@ export const columns: ColumnDef<Company>[] = [
   },
   { 
     accessorKey: "gr_t", 
-    header: "FY26 gr", 
+    header: "FY26gr", 
     cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t1", 
-    header: "FY27 gr", 
+    header: "FY27gr", 
     cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t2", 
-    header: "FY28 gr", 
+    header: "FY28gr", 
     cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t3", 
-    header: "FY29 gr", 
+    header: "FY29gr", 
     cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "gr_t4", 
-    header: "FY30 gr", 
+    header: "FY30gr", 
     cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
   },
   { 
     accessorKey: "1m_return", 
-    header: "1m"
+    header: "1 m"
   },
   { 
     accessorKey: "3m_return", 
-    header: "3m"
+    header: "3 m"
   },
   { 
     accessorKey: "1yr_return", 
-    header: "1yr"
+    header: "1 yr"
   },
   { 
     accessorKey: "3yrs_return", 
-    header: "3yr"
+    header: "3 yr"
   },
   { 
     accessorKey: "5yrs_return", 
-    header: "5yr"
+    header: "5 yr"
   },
 ];
