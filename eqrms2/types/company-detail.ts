@@ -48,7 +48,7 @@ export type Company = {
   pe_t1: number;
   pe_t2: number;
   pe_t3: number;
-  pr_t4: number;
+  pe_t4: number;
   gr_t: number;
   gr_t1: number;
   gr_t2: number;

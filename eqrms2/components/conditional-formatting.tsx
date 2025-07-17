@@ -24,8 +24,10 @@ function getRatingStyles(rating: number) {
       return "bg-green-100 text-green-800";
     case 5:
       return "bg-green-800 text-green-100";
+    case 6:
+      return ""; // using as an alternate default
     default:
-      return "bg-gray-100 text-gray-800";
+      return "";
   }
 }
 
@@ -70,6 +72,25 @@ export function NumberRating({ rating }: { rating: number }) {
   const numericRating = getNumericRating(rating);
   return (
     <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+/**
+ * NUMBER FORMATTING - EARNINGS GROWTH & STOCK PRICES
+ */
+export function ComGrowthNumberRating({ rating }: { rating: number }) {
+  // Map the number to a 1-5 rating based on the specified ranges
+  const getNumericRating = (num: number): number => {
+    if (num > 25) return 5;
+    if (num > 15) return 4;
+    if (num < 0) return 1;
+    return 6; // num <= 0
+  };
+  const numericRating = getNumericRating(rating);
+  return (
+    <div className={`px-0 py-0.5 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
       {rating}
     </div>
   );

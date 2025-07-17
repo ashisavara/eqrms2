@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Company } from "@/types/company-detail";
 import Link from "next/link";
-import { CompQualityRating, RatingDisplay, NumberRating } from "@/components/conditional-formatting";
+import { CompQualityRating, RatingDisplay, NumberRating, ComGrowthNumberRating } from "@/components/conditional-formatting";
 
 export const columns: ColumnDef<Company>[] = [
   {
@@ -72,57 +72,51 @@ export const columns: ColumnDef<Company>[] = [
     header: "TP"
   },
   { 
-    accessorKey: "multiple", 
-    header: "Multiple",
-    size:200
-  },
-  { 
     accessorKey: "pe_t2", 
-    header: "FY27 PE"
+    header: "27 PE",
+    cell: ({ getValue }) => <div className="font-bold text-blue-500"> {Number(getValue()).toFixed(1)} </div>
   },
   { 
-    accessorKey: "gr_t", 
-    header: "FY26gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
+    accessorKey: "pe_t4", 
+    header: "29 PE", 
+    cell: ({ getValue }) => <div className="text-grey-600"> {Number(getValue()).toFixed(1)} </div>
+  },
+  { 
+    accessorKey: "multiple", 
+    header: "TP PE",
+    cell: ({ getValue }) => <div className="font-bold text-blue-500"> {Math.round(Number(getValue()))} </div>
   },
   { 
     accessorKey: "gr_t1", 
-    header: "FY27gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
+    header: "26gr", 
+    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "gr_t2", 
-    header: "FY28gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
-  },
-  { 
-    accessorKey: "gr_t3", 
-    header: "FY29gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
-  },
-  { 
-    accessorKey: "gr_t4", 
-    header: "FY30gr", 
-    cell: ({ getValue }) => <div className="text-blue-500"> {Number(getValue()).toFixed(0)} </div>
+    header: "27gr", 
+    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "1m_return", 
-    header: "1 m"
+    header: "1 m ", 
+    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "3m_return", 
-    header: "3 m"
+    header: "3 m "
   },
   { 
     accessorKey: "1yr_return", 
-    header: "1 yr"
+    header: "1 yr ", 
+    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "3yrs_return", 
-    header: "3 yr"
+    header: "3 yr "
   },
   { 
     accessorKey: "5yrs_return", 
-    header: "5 yr"
+    header: "5 yr ", 
+    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
 ];

@@ -167,15 +167,15 @@ export function ReactTableWrapper<TData>({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 flex flex-wrap">
       {/* ✅ Search Input */}
       {showSearch && (
-        <div className="flex items-center py-4">
+        <div className="flex items-center flex-wrap mt-4 p-4">
           <Input
             placeholder={searchPlaceholder}
             value={(table.getState().globalFilter as string) ?? ""}
             onChange={(event) => table.setGlobalFilter(String(event.target.value))}
-            className="max-w-sm"
+            className="max-w-sm w-250"
           />
         </div>
       )}
