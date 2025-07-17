@@ -16,7 +16,7 @@ export async function supabaseSingleRead<T = any>({ table, columns = "*", filter
     query = filterFn(query);
   });
 
-  const { data, error } = await query.single();
+  const { data, error } = await query.maybeSingle();
   if (error) {
     console.error("Supabase error:", error);
     throw error;

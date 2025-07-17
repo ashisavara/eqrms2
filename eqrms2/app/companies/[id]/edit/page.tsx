@@ -11,25 +11,23 @@ type Props = {
 };
 
 export default async function EditCompanyPage({ params }: Props) {
-  const { id } = await params; // Await the params to get the id
+  const { id } = await params;
   
-  // Fetch existing company data using utility - only fields needed for the form
   const companyData = await supabaseSingleRead<CompanySnapshotFormValues>({
-    table: "eq_rms_valscreen",
-    filters: [(query: any) => query.eq("rel_company_id", id)],
+    table: "eq_rms_company",
+    filters: [(query: any) => query.eq("company_id", id)],
     columns: "snapshot,positive,negative,outlook,inv_view,positive_snapshot,negative_snapshot,watch_for",
   });
 
-  if (!companyData) return notFound(); // 404 if company not found
+  if (!companyData) return notFound(); // Show 404 if company doesn't exist
 
-  // Convert null values to empty strings
   const sanitizedData = Object.fromEntries(
     Object.entries(companyData).map(([key, value]) => [key, value ?? ""])
   ) as CompanySnapshotFormValues;
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <EditCompanyForm companyId={id} defaultValues={sanitizedData} /> {/* Use id instead of params.id */}
+      <EditCompanyForm companyId={id} defaultValues={sanitizedData} />
     </div>
   );
 }
