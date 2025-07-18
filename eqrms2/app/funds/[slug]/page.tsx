@@ -2,6 +2,7 @@ import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
 import { RmsFundAmc } from "@/types/funds-detail";
 import { RatingDisplay } from "@/components/conditional-formatting";
+import { EditFundsButton } from "@/components/forms/EditFunds";
 
 export default async function FundPage({ params }: { params: { slug: string } }) {
   const { slug } = await params;
@@ -28,6 +29,7 @@ export default async function FundPage({ params }: { params: { slug: string } })
             <div> {fund.category_name} |  </div>
             <div> AUM: {fund.fund_aum} cr |  </div>
             <div> Open for Subscription: {fund.open_for_subscription} </div>
+            <EditFundsButton fundData={fund} />
         </div>
       </div>
       <div>
@@ -100,7 +102,7 @@ export default async function FundPage({ params }: { params: { slug: string } })
               </div>
         </div>
         <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
-                <h3 className="text-center font-bold mb-2"> Rationale behind our fund rating</h3>
+                <h3 className="ime-basic-h3"> Rationale behind our fund rating</h3>
                 <div className="flex mb-4">
                     <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
                     <div className="flex-1 min-w-0">{fund.investment_view}</div>
@@ -118,8 +120,8 @@ export default async function FundPage({ params }: { params: { slug: string } })
                     <div className="flex-1 min-w-0">{fund.oth_salient_points}</div>
                 </div>
         </div>
-        <div className="border-2 border-gray-300 rounded-md m-8 p-2 text-base">
-                <h3 className="text-center font-bold mb-2"> Rationale behind our AMC rating</h3>
+        <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
+                <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
                 <div className="flex mb-4">
                     <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">View on AMC</span></div>
                     <div className="flex-1 min-w-0">{fund.amc_view}</div>
@@ -137,11 +139,11 @@ export default async function FundPage({ params }: { params: { slug: string } })
                     <div className="flex-1 min-w-0">{fund.inv_phil_desc}</div>
                 </div>
         </div>
-        <div className="border-2 border-gray-300 rounded-md m-8 p-2 text-base">
-        <h3 className="text-center font-bold mb-2"> Investment Team </h3>
+        <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
+            <h3 className="ime-basic-h3"> Investment Team </h3>
             {fund.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: fund.amc_fm_html }} />}
         </div>
-        <div className="border-2 border-gray-300 rounded-md m-8 p-2 text-base">
+        <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
             <h3 className="ime-basic-h3"> Fund Trailing Performance </h3>
             {fund.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.trailing_perf_html }} />}
             <h3 className="ime-basic-h3"> Fund Annual Performance </h3>
@@ -149,7 +151,7 @@ export default async function FundPage({ params }: { params: { slug: string } })
             <h3 className="ime-basic-h3"> Portfolio Composition </h3>
             {fund.port_comp_html && <div dangerouslySetInnerHTML={{ __html: fund.port_comp_html }} />}
         </div>
-        <div className="border-2 border-gray-300 rounded-md m-8 p-2 text-base">
+        <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
             <h3 className="ime-basic-h3"> Fee Structure </h3>
             {fund.fee_structure_html && <div dangerouslySetInnerHTML={{ __html: fund.fee_structure_html }} />}
         </div>

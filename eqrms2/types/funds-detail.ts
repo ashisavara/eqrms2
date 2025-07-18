@@ -70,6 +70,7 @@ export type RmsFundAmc = {
     category_id: number | null;
     structure_id: number | null;
     amc_id: number | null;
+    slug : string | null;
   
     fund_rating: number | null;
     fund_strategy_rating: number | null;

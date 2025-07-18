@@ -7,7 +7,18 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "fund_name",
     header: () => <div className="text-left">Fund Name</div>,
-    cell: ({ getValue }) => <div className="text-left"> {getValue() as string} </div>
+    cell: ({ row }) => {
+      const fundSlug = row.original.slug;
+      const fundName = row.original.fund_name;
+
+      return (
+        <div className="text-left">
+          <Link href={`/funds/${fundSlug}`} className="text-blue-600 font-bold hover:underline">
+            {fundName}
+          </Link>
+        </div>
+      );
+    }
   },    
   {
     accessorKey: "fund_rating",

@@ -14,11 +14,7 @@ type Props = {
   onSuccess?: () => void;
 };
 
-export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions, onSuccess }: Props) {
-  // Debug: Log the structure of initialData to verify quarterly_notes_id is available
-  console.log('EditQtrNotesForm - initialData:', initialData);
-  console.log('EditQtrNotesForm - quarterly_notes_id:', (initialData as any).quarterly_notes_id);
-  
+export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions, onSuccess }: Props) {  
   // Convert null values to empty strings for form inputs
   const cleanedData: CompanyQrtNotesValues = {
     qtr: initialData.qtr ?? "",
