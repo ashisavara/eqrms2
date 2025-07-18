@@ -31,11 +31,9 @@ function getRatingStyles(rating: number) {
   }
 }
 
-export function RatingDisplay({ rating }: { rating: number }) {
+export function RatingDisplay({ rating }: { rating: number | null }) {
   return (
-    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(rating)}`}>
-      {rating}
-    </div>
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(rating as number)}`}> {rating} </div>
   );
 }
 

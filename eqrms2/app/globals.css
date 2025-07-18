@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .ime-basic-h3 {
+    @apply text-center font-bold mt-6 mb-2;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -84,4 +90,89 @@
       margin-bottom: 0.25rem;
     }
 
+}
+
+/* INJECTING PREVIOUS CSS CLASSES USED IN OLD FLUTTER APP FOR HTML CODE IN PERFORMANCE & OTHER FIELDS */
+
+
+/* Color utility classes */
+.rms-blue { color: #0B5394; }
+.rms-green { color: #38761c; }
+.rms-red { color: #B24949; }
+.rms-brown { color: #741C47; }
+.rms-dark-green { color: #4C6025; }
+.rms-dark-red { color: #9E2B2B; }
+.rms-yellow { color: #FF914D; }
+
+/* Background coloring for table cells */
+td.rms-red { background: #F1E0E0; }
+td.rms-green { background: #EEF5E6; }
+td.rms-dark-green { background: #4C6025; color: white; }
+td.rms-dark-red { background: #9E2B2B; color: white; }
+td.rms-yellow { background: #FF914D; color: white; }
+
+/* Table styling */
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+.table th,
+.table td {
+  font-size: 0.8em;
+  padding: 0.5rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+  text-align: center;
+}
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+}
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Headings */
+h2 {
+  font-size: 1.3em;
+  color: #494848;
+  text-align: center;
+  border-bottom: 1px dotted grey;
+  border-top: 1px dotted grey;
+  padding: 10px;
+  margin: 2em 0 0.5em 0;
+}
+
+/* IME Fund Manager Styling */
+div.ime-fm h4 {
+  font-weight: 600;
+  margin-bottom: 0;
+  color: rgb(100, 100, 100);
+  font-size: 1.25em;
+  margin-block-start: 15px;
+}
+
+div.ime-fm p.ime-fm-details {
+  font-size: 0.95em;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  color: #525758;
+}
+
+div.ime-fm p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  color: #525758;
 }
