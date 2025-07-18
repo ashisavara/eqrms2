@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { fundsUpdateSchema, FundsUpdateValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea, TextInput, SelectInput } from "./FormFields";
+import { ResizableTextArea, TextInput, ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 
 // Internal form component
@@ -71,32 +71,22 @@ function EditFundsForm({ initialData, onSuccess }: { initialData: FundsUpdateVal
     }
   };
 
+  const ratingOptions = [
+    { value: "1", label: "1" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+    { value: "4", label: "4" },
+    { value: "5", label: "5" }
+  ];
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full p-4 space-y-4">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
       
-      {/* Single column layout - no grid */}
-      <SelectInput name="fund_rating" label="Fund Rating" control={control} options={[
-        { value: "1", label: "1" },
-        { value: "2", label: "2" },
-        { value: "3", label: "3" },
-        { value: "4", label: "4" },
-        { value: "5", label: "5" }
-      ]} />
-      <SelectInput name="fund_performance_rating" label="Performance Rating" control={control} options={[
-        { value: "1", label: "1" },
-        { value: "2", label: "2" },
-        { value: "3", label: "3" },
-        { value: "4", label: "4" },
-        { value: "5", label: "5" }
-      ]} />
-      <SelectInput name="fund_strategy_rating" label="Strategy Rating" control={control} options={[
-        { value: "1", label: "1" },
-        { value: "2", label: "2" },
-        { value: "3", label: "3" },
-        { value: "4", label: "4" },
-        { value: "5", label: "5" }
-      ]} />
+      {/* Rating Fields with Toggle Groups */}
+      <ToggleGroupInput name="fund_rating" label="Fund Rating" control={control} options={ratingOptions} />
+      <ToggleGroupInput name="fund_performance_rating" label="Performance Rating" control={control} options={ratingOptions} />
+      <ToggleGroupInput name="fund_strategy_rating" label="Strategy Rating" control={control} options={ratingOptions} />
       
       <TextInput name="open_for_subscription" label="Open for Subscription" control={control} />
       <TextInput name="recommendation_tag" label="Recommendation Tag" control={control} />

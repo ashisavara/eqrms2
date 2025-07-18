@@ -7,6 +7,7 @@ import { Controller, Control } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import TextareaAutosize from 'react-textarea-autosize';
 
 type Props = { name: string; label: string; control: Control<any>; placeholder?: string };
@@ -47,6 +48,102 @@ export function ResizableTextArea({ name, label, control }: { name: string; labe
             minRows={2}
             maxRows={15}
           />
+        )}
+      />
+    </div>
+  );
+}
+
+// Toggle Group field (for choice chips like ratings)
+export function ToggleGroupInput({ 
+  name, 
+  label, 
+  control, 
+  options,
+  className,
+  toggleGroupClassName,
+  itemClassName
+}: { 
+  name: string; 
+  label: string; 
+  control: Control<any>; 
+  options: { value: string; label: string }[];
+  className?: string;
+  toggleGroupClassName?: string;
+  itemClassName?: string;
+}) {
+  return (
+    <div className={className || "space-y-2"}>
+      <Label className="font-bold">{label}</Label>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <ToggleGroup
+            type="single"
+            value={field.value?.toString()}
+            onValueChange={(value) => field.onChange(value ? parseInt(value) : 0)}
+            className={toggleGroupClassName || "justify-start"}
+          >
+            {options.map((option) => (
+              <ToggleGroupItem 
+                key={option.value} 
+                value={option.value} 
+                aria-label={option.label}
+                className={itemClassName}
+              >
+                {option.label}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        )}
+      />
+    </div>
+  );
+}
+
+// Multi-Select Toggle Group field (for multiple choice chips like tags, categories)
+export function MultiToggleGroupInput({ 
+  name, 
+  label, 
+  control, 
+  options,
+  className,
+  toggleGroupClassName,
+  itemClassName
+}: { 
+  name: string; 
+  label: string; 
+  control: Control<any>; 
+  options: { value: string; label: string }[];
+  className?: string;
+  toggleGroupClassName?: string;
+  itemClassName?: string;
+}) {
+  return (
+    <div className={className || "space-y-2"}>
+      <Label className="font-bold">{label}</Label>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <ToggleGroup
+            type="multiple"
+            value={field.value || []}
+            onValueChange={(values) => field.onChange(values)}
+            className={toggleGroupClassName || "justify-start"}
+          >
+            {options.map((option) => (
+              <ToggleGroupItem 
+                key={option.value} 
+                value={option.value} 
+                aria-label={option.label}
+                className={itemClassName}
+              >
+                {option.label}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
         )}
       />
     </div>
