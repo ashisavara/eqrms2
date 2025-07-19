@@ -6,11 +6,21 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { fundsUpdateSchema, FundsUpdateValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea, TextInput, ToggleGroupInput } from "./FormFields";
+import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 
 // Internal form component
-function EditFundsForm({ initialData, onSuccess }: { initialData: FundsUpdateValues; onSuccess?: () => void }) {  
+function EditFundsForm({ 
+  initialData, 
+  onSuccess,
+  openSubsOptions,
+  strategyTagOptions
+}: { 
+  initialData: FundsUpdateValues; 
+  onSuccess?: () => void;
+  openSubsOptions: { value: string; label: string }[];
+  strategyTagOptions: { value: string; label: string }[];
+}) {  
   // Convert null values to empty strings for form inputs
   const cleanedData: FundsUpdateValues = {
     fund_rating: initialData.fund_rating ?? 0,
@@ -84,13 +94,29 @@ function EditFundsForm({ initialData, onSuccess }: { initialData: FundsUpdateVal
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
       
       {/* Rating Fields with Toggle Groups */}
-      <ToggleGroupInput name="fund_rating" label="Fund Rating" control={control} options={ratingOptions} />
-      <ToggleGroupInput name="fund_performance_rating" label="Performance Rating" control={control} options={ratingOptions} />
-      <ToggleGroupInput name="fund_strategy_rating" label="Strategy Rating" control={control} options={ratingOptions} />
+      <ToggleGroupInput name="fund_rating" label="Fund Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips" />
+      <ToggleGroupInput name="fund_performance_rating" label="Performance Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
+      <ToggleGroupInput name="fund_strategy_rating" label="Strategy Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
       
-      <TextInput name="open_for_subscription" label="Open for Subscription" control={control} />
+      <ToggleGroupInput 
+        name="open_for_subscription" 
+        label="Open for Subscription" 
+        control={control} 
+        options={openSubsOptions}
+        valueType="string"
+        toggleGroupClassName="gap-2 flex-wrap"
+        itemClassName="!rounded-full border border-gray-300 px-4 py-2 min-w-fit whitespace-nowrap hover:bg-gray-100 hover:border-gray-400 data-[state=on]:bg-blue-600 data-[state=on]:text-white data-[state=on]:border-blue-600 data-[state=on]:hover:bg-blue-700 transition-all duration-200"
+      />
       <TextInput name="recommendation_tag" label="Recommendation Tag" control={control} />
-      <TextInput name="strategy_tag" label="Strategy Tag" control={control} />
+      <ToggleGroupInput 
+        name="strategy_tag" 
+        label="Strategy Tag" 
+        control={control} 
+        options={strategyTagOptions}
+        valueType="string"
+        toggleGroupClassName="gap-2 flex-wrap"
+        itemClassName="ime-choice-chips"
+      />
       <TextInput name="strategy_name" label="Strategy Name" control={control} />
       
       <div>
@@ -107,7 +133,15 @@ function EditFundsForm({ initialData, onSuccess }: { initialData: FundsUpdateVal
 }
 
 // Main component that exports the button and handles sheet state
-export function EditFundsButton({ fundData }: { fundData: any }) {
+export function EditFundsButton({ 
+  fundData,
+  openSubsOptions,
+  strategyTagOptions
+}: { 
+  fundData: any;
+  openSubsOptions: { value: string; label: string }[];
+  strategyTagOptions: { value: string; label: string }[];
+}) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
   // Convert fund data to FundsUpdateValues format
@@ -145,6 +179,8 @@ export function EditFundsButton({ fundData }: { fundData: any }) {
               <EditFundsForm
                 initialData={fundUpdateData}
                 onSuccess={() => setShowEditSheet(false)}
+                openSubsOptions={openSubsOptions}
+                strategyTagOptions={strategyTagOptions}
               />
             </div>
           </SheetContent>

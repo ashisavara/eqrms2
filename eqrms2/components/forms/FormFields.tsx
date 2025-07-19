@@ -62,7 +62,8 @@ export function ToggleGroupInput({
   options,
   className,
   toggleGroupClassName,
-  itemClassName
+  itemClassName,
+  valueType = "string"
 }: { 
   name: string; 
   label: string; 
@@ -71,6 +72,7 @@ export function ToggleGroupInput({
   className?: string;
   toggleGroupClassName?: string;
   itemClassName?: string;
+  valueType?: "string" | "number";
 }) {
   return (
     <div className={className || "space-y-2"}>
@@ -81,8 +83,14 @@ export function ToggleGroupInput({
         render={({ field }) => (
           <ToggleGroup
             type="single"
-            value={field.value?.toString()}
-            onValueChange={(value) => field.onChange(value ? parseInt(value) : 0)}
+            value={field.value?.toString() || ""}
+            onValueChange={(value) => {
+              if (valueType === "number") {
+                field.onChange(value ? parseInt(value) : 0);
+              } else {
+                field.onChange(value || "");
+              }
+            }}
             className={toggleGroupClassName || "justify-start"}
           >
             {options.map((option) => (

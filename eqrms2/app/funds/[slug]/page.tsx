@@ -1,5 +1,5 @@
 import SimpleTable from "@/components/tables/singleRowTable";
-import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
+import { supabaseSingleRead, fetchOptions } from "@/lib/supabase/serverQueryHelper";
 import { RmsFundAmc } from "@/types/funds-detail";
 import { RatingDisplay } from "@/components/conditional-formatting";
 import { EditFundsButton } from "@/components/forms/EditFunds";
@@ -10,13 +10,19 @@ interface PageProps {
 
 export default async function FundPage({ params }: PageProps) {
   const { slug } = await params;
-  const fund = await supabaseSingleRead<RmsFundAmc>({
-    table: "view_rms_funds_amc",
-    columns: "*",
-    filters: [
-      (query) => query.eq('slug', slug)
-    ]
-  });
+
+  // Fetch options and fund data in parallel
+  const [openSubsOptions, strategyTagOptions, fund] = await Promise.all([
+    fetchOptions<string, string>("master", "open_for_subscription_tag", "open_for_subscription_tag"),
+    fetchOptions<string, string>("master", "fund_strategy_def_tag", "fund_strategy_def_tag"),
+    supabaseSingleRead<RmsFundAmc>({
+      table: "view_rms_funds_amc",
+      columns: "*",
+      filters: [
+        (query) => query.eq('slug', slug)
+      ]
+    })
+  ]);
 
   if (!fund) {
     return <div>Fund not found</div>;
@@ -33,7 +39,11 @@ export default async function FundPage({ params }: PageProps) {
             <div> {fund.category_name} |  </div>
             <div> AUM: {fund.fund_aum} cr |  </div>
             <div> Open for Subscription: {fund.open_for_subscription} </div>
-            <EditFundsButton fundData={fund} />
+            <EditFundsButton 
+              fundData={fund} 
+              openSubsOptions={openSubsOptions}
+              strategyTagOptions={strategyTagOptions}
+            />
         </div>
       </div>
       <div>
