@@ -12,11 +12,13 @@ import { toast, Toaster } from "sonner";
 // Internal form component
 function EditFundsForm({ 
   initialData, 
+  fund_id,  // Add explicit fund_id prop
   onSuccess,
   openSubsOptions,
   strategyTagOptions
 }: { 
   initialData: FundsUpdateValues; 
+  fund_id: number;  // Add type for fund_id
   onSuccess?: () => void;
   openSubsOptions: { value: string; label: string }[];
   strategyTagOptions: { value: string; label: string }[];
@@ -43,20 +45,20 @@ function EditFundsForm({
 
   const onSubmit = async (data: FundsUpdateValues) => {
     try {
-      // Add funds_id from initialData for the update
-      const updateData = {
-        ...data,
-        funds_id: (initialData as any).funds_id
+      // Structure the data as the API route expects
+      const requestData = {
+        fund_id,
+        data  // The form data goes in a 'data' property
       };
       
-      if (!updateData.funds_id) {
-        throw new Error('Funds_id is required for updates');
+      if (!requestData.fund_id) {
+        throw new Error('fund_id is required for updates');
       }
       
-      const response = await fetch('/api/update-funds', {
+      const response = await fetch('/api/update-funds-view', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updateData),
+        body: JSON.stringify(requestData),
       });
 
       if (!response.ok) {
@@ -144,6 +146,12 @@ export function EditFundsButton({
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
+  // Get fund_id from fundData
+  const fund_id = fundData.fund_id;
+  if (!fund_id) {
+    console.error('Fund data is missing fund_id:', fundData);
+  }
+
   // Convert fund data to FundsUpdateValues format
   const fundUpdateData: FundsUpdateValues = {
     fund_rating: fundData.fund_rating ?? 0,
@@ -178,6 +186,7 @@ export function EditFundsButton({
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditFundsForm
                 initialData={fundUpdateData}
+                fund_id={fund_id}  // Pass fund_id explicitly
                 onSuccess={() => setShowEditSheet(false)}
                 openSubsOptions={openSubsOptions}
                 strategyTagOptions={strategyTagOptions}

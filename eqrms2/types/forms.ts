@@ -47,17 +47,17 @@ export type CompanyQrtNotesValues = z.infer<typeof CompanyQrtNotesSchema>;
 
 // Defining the zodSchema for funds update
 export const fundsUpdateSchema = z.object({
-  fund_rating: z.number(),
-  fund_performance_rating: z.number(),
-  fund_strategy_rating: z.number(),
-  open_for_subscription: z.string(),
-  recommendation_tag: z.string(),
-  strategy_tag: z.string(),
-  strategy_name: z.string(),
-  investment_view: z.string(),
-  strategy_view: z.string(),
-  additional_performance_view: z.string(),
-  oth_salient_points: z.string(),
+  fund_rating: z.number().nullable(),
+  fund_performance_rating: z.number().nullable(),
+  fund_strategy_rating: z.number().nullable(),
+  open_for_subscription: z.string().nullable(),
+  recommendation_tag: z.string().nullable(),
+  strategy_tag: z.string().nullable(),
+  strategy_name: z.string().nullable(),
+  investment_view: z.string().nullable(),
+  strategy_view: z.string().nullable(),
+  additional_performance_view: z.string().nullable(),
+  oth_salient_points: z.string().nullable(),
 });
 
 export type FundsUpdateValues = z.infer<typeof fundsUpdateSchema>;
