@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import { SearchButton } from "@/components/forms/SearchButton";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -33,7 +34,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <p className="font-bold text-blue-700 pt-6 pb-2 pl-4"><a href="/companies">Val Screen</a>  |  <a href="/funds"> Funds</a></p>
+            <p className="font-bold text-blue-700 pt-6 pb-2 pl-4"><a href="/companies">Val Screen</a>  |  <a href="/funds"> Funds</a> | <SearchButton /></p>
             {children}
           </ThemeProvider>
       </body>
