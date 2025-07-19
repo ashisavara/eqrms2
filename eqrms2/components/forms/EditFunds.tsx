@@ -173,7 +173,7 @@ export function EditFundsButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Edit
+         Fund View |  
       </span>
 
       {/* Edit Sheet */}

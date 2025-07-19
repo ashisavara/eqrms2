@@ -3,6 +3,7 @@ import { supabaseSingleRead, fetchOptions } from "@/lib/supabase/serverQueryHelp
 import { RmsFundAmc } from "@/types/funds-detail";
 import { RatingDisplay } from "@/components/conditional-formatting";
 import { EditFundsButton } from "@/components/forms/EditFunds";
+import { EditAMCButton } from "@/components/forms/EditAMC";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -12,9 +13,16 @@ export default async function FundPage({ params }: PageProps) {
   const { slug } = await params;
 
   // Fetch options and fund data in parallel
-  const [openSubsOptions, strategyTagOptions, fund] = await Promise.all([
+  const [openSubsOptions, strategyTagOptions, amcPedigreeOptions, amcTeamPedigreeOptions, amcTeamChurnOptions, amcMaturityOptions, amcInvPhilosophyDefOptions, fund] = await Promise.all([
     fetchOptions<string, string>("master", "open_for_subscription_tag", "open_for_subscription_tag"),
     fetchOptions<string, string>("master", "fund_strategy_def_tag", "fund_strategy_def_tag"),
+
+    fetchOptions<string, string>("master", "amc_pedigree_tag", "amc_pedigree_tag"),
+    fetchOptions<string, string>("master", "amc_team_pedigree_tag", "amc_team_pedigree_tag"),
+    fetchOptions<string, string>("master", "amc_team_churn_tag", "amc_team_churn_tag"),
+    fetchOptions<string, string>("master", "amc_maturity_tag", "amc_maturity_tag"),
+    fetchOptions<string, string>("master", "amc_inv_philosophy_def_tag", "amc_inv_philosophy_def_tag"),
+
     supabaseSingleRead<RmsFundAmc>({
       table: "view_rms_funds_amc",
       columns: "*",
@@ -30,20 +38,30 @@ export default async function FundPage({ params }: PageProps) {
 
   return (
     <div>
-      <div className="bg-gray-100 p-4 rounded-md text-center">
-        <h1 className="text-2xl font-bold pb-4">{fund.fund_name}</h1>
+      <div>
+        <h1 className="text-2xl font-bold p-4 bg-gray-100 rounded text-center">{fund.fund_name}</h1>
         <div className="flex flex-row gap-2 justify-center">
             <div> {fund.amc_name} |  </div>
             <div> {fund.structure_name} -  </div>
             <div> {fund.asset_class_name} -  </div>
             <div> {fund.category_name} |  </div>
             <div> AUM: {fund.fund_aum} cr |  </div>
-            <div> Open for Subscription: {fund.open_for_subscription} </div>
-            <EditFundsButton 
+            <div> Open for Subscription: {fund.open_for_subscription}  | </div>
+            <div>
+              <span>Edit: </span>
+              <EditFundsButton 
               fundData={fund} 
               openSubsOptions={openSubsOptions}
               strategyTagOptions={strategyTagOptions}
-            />
+              />
+              <EditAMCButton 
+              amcData={fund} 
+              amcPedigreeOptions={amcPedigreeOptions}
+              amcTeamPedigreeOptions={amcTeamPedigreeOptions}
+              amcTeamChurnOptions={amcTeamChurnOptions}
+              amcMaturityOptions={amcMaturityOptions}
+              amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
+              />
         </div>
       </div>
       <div>
@@ -152,6 +170,10 @@ export default async function FundPage({ params }: PageProps) {
                     <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
                     <div className="flex-1 min-w-0">{fund.inv_phil_desc}</div>
                 </div>
+                <div className="flex mb-4">
+                    <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
+                    <div className="flex-1 min-w-0">{fund.salient_points}</div>
+                </div>
         </div>
         <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
             <h3 className="ime-basic-h3"> Investment Team </h3>
@@ -171,5 +193,6 @@ export default async function FundPage({ params }: PageProps) {
         </div>
       </div>
     </div>
+  </div>
   );
 }
