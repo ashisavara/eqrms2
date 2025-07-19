@@ -4,7 +4,11 @@ import { RmsFundAmc } from "@/types/funds-detail";
 import { RatingDisplay } from "@/components/conditional-formatting";
 import { EditFundsButton } from "@/components/forms/EditFunds";
 
-export default async function FundPage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function FundPage({ params }: PageProps) {
   const { slug } = await params;
   const fund = await supabaseSingleRead<RmsFundAmc>({
     table: "view_rms_funds_amc",
