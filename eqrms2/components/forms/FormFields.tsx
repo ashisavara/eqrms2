@@ -9,22 +9,41 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import TextareaAutosize from 'react-textarea-autosize';
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns"; // Comment out the DatePicker import
+import { Calendar } from "@/components/ui/calendar"; // Comment out the DatePicker import
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Comment out the DatePicker import
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react"; // Make sure you have lucide-react installed
+import { CalendarIcon } from "lucide-react"; // Make sure you have lucide-react installed // Comment out the DatePicker import
 import { cn } from "@/lib/utils"; // shadcn utility for combining classNames
-import "@/styles/calendar.css";  // Add this import
 
-type Props = { name: string; label: string; control: Control<any>; placeholder?: string };
+// Update the Props type to include optional type and step
+type Props = { 
+  name: string; 
+  label: string; 
+  control: Control<any>; 
+  placeholder?: string;
+  type?: string;
+  step?: string;
+};
 
-// Text input field
-export function TextInput({ name, label, control, placeholder }: Props) {
+// Update the TextInput component
+export function TextInput({ name, label, control, placeholder, type, step }: Props) {
   return (
     <div>
       <Label htmlFor={name} className="font-bold">{label}</Label>
-      <Controller name={name} control={control} render={({ field }) => <Input id={name} placeholder={placeholder} {...field} />} />
+      <Controller 
+        name={name} 
+        control={control} 
+        render={({ field }) => (
+          <Input 
+            {...field}
+            id={name} 
+            placeholder={placeholder} 
+            type={type}
+            step={step}
+          />
+        )} 
+      />
     </div>
   );
 }
@@ -228,6 +247,7 @@ export function RadioInput({
   );
 }
 
+
 export function DatePicker({ 
   name, 
   label, 
@@ -249,6 +269,7 @@ export function DatePicker({
           <Popover>
             <PopoverTrigger asChild>
               <Button
+                id={name}
                 variant={"outline"}
                 className={cn(
                   "w-full justify-start text-left font-normal",
@@ -273,3 +294,4 @@ export function DatePicker({
     </div>
   );
 }
+

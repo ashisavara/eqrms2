@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { amcDueDiligenceSchema, AmcDueDiligenceValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput, DatePicker } from "./FormFields";
+import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput  , DatePicker } from "./FormFields";
 import { toast, Toaster } from "sonner";
 
 // Internal form component
@@ -35,7 +35,7 @@ function EditAmcDueDilForm({
     inv_committee_amc: initialData.inv_committee_amc ?? "",
     ownership_alignment_amc: initialData.ownership_alignment_amc ?? "",
     strategy_adherance_amc: initialData.strategy_adherance_amc ?? "",
-    NAV_chart_amc: initialData.NAV_chart_amc ?? "",
+    nav_chart_amc: initialData.nav_chart_amc ?? "",
     cy_returns_amc: initialData.cy_returns_amc ?? 0,
     drawdown_history_amc: initialData.drawdown_history_amc ?? "",
     qty_mktcap_composition_amc: initialData.qty_mktcap_composition_amc ?? "",
@@ -65,8 +65,8 @@ function EditAmcDueDilForm({
     custory_broker_mkt_mat: initialData.custory_broker_mkt_mat ?? "",
     
     // SEBI Section
-    firm_AUM_sebi: initialData.firm_AUM_sebi ?? 0,
-    strategy_AUM_clients_sebi: initialData.strategy_AUM_clients_sebi ?? 0,
+    firm_aum_sebi: initialData.firm_aum_sebi ?? 0,
+    strategy_aum_clients_sebi: initialData.strategy_aum_clients_sebi ?? 0,
     
     // CHECK Section - Dates can stay null as they represent absence of a check
     disclosure_doc_last_check: initialData.disclosure_doc_last_check ?? null,
@@ -74,12 +74,17 @@ function EditAmcDueDilForm({
     amc_diligence_last_check: initialData.amc_diligence_last_check ?? null
   };
 
-  const { control, handleSubmit } = useForm<AmcDueDiligenceValues>({
+  const { control, handleSubmit, formState: { errors } } = useForm<AmcDueDiligenceValues>({
     defaultValues: cleanedData,
     resolver: zodResolver(amcDueDiligenceSchema),
   });
 
+  // Debug: Log form errors
+  console.log('Form errors:', errors);
+
   const onSubmit = async (data: AmcDueDiligenceValues) => {
+    console.log('Form submitted with data:', data); // Add this line
+    
     try {
       // Structure the data as the API route expects
       const requestData = {
@@ -92,7 +97,7 @@ function EditAmcDueDilForm({
       }
       
       // TODO: Update this API endpoint when created
-      const response = await fetch('/api/update-amc-due-diligence', {
+      const response = await fetch('/api/update-amc-due-dil', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData),
@@ -126,15 +131,17 @@ function EditAmcDueDilForm({
   ];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full p-4 space-y-6">
+    <form onSubmit={handleSubmit(onSubmit, (errors) => {
+      console.log('Form submission failed with errors:', errors);
+    })} className="w-full p-4 space-y-6">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
       
       {/* CHECK Section */}
       <h3 className="text-lg font-semibold border-b pb-2">Last Check Dates</h3>
       <div className="space-y-4 grid grid-cols-3">
-        <DatePicker name="disclosure_doc_last_check" label="Disclosure Document Last Check" control={control}/>
-        <DatePicker name="mkt_mat_last_check" label="Market Materials Last Check" control={control}/>
-        <DatePicker name="amc_diligence_last_check" label="AMC Diligence Last Check" control={control}/>
+        <DatePicker name="disclosure_doc_last_check" label="Disclosure Document Last Check" control={control} />
+        <DatePicker name="mkt_mat_last_check" label="Market Materials Last Check" control={control} />
+        <DatePicker name="amc_diligence_last_check" label="AMC Diligence Last Check" control={control} />
       </div>
 
       {/* DD Section */}
@@ -156,7 +163,7 @@ function EditAmcDueDilForm({
         <ResizableTextArea name="inv_committee_amc" label="Investment Committee" control={control} />
         <ResizableTextArea name="ownership_alignment_amc" label="Ownership Alignment" control={control} />
         <ResizableTextArea name="strategy_adherance_amc" label="Strategy Adherence" control={control} />
-        <ResizableTextArea name="NAV_chart_amc" label="NAV Chart" control={control} />
+        <ResizableTextArea name="nav_chart_amc" label="NAV Chart" control={control} />
         <TextInput name="cy_returns_amc" label="Current Year Returns" control={control} type="number" step="0.01" />
         <ResizableTextArea name="drawdown_history_amc" label="Drawdown History" control={control} />
         <ResizableTextArea name="qty_mktcap_composition_amc" label="Quality Market Cap Composition" control={control} />
@@ -206,11 +213,17 @@ function EditAmcDueDilForm({
       {/* SEBI Section */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold border-b pb-2">SEBI Information</h3>
-        <TextInput name="firm_AUM_sebi" label="Firm AUM" control={control} type="number" /> 
-        <TextInput name="strategy_AUM_clients_sebi" label="Strategy AUM Clients" control={control} type="number" />
+        <TextInput name="firm_aum_sebi" label="Firm AUM" control={control} type="number" /> 
+        <TextInput name="strategy_aum_clients_sebi" label="Strategy AUM Clients" control={control} type="number" />
       </div>
       
-      <Button type="submit" className="w-full">Update AMC Due Diligence</Button>
+      <Button 
+        type="submit" 
+        className="w-full"
+        onClick={() => console.log('Button clicked!')}
+      >
+        Update AMC Due Diligence
+      </Button>
     </form>
   );
 }
@@ -245,7 +258,7 @@ export function EditAmcDueDilButton({
     inv_committee_amc: amcData.inv_committee_amc ?? "",
     ownership_alignment_amc: amcData.ownership_alignment_amc ?? "",
     strategy_adherance_amc: amcData.strategy_adherance_amc ?? "",
-    NAV_chart_amc: amcData.NAV_chart_amc ?? "",
+    nav_chart_amc: amcData.nav_chart_amc ?? "",
     cy_returns_amc: amcData.cy_returns_amc ?? 0,
     drawdown_history_amc: amcData.drawdown_history_amc ?? "",
     qty_mktcap_composition_amc: amcData.qty_mktcap_composition_amc ?? "",
@@ -275,8 +288,8 @@ export function EditAmcDueDilButton({
     custory_broker_mkt_mat: amcData.custory_broker_mkt_mat ?? "",
     
     // SEBI Section
-    firm_AUM_sebi: amcData.firm_AUM_sebi ?? 0,
-    strategy_AUM_clients_sebi: amcData.strategy_AUM_clients_sebi ?? 0,
+    firm_aum_sebi: amcData.firm_aum_sebi ?? 0,
+    strategy_aum_clients_sebi: amcData.strategy_aum_clients_sebi ?? 0,
     
     // CHECK Section - Dates can stay null as they represent absence of a check
     disclosure_doc_last_check: amcData.disclosure_doc_last_check ?? null,

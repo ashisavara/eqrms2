@@ -113,7 +113,7 @@ export const amcDueDiligenceSchema = z.object({
   inv_process_mkt_mat: z.string().nullable(),
   strategy_adherance_amc: z.string().nullable(),
   active_schemes_mkt_mat: z.string().nullable(),
-  NAV_chart_amc: z.string().nullable(),
+  nav_chart_amc: z.string().nullable(),
   cy_returns_amc: z.number().nullable(),
   rolling_returns_mkt_mat: z.number().nullable(),
   drawdown_history_amc: z.string().nullable(),
@@ -123,8 +123,8 @@ export const amcDueDiligenceSchema = z.object({
   section_allocation_amc: z.string().nullable(),
   historic_calls_amc: z.string().nullable(),
   black_swan_events_amc: z.string().nullable(),
-  firm_AUM_sebi: z.number().nullable(),
-  strategy_AUM_clients_sebi: z.number().nullable(),
+  firm_aum_sebi: z.number().nullable(),
+  strategy_aum_clients_sebi: z.number().nullable(),
   capacity_contraints_amc: z.string().nullable(),
   fee_mkt_mat: z.number().nullable(),
   commission_mkt_mat: z.number().nullable(),
@@ -133,9 +133,9 @@ export const amcDueDiligenceSchema = z.object({
   webinars_amc: z.string().nullable(),
   custory_broker_mkt_mat: z.string().nullable(),
   mailing_list_amc: z.boolean().nullable(),
-  disclosure_doc_last_check: z.date().nullable(),
-  mkt_mat_last_check: z.date().nullable(),
-  amc_diligence_last_check: z.date().nullable()
+  disclosure_doc_last_check: z.coerce.date().nullable(),
+  mkt_mat_last_check: z.coerce.date().nullable(),
+  amc_diligence_last_check: z.coerce.date().nullable()
 });
 
 // Add the type export for use in TypeScript
