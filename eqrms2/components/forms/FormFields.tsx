@@ -9,6 +9,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import TextareaAutosize from 'react-textarea-autosize';
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react"; // Make sure you have lucide-react installed
+import { cn } from "@/lib/utils"; // shadcn utility for combining classNames
+import "@/styles/calendar.css";  // Add this import
 
 type Props = { name: string; label: string; control: Control<any>; placeholder?: string };
 
@@ -215,6 +222,52 @@ export function RadioInput({
               </label>
             ))}
           </div>
+        )}
+      />
+    </div>
+  );
+}
+
+export function DatePicker({ 
+  name, 
+  label, 
+  control,
+  placeholder = "Pick a date"
+}: { 
+  name: string; 
+  label: string; 
+  control: Control<any>;
+  placeholder?: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={name} className="font-bold">{label}</Label>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !field.value && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {field.value ? format(new Date(field.value), "PPP") : placeholder}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={field.value ? new Date(field.value) : undefined}
+                onSelect={field.onChange}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         )}
       />
     </div>

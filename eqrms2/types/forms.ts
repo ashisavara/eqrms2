@@ -88,3 +88,55 @@ export const amcUpdateSchema = z.object({
 });
 
 export type AmcUpdateValues = z.infer<typeof amcUpdateSchema>;
+
+// -----------------------
+// AMC DUE DILIGENCE FORM 
+// -----------------------
+
+export const amcDueDiligenceSchema = z.object({
+  amc_incorporation_dd: z.number().nullable(),
+  pms_license_number_dd: z.string().nullable(),
+  shareholding_structure_dd: z.string().nullable(),
+  team_changes_amc: z.string().nullable(),
+  other_biz_dd: z.string().nullable(),
+  legal_dd: z.string().nullable(),
+  fund_managers_mkt_mat: z.string().nullable(),
+  inv_team_amc: z.string().nullable(),
+  ops_team_amc: z.string().nullable(),
+  inv_committee_amc: z.string().nullable(),
+  ownership_alignment_amc: z.string().nullable(),
+  inv_philosophy_mkt_mat: z.string().nullable(),
+  portfolio_construction_mkt_mat: z.string().nullable(),
+  risk_management_mkt_mat: z.string().nullable(),
+  cash_management_mkt_mat: z.string().nullable(),
+  derivatives_mkt_mat: z.boolean().nullable(),
+  inv_process_mkt_mat: z.string().nullable(),
+  strategy_adherance_amc: z.string().nullable(),
+  active_schemes_mkt_mat: z.string().nullable(),
+  NAV_chart_amc: z.string().nullable(),
+  cy_returns_amc: z.number().nullable(),
+  rolling_returns_mkt_mat: z.number().nullable(),
+  drawdown_history_amc: z.string().nullable(),
+  portfolio_composition_mkt_mat: z.string().nullable(),
+  qty_mktcap_composition_amc: z.string().nullable(),
+  portfolio_turnover_amc: z.number().nullable(),
+  section_allocation_amc: z.string().nullable(),
+  historic_calls_amc: z.string().nullable(),
+  black_swan_events_amc: z.string().nullable(),
+  firm_AUM_sebi: z.number().nullable(),
+  strategy_AUM_clients_sebi: z.number().nullable(),
+  capacity_contraints_amc: z.string().nullable(),
+  fee_mkt_mat: z.number().nullable(),
+  commission_mkt_mat: z.number().nullable(),
+  inv_comm_amc: z.string().nullable(),
+  disclosure_doc_mkt_mat: z.string().nullable(),
+  webinars_amc: z.string().nullable(),
+  custory_broker_mkt_mat: z.string().nullable(),
+  mailing_list_amc: z.boolean().nullable(),
+  disclosure_doc_last_check: z.date().nullable(),
+  mkt_mat_last_check: z.date().nullable(),
+  amc_diligence_last_check: z.date().nullable()
+});
+
+// Add the type export for use in TypeScript
+export type AmcDueDiligenceValues = z.infer<typeof amcDueDiligenceSchema>;

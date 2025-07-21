@@ -5,6 +5,7 @@ import { RatingDisplay } from "@/components/conditional-formatting";
 import { EditFundsButton } from "@/components/forms/EditFunds";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -30,7 +31,7 @@ export default async function FundPage({ params }: PageProps) {
       filters: [
         (query) => query.eq('slug', slug)
       ]
-    })
+    }), 
   ]);
 
   if (!fund) {
@@ -63,6 +64,7 @@ export default async function FundPage({ params }: PageProps) {
               amcMaturityOptions={amcMaturityOptions}
               amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
               />
+              <EditAmcDueDilButton amcData={fund} />
         </div>
         </div>
       <div>
