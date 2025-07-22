@@ -1,4 +1,4 @@
-import { serverSideQuery, getFilterOptions } from "@/lib/supabase/serverSideQueryHelper";
+import { serverSideQuery, getMultipleFilterOptions } from "@/lib/supabase/serverSideQueryHelper";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import InternalFundsTable from "./InternalFundsTable";
 import InternalFundsFilters from "./InternalFundsFilters";
@@ -54,22 +54,31 @@ export default async function InternalFundsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const { filters, pagination, sorting, search } = parseSearchParams(params);
 
+  // Define filter configuration for funds
+  const fundsFilterConfig = {
+    // fund_rating is handled specially in the helper function with hardcoded values (1-5)
+    fund_rating: { table: '', valueCol: '', labelCol: '' }, // Not used - handled specially
+    amc_name: { table: 'rms_amc', valueCol: 'amc_name', labelCol: 'amc_name' },
+    structure_name: { table: 'rms_structure', valueCol: 'structure_name', labelCol: 'structure_name' },
+    category_name: { table: 'rms_category', valueCol: 'cat_name', labelCol: 'cat_name' },
+    // For Y/N fields, we'll get distinct values from the view itself
+    estate_duty_exposure: { table: 'view_rms_funds_screener', valueCol: 'estate_duty_exposure', labelCol: 'estate_duty_exposure' },
+    us_investors: { table: 'view_rms_funds_screener', valueCol: 'us_investors', labelCol: 'us_investors' }
+  };
+
   // Fetch filter options and funds data in parallel
   const [
-    fundRatingOptions,
-    amcNameOptions,
-    structureNameOptions,
-    categoryNameOptions,
-    estateDutyOptions,
-    usInvestorsOptions,
+    filterOptions,
     fundsResult
   ] = await Promise.all([
-    getFilterOptions('fund_rating'),
-    getFilterOptions('amc_name'),
-    getFilterOptions('structure_name'),
-    getFilterOptions('category_name'),
-    getFilterOptions('estate_duty_exposure'),
-    getFilterOptions('us_investors'),
+    getMultipleFilterOptions([
+      'fund_rating',
+      'amc_name', 
+      'structure_name',
+      'category_name',
+      'estate_duty_exposure',
+      'us_investors'
+    ], fundsFilterConfig),
     serverSideQuery<RmsFundsScreener>({
       table: "view_rms_funds_screener",
       columns: "fund_id,fund_name,fund_rating,fund_performance_rating,amc_name,amc_rating,asset_class_name,category_name,cat_long_name,structure_name,open_for_subscription,estate_duty_exposure,us_investors,one_yr,three_yr,five_yr,since_inception,slug",
@@ -81,15 +90,6 @@ export default async function InternalFundsPage({ searchParams }: PageProps) {
       staticFilters: [] // No static filters - show all funds for internal users
     })
   ]);
-
-  const filterOptions = {
-    fund_rating: fundRatingOptions,
-    amc_name: amcNameOptions,
-    structure_name: structureNameOptions,
-    category_name: categoryNameOptions,
-    estate_duty_exposure: estateDutyOptions,
-    us_investors: usInvestorsOptions
-  };
 
   return (
     <div className="space-y-6 p-6">
@@ -103,7 +103,14 @@ export default async function InternalFundsPage({ searchParams }: PageProps) {
       </div>
 
       <InternalFundsFilters 
-        filterOptions={filterOptions}
+        filterOptions={filterOptions as {
+          fund_rating: any[];
+          amc_name: any[];
+          structure_name: any[];
+          category_name: any[];
+          estate_duty_exposure: any[];
+          us_investors: any[];
+        }}
         currentFilters={filters}
         currentSearch={search}
         currentSort={{

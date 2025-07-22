@@ -56,10 +56,10 @@ export type RmsFundAmc = {
     inv_phil_desc: string | null;
     salient_points: string | null;
   
-    category_name: string | null;
-    category_long_name: string | null;
-    asset_class_name: string | null;
-    structure_name: string | null;
+      category_name: string | null;
+  category_long_name: string | null;
+  asset_class_name: string | null;
+  structure_name: string | null;
   };
 
 
