@@ -86,10 +86,10 @@ export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions,
       <TextInput name="positive" label="Positive" control={control} />
       <TextInput name="negative" label="Negative" control={control} />
       <TextInput name="outlook" label="Outlook" control={control} />
+      <TextInput name="summary" label="Summary" control={control} />
       
       <div>
         <h4 className="font-bold mt-5 border-t-2 border-b-2 border-gray-300">Only for DVs plus</h4>
-        <TextInput name="summary" label="Summary" control={control} />
         <ResizableTextArea name="positive_notes" label="Positive Notes" control={control} />
         <ResizableTextArea name="negative_notes" label="Negative Notes" control={control} />
         <ResizableTextArea name="neutral_notes" label="Neutral Notes" control={control} />
