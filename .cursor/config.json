@@ -1,0 +1,41 @@
+{
+  "preferences": {
+    "codeStyle": {
+      "functionCalls": "single-line-when-short",
+      "maxLineLength": 80,
+      "quotationMarks": "single",
+      "semicolons": true
+    },
+    "architecture": {
+      "componentStructure": "atomic-design",
+      "stateManagement": "react-query",
+      "apiPattern": "server-actions"
+    },
+    "techStack": {
+      "frontend": {
+        "framework": "nextjs",
+        "styling": "tailwind",
+        "formHandling": "react-hook-form",
+        "stateManagement": ["react-query", "zustand"],
+        "testing": "vitest"
+      },
+      "backend": {
+        "database": "supabase",
+        "auth": "supabase-auth",
+        "api": "next-server-actions"
+      }
+    },
+    "patterns": {
+      "forms": {
+        "validation": "zod",
+        "errorHandling": "toast-notifications",
+        "submitPattern": "optimistic-updates"
+      },
+      "dataFetching": {
+        "preferServerComponents": true,
+        "caching": "react-query",
+        "errorBoundaries": true
+      }
+    }
+  }
+} 
