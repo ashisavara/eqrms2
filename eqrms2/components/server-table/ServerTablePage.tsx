@@ -28,6 +28,11 @@ export interface ServerTablePageConfig<T = any> {
   tableClassName?: string;
   showPagination?: boolean;
   pageSizeOptions?: number[];
+  
+  // 🔄 ITERATIVE FILTERING (Optional - enables dynamic filter options)
+  sourceTable?: string;           // Main data table/view for iterative filtering
+  filterConfig?: Record<string, any>; // Filter configuration mapping (same as in page.tsx)
+  searchColumns?: string[];       // Columns to include in search filtering
 }
 
 // Props for the page component
@@ -68,6 +73,9 @@ export default function ServerTablePage<T = any>({
         searchPlaceholder={config.searchPlaceholder}
         showSearch={config.showSearch}
         showSort={config.showSort}
+        sourceTable={config.sourceTable}
+        filterConfig={config.filterConfig}
+        searchColumns={config.searchColumns}
       />
 
       {/* Table */}

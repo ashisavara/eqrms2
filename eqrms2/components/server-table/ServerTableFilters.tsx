@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MultiSelectFilter } from "@/components/data-table/MultiSelectFilter";
 import { useServerTableState } from "@/lib/hooks/useServerTableState";
-import { Search, RotateCcw } from "lucide-react";
+import { getIterativeFilterOptions } from "@/lib/supabase/serverSideQueryHelper";
+import { Search, RotateCcw, Loader2 } from "lucide-react";
 
 // Filter option type (matches serverSideQueryHelper)
 export interface FilterOption {
@@ -41,6 +42,10 @@ export interface ServerTableFiltersProps {
   searchPlaceholder?: string;
   showSearch?: boolean;
   showSort?: boolean;
+  // New props for iterative filtering
+  sourceTable?: string;
+  filterConfig?: Record<string, any>;
+  searchColumns?: string[];
 }
 
 export default function ServerTableFilters({
@@ -50,7 +55,10 @@ export default function ServerTableFilters({
   tableStateConfig,
   searchPlaceholder = "Search...",
   showSearch = true,
-  showSort = true
+  showSort = true,
+  sourceTable,
+  filterConfig,
+  searchColumns = []
 }: ServerTableFiltersProps) {
   // Use the server table state hook
   const tableState = useServerTableState(tableStateConfig);
@@ -59,21 +67,71 @@ export default function ServerTableFilters({
   const [localFilters, setLocalFilters] = useState(tableState.state.filters);
   const [localSearch, setLocalSearch] = useState(tableState.state.search);
   const [localSort, setLocalSort] = useState(tableState.state.sorting);
+  
+  // 🔄 ITERATIVE FILTERING STATE
+  // Track both original and current filter options
+  const [originalFilterConfigs] = useState(filterConfigs); // Never changes - stores initial options
+  const [currentFilterConfigs, setCurrentFilterConfigs] = useState(filterConfigs); // Updates with iterative filtering
+  const [isUpdatingFilters, setIsUpdatingFilters] = useState(false); // Loading state
 
-  // Apply filters (navigate to new URL)
-  const applyFilters = () => {
+  // 🔄 Update filter options based on current applied filters
+  const updateFilterOptions = async (appliedFilters: Record<string, any>, searchQuery: string = '') => {
+    // Skip if we don't have the required data for iterative filtering
+    if (!sourceTable || !filterConfig) {
+      return;
+    }
+
+    try {
+      setIsUpdatingFilters(true);
+      
+      // Get updated filter options based on current filters
+      const updatedOptions = await getIterativeFilterOptions(
+        sourceTable,
+        tableStateConfig.filterKeys,
+        filterConfig,
+        appliedFilters,
+        searchColumns,
+        searchQuery
+      );
+
+      // Update the filter configs with new options
+      const updatedFilterConfigs = currentFilterConfigs.map(config => ({
+        ...config,
+        options: updatedOptions[config.key] || config.options
+      }));
+
+      setCurrentFilterConfigs(updatedFilterConfigs);
+    } catch (error) {
+      console.error('Error updating filter options:', error);
+      // On error, keep current options - no change to UX
+    } finally {
+      setIsUpdatingFilters(false);
+    }
+  };
+
+  // Apply filters (navigate to new URL and update filter options)
+  const applyFilters = async () => {
+    // Navigate to new URL first
     tableState.navigate({
       filters: localFilters,
       search: localSearch,
       sorting: localSort
     }, true, basePath);
+
+    // Then update filter options for better UX on next interaction
+    await updateFilterOptions(localFilters, localSearch);
   };
 
-  // Clear all filters
+  // Clear all filters (reset to original state)
   const clearFilters = () => {
     setLocalFilters({});
     setLocalSearch('');
     setLocalSort(tableStateConfig.defaultSort || { column: 'id', direction: 'desc' });
+    
+    // Reset filter options to original
+    setCurrentFilterConfigs(originalFilterConfigs);
+    
+    // Navigate to clear URL
     tableState.clearFilters(basePath);
   };
 
@@ -127,7 +185,10 @@ export default function ServerTableFilters({
               onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
             />
           </div>
-          <Button onClick={applyFilters} className="shrink-0">Apply Filters</Button>
+          <Button onClick={applyFilters} disabled={isUpdatingFilters} className="shrink-0">
+            {isUpdatingFilters && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+            Apply Filters
+          </Button>
           <Button variant="outline" onClick={clearFilters} className="shrink-0">
             <RotateCcw className="h-4 w-4 mr-2" />
             Clear All
@@ -136,9 +197,9 @@ export default function ServerTableFilters({
       )}
 
       {/* Filters Row */}
-      {filterConfigs.length > 0 && (
+      {currentFilterConfigs.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filterConfigs.map((config) => (
+          {currentFilterConfigs.map((config) => (
             <div key={config.key}>
               <MultiSelectFilter
                 title={config.title}

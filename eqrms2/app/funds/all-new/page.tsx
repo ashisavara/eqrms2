@@ -3,13 +3,17 @@ import { RmsFundsScreener } from "@/types/funds-detail";
 import FundsTableClient from "./FundsTableClient";
 
 // ================================================================
-// 🎯 SERVER-SIDE TABLE TEMPLATE
+// 🎯 SERVER-SIDE TABLE TEMPLATE WITH ITERATIVE FILTERING
 // ================================================================
 // This is a complete example of building a large table (>1000 records)
 // with server-side filtering, sorting, and pagination using our new system.
 // 
-// Copy this file and modify the configuration objects below to create
-// new large tables in ~20 lines of custom code!
+// 🔄 NEW FEATURE: ITERATIVE FILTERING
+// This template includes dynamic filter options that update based on applied
+// filters. Users only see filter options that will return results.
+// 
+// Copy this directory and modify the configuration objects below to create
+// new large tables with iterative filtering in ~20 minutes!
 // ================================================================
 
 interface PageProps {
@@ -168,6 +172,8 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
         estate_duty_exposure: any[];
         us_investors: any[];
       }}
+      filterConfig={filterConfig}
+      searchColumns={['fund_name', 'amc_name', 'category_name', 'structure_name']}
     />
   );
 }

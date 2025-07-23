@@ -305,4 +305,138 @@ export async function getMultipleFilterOptions(
 }
 
 // Import the existing helper for backward compatibility
-import { supabaseListRead } from "./serverQueryHelper"; 
+import { supabaseListRead } from "./serverQueryHelper";
+
+/**
+ * 🔄 ITERATIVE FILTER OPTIONS
+ * 
+ * This function provides dynamic filter options that update based on currently applied filters.
+ * It ensures users only see options that will return results, creating a better UX.
+ * 
+ * HOW IT WORKS:
+ * - For each filter column, apply ALL OTHER filters except that specific column
+ * - Get distinct values from the filtered dataset for that column  
+ * - Return updated options that will guarantee results
+ * 
+ * EXAMPLE:
+ * User selects: AMC = "HDFC"
+ * Result: Category filter now only shows categories that HDFC has funds in
+ * 
+ * @param sourceTable - The main data table/view to query
+ * @param filterKeys - Array of filter column names
+ * @param filterConfig - Configuration mapping filter keys to their source tables
+ * @param currentFilters - Currently applied filters (from URL state)
+ * @param searchColumns - Columns to include in search (optional)
+ * @param search - Current search query (optional)
+ */
+export async function getIterativeFilterOptions(
+  sourceTable: string,
+  filterKeys: string[],
+  filterConfig: FilterConfiguration,
+  currentFilters: ServerSideFilters = {},
+  searchColumns: string[] = [],
+  search?: string
+): Promise<Record<string, FilterOption[]>> {
+  const supabase = await createClient();
+  
+  // Prepare results object
+  const results: Record<string, FilterOption[]> = {};
+
+  // For each filter key, get options based on OTHER applied filters
+  for (const filterKey of filterKeys) {
+    try {
+      // Special handling for fund_rating - always return all options
+      if (filterKey === 'fund_rating') {
+        results[filterKey] = [
+          { value: 0, label: '0' },
+          { value: 1, label: '1' },
+          { value: 2, label: '2' },
+          { value: 3, label: '3' },
+          { value: 4, label: '4' },
+          { value: 5, label: '5' }
+        ];
+        continue;
+      }
+
+      // Create filters for all OTHER columns (exclude current filter key)
+      const otherFilters: ServerSideFilters = {};
+      Object.entries(currentFilters).forEach(([key, value]) => {
+        if (key !== filterKey && value !== null && value !== undefined) {
+          // Only include non-empty arrays and non-empty values
+          if (Array.isArray(value)) {
+            if (value.length > 0) {
+              otherFilters[key] = value;
+            }
+          } else if (value !== '') {
+            otherFilters[key] = value;
+          }
+        }
+      });
+
+      // Build query for distinct values in this column
+      let query = supabase
+        .from(sourceTable)
+        .select(filterKey, { count: 'exact' });
+
+      // Apply filters from OTHER columns
+      const filterFunctions = buildFilters(otherFilters);
+      filterFunctions.forEach((filterFn) => {
+        query = filterFn(query);
+      });
+
+      // Apply search filters if provided
+      if (search && searchColumns.length > 0) {
+        const searchFilters = buildSearchFilters(search, searchColumns);
+        searchFilters.forEach((searchFn) => {
+          query = searchFn(query);
+        });
+      }
+
+      // Execute query
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error(`Error fetching iterative options for ${filterKey}:`, error);
+        // Fallback to original filter options
+        results[filterKey] = await getFilterOptions(filterKey, filterConfig);
+        continue;
+      }
+
+      // Extract unique values, filter out nulls/empties, and sort
+      const uniqueValues = [
+        ...new Set(
+          (data || [])
+            .map((item: any) => item[filterKey])
+            .filter(value => value !== null && value !== undefined && value !== '')
+        )
+      ];
+
+      // Sort values appropriately
+      uniqueValues.sort((a, b) => {
+        if (typeof a === 'number' && typeof b === 'number') {
+          return a - b;
+        }
+        return String(a).localeCompare(String(b));
+      });
+
+      // Convert to FilterOption format
+      results[filterKey] = uniqueValues.map(value => ({
+        value,
+        label: value.toString()
+      }));
+
+      // If no results found with current filters, fall back to original options
+      // This prevents empty filter dropdowns which would be confusing
+      if (results[filterKey].length === 0) {
+        results[filterKey] = await getFilterOptions(filterKey, filterConfig);
+      }
+
+    } catch (error) {
+      console.error(`Error processing iterative filter for ${filterKey}:`, error);
+      // Fallback to original filter options
+      results[filterKey] = await getFilterOptions(filterKey, filterConfig);
+    }
+  }
+
+  return results;
+} 

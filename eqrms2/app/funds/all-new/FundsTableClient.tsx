@@ -6,11 +6,18 @@ import { RmsFundsScreener } from "@/types/funds-detail";
 import Link from "next/link";
 
 // ================================================================
-// 🎯 CLIENT COMPONENT FOR SERVER-SIDE TABLE
+// 🎯 CLIENT COMPONENT FOR SERVER-SIDE TABLE WITH ITERATIVE FILTERING
 // ================================================================
 // This component handles the table configuration with render functions.
 // Render functions can't be passed from Server Components to Client Components,
 // so we define them here in the client component.
+//
+// 🔄 NEW FEATURE: ITERATIVE FILTERING
+// This template now includes iterative filtering that automatically updates
+// filter options based on applied filters. When users apply filters, the
+// other filter dropdowns will only show options that return results.
+//
+// Example: Select AMC = "HDFC" → Category filter only shows HDFC categories
 // ================================================================
 
 interface FundsTableClientProps {
@@ -31,9 +38,12 @@ interface FundsTableClientProps {
     estate_duty_exposure: any[];
     us_investors: any[];
   };
+  // Pass through the filter configuration for iterative filtering
+  filterConfig: Record<string, any>;
+  searchColumns: string[];
 }
 
-export default function FundsTableClient({ data, pagination, filterOptions }: FundsTableClientProps) {
+export default function FundsTableClient({ data, pagination, filterOptions, filterConfig, searchColumns }: FundsTableClientProps) {
   // 🎨 CLIENT-SIDE CONFIGURATION
   // All the render functions and complex logic that requires client-side execution
   const config: ServerTablePageConfig<RmsFundsScreener> = {
@@ -181,7 +191,13 @@ export default function FundsTableClient({ data, pagination, filterOptions }: Fu
     ],
     
     // 📄 MISC CONFIGURATION
-    emptyMessage: 'No funds found with the current filters.'
+    emptyMessage: 'No funds found with the current filters.',
+    
+    // 🔄 ITERATIVE FILTERING CONFIGURATION
+    // These enable dynamic filter options that update based on applied filters
+    sourceTable: 'view_rms_funds_screener',  // Main data table for filtering
+    filterConfig: filterConfig,              // Filter configuration from server
+    searchColumns: searchColumns             // Columns to include in search
   };
 
   // 🎉 RENDER THE COMPLETE TABLE

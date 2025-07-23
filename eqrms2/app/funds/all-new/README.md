@@ -1,6 +1,14 @@
-# 🎯 Server-Side Table Template
+# 🎯 Server-Side Table Template with Iterative Filtering
 
-This directory contains a **perfect template** for creating new large tables (>1000 records) with server-side filtering, sorting, and pagination.
+This directory contains a **perfect template** for creating new large tables (>1000 records) with server-side filtering, sorting, pagination, and **iterative filtering**.
+
+## 🔄 **NEW: Iterative Filtering**
+
+Filter options now **automatically update** based on applied filters! Users only see options that will return results.
+
+**Example**: Select AMC = "HDFC" → Category filter only shows categories where HDFC has funds.
+
+This creates a much better user experience and prevents "empty result" situations.
 
 ## 🚀 Quick Start
 
@@ -18,6 +26,7 @@ This directory contains a **perfect template** for creating new large tables (>1
    import MyTableClient from './MyTableClient';        // Your client component
    
    const filterKeys = ['status', 'category', 'type'];   // Your filter columns
+   const searchColumns = ['name', 'description'];      // Your search columns
    const sortColumn = 'created_at';                     // Your default sort
    
    const filterConfig = {
@@ -28,8 +37,15 @@ This directory contains a **perfect template** for creating new large tables (>1
    serverSideQuery<MyDataType>({
      table: "my_view",                                  // Your Supabase view
      columns: "id,name,status,created_at",             // Your columns
-     searchColumns: ['name', 'description'],          // Your search columns
+     searchColumns: searchColumns,                     // Your search columns
    });
+   
+   // Pass to client component for iterative filtering:
+   return <MyTableClient 
+     filterConfig={filterConfig} 
+     searchColumns={searchColumns}
+     // ... other props
+   />;
    ```
 
 3. **🎨 Update client component** (rename and modify `FundsTableClient.tsx`):
@@ -46,7 +62,12 @@ This directory contains a **perfect template** for creating new large tables (>1
          render: (value, row) => <Link href={`/items/${row.id}`}>{value}</Link>
        },
        // ... your columns with custom rendering
-     ]
+     ],
+     
+     // 🔄 ITERATIVE FILTERING (automatically enabled!)
+     sourceTable: 'my_main_view',                     // Your main data table
+     filterConfig: filterConfig,                      // Passed from server component
+     searchColumns: searchColumns                     // Passed from server component
    };
    ```
 
@@ -56,6 +77,7 @@ This directory contains a **perfect template** for creating new large tables (>1
 
 ✅ **URL-based state management** - Shareable, bookmarkable URLs  
 ✅ **Multi-select filtering** - From dedicated Supabase tables  
+✅ **🔄 Iterative filtering** - Filter options update dynamically (NEW!)  
 ✅ **Server-side pagination** - Handles thousands of records efficiently  
 ✅ **Global search** - Across multiple columns  
 ✅ **Column sorting** - Click headers or use dropdown  
