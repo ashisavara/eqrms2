@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MultiSelectFilter } from "@/components/data-table/MultiSelectFilter";
 import { FilterOption } from "@/lib/supabase/serverSideQueryHelper";
+import { useServerTableState } from "@/lib/hooks/useServerTableState";
 import { Search, RotateCcw } from "lucide-react";
 
 interface FilterOptions {
@@ -18,79 +18,43 @@ interface FilterOptions {
   us_investors: FilterOption[];
 }
 
-interface CurrentSort {
-  primary: { column: string; direction: 'asc' | 'desc' };
-  secondary: { column: string; direction: 'asc' | 'desc' };
-}
-
 interface InternalFundsFiltersProps {
   filterOptions: FilterOptions;
-  currentFilters: Record<string, any>;
-  currentSearch: string;
-  currentSort: CurrentSort;
 }
 
 export default function InternalFundsFilters({
-  filterOptions,
-  currentFilters,
-  currentSearch,
-  currentSort
+  filterOptions
 }: InternalFundsFiltersProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const basePath = '/funds/all';
+  
+  // Use the server table state hook
+  const tableState = useServerTableState({
+    filterKeys: ['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'],
+    defaultSort: { column: 'fund_rating', direction: 'desc' },
+    defaultPageSize: 50
+  });
   
   // Local state for filters before applying them
-  const [localFilters, setLocalFilters] = useState(currentFilters);
-  const [localSearch, setLocalSearch] = useState(currentSearch);
-  const [localSort, setLocalSort] = useState(currentSort);
-
-  // Build URL with current filters and parameters
-  const buildUrl = (newFilters?: Record<string, any>, newSearch?: string, newSort?: CurrentSort, resetPage = true) => {
-    const params = new URLSearchParams();
-    
-    // Add filters
-    const filtersToUse = newFilters || localFilters;
-    Object.entries(filtersToUse).forEach(([key, value]) => {
-      if (Array.isArray(value) && value.length > 0) {
-        value.forEach(v => params.append(key, v.toString()));
-      }
-    });
-
-    // Add search
-    const searchToUse = newSearch !== undefined ? newSearch : localSearch;
-    if (searchToUse) {
-      params.set('search', searchToUse);
-    }
-
-    // Add sorting
-    const sortToUse = newSort || localSort;
-    params.set('sort', sortToUse.primary.column);
-    params.set('order', sortToUse.primary.direction);
-    params.set('secondarySort', sortToUse.secondary.column);
-    params.set('secondaryOrder', sortToUse.secondary.direction);
-
-    // Keep pagination unless resetting
-    if (!resetPage) {
-      const currentPage = searchParams.get('page');
-      if (currentPage) params.set('page', currentPage);
-    }
-
-    const currentPageSize = searchParams.get('pageSize');
-    if (currentPageSize) params.set('pageSize', currentPageSize);
-
-    return `/funds/all?${params.toString()}`;
-  };
+  const [localFilters, setLocalFilters] = useState(tableState.state.filters);
+  const [localSearch, setLocalSearch] = useState(tableState.state.search);
+  const [localSort, setLocalSort] = useState(tableState.state.sorting);
 
   // Apply filters (navigate to new URL)
   const applyFilters = () => {
-    router.push(buildUrl(localFilters, localSearch, localSort, true));
+    // Apply all local state to URL
+    tableState.navigate({
+      filters: localFilters,
+      search: localSearch,
+      sorting: localSort
+    }, true, basePath);
   };
 
   // Clear all filters
   const clearFilters = () => {
     setLocalFilters({});
     setLocalSearch('');
-    router.push('/funds/all');
+    setLocalSort({ column: 'fund_rating', direction: 'desc' });
+    tableState.clearFilters(basePath);
   };
 
   // Handle individual filter changes
@@ -105,9 +69,9 @@ export default function InternalFundsFilters({
   };
 
   // Handle sort changes
-  const handleSortChange = (type: 'primary' | 'secondary', field: 'column' | 'direction', value: string) => {
+  const handleSortChange = (field: 'column' | 'direction', value: string) => {
     const newSort = { ...localSort };
-    newSort[type][field] = value as any;
+    newSort[field] = value as any;
     setLocalSort(newSort);
   };
 
@@ -222,10 +186,9 @@ export default function InternalFundsFilters({
         <span className="text-sm font-medium">Sort by:</span>
         
         <div className="flex items-center gap-2">
-          <span className="text-sm">Primary:</span>
           <Select 
-            value={localSort.primary.column} 
-            onValueChange={(value) => handleSortChange('primary', 'column', value)}
+            value={localSort.column} 
+            onValueChange={(value) => handleSortChange('column', value)}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue />
@@ -240,40 +203,8 @@ export default function InternalFundsFilters({
           </Select>
           
           <Select 
-            value={localSort.primary.direction} 
-            onValueChange={(value) => handleSortChange('primary', 'direction', value)}
-          >
-            <SelectTrigger className="w-[100px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="desc">Desc</SelectItem>
-              <SelectItem value="asc">Asc</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-sm">Secondary:</span>
-          <Select 
-            value={localSort.secondary.column} 
-            onValueChange={(value) => handleSortChange('secondary', 'column', value)}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {sortOptions.map(option => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          <Select 
-            value={localSort.secondary.direction} 
-            onValueChange={(value) => handleSortChange('secondary', 'direction', value)}
+            value={localSort.direction} 
+            onValueChange={(value) => handleSortChange('direction', value)}
           >
             <SelectTrigger className="w-[100px]">
               <SelectValue />

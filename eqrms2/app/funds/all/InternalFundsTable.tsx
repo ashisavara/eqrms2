@@ -1,12 +1,11 @@
 "use client";
 
-
-import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import Link from "next/link";
 import { ComGrowthNumberRating, RatingDisplay } from "@/components/conditional-formatting";
+import { useServerTableState } from "@/lib/hooks/useServerTableState";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 interface PaginationInfo {
@@ -24,27 +23,23 @@ interface InternalFundsTableProps {
 }
 
 export default function InternalFundsTable({ data, pagination }: InternalFundsTableProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // Build URL for pagination
-  const buildPaginationUrl = (page: number, newPageSize?: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('page', page.toString());
-    if (newPageSize) {
-      params.set('pageSize', newPageSize.toString());
-    }
-    return `/funds/all?${params.toString()}`;
-  };
+  const basePath = '/funds/all';
+  
+  // Use the server table state hook for pagination
+  const tableState = useServerTableState({
+    filterKeys: ['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'],
+    defaultSort: { column: 'fund_rating', direction: 'desc' },
+    defaultPageSize: 50
+  });
 
   // Handle page size change
   const handlePageSizeChange = (newPageSize: string) => {
-    router.push(buildPaginationUrl(1, parseInt(newPageSize)));
+    tableState.updatePagination(1, basePath, parseInt(newPageSize));
   };
 
   // Handle page navigation
   const goToPage = (page: number) => {
-    router.push(buildPaginationUrl(page));
+    tableState.updatePagination(page, basePath);
   };
 
   return (

@@ -111,12 +111,6 @@ export default async function InternalFundsPage({ searchParams }: PageProps) {
           estate_duty_exposure: any[];
           us_investors: any[];
         }}
-        currentFilters={filters}
-        currentSearch={search}
-        currentSort={{
-          primary: { column: sorting[0]?.column || 'fund_rating', direction: sorting[0]?.direction || 'desc' },
-          secondary: { column: sorting[1]?.column || 'five_yr', direction: sorting[1]?.direction || 'desc' }
-        }}
       />
 
       <InternalFundsTable 
