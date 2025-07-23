@@ -1,0 +1,23 @@
+export type Category = {
+    category_id: number;
+    cat_name: string;
+    cat_long_name: string;
+    cat_summary: string;
+    cat_description: string;
+    asset_class_id: number;
+    exp_return: number;
+    cat_sort_order: number;
+    one_yr: number;
+    three_yr: number;
+    five_yr: number;
+    cy_1: number;
+    cy_2: number;
+    cy_3: number;
+    cy_4: number;
+    cy_5: number;
+    cy_6: number;
+    cy_7: number;
+    cy_8: number;
+    cy_9: number;
+    cy_10: number;
+};
