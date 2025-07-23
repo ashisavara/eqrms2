@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MultiSelectFilter } from "@/components/data-table/MultiSelectFilter";
 import { useServerTableState } from "@/lib/hooks/useServerTableState";
-import { getIterativeFilterOptions } from "@/lib/supabase/serverSideQueryHelper";
+import { updateFilterOptionsAction } from "@/lib/actions/iterativeFiltering";
 import { Search, RotateCcw, Loader2 } from "lucide-react";
 
 // Filter option type (matches serverSideQueryHelper)
@@ -84,8 +84,8 @@ export default function ServerTableFilters({
     try {
       setIsUpdatingFilters(true);
       
-      // Get updated filter options based on current filters
-      const updatedOptions = await getIterativeFilterOptions(
+      // Get updated filter options based on current filters using server action
+      const result = await updateFilterOptionsAction(
         sourceTable,
         tableStateConfig.filterKeys,
         filterConfig,
@@ -93,6 +93,13 @@ export default function ServerTableFilters({
         searchColumns,
         searchQuery
       );
+
+      if (!result.success || !result.data) {
+        console.error('Failed to update filter options:', result.error);
+        return;
+      }
+
+      const updatedOptions = result.data;
 
       // Update the filter configs with new options
       const updatedFilterConfigs = currentFilterConfigs.map(config => ({

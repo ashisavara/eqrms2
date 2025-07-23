@@ -215,7 +215,12 @@ export default async function InternalFundsPageRefactored({ searchParams }: Page
       }
     ],
     
-    emptyMessage: 'No funds found with the current filters.'
+    emptyMessage: 'No funds found with the current filters.',
+    
+    // 🔄 ENABLE ITERATIVE FILTERING
+    sourceTable: 'view_rms_funds_screener',
+    filterConfig: fundsFilterConfig,
+    searchColumns: ['fund_name', 'amc_name', 'category_name', 'structure_name']
   };
 
   return (
