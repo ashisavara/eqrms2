@@ -76,16 +76,20 @@ export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions,
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full p-4 space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full p-4 space-y-1">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
       
       {/* Single column layout - no grid */}
-      <SelectInput name="qtr" label="Quarter" control={control} options={qtrOptions} />
-      <RadioInput name="result_rating" label="Result Rating" control={control} options={resultRatingOptions} direction="horizontal" />
+      <div className="grid grid-cols-2 gap-4">
+        <SelectInput name="qtr" label="Quarter" control={control} options={qtrOptions} />
+        <RadioInput name="result_rating" label="Result Rating" control={control} options={resultRatingOptions} direction="horizontal" />
+      </div>
       
-      <TextInput name="positive" label="Positive" control={control} />
-      <TextInput name="negative" label="Negative" control={control} />
-      <TextInput name="outlook" label="Outlook" control={control} />
+      <div className="grid grid-cols-3 gap-4">
+        <TextInput name="positive" label="Positive" control={control} />
+        <TextInput name="negative" label="Negative" control={control} />
+        <TextInput name="outlook" label="Outlook" control={control} />
+      </div>
       <TextInput name="summary" label="Summary" control={control} />
       
       <div>
