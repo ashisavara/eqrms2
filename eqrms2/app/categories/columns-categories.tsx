@@ -22,21 +22,31 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "asset_class_name",
     header: "Asset Class",
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "one_yr",
     header: "1yr",
-    cell: ({ getValue }) => (Math.round((getValue() as number) * 10) / 10).toFixed(1)
+    cell: ({ getValue }) => {
+      const value = getValue() as number;
+      return value !== null && value !== undefined ? (Math.round(value * 10) / 10).toFixed(1) : '';
+    }
   },
   {
     accessorKey: "three_yr",
     header: "3yr",
-    cell: ({ getValue }) => (Math.round((getValue() as number) * 10) / 10).toFixed(1)
+    cell: ({ getValue }) => {
+      const value = getValue() as number;
+      return value !== null && value !== undefined ? (Math.round(value * 10) / 10).toFixed(1) : '';
+    }
   },
   {
     accessorKey: "five_yr",
     header: "5yr",
-    cell: ({ getValue }) => (Math.round((getValue() as number) * 10) / 10).toFixed(1)
+    cell: ({ getValue }) => {
+      const value = getValue() as number;
+      return value !== null && value !== undefined ? (Math.round(value * 10) / 10).toFixed(1) : '';
+    }
   },
   {
     accessorKey: "cat_summary",

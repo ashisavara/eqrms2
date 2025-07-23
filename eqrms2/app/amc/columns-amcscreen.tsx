@@ -22,7 +22,8 @@ export const columns: ColumnDef<AMC>[] = [
   },    
   {
     accessorKey: "structure",
-    header: "Structure"
+    header: "Structure",
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "amc_rating",
@@ -37,7 +38,8 @@ export const columns: ColumnDef<AMC>[] = [
   {
     accessorKey: "amc_team_rating",
     header: "Team",
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />,
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "amc_philosophy_rating",
@@ -55,6 +57,7 @@ export const columns: ColumnDef<AMC>[] = [
   {
     accessorKey: "us_investor_tagging",
     header: "US Investor",
-    meta: { isFilterOnly: true }
+    meta: { isFilterOnly: true },
+    filterFn: "arrIncludesSome",
   }
 ];
