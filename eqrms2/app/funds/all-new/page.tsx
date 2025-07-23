@@ -1,8 +1,6 @@
 import { serverSideQuery, getMultipleFilterOptions } from "@/lib/supabase/serverSideQueryHelper";
 import { RmsFundsScreener } from "@/types/funds-detail";
-import { ServerTablePage, ServerTablePageConfig } from "@/components/server-table";
-import { ComGrowthNumberRating, RatingDisplay } from "@/components/conditional-formatting";
-import Link from "next/link";
+import FundsTableClient from "./FundsTableClient";
 
 // ================================================================
 // 🎯 SERVER-SIDE TABLE TEMPLATE
@@ -148,168 +146,11 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
     })
   ]);
 
-  // 🎨 STEP 5: Configure the complete table page
-  // This single configuration object defines the entire table behavior!
-  const config: ServerTablePageConfig<RmsFundsScreener> = {
-    // 🏠 PAGE IDENTITY
-    basePath: '/funds/all-new',                    // 📝 Update this for your new table
-    title: 'All Funds (New Implementation)',       // 📝 Page title
-    description: 'Server-side filtered funds table with 3000+ records', // 📝 Optional subtitle
-    
-    // 🔧 TABLE STATE CONFIGURATION
-    tableStateConfig: {
-      filterKeys: ['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'], // Must match parseSearchParams
-      defaultSort: { column: 'fund_rating', direction: 'desc' }, // 📝 Default sorting
-      defaultPageSize: 50 // 📝 Default page size
-    },
-    
-    // 🎛️ FILTER CONFIGURATION
-    // Each filter becomes a multi-select dropdown in the UI
-    filterConfigs: [
-      {
-        key: 'fund_rating',           // Must match filterKeys and column name
-        title: 'Fund Rating',        // Display label
-        placeholder: 'Rating...',    // Dropdown placeholder
-        options: filterOptions.fund_rating
-      },
-      {
-        key: 'amc_name',
-        title: 'AMC',
-        placeholder: 'AMC...',
-        options: filterOptions.amc_name
-      },
-      {
-        key: 'structure_name', 
-        title: 'Structure',
-        placeholder: 'Structure...',
-        options: filterOptions.structure_name
-      },
-      {
-        key: 'category_name',
-        title: 'Category', 
-        placeholder: 'Category...',
-        options: filterOptions.category_name
-      },
-      {
-        key: 'estate_duty_exposure',
-        title: 'Estate Duty',
-        placeholder: 'Estate Duty...',
-        options: filterOptions.estate_duty_exposure
-      },
-      {
-        key: 'us_investors',
-        title: 'US Investors',
-        placeholder: 'US Investors...',
-        options: filterOptions.us_investors
-      }
-    ],
-    
-    // 🔄 SORT OPTIONS
-    // These appear in the sort dropdown
-    sortOptions: [
-      { value: 'fund_name', label: 'Fund Name' },
-      { value: 'fund_rating', label: 'Fund Rating' },
-      { value: 'fund_performance_rating', label: 'Performance Rating' },
-      { value: 'amc_rating', label: 'AMC Rating' },
-      { value: 'one_yr', label: '1 Year Return' },
-      { value: 'three_yr', label: '3 Year Return' }, 
-      { value: 'five_yr', label: '5 Year Return' },
-      { value: 'since_inception', label: 'Since Inception' }
-    ],
-    
-    // 🔍 SEARCH CONFIGURATION
-    searchPlaceholder: 'Search funds, AMCs, categories...', // 📝 Search input placeholder
-    
-    // 📊 TABLE COLUMN CONFIGURATION
-    // This is where you define what columns to show and how to render them
-    columns: [
-      // 🔗 Link Column Example
-      {
-        key: 'fund_name',
-        header: 'Fund Name',
-        align: 'left',
-        render: (value, row) => (
-          <Link 
-            href={`/funds/${row.slug}`} 
-            className="text-blue-600 font-bold hover:underline"
-          >
-            {value}
-          </Link>
-        )
-      },
-      
-      // 🌟 Custom Component Columns
-      {
-        key: 'fund_rating',
-        header: 'Fund',
-        render: (value) => <RatingDisplay rating={value} />
-      },
-      {
-        key: 'fund_performance_rating', 
-        header: 'Perf',
-        render: (value) => <RatingDisplay rating={value} />
-      },
-      {
-        key: 'amc_rating',
-        header: 'AMC', 
-        render: (value) => <RatingDisplay rating={value} />
-      },
-      
-      // 📝 Simple Text Columns
-      {
-        key: 'structure_name',
-        header: 'Structure'
-      },
-      {
-        key: 'cat_long_name',
-        header: 'Category'
-      },
-      {
-        key: 'estate_duty_exposure',
-        header: 'Estate Duty'
-      },
-      {
-        key: 'us_investors',
-        header: 'US Investors'
-      },
-      
-      // 💰 Conditional Rendering Columns (show '-' for null values)
-      {
-        key: 'one_yr',
-        header: '1 Year',
-        render: (value) => value !== null ? <ComGrowthNumberRating rating={value} /> : '-'
-      },
-      {
-        key: 'three_yr', 
-        header: '3 Year',
-        render: (value) => value !== null ? <ComGrowthNumberRating rating={value} /> : '-'
-      },
-      {
-        key: 'five_yr',
-        header: '5 Year', 
-        render: (value) => value !== null ? <ComGrowthNumberRating rating={value} /> : '-'
-      },
-      {
-        key: 'since_inception',
-        header: 'Since Inception',
-        render: (value) => value !== null ? <ComGrowthNumberRating rating={value} /> : '-'
-      }
-    ],
-    
-    // 📄 MISC CONFIGURATION
-    emptyMessage: 'No funds found with the current filters.' // 📝 Message when no results
-  };
-
-  // 🎉 STEP 6: Render the complete table page!
-  // That's it! Everything else is handled automatically:
-  // - URL state management
-  // - Filter UI rendering
-  // - Table rendering with pagination
-  // - Responsive design
-  // - Error handling
+  // 🎉 STEP 5: Render using client component!
+  // The client component handles all the render functions and UI configuration
+  // while the server component handles data fetching and URL parsing
   return (
-    <ServerTablePage
-      config={config}
+    <FundsTableClient
       data={tableData.data}
       pagination={{
         currentPage: tableData.currentPage,
@@ -318,6 +159,14 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
         hasPreviousPage: tableData.hasPreviousPage,
         pageSize: tableData.pageSize,
         totalCount: tableData.totalCount
+      }}
+      filterOptions={filterOptions as {
+        fund_rating: any[];
+        amc_name: any[];
+        structure_name: any[];
+        category_name: any[];
+        estate_duty_exposure: any[];
+        us_investors: any[];
       }}
     />
   );
@@ -329,23 +178,32 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
 // 
 // To create a new large table:
 // 
-// 1. 📁 Copy this entire file to your new route (e.g., companies/all/page.tsx)
+// 1. 📁 Copy this directory to your new route:
+//    cp -r app/funds/all-new app/my-new-table
 // 
-// 2. 🔧 Update these key parts:
+// 2. 🔧 Update the SERVER COMPONENT (page.tsx):
 //    - Import your data type instead of RmsFundsScreener
 //    - Change filterKeys in parseSearchParams()  
 //    - Update filterConfig object with your table/column names
 //    - Modify serverSideQuery table, columns, searchColumns
-//    - Update config.basePath to your route
-//    - Configure your specific columns in config.columns
+//    - Update the import to your new client component
 // 
-// 3. 🎯 Test your new table:
+// 3. 🎨 Update the CLIENT COMPONENT (YourTableClient.tsx):
+//    - Update basePath to your route
+//    - Configure your specific columns with render functions
+//    - Update filter configurations and sort options
+//    - Modify page title and description
+// 
+// 4. 🎯 Test your new table:
 //    - Filters should work immediately  
 //    - Pagination should work automatically
 //    - Sorting should work on any column you defined
 //    - URLs should be shareable and bookmarkable
 // 
-// 4. 🚀 Deploy and enjoy your new server-side table!
+// 5. 🚀 Deploy and enjoy your new server-side table!
 // 
-// ⏱️ Total time to create a new table: ~15 minutes
+// ⚠️ IMPORTANT: The split into server/client components solves the Next.js App Router 
+//    limitation where render functions can't be passed from server to client components.
+// 
+// ⏱️ Total time to create a new table: ~20 minutes
 // ================================================================ 

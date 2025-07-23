@@ -11,10 +11,11 @@ This directory contains a **perfect template** for creating new large tables (>1
    cp -r app/funds/all-new app/my-new-table
    ```
 
-2. **🔧 Update key configuration** (in `page.tsx`):
+2. **🔧 Update server component** (in `page.tsx`):
    ```tsx
-   // Change these parts:
+   // Change these parts in page.tsx:
    import { MyDataType } from '@/types/my-data';        // Your data type
+   import MyTableClient from './MyTableClient';        // Your client component
    
    const filterKeys = ['status', 'category', 'type'];   // Your filter columns
    const sortColumn = 'created_at';                     // Your default sort
@@ -29,18 +30,27 @@ This directory contains a **perfect template** for creating new large tables (>1
      columns: "id,name,status,created_at",             // Your columns
      searchColumns: ['name', 'description'],          // Your search columns
    });
-   
+   ```
+
+3. **🎨 Update client component** (rename and modify `FundsTableClient.tsx`):
+   ```tsx
+   // Change these parts in MyTableClient.tsx:
    const config = {
      basePath: '/my-new-table',                        // Your route
      title: 'My New Table',                           // Your title
-     columns: [                                       // Your table columns
-       { key: 'name', header: 'Name', align: 'left' },
-       // ... your columns
+     columns: [                                       // Your table columns with render functions
+       { 
+         key: 'name', 
+         header: 'Name', 
+         align: 'left',
+         render: (value, row) => <Link href={`/items/${row.id}`}>{value}</Link>
+       },
+       // ... your columns with custom rendering
      ]
    };
    ```
 
-3. **✅ Test your new table** - It should work immediately!
+4. **✅ Test your new table** - It should work immediately!
 
 ## 📊 What You Get Automatically
 
@@ -109,8 +119,16 @@ rating: { table: '', valueCol: '', labelCol: '' } // Handled automatically
 
 ## ⏱️ Development Time
 
-- **New table from template**: ~15 minutes
+- **New table from template**: ~20 minutes (server + client components)
 - **Without template**: ~3+ hours
+
+## 🏗️ Architecture Pattern
+
+This template uses **Server + Client Component architecture**:
+- **Server Component** (`page.tsx`): Handles data fetching, URL parsing, filter configuration
+- **Client Component** (`TableClient.tsx`): Handles UI rendering, render functions, interactions
+
+This pattern solves Next.js App Router limitations while maintaining optimal performance.
 
 ## 📚 Need More Help?
 
