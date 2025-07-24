@@ -22,4 +22,5 @@ export type Category = {
     cy_9: number;
     cy_10: number;
     asset_class_name: string;
+    category_slug: string;
 };

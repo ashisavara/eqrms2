@@ -76,7 +76,6 @@ export default async function FundPage({ params }: PageProps) {
         <Tabs defaultValue="rating_snapshot" className="w-full mx-auto mt-6">
           <TabsList className="w-full">
             <TabsTrigger value="rating_snapshot">Rating Snapshot</TabsTrigger>
-            <TabsTrigger value="performance">Performance</TabsTrigger>
             <TabsTrigger value="rating_rationale">Rating Rationale</TabsTrigger>
             <TabsTrigger value="investment_team">Team</TabsTrigger>
             <TabsTrigger value="fees">Fees</TabsTrigger>
@@ -150,8 +149,6 @@ export default async function FundPage({ params }: PageProps) {
                   </div>
                 </div>
             </div>
-          </TabsContent>
-          <TabsContent value="performance">
           <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
             <h3 className="ime-basic-h3"> Fund Trailing Performance </h3>
             {fund.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.trailing_perf_html }} />}
