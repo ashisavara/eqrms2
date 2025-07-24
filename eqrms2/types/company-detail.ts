@@ -1,5 +1,7 @@
 // eqrms2/types/companyDetail.ts
 
+import { StringValidation } from "zod";
+
 export type Company = {
   company_id: string;
   ime_name: string;
@@ -72,4 +74,7 @@ export type Company = {
   inv_view: string;
   snapshot: string;
   sector_name: string;
+  business_mix: string;
+  catalysts: string;
+  hidden: string;
 };

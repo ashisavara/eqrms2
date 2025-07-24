@@ -57,6 +57,9 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
       <ResizableTextArea name="negative" label="Negative" control={control} />
       <ResizableTextArea name="outlook" label="Outlook" control={control} />
       <ResizableTextArea name="snapshot" label="Snapshot" control={control} />
+      <ResizableTextArea name="business_mix" label="Business Mix" control={control} />
+      <ResizableTextArea name="catalysts" label="Catalysts" control={control} />
+      <ResizableTextArea name="hidden" label="Hidden" control={control} />
       {/* Submit button */}
       {Object.keys(errors).length > 0 && (
         <div className="text-red-500">

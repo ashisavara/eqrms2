@@ -80,6 +80,12 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div className="text-blue-900 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.inv_view || ""}</ReactMarkdown>
             </div>
+            <div className="text-blue-700 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.catalysts || ""}</ReactMarkdown>
+            </div>
+            <div className="text-gray-900 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.business_mix || ""}</ReactMarkdown>
+            </div>
 
             <div className="text-green-700 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.positive || ""}</ReactMarkdown>
@@ -92,6 +98,9 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             </div>
             <div className="text-blue-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.snapshot || ""}</ReactMarkdown>
+            </div>
+            <div className="text-gray-900 mb-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.hidden || ""}</ReactMarkdown>
             </div>
           </div>
 

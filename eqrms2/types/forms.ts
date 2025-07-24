@@ -14,6 +14,9 @@ export const companySnapshotFormSchema = z.object({
   positive_snapshot: z.string().nullable(),
   negative_snapshot: z.string().nullable(),
   watch_for: z.string().nullable(),
+  business_mix: z.string().nullable(),
+  catalysts: z.string().nullable(),
+  hidden: z.string().nullable(),
 });
 
 // TypeScript type inferred from the schema. It defines the shape of actual data
