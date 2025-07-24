@@ -13,7 +13,7 @@ export const columns: ColumnDef<AMC>[] = [
 
       return (
         <div className="text-left">
-          <Link href={`/funds/${amcSlug}`} className="text-blue-600 font-bold hover:underline">
+          <Link href={`/amc/${amcSlug}`} className="text-blue-600 font-bold hover:underline">
             {amcName}
           </Link>
         </div>

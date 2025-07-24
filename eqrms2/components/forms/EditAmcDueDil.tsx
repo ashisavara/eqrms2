@@ -230,16 +230,17 @@ function EditAmcDueDilForm({
 
 // Main component that exports the button and handles sheet state
 export function EditAmcDueDilButton({ 
-  amcData
+  amcData,
+  amcId  // Add explicit amcId prop
 }: { 
   amcData: any;
+  amcId: number;  // Add explicit amcId prop type
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
-  // Get id from amcData
-  const id = amcData.amc_id;
-  if (!id) {
-    console.error('AMC data is missing id:', amcData);
+  // Use the explicit amcId prop instead of extracting from amcData
+  if (!amcId) {
+    console.error('amcId is required but not provided');
   }
 
   // Convert amc data to AmcDueDiligenceValues format
@@ -316,7 +317,7 @@ export function EditAmcDueDilButton({
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditAmcDueDilForm
                 initialData={amcDueDilData}
-                id={id}
+                id={amcId}
                 onSuccess={() => setShowEditSheet(false)}
               />
             </div>

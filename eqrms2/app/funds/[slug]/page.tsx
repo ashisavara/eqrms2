@@ -56,15 +56,20 @@ export default async function FundPage({ params }: PageProps) {
               openSubsOptions={openSubsOptions}
               strategyTagOptions={strategyTagOptions}
               />
-              <EditAMCButton 
-              amcData={fund} 
-              amcPedigreeOptions={amcPedigreeOptions}
-              amcTeamPedigreeOptions={amcTeamPedigreeOptions}
-              amcTeamChurnOptions={amcTeamChurnOptions}
-              amcMaturityOptions={amcMaturityOptions}
-              amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
-              />
-              <EditAmcDueDilButton amcData={fund} />
+              {fund.amc_id && (
+                <>
+                  <EditAMCButton 
+                  amcData={fund} 
+                  amcId={fund.amc_id}
+                  amcPedigreeOptions={amcPedigreeOptions}
+                  amcTeamPedigreeOptions={amcTeamPedigreeOptions}
+                  amcTeamChurnOptions={amcTeamChurnOptions}
+                  amcMaturityOptions={amcMaturityOptions}
+                  amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
+                  />
+                  <EditAmcDueDilButton amcData={fund} amcId={fund.amc_id} />
+                </>
+              )}
         </div>
         </div>
       <div>

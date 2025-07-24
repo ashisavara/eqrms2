@@ -177,6 +177,7 @@ function EditAmcForm({
 // Main component that exports the button and handles sheet state
 export function EditAMCButton({ 
   amcData,
+  amcId,  // Add explicit amcId prop
   amcPedigreeOptions,
   amcTeamPedigreeOptions,
   amcTeamChurnOptions,
@@ -184,6 +185,7 @@ export function EditAMCButton({
   amcInvPhilosophyDefOptions
 }: { 
   amcData: any;
+  amcId: number;  // Add explicit amcId prop type
   amcPedigreeOptions: { value: string; label: string }[];
   amcTeamPedigreeOptions: { value: string; label: string }[];
   amcTeamChurnOptions: { value: string; label: string }[];
@@ -192,10 +194,9 @@ export function EditAMCButton({
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
-  // Get id from amcData
-  const id = amcData.amc_id;
-  if (!id) {
-    console.error('AMC data is missing id:', amcData);
+  // Use the explicit amcId prop instead of extracting from amcData
+  if (!amcId) {
+    console.error('amcId is required but not provided');
   }
 
   // Convert amc data to AmcUpdateValues format
@@ -238,7 +239,7 @@ export function EditAMCButton({
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditAmcForm
                 initialData={amcUpdateData}
-                id={id}  // Pass id explicitly
+                id={amcId}  // Use the explicit amcId prop
                 onSuccess={() => setShowEditSheet(false)}
                 amcPedigreeOptions={amcPedigreeOptions}
                 amcTeamPedigreeOptions={amcTeamPedigreeOptions}

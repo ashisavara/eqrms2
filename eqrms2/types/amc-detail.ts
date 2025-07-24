@@ -1,5 +1,6 @@
 export type AMC = {
     amc_name: string,
+    id: number,
     slug: string,
     aum: number,
     amc_rating: number,
@@ -61,5 +62,6 @@ export type AMC = {
     mailing_list_amc: boolean,
     disclosure_doc_last_check: Date,
     mkt_mat_last_check: Date,
-    amc_diligence_last_check: Date
+    amc_diligence_last_check: Date,
+    amc_fm_html: string
 };
