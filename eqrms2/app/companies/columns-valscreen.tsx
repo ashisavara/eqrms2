@@ -119,4 +119,9 @@ export const columns: ColumnDef<Company>[] = [
     header: "5 yr ", 
     cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
+  { 
+    accessorKey: "coverage", 
+    header: "Coverage ", 
+    meta: { isFilterOnly: true }
+  },
 ];

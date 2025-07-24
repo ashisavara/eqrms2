@@ -10,7 +10,7 @@ import { QtrNotesForm } from "@/components/forms/AddQtrNotes";
 import { TableQuarterlyNotes } from "./TableQuarterlyNotes";
 import { EditQuarterSheet } from "./EditQuarterSheet";
 import { CompanyQrtNotesValues } from "@/types/forms";
-import { RatingDisplay,CompQualityRating, NumberRating, ComGrowthNumberRating } from "@/components/conditional-formatting";
+import { RatingDisplay,CompQualityRating, NumberRating, ComGrowthNumberRating, CoverageRating } from "@/components/conditional-formatting";
 
 export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params; // Await the params to get the id
@@ -67,13 +67,12 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
               body={[{ value: company.positive_snapshot, className: 'bg-green-100'  },{ value: company.negative_snapshot, className: 'bg-red-100'  },{ value: company.watch_for, className: 'bg-orange-100'  }]}
               />
             </div>
-            <div className="text-center text-gray-800 mb-5 text-base">
-              <span>{company.sector_name}  | </span>
-              <span>{company.industry}  | </span>
-              <span>{company.coverage} | </span>
-              <span><Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link></span>
+            <div>
+              <SimpleTable
+              headers={[{ label: "Coverage"},{ label: "Sector"},{ label: "Industry"},{ label: "Sector Stance"},{ label: "Edit"}]}
+              body={[{ value: <CoverageRating rating={company.coverage}/>},{ value: company.sector_name},{ value: company.industry },{ value: company.sector_name},{ value: <Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link> }]}
+              />
             </div>
-            
           </div>
 
           <div className="text-sm">

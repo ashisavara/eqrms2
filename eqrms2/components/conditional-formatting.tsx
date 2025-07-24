@@ -54,6 +54,20 @@ export function CompQualityRating({ rating }: { rating: string }) {
   );
 }
 
+export function CoverageRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {'Focus': 5,'Detail': 4,'Basic': 3,'Brief': 2,'Exclude': 1}; 
+    return ratingMap[textRating];
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+
 /**
  * Conditional formatting component for numbers, which use the same color System as rating styles
  * Maps text ratings to numeric equivalents for consistent styling

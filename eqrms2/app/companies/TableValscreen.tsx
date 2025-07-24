@@ -33,7 +33,7 @@ export function TableValscreen({ data }: TableValscreenProps) {
     },
     initialState: {
       pagination: {
-        pageSize: 30, // Set default page size
+        pageSize: 50, // Set default page size
       },
     },
   });
@@ -44,6 +44,7 @@ export function TableValscreen({ data }: TableValscreenProps) {
     { column: "quality", title: "Quality", placeholder: "Quality" },
     { column: "mt_growth", title: "Growth", placeholder: "Growth" },
     { column: "market_momentum", title: "Momentum", placeholder: "Momentum" },
+    { column: "coverage", title: "Coverage", placeholder: "Coverage" },
   ];
 
   return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;

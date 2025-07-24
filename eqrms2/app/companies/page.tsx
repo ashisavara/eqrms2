@@ -6,9 +6,10 @@ export default async function CompaniesPage() {
   // Fetch data server-side
   const companies = await supabaseListRead<Company>({
     table: "eq_rms_company_view",
-    columns: "company_id,ime_name,sector_name,industry,quality,mt_growth,market_momentum,upside,stock_score,cmp,target_price,multiple,pe_t2,pe_t4,gr_t1,gr_t2,gr_t3,gr_t4,1m_return,3m_return,1yr_return,3yrs_return,5yrs_return",
+    columns: "company_id,ime_name,sector_name,industry,quality,mt_growth,market_momentum,upside,stock_score,cmp,target_price,multiple,pe_t2,pe_t4,gr_t1,gr_t2,gr_t3,gr_t4,1m_return,3m_return,1yr_return,3yrs_return,5yrs_return, coverage",
     filters: [
-      (query) => query.in('coverage', ['Coverage', 'DV', 'BV'])
+      (query) => query.in('coverage', ['Focus', 'Detail', 'Basic']),
+      (query) => query.order('upside', { ascending: false, nullsFirst: false })
     ]
   });
 
