@@ -4,21 +4,33 @@ import { useForm, Controller } from "react-hook-form"; // React Hook Form hooks
 import { Button } from "@/components/ui/button"; // Shadcn UI button
 import { companySnapshotFormSchema, CompanySnapshotFormValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod"; // Bridge between react-hook-form and zod
-import { ResizableTextArea, TextInput } from "./FormFields"; // Our reusable field components
+import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields"; // Our reusable field components
 
 // 3️⃣ Define the props that this form component expects
 type Props = {
   companyId: string;
   defaultValues: CompanySnapshotFormValues; // Initial values to prefill the form
+  coverageOptions: { value: string; label: string }[];
+  qualityOptions: { value: string; label: string }[];
 };
 
+
+
 // 4️⃣ The actual form component
-export function EditCompanyForm({ companyId, defaultValues }: Props) {
+export function EditCompanyForm({ companyId, defaultValues, coverageOptions, qualityOptions }: Props) {
   // Initialize react-hook-form with default values and Zod schema validation
   const { control, handleSubmit, formState: { errors } } = useForm<CompanySnapshotFormValues>({
     defaultValues,
     resolver: zodResolver(companySnapshotFormSchema),
   });  
+
+  const stockScoreOptions = [
+    { value: "1", label: "1" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+    { value: "4", label: "4" },
+    { value: "5", label: "5" }
+  ];
 
   const onSubmit = async (data: CompanySnapshotFormValues) => {
     try {
@@ -46,6 +58,11 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-6xl w-full mx-auto p-4 space-y-4">
       {/* Reusable textarea fields for each form section */}
       <h3 className="text-2xl font-bold text-center">Edit Company View</h3>
+      <div className="grid grid-cols-3 gap-4 bg-gray-100 pl-4 pr-4 pt-2 pb-2 rounded-lg">
+        <ToggleGroupInput name="stock_score" label="Stock Score" control={control} options={stockScoreOptions} valueType="number" itemClassName="ime-choice-chips" />
+           <SelectInput name="coverage" label="Coverage" control={control} options={coverageOptions} />
+           <SelectInput name="quality" label="Quality" control={control} options={qualityOptions}/>
+      </div>
       <div className="grid grid-cols-3 gap-4">
         <TextInput name="positive_snapshot" label="Positive Snapshot" control={control} />
         <TextInput name="negative_snapshot" label="Negative Snapshot" control={control} />
