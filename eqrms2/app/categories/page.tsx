@@ -95,7 +95,7 @@ export default async function CategoriesPage() {
                 <TabsTrigger value="Alternatives">Altenatives</TabsTrigger>
             </TabsList>
             <TabsContent value="Asset Class">
-                <TableAssetClass data={DomesticAssetClass} />
+                <TableAssetClass data={DomesticAssetClass}/>
             </TabsContent> 
             <TabsContent value="Equity">
                 <TableCategories data={Eqcategory}/>

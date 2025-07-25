@@ -2,7 +2,7 @@ import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { Category } from "@/types/category-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
-import TableFundScreen from "@/app/funds/TableFundScreen";
+import TableFundBasic from "@/app/funds/TableFundBasic";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -55,8 +55,8 @@ export default async function CategoryPage({ params }: PageProps) {
                 />
             </div>
             <div className="p-4 text-sm">
-                <h3 className="text-base font-bold text-center">Funds</h3>
-                <TableFundScreen data={funds} />
+                <h3 className="text-base font-bold text-center">Recommended Funds</h3>
+                <TableFundBasic data={funds}/>
             </div>
     </div>
   );
