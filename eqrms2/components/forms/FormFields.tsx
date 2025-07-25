@@ -295,3 +295,60 @@ export function DatePicker({
   );
 }
 
+// Boolean Toggle field (for Yes/No choices)
+export function BooleanToggleInput({ 
+  name, 
+  label, 
+  control, 
+  className,
+  toggleGroupClassName,
+  itemClassName,
+  yesLabel = "Yes",
+  noLabel = "No"
+}: { 
+  name: string; 
+  label: string; 
+  control: Control<any>; 
+  className?: string;
+  toggleGroupClassName?: string;
+  itemClassName?: string;
+  yesLabel?: string;
+  noLabel?: string;
+}) {
+  const booleanOptions = [
+    { value: "true", label: yesLabel },
+    { value: "false", label: noLabel }
+  ];
+
+  return (
+    <div className={className || "space-y-2"}>
+      <Label className="font-bold">{label}</Label>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }: { field: any }) => (
+          <ToggleGroup
+            type="single"
+            value={field.value?.toString() || ""}
+            onValueChange={(value: string) => {
+              field.onChange(value === "true");
+            }}
+            className={toggleGroupClassName || "gap-2 flex-wrap justify-start"}
+          >
+            {booleanOptions.map((option) => (
+              <ToggleGroupItem 
+                key={option.value} 
+                value={option.value} 
+                aria-label={option.label}
+                className={itemClassName || "!rounded-full border border-gray-300 px-4 py-2 min-w-fit whitespace-nowrap hover:bg-gray-100 hover:border-gray-400 data-[state=on]:bg-blue-600 data-[state=on]:text-white data-[state=on]:border-blue-600 data-[state=on]:hover:bg-blue-700 transition-all duration-200"}
+              >
+                {option.label}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        )}
+      />
+    </div>
+  );
+}
+

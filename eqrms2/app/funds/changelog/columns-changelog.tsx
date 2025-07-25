@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { RmsChangelog } from "@/types/rms-changelog-detail";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
+import { EditChangelogButton } from "@/components/forms/EditRmsChangeLog";
 
 export const columns: ColumnDef<RmsChangelog>[] = [
   {
@@ -47,10 +48,33 @@ export const columns: ColumnDef<RmsChangelog>[] = [
   },
   {
     accessorKey: "change_type",
-    header: "Type"
+    header: "Type",
+    cell: ({ row }) => {
+      const changeType = row.original.change_type;
+      return (
+        <div className="text-left">
+          {changeType}
+        </div>
+      );
+    }
   },
   {
     accessorKey: "change_desc",
     header: "Description"
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const changelogData = row.original;
+      const changelogId = changelogData.id;
+
+      return (
+        <EditChangelogButton 
+          changelogData={changelogData}
+          changelogId={changelogId}
+        />
+      );
+    }
   },
 ];

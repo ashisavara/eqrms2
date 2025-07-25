@@ -172,9 +172,6 @@ export type CategoryValues = z.infer<typeof categorySchema>;
 // -----------------------
 
 export const changelogSchema = z.object({
-  amc_id: z.number().nullable(),
-  fund_id: z.number().nullable(),
-  change_type: z.string().nullable(),
   change_desc: z.string().nullable(),
   team_discussed: z.boolean().nullable()
 });
