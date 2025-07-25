@@ -48,6 +48,7 @@ export const columns: ColumnDef<AMC>[] = [
   },
   {
     accessorKey: "amc_size_rating",
+    header: "Size",
     cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
   },
   {

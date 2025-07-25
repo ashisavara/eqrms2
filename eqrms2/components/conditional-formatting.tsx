@@ -32,8 +32,13 @@ function getRatingStyles(rating: number) {
 }
 
 export function RatingDisplay({ rating }: { rating: number | null }) {
+  // Handle null/undefined rating
+  const displayRating = rating ?? '';
+  
   return (
-    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(rating as number)}`}> {rating} </div>
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(rating as number)}`}>
+      {displayRating}
+    </div>
   );
 }
 

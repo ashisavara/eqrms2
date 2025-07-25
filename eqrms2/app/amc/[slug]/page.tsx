@@ -65,7 +65,11 @@ export default async function AmcPage({ params }: PageProps) {
                   <h3 className="text-center font-bold mb-2"> How we rate the AMC</h3>
                   <SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
-                  body = {[{value:<RatingDisplay rating={AMC.amc_rating} />},{value:<RatingDisplay rating={AMC.amc_team_rating} />},{value:<RatingDisplay rating={AMC.amc_philosophy_rating} />}]}
+                  body = {[
+                    {value: <RatingDisplay rating={AMC?.amc_rating ?? null} />},
+                    {value: <RatingDisplay rating={AMC?.amc_team_rating ?? null} />},
+                    {value: <RatingDisplay rating={AMC?.amc_philosophy_rating ?? null} />}
+                  ]}
                   />
                   <div className="grid grid-cols-2 w-full mt-2 text-base">
                     <div>
