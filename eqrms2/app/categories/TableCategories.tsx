@@ -22,5 +22,5 @@ export function TableCategories({ data }: TableCategoryProps) {
     enableSortingRemoval: false, // Disable sort clearing - only toggle between asc/desc
   });
 
-  return <ReactTableWrapper table={table} className="text-xs text-center"/>;
+  return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false}/>;
 }

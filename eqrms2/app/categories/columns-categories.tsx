@@ -12,7 +12,7 @@ export const columns: ColumnDef<Category>[] = [
 
       return (
         <div className="text-left">
-          <Link href={`/funds/${categorySlug}`} className="text-blue-600 font-bold hover:underline">
+          <Link href={`/categories/${categorySlug}`} className="text-blue-600 font-bold hover:underline">
             {categoryName}
           </Link>
         </div>

@@ -52,7 +52,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div>
               <SimpleTable 
                 headers = {[{label:"FY27pe"},{label:"FY26gr"},{label:"FY27gr"},{label:"FY28gr"},{label:"FY29gr"}]}
-                body = {[{value:Math.round(company.pe_t2)},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t1)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t2)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t3)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t4)}/>}]}
+                body = {[{value:<span className="text-blue-600 font-bold">{Math.round(company.pe_t2)}</span>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t1)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t2)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t3)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t4)}/>}]}
               />
             </div>
             <div>
