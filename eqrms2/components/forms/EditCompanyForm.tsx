@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"; // Shadcn UI button
 import { companySnapshotFormSchema, CompanySnapshotFormValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod"; // Bridge between react-hook-form and zod
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields"; // Our reusable field components
+import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 
 // 3️⃣ Define the props that this form component expects
 type Props = {
@@ -34,17 +35,8 @@ export function EditCompanyForm({ companyId, defaultValues, coverageOptions, qua
 
   const onSubmit = async (data: CompanySnapshotFormValues) => {
     try {
-      const response = await fetch('/api/update-company-view', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ companyId, data }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Network response was not ok: ${response.status} ${errorText}`);
-      }
-
+      await supabaseUpdateRow('eq_rms_company', 'company_id', companyId, data);
+      
       // Redirect to the company page if update is successful
       window.location.href = `/companies/${companyId}`;
     } catch (error) {

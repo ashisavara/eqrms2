@@ -77,7 +77,6 @@ export function EditChangelogButton({
 
   // Convert changelog data to ChangelogValues format
   const changelogUpdateData: ChangelogValues = {
-    change_type: changelogData.change_type ?? "",
     change_desc: changelogData.change_desc ?? "",
     team_discussed: changelogData.team_discussed ?? false,
   };

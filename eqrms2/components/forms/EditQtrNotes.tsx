@@ -6,6 +6,7 @@ import { CompanyQrtNotesSchema, CompanyQrtNotesValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, SelectInput, RadioInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
+import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 
 type Props = {
   initialData: CompanyQrtNotesValues;
@@ -37,28 +38,14 @@ export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions,
 
   const onSubmit = async (data: CompanyQrtNotesValues) => {
     try {
-      // Add quarterly_notes_id from initialData for the update
-      const updateData = {
-        ...data,
-        quarterly_notes_id: (initialData as any).quarterly_notes_id
-      };
+      // Get quarterly_notes_id from initialData for the update
+      const quarterlyNotesId = (initialData as any).quarterly_notes_id;
       
-      if (!updateData.quarterly_notes_id) {
+      if (!quarterlyNotesId) {
         throw new Error('quarterly_notes_id is required for updates');
       }
       
-      const response = await fetch('/api/update-qtr-notes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updateData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log('Result:', result);
+      await supabaseUpdateRow('eq_rms_qrtly_notes', 'quarterly_notes_id', quarterlyNotesId, data);
       
       if (typeof window !== "undefined") {
         toast.success("Quarterly notes updated successfully!");

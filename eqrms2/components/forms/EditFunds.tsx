@@ -8,6 +8,7 @@ import { fundsUpdateSchema, FundsUpdateValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
+import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 
 // Internal form component
 function EditFundsForm({ 
@@ -45,28 +46,11 @@ function EditFundsForm({
 
   const onSubmit = async (data: FundsUpdateValues) => {
     try {
-      // Structure the data as the API route expects
-      const requestData = {
-        fund_id,
-        data  // The form data goes in a 'data' property
-      };
-      
-      if (!requestData.fund_id) {
+      if (!fund_id) {
         throw new Error('fund_id is required for updates');
       }
       
-      const response = await fetch('/api/update-funds-view', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log('Result:', result);
+      await supabaseUpdateRow('rms_funds', 'fund_id', fund_id, data);
       
       if (typeof window !== "undefined") {
         toast.success("Fund updated successfully!");

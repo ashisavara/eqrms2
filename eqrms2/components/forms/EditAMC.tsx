@@ -8,6 +8,7 @@ import { amcUpdateSchema, AmcUpdateValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
+import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 
 // Internal form component
 function EditAmcForm({ 
@@ -57,28 +58,11 @@ function EditAmcForm({
 
   const onSubmit = async (data: AmcUpdateValues) => {
     try {
-      // Structure the data as the API route expects
-      const requestData = {
-        id,
-        data  // The form data goes in a 'data' property
-      };
-      
-      if (!requestData.id) {
+      if (!id) {
         throw new Error('id is required for updates');
       }
       
-      const response = await fetch('/api/update-amc-view', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log('Result:', result);
+      await supabaseUpdateRow('rms_amc', 'id', id, data);
       
       if (typeof window !== "undefined") {
         toast.success("AMC updated successfully!");
