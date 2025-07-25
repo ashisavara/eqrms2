@@ -1,3 +1,5 @@
+"use server";
+
 import { createClient } from "./server"; // Make sure this is your server-side client
 
 // Defining types for the query options

@@ -143,3 +143,40 @@ export const amcDueDiligenceSchema = z.object({
 
 // Add the type export for use in TypeScript
 export type AmcDueDiligenceValues = z.infer<typeof amcDueDiligenceSchema>;
+
+
+// -----------------------
+// ASSET CLASS FORM 
+// -----------------------
+
+export const assetClassSchema = z.object({
+  asset_class_summary: z.string().nullable(),
+  asset_class_desc: z.string().nullable()
+});
+
+export type AssetClassValues = z.infer<typeof assetClassSchema>;
+
+// -----------------------
+// CATEGORY FORM 
+// -----------------------
+
+export const categorySchema = z.object({
+  cat_summary: z.string().nullable(),
+  cat_desc: z.string().nullable()
+});
+
+export type CategoryValues = z.infer<typeof categorySchema>;
+
+// -----------------------
+// CHANGELOG FORM 
+// -----------------------
+
+export const changelogSchema = z.object({
+  amc_id: z.number().nullable(),
+  fund_id: z.number().nullable(),
+  change_type: z.string().nullable(),
+  change_desc: z.string().nullable(),
+  team_discussed: z.boolean().nullable()
+});
+
+export type ChangelogValues = z.infer<typeof changelogSchema>;
