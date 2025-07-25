@@ -6,6 +6,7 @@ import { CompanyQrtNotesSchema, CompanyQrtNotesValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, SelectInput, RadioInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
+import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 
 type Props = {
   company_id: number;
@@ -33,30 +34,19 @@ export function QtrNotesForm({ company_id, qtrOptions, resultRatingOptions }: Pr
 
   const onSubmit = async (data: CompanyQrtNotesValues) => {
     try {
-      const response = await fetch('/api/add-qtr-notes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      await supabaseInsertRow('eq_rms_qrtly_notes', data);
+      
+      if (typeof window !== "undefined") {
+        toast.success("Quarterly notes added successfully!");
+        setTimeout(() => {
+          window.location.href = `/companies/${company_id}`;
+        }, 1500);
       }
-
-      const result = await response.json();
-      console.log('Result:', result);
-      // Since we often deal with server components, it's a good practice to guard the toast call
-      // with typeof window !== "undefined" to ensure it only runs on the client.
-      // Show toast and redirect with hard reload
-    if (typeof window !== "undefined") {
-      toast.success("Quarterly notes added successfully!");
-      setTimeout(() => {
-        window.location.href = `/companies/${company_id}`;
-      }, 1500);
-    }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error saving quarterly notes');
+      if (typeof window !== "undefined") {
+        toast.error('Error saving quarterly notes');
+      }
     }
   };
 

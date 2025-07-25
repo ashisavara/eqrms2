@@ -101,3 +101,39 @@ export async function fetchOptions<T, U>(
     label: item[labelColumn] as U,
   }));
 }
+
+// Generic search function for entities
+export async function searchEntities(
+  entityType: 'fund' | 'amc' | 'company',
+  searchTerm: string,
+  limit: number = 10
+): Promise<any[]> {
+  const searchConfig = {
+    fund: {
+      table: 'rms_funds',
+      columns: 'fund_name, slug',
+      searchField: 'fund_name'
+    },
+    amc: {
+      table: 'rms_amc', 
+      columns: 'amc_name',
+      searchField: 'amc_name'
+    },
+    company: {
+      table: 'eq_rms_company',
+      columns: 'ime_name, company_id',
+      searchField: 'ime_name'
+    }
+  };
+
+  const config = searchConfig[entityType];
+  
+  return await supabaseListRead({
+    table: config.table,
+    columns: config.columns,
+    filters: [
+      (query) => query.ilike(config.searchField, `%${searchTerm}%`),
+      (query) => query.limit(limit)
+    ]
+  });
+}

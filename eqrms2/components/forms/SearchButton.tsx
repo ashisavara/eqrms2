@@ -8,6 +8,7 @@ import { ToggleGroupInput, TextInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { searchEntities } from "@/lib/supabase/serverQueryHelper";
 
 interface SearchFormValues {
   entity_type: string;
@@ -38,18 +39,11 @@ function SearchForm({
 
   const onSubmit = async (data: SearchFormValues) => {
     try {
-      const apiRoute = `/api/search-${data.entity_type}`;
-      const response = await fetch(apiRoute, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ search_term: data.search_term }),
-      });
+      const searchResults = await searchEntities(
+        data.entity_type as 'fund' | 'amc' | 'company',
+        data.search_term
+      );
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const searchResults = await response.json();
       setResults(searchResults);
       
     } catch (error) {
