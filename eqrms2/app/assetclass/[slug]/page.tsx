@@ -1,10 +1,8 @@
-import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { AssetClass } from "@/types/asset-class-detail";
 import { Category } from "@/types/category-detail";
 import { TableCategories } from "@/app/categories/TableCategories";
-import { columns } from "@/app/categories/columns-categories";
-import { annualColumns } from "@/app/categories/columns-catannual";
+import { EditAssetClassButton } from "@/components/forms/EditAssetClass";
 
 interface PageProps {
     params: Promise<{slug:string}>;
@@ -39,6 +37,7 @@ export default async function AssetClassPage({params}: PageProps) {
                 <h1 className="text-2xl font-bold">{assetClass.asset_class_name}</h1>
                 <p className="font-bold">{assetClass.asset_class_summary}</p>
                 <p>{assetClass.asset_class_desc}</p>
+                <EditAssetClassButton assetClassData={assetClass} assetClassId={assetClass.asset_class_id} />
             </div>
             <div>
                 <h2> Trailing Returns</h2>
