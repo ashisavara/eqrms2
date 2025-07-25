@@ -3,6 +3,7 @@ import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQuery
 import { Category } from "@/types/category-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import TableFundBasic from "@/app/funds/TableFundBasic";
+import { EditCatButton } from "@/components/forms/EditCategory";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -39,6 +40,7 @@ export default async function CategoryPage({ params }: PageProps) {
             <h1 className="text-2xl font-bold">{category.cat_name}</h1>
             <p className="font-bold">{category.cat_summary}</p>
             <p>{category.cat_description}</p>
+            <EditCatButton categoryData={category} categoryId={category.category_id} />
         </div>
             <div className="p-4 text-sm">
                 <h3 className="text-base font-bold text-center">Trailing Returns</h3>

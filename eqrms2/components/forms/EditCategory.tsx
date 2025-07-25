@@ -4,42 +4,42 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import { assetClassSchema, AssetClassValues } from "@/types/forms";
+import { categorySchema, CategoryValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 
 // Internal form component
-function EditAssetClassForm({initialData, id, onSuccess}: {initialData: AssetClassValues | null, id: number, onSuccess: () => void}) {
+function EditAssetClassForm({initialData, id, onSuccess}: {initialData: CategoryValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
 
-    const cleanedData: AssetClassValues = {
-        asset_class_summary: initialData?.asset_class_summary || "",
-        asset_class_desc: initialData?.asset_class_desc || ""
+    const cleanedData: CategoryValues = {
+        cat_summary: initialData?.cat_summary || "",
+        cat_description: initialData?.cat_description || ""
     };
 
-    const { control, handleSubmit} = useForm<AssetClassValues>({
+    const { control, handleSubmit} = useForm<CategoryValues>({
         defaultValues: cleanedData,
-        resolver: zodResolver(assetClassSchema)
+        resolver: zodResolver(categorySchema)
     });
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await supabaseUpdateRow('rms_asset_class', 'asset_class_id', id, data);
+            await supabaseUpdateRow('rms_category', 'category_id', id, data);
             
             if (typeof window !== "undefined") {
-                toast.success("Asset class updated successfully!");
+                toast.success("Category updated successfully!");
                 setTimeout(() => {
                     onSuccess?.();
                     window.location.reload();
                 }, 1500);
             }
         } catch (error) {
-            console.error('Error updating asset class:', error);
+            console.error('Error updating Category:', error);
             if (typeof window !== "undefined") {
-                toast.error("Failed to update asset class. Please try again.");
+                toast.error("Failed to update Category. Please try again.");
             }
             setIsLoading(false);
         }
@@ -49,8 +49,8 @@ function EditAssetClassForm({initialData, id, onSuccess}: {initialData: AssetCla
         <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
             
-            <ResizableTextArea name="asset_class_summary" label="Asset Class Summary" control={control} />
-            <ResizableTextArea name="asset_class_desc" label="Asset Class Description" control={control} />
+            <ResizableTextArea name="cat_summary" label="Category Summary" control={control} />
+            <ResizableTextArea name="cat_description" label="Category Description" control={control} />
 
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
@@ -62,23 +62,23 @@ function EditAssetClassForm({initialData, id, onSuccess}: {initialData: AssetCla
 }
 
 // Main component that exports the button and handles sheet state
-export function EditAssetClassButton({ 
-  assetClassData,
-  assetClassId
+export function EditCatButton({ 
+  categoryData,
+  categoryId
 }: { 
-  assetClassData: any;
-  assetClassId: number;
+  categoryData: any;
+  categoryId: number;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
-  if (!assetClassId) {
-    console.error('Asset class data is missing asset_class_id:', assetClassData);
+  if (!categoryId) {
+    console.error('Asset class data is missing asset_class_id:', categoryData);
   }
 
-  // Convert asset class data to AssetClassValues format
-  const assetClassUpdateData: AssetClassValues = {
-    asset_class_summary: assetClassData.asset_class_summary ?? "",
-    asset_class_desc: assetClassData.asset_class_desc ?? "",
+  // Convert category data to CategoryValues format
+  const categoryUpdateData: CategoryValues = {
+    cat_summary: categoryData.cat_summary ?? "",
+    cat_description: categoryData.cat_description ?? "",
   };
 
   return (
@@ -87,7 +87,7 @@ export function EditAssetClassButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Edit |  
+        Asset Class View |  
       </span>
 
       {/* Edit Sheet */}
@@ -99,8 +99,8 @@ export function EditAssetClassButton({
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditAssetClassForm
-                initialData={assetClassUpdateData}
-                id={assetClassId}
+                initialData={categoryUpdateData}
+                id={categoryId}
                 onSuccess={() => setShowEditSheet(false)}
               />
             </div>

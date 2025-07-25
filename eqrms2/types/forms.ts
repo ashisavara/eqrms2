@@ -162,7 +162,7 @@ export type AssetClassValues = z.infer<typeof assetClassSchema>;
 
 export const categorySchema = z.object({
   cat_summary: z.string().nullable(),
-  cat_desc: z.string().nullable()
+  cat_description: z.string().nullable()
 });
 
 export type CategoryValues = z.infer<typeof categorySchema>;
