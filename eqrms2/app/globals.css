@@ -85,6 +85,10 @@
     @apply p-4 bg-gray-100 rounded-lg text-center;
   }
 
+  p.imeFormFieldDesc {
+    @apply text-xs text-gray-500;
+  }
+
 }
 
 

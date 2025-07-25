@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput  , DatePicker } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // Internal form component
 function EditAmcDueDilForm({ 
@@ -118,88 +119,6 @@ function EditAmcDueDilForm({
       console.log('Form submission failed with errors:', errors);
     })} className="w-full p-4 space-y-6">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-      
-      {/* CHECK Section */}
-      <h3 className="text-lg font-semibold border-b pb-2">Last Check Dates</h3>
-      <div className="space-y-4 grid grid-cols-3">
-        <DatePicker name="disclosure_doc_last_check" label="Disclosure Document Last Check" control={control} />
-        <DatePicker name="mkt_mat_last_check" label="Market Materials Last Check" control={control} />
-        <DatePicker name="amc_diligence_last_check" label="AMC Diligence Last Check" control={control} />
-      </div>
-
-      {/* DD Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold border-b pb-2">Due Diligence (DD)</h3>
-        <TextInput name="amc_incorporation_dd" label="AMC Incorporation" control={control} type="number" />
-        <TextInput name="pms_license_number_dd" label="PMS License Number" control={control} />
-        <ResizableTextArea name="shareholding_structure_dd" label="Shareholding Structure" control={control} />
-        <ResizableTextArea name="other_biz_dd" label="Other Business" control={control} />
-        <ResizableTextArea name="legal_dd" label="Legal DD" control={control} />
-      </div>
-
-      {/* AMC Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold border-b pb-2">AMC Details</h3>
-        <ResizableTextArea name="team_changes_amc" label="Team Changes" control={control} />
-        <ResizableTextArea name="inv_team_amc" label="Investment Team" control={control} />
-        <ResizableTextArea name="ops_team_amc" label="Operations Team" control={control} />
-        <ResizableTextArea name="inv_committee_amc" label="Investment Committee" control={control} />
-        <ResizableTextArea name="ownership_alignment_amc" label="Ownership Alignment" control={control} />
-        <ResizableTextArea name="strategy_adherance_amc" label="Strategy Adherence" control={control} />
-        <ResizableTextArea name="nav_chart_amc" label="NAV Chart" control={control} />
-        <TextInput name="cy_returns_amc" label="Current Year Returns" control={control} type="number" step="0.01" />
-        <ResizableTextArea name="drawdown_history_amc" label="Drawdown History" control={control} />
-        <ResizableTextArea name="qty_mktcap_composition_amc" label="Quality Market Cap Composition" control={control} />
-        <TextInput name="portfolio_turnover_amc" label="Portfolio Turnover" control={control} type="number" step="0.01" />
-        <ResizableTextArea name="section_allocation_amc" label="Section Allocation" control={control} />
-        <ResizableTextArea name="historic_calls_amc" label="Historic Calls" control={control} />
-        <ResizableTextArea name="black_swan_events_amc" label="Black Swan Events" control={control} />
-        <ResizableTextArea name="capacity_contraints_amc" label="Capacity Constraints" control={control} />
-        <ResizableTextArea name="inv_comm_amc" label="Investment Communication" control={control} />
-        <ResizableTextArea name="webinars_amc" label="Webinars" control={control} />
-        <ToggleGroupInput 
-          name="mailing_list_amc" 
-          label="Mailing List" 
-          control={control} 
-          options={yesNoOptions}
-          valueType="string"
-          itemClassName="ime-choice-chips"
-        />
-      </div>
-
-      {/* MAT Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold border-b pb-2">Market Materials (MAT)</h3>
-        <ResizableTextArea name="fund_managers_mkt_mat" label="Fund Managers" control={control} />
-        <ResizableTextArea name="inv_philosophy_mkt_mat" label="Investment Philosophy" control={control} />
-        <ResizableTextArea name="portfolio_construction_mkt_mat" label="Portfolio Construction" control={control} />
-        <ResizableTextArea name="risk_management_mkt_mat" label="Risk Management" control={control} />
-        <ResizableTextArea name="cash_management_mkt_mat" label="Cash Management" control={control} />
-        <ToggleGroupInput 
-          name="derivatives_mkt_mat" 
-          label="Derivatives" 
-          control={control} 
-          options={yesNoOptions}
-          valueType="string"
-          itemClassName="ime-choice-chips"
-        />
-        <ResizableTextArea name="inv_process_mkt_mat" label="Investment Process" control={control} />
-        <ResizableTextArea name="active_schemes_mkt_mat" label="Active Schemes" control={control} />
-        <TextInput name="rolling_returns_mkt_mat" label="Rolling Returns" control={control} type="number" step="0.01" />
-        <ResizableTextArea name="portfolio_composition_mkt_mat" label="Portfolio Composition" control={control} />
-        <TextInput name="fee_mkt_mat" label="Fee" control={control} type="number" step="0.01" />
-        <TextInput name="commission_mkt_mat" label="Commission" control={control} type="number" step="0.01" />
-        <ResizableTextArea name="disclosure_doc_mkt_mat" label="Disclosure Document" control={control} />
-        <ResizableTextArea name="custory_broker_mkt_mat" label="Custory Broker" control={control} />
-      </div>
-
-      {/* SEBI Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold border-b pb-2">SEBI Information</h3>
-        <TextInput name="firm_aum_sebi" label="Firm AUM" control={control} type="number" /> 
-        <TextInput name="strategy_aum_clients_sebi" label="Strategy AUM Clients" control={control} type="number" />
-      </div>
-      
       <Button 
         type="submit" 
         className="w-full"
@@ -207,6 +126,119 @@ function EditAmcDueDilForm({
       >
         Update AMC Due Diligence
       </Button>
+
+      <Tabs defaultValue="dates" className="w-full mx-auto mt-6">
+        <TabsList className="w-full">
+            <TabsTrigger value="dates">Dates</TabsTrigger>
+            <TabsTrigger value="dd">Due Diligence (DD)</TabsTrigger>
+            <TabsTrigger value="amc">AMC Details</TabsTrigger>
+            <TabsTrigger value="mat">Market Materials (MAT)</TabsTrigger>
+            <TabsTrigger value="sebi">SEBI Information</TabsTrigger>
+        </TabsList>
+        <TabsContent value="dates">
+            <h3 className="text-lg font-semibold border-b pb-2">Last Check Dates</h3>
+            <div className="space-y-4 grid grid-cols-3">
+            <DatePicker name="disclosure_doc_last_check" label="Disclosure Document Last Check" control={control} />
+            <DatePicker name="mkt_mat_last_check" label="Market Materials Last Check" control={control} />
+            <DatePicker name="amc_diligence_last_check" label="AMC Diligence Last Check" control={control} />
+            </div>
+        </TabsContent>
+        <TabsContent value="dd">
+            <div className="space-y-4">
+            <h3 className="text-lg font-semibold border-b pb-2">Due Diligence (DD)</h3>
+            <TextInput name="amc_incorporation_dd" label="AMC Incorporation" control={control} type="number" />
+            <p className="imeFormFieldDesc">Year of SEBI/Regulatory license</p>
+            <TextInput name="pms_license_number_dd" label="PMS License Number" control={control} />
+            <ResizableTextArea name="shareholding_structure_dd" label="Shareholding Structure" control={control} />
+            <p className="imeFormFieldDesc">Especially check & mention any specific ownership of the CIO/senior investment team</p>
+            <ResizableTextArea name="other_biz_dd" label="Other Business" control={control} />
+            <p className="imeFormFieldDesc">Any other biz they operate in like broking, wealth, or non-finance etc</p>
+            <ResizableTextArea name="legal_dd" label="Legal DD" control={control} />
+            <p className="imeFormFieldDesc">Legal cases ongoing or resolved at firm level or individuals</p>
+            </div>
+        </TabsContent>
+        <TabsContent value="amc">
+            <div className="space-y-4">
+            <h3 className="text-lg font-semibold border-b pb-2">AMC Details</h3>
+            <ResizableTextArea name="team_changes_amc" label="Team Changes" control={control} />
+            <p className="imeFormFieldDesc">Historic FM changes</p>
+            <ResizableTextArea name="inv_team_amc" label="Investment Team" control={control} />
+            <p className="imeFormFieldDesc">Team composition outside of key FMs (# of analyst and experience etc)</p>
+            <ResizableTextArea name="ops_team_amc" label="Operations Team" control={control} />
+            <p className="imeFormFieldDesc">Ops team support (number of people/experience)</p>
+            <ResizableTextArea name="inv_committee_amc" label="Investment Committee" control={control} />
+            <p className="imeFormFieldDesc">Decision making framework (via committee or full discretion of key FM)</p>
+            <ResizableTextArea name="ownership_alignment_amc" label="Ownership Alignment" control={control} />
+            <p className="imeFormFieldDesc">Fund manager's personal networth in the strategies</p>
+            <ResizableTextArea name="strategy_adherance_amc" label="Strategy Adherence" control={control} />
+            <ResizableTextArea name="nav_chart_amc" label="NAV Chart" control={control} />
+            <TextInput name="cy_returns_amc" label="Current Year Returns" control={control} type="number" step="0.01" />
+            <ResizableTextArea name="drawdown_history_amc" label="Drawdown History" control={control} />
+            <p className="imeFormFieldDesc">Historic portfolio drawdown during weak market environments</p>
+            <ResizableTextArea name="qty_mktcap_composition_amc" label="Quality Market Cap Composition" control={control} />
+            <TextInput name="portfolio_turnover_amc" label="Portfolio Turnover" control={control} type="number" step="0.01" />
+            <ResizableTextArea name="section_allocation_amc" label="Section Allocation" control={control} />
+            <p className="imeFormFieldDesc">Historic sector allocation that aided or dragged down performance</p>
+            <ResizableTextArea name="historic_calls_amc" label="Historic Calls" control={control} />
+            <p className="imeFormFieldDesc">Historic winners and losers in the portfolio</p>
+            <ResizableTextArea name="black_swan_events_amc" label="Black Swan Events" control={control} />
+            <p className="imeFormFieldDesc">How did the team react during black swan events (like IL&FS, Covid etc)</p>
+            <ResizableTextArea name="capacity_contraints_amc" label="Capacity Constraints" control={control} />
+            <p className="imeFormFieldDesc">Any upper limit on AUM size for the strategies?</p>
+            <ResizableTextArea name="inv_comm_amc" label="Investment Communication" control={control} />
+            <p className="imeFormFieldDesc">What are the key marketing materials the AMC provides?</p>
+            <ResizableTextArea name="webinars_amc" label="Webinars" control={control} />
+            <p className="imeFormFieldDesc">Webinars that explore and elaborate the strategy</p>
+            <ToggleGroupInput 
+              name="mailing_list_amc" 
+              label="Mailing List" 
+              control={control} 
+              options={yesNoOptions}
+              valueType="string"
+              itemClassName="ime-choice-chips"
+            />
+            <p className="imeFormFieldDesc">Are we on the mailing list to receive regular communication?</p>
+            </div>
+        </TabsContent>
+        <TabsContent value="mat">
+            <div className="space-y-4">
+            <h3 className="text-lg font-semibold border-b pb-2">Market Materials (MAT)</h3>
+            <ResizableTextArea name="fund_managers_mkt_mat" label="Fund Managers" control={control} />
+            <ResizableTextArea name="inv_philosophy_mkt_mat" label="Investment Philosophy" control={control} />
+            <ResizableTextArea name="portfolio_construction_mkt_mat" label="Portfolio Construction" control={control} />
+            <ResizableTextArea name="risk_management_mkt_mat" label="Risk Management" control={control} />
+            <ResizableTextArea name="cash_management_mkt_mat" label="Cash Management" control={control} />
+            <p className="imeFormFieldDesc">Does the strategy take cash calls?</p>
+            <ToggleGroupInput 
+              name="derivatives_mkt_mat" 
+              label="Derivatives" 
+              control={control} 
+              options={yesNoOptions}
+              valueType="string"
+              itemClassName="ime-choice-chips"
+            />
+            <p className="imeFormFieldDesc">Does the strategy use derivatives?</p>
+            <ResizableTextArea name="inv_process_mkt_mat" label="Investment Process" control={control} />
+            <ResizableTextArea name="active_schemes_mkt_mat" label="Active Schemes" control={control} />
+            <TextInput name="rolling_returns_mkt_mat" label="Rolling Returns" control={control} type="number" step="0.01" />
+            <ResizableTextArea name="portfolio_composition_mkt_mat" label="Portfolio Composition" control={control} />
+            <TextInput name="fee_mkt_mat" label="Fee" control={control} type="number" step="0.01" />
+            <TextInput name="commission_mkt_mat" label="Commission" control={control} type="number" step="0.01" />
+            <ResizableTextArea name="disclosure_doc_mkt_mat" label="Disclosure Document" control={control} />
+            <p className="imeFormFieldDesc">Go through disclosure and make pertinent notes</p>
+            <ResizableTextArea name="custory_broker_mkt_mat" label="Custory Broker" control={control} />
+            <p className="imeFormFieldDesc">Sanity check - who is the custodian and PIS Bank account with?</p>
+            </div>
+        </TabsContent>
+        <TabsContent value="sebi">
+            <div className="space-y-4">
+            <h3 className="text-lg font-semibold border-b pb-2">SEBI Information</h3>
+            <TextInput name="firm_aum_sebi" label="Firm AUM" control={control} type="number" /> 
+            <TextInput name="strategy_aum_clients_sebi" label="Strategy AUM Clients" control={control} type="number" />
+            </div>  
+        </TabsContent>
+      </Tabs>      
+      
     </form>
   );
 }
