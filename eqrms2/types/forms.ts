@@ -177,3 +177,23 @@ export const changelogSchema = z.object({
 });
 
 export type ChangelogValues = z.infer<typeof changelogSchema>;
+
+// -----------------------
+// SECTOR FORM 
+// -----------------------
+
+export const sectorSchema = z.object({
+  sector_name: z.string().nullable(),
+  sector_slug: z.string().nullable(),
+  sector_stance: z.string().nullable(),
+  mkt_momentum: z.string().nullable(),
+  investment_view: z.string().nullable(),
+  sector_positive_snapshot: z.string().nullable(),
+  sector_negative_snapshot: z.string().nullable(),
+  sector_watch_for_snapshot: z.string().nullable(),
+  portfolio_thoughts: z.string().nullable(),
+  red_team: z.string().nullable(),
+});
+
+export type SectorValues = z.infer<typeof sectorSchema>;
+
