@@ -32,14 +32,7 @@ interface PageProps {
  */
 function parseSearchParams(params: { [key: string]: string | string[] | undefined }) {
   // 🔍 FILTERS: Define which URL parameters should be treated as filters
-  const filterKeys = [
-    'fund_rating',         // Numeric filter (converted to numbers)
-    'amc_name',           // String filter
-    'structure_name',     // String filter
-    'category_name',      // String filter
-    'estate_duty_exposure', // String filter (Y/N values)
-    'us_investors'        // String filter (Y/N values)
-  ];
+  const filterKeys = ['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'];
   
   // Parse filters from URL parameters
   const filters: Record<string, any> = {};
@@ -96,46 +89,19 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
     fund_rating: { table: '', valueCol: '', labelCol: '' },
     
     // Standard filters: fetch options from dedicated master tables
-    amc_name: { 
-      table: 'rms_amc', 
-      valueCol: 'amc_name', 
-      labelCol: 'amc_name' 
-    },
-    structure_name: { 
-      table: 'rms_structure', 
-      valueCol: 'structure_name', 
-      labelCol: 'structure_name' 
-    },
-    category_name: { 
-      table: 'rms_category', 
-      valueCol: 'cat_name',      // 📝 Note: using cat_name not category_name
-      labelCol: 'cat_name' 
-    },
+    amc_name: { table: 'rms_amc', valueCol: 'amc_name', labelCol: 'amc_name' },
+    structure_name: { table: 'rms_structure', valueCol: 'structure_name', labelCol: 'structure_name' },
+    category_name: { table: 'rms_category', valueCol: 'cat_name', labelCol: 'cat_name' },
     
     // Y/N filters: fetch unique values from the main view itself
-    estate_duty_exposure: { 
-      table: 'view_rms_funds_screener', 
-      valueCol: 'estate_duty_exposure', 
-      labelCol: 'estate_duty_exposure' 
-    },
-    us_investors: { 
-      table: 'view_rms_funds_screener', 
-      valueCol: 'us_investors', 
-      labelCol: 'us_investors' 
-    }
+    estate_duty_exposure: { table: 'view_rms_funds_screener', valueCol: 'estate_duty_exposure', labelCol: 'estate_duty_exposure' },
+    us_investors: { table: 'view_rms_funds_screener', valueCol: 'us_investors', labelCol: 'us_investors' }
   };
 
   // 📊 STEP 4: Fetch data and filter options in parallel (for performance)
   const [filterOptions, tableData] = await Promise.all([
     // Fetch all filter dropdown options
-    getMultipleFilterOptions([
-      'fund_rating',
-      'amc_name',
-      'structure_name', 
-      'category_name',
-      'estate_duty_exposure',
-      'us_investors'
-    ], filterConfig),
+    getMultipleFilterOptions(['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'], filterConfig),
     
     // Fetch the actual table data with server-side filtering/sorting/pagination
     serverSideQuery<RmsFundsScreener>({

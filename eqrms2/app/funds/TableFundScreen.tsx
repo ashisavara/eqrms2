@@ -8,7 +8,7 @@ import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 
 export default function TableFundScreen({ data }: { data: RmsFundsScreener[] }) {
 
-    const autoSortedColumns = useAutoSorting(data, columns);
+  const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({
     data,

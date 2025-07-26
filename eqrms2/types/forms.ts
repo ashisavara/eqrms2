@@ -197,3 +197,35 @@ export const sectorSchema = z.object({
 
 export type SectorValues = z.infer<typeof sectorSchema>;
 
+
+
+// -----------------------
+// LEAD FORM 
+// -----------------------
+
+
+export const LeadsTaggingSchema = z.object({
+  lead_name: z.string().nullable(),
+  last_contact_date: z.date().nullable(),
+  followup_date: z.date().nullable(),
+  importance: z.string().nullable(),
+  lead_progression: z.string().nullable(),
+  lead_source: z.string().nullable(),
+  lead_type: z.string().nullable(),
+  wealth_level: z.string().nullable(),
+  first_name: z.string().nullable(),
+  last_name: z.string().nullable(),
+  linkedin_url: z.string().nullable(),
+  phone_valid_date: z.boolean().nullable(),
+  email_valid_date: z.boolean().nullable(),
+  country_code: z.string().nullable(),
+  phone_number: z.string().nullable(),
+  email_1: z.string().nullable(),
+  email_2: z.string().nullable(),
+  email_3: z.string().nullable(),
+  lead_summary: z.string().nullable(),
+  lead_background: z.string().nullable(),
+  primary_rm: z.string().nullable(),
+});
+
+export type LeadsTaggingValues = z.infer<typeof LeadsTaggingSchema>;

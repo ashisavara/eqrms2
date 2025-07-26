@@ -5,8 +5,6 @@ import ServerTable, { ServerTableColumn, PaginationInfo } from "./ServerTable";
 export interface ServerTablePageConfig<T = any> {
   // Table identification
   basePath: string;
-  title: string;
-  description?: string;
   
   // Table state configuration
   tableStateConfig: {
@@ -50,20 +48,7 @@ export default function ServerTablePage<T = any>({
   className = ""
 }: ServerTablePageProps<T>) {
   return (
-    <div className={`space-y-6 p-6 ${className}`}>
-      {/* Page Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">{config.title}</h1>
-          {config.description && (
-            <p className="text-muted-foreground">{config.description}</p>
-          )}
-          <p className="text-muted-foreground">
-            Showing {data.length} of {pagination.totalCount} results
-          </p>
-        </div>
-      </div>
-
+    <div className={`space-y-6 ${className}`}>
       {/* Filters */}
       <ServerTableFilters
         basePath={config.basePath}

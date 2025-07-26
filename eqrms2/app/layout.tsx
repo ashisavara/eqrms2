@@ -34,7 +34,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <p className="font-bold text-blue-700 pt-6 pb-2 pl-4"><a href="/companies">  Val Screen  </a>  |  <a href="/funds"> Funds  </a> | <a href="/funds/all-new"> AllFunds</a> | <a href="/amc"> AMC</a> | <a href="/categories"> Categories</a> | <a href="/funds/changelog"> ChangeLog</a> | <a href="/sectors"> Sectors</a> | <SearchButton /></p>
+            <p className="font-bold text-blue-700 pt-6 pb-2 pl-4"><a href="/companies">  Val Screen  </a>  |  <a href="/funds"> Funds  </a> | <a href="/funds/all"> AllFunds</a> | <a href="/amc"> AMC</a> | <a href="/categories"> Categories</a> | <a href="/funds/changelog"> ChangeLog</a> | <a href="/sectors"> Sectors</a> | <SearchButton /></p>
             {children}
           </ThemeProvider>
       </body>
