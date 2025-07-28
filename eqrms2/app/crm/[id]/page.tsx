@@ -3,6 +3,7 @@ import { LeadsTagging } from "@/types/lead-detail";
 import { formatDate } from "@/lib/utils";
 import { EditLeadsButton } from "@/components/forms/EditLeads";
 import SimpleTable from "@/components/tables/singleRowTable";
+import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
 
 export default async function CrmDetailPage({ params }: { params: { id: string } }) {
     const { id } = await params;
@@ -36,7 +37,7 @@ export default async function CrmDetailPage({ params }: { params: { id: string }
                         <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} />
                     </div>
                     <div>
-                        <p>{lead.importance} | {lead.wealth_level} | {lead.lead_progression} | {lead.lead_source} | {lead.lead_type} | {lead.primary_rm} | </p>
+                        <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.primary_rm} | </p>
                         <p>Place for Custom Tags</p>
                         <p className="text-base italic">{lead.lead_summary}</p>
                     </div>

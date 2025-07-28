@@ -73,7 +73,7 @@ export default async function FundPage({ params }: PageProps) {
         </div>
         </div>
       <div>
-        <Tabs defaultValue="rating_snapshot" className="w-full mx-auto mt-6">
+        <Tabs defaultValue="rating_snapshot" className="w-full mx-auto mt-6 text-sm">
           <TabsList className="w-full">
             <TabsTrigger value="rating_snapshot">Rating Snapshot</TabsTrigger>
             <TabsTrigger value="rating_rationale">Rating Rationale</TabsTrigger>
@@ -88,7 +88,7 @@ export default async function FundPage({ params }: PageProps) {
                   headers = {[{label:"Fund"},{label:"Strategy"},{label:"Performance"}]}
                   body = {[{value:<RatingDisplay rating={fund.fund_rating} />},{value:<RatingDisplay rating={fund.fund_strategy_rating} />},{value:<RatingDisplay rating={fund.fund_performance_rating} />} ]}
                   />
-                  <div className="w-full mt-2 text-base">
+                  <div className="w-full mt-2 text-sm">
                       <div className="flex mb-2">
                           <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Recommendation</span></div>
                           <div className="flex-1 min-w-0">{fund.recommendation_tag}</div>
@@ -117,7 +117,7 @@ export default async function FundPage({ params }: PageProps) {
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[{value:<RatingDisplay rating={fund.amc_rating} />},{value:<RatingDisplay rating={fund.amc_team_rating} />},{value:<RatingDisplay rating={fund.amc_philosophy_rating} />}]}
                   />
-                  <div className="w-full mt-2 text-base">
+                  <div className="w-full mt-2 text-sm">
                       <div className="flex mb-2">
                           <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
                           <div className="flex-1 min-w-0">{fund.amc_pedigree}</div>

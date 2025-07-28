@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { LeadsTaggingSchema, LeadsTaggingValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea, TextInput, ToggleGroupInput, DatePicker, BooleanToggleInput } from "./FormFields";
+import { ResizableTextArea, TextInput, ToggleGroupInput, DatePicker, BooleanToggleInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 
@@ -84,87 +84,58 @@ function EditLeadsForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full p-4 space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full px-4 pt-4 pb-2 space-y-3">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
       
       {/* Basic Information */}
-      <TextInput name="lead_name" label="Lead Name" control={control} placeholder="Enter lead name" />
-      <TextInput name="first_name" label="First Name" control={control} placeholder="Enter first name" />
-      <TextInput name="last_name" label="Last Name" control={control} placeholder="Enter last name" />
+      <div className="grid grid-cols-3 gap-4 !mt-0">
+        <TextInput name="lead_name" label="Lead Name" control={control} placeholder="Enter lead name" />
+        <DatePicker name="last_contact_date" label="Last Contact Date" control={control} />
+        <DatePicker name="followup_date" label="Follow-up Date" control={control} />
+      </div>
+      <TextInput name="lead_summary" label="Lead Summary" control={control} />
       
-      {/* Date Fields */}
-      <DatePicker name="last_contact_date" label="Last Contact Date" control={control} />
-      <DatePicker name="followup_date" label="Follow-up Date" control={control} />
-      
+      <div className="bg-gray-100 p-4">
+        <ToggleGroupInput name="importance" label="Importance" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+
+        <div className="grid grid-cols-5 gap-4">
+          <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
+          <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
+          <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
+          <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
+          <TextInput name="primary_rm" label="Primary RM" control={control} placeholder="Relationship Manager" />
+        </div>
+      </div>
       {/* Categorization Fields with Options */}
-      <ToggleGroupInput 
-        name="importance" 
-        label="Importance" 
-        control={control} 
-        options={importanceOptions}
-        valueType="string"
-        toggleGroupClassName="gap-2 flex-wrap"
-        itemClassName="ime-choice-chips"
-      />
       
-      <ToggleGroupInput 
-        name="lead_progression" 
-        label="Lead Stage" 
-        control={control} 
-        options={leadProgressionOptions}
-        valueType="string"
-        toggleGroupClassName="gap-2 flex-wrap"
-        itemClassName="ime-choice-chips"
-      />
-      
-      <ToggleGroupInput 
-        name="lead_source" 
-        label="Lead Source" 
-        control={control} 
-        options={leadSourceOptions}
-        valueType="string"
-        toggleGroupClassName="gap-2 flex-wrap"
-        itemClassName="ime-choice-chips"
-      />
-      
-      <ToggleGroupInput 
-        name="lead_type" 
-        label="Lead Type" 
-        control={control} 
-        options={leadTypeOptions}
-        valueType="string"
-        toggleGroupClassName="gap-2 flex-wrap"
-        itemClassName="ime-choice-chips"
-      />
-      
-      <ToggleGroupInput 
-        name="wealth_level" 
-        label="Wealth Level" 
-        control={control} 
-        options={wealthLevelOptions}
-        valueType="string"
-        toggleGroupClassName="gap-2 flex-wrap"
-        itemClassName="ime-choice-chips"
-      />
-      
+      <ResizableTextArea name="lead_background" label="Lead Background" control={control} />
+
       {/* Contact Information */}
-      <TextInput name="country_code" label="Country Code" control={control} placeholder="+1" />
-      <TextInput name="phone_number" label="Phone Number" control={control} placeholder="Enter phone number" />
-      <TextInput name="email_1" label="Primary Email" control={control} type="email" placeholder="Enter primary email" />
-      <TextInput name="email_2" label="Secondary Email" control={control} type="email" placeholder="Enter secondary email" />
-      <TextInput name="email_3" label="Tertiary Email" control={control} type="email" placeholder="Enter tertiary email" />
-      <TextInput name="linkedin_url" label="LinkedIn URL" control={control} placeholder="LinkedIn profile URL" />
+      <div className="grid grid-cols-2 gap-4">
+        <TextInput name="first_name" label="First Name" control={control} placeholder="Enter first name" />
+        <TextInput name="last_name" label="Last Name" control={control} placeholder="Enter last name" />
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        <BooleanToggleInput name="phone_valid_date" label="Phone Validated" control={control} />
+        <TextInput name="country_code" label="Country Code" control={control} placeholder="+1" />
+        <TextInput name="phone_number" label="Phone Number" control={control} placeholder="Enter phone number" />
+        <TextInput name="linkedin_url" label="LinkedIn URL" control={control} placeholder="LinkedIn profile URL" />
+      </div>
       
-      {/* Validation Flags */}
-      <BooleanToggleInput name="phone_valid_date" label="Phone Validated" control={control} />
-      <BooleanToggleInput name="email_valid_date" label="Email Validated" control={control} />
+      <div className="grid grid-cols-4 gap-4">
+        <BooleanToggleInput name="email_valid_date" label="Email Validated" control={control} />
+        <TextInput name="email_1" label="Primary Email" control={control} type="email" placeholder="Enter primary email" />
+        <TextInput name="email_2" label="Secondary Email" control={control} type="email" placeholder="Enter secondary email" />
+        <TextInput name="email_3" label="Tertiary Email" control={control} type="email" placeholder="Enter tertiary email" />
+      </div>
       
       {/* Additional Information */}
-      <TextInput name="primary_rm" label="Primary RM" control={control} placeholder="Relationship Manager" />
+      
       
       {/* Text Areas for Descriptions */}
-      <ResizableTextArea name="lead_summary" label="Lead Summary" control={control} />
-      <ResizableTextArea name="lead_background" label="Lead Background" control={control} />
+      
+      
       
       <Button type="submit" className="w-full">Update Lead</Button>
     </form>

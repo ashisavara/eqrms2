@@ -14,7 +14,7 @@ export default async function CompaniesPage() {
   });
 
   return (
-    <div>
+    <div className="p-5">
       <h1 className="text-2xl font-bold m-1">Companies</h1>
       <TableValscreen data={companies}/>
     </div>

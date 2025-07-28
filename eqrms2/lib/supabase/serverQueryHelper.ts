@@ -81,18 +81,25 @@ export async function supabaseInsertRow<T>(
 // Utility function to fetch and map options for select, radio, or checkbox inputs
 // Example usage:
 //   const options = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter");
-//   first argument is table name, second is value column, third is label column
+//   const optionsCustomSort = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter", { column: "created_at", ascending: false });
+//   first argument is table name, second is value column, third is label column, fourth is optional sort config
 export async function fetchOptions<T, U>(
   table: string,
   valueColumn: string,
-  labelColumn: string
+  labelColumn: string,
+  sortOptions?: { column?: string; ascending?: boolean }
 ): Promise<{ value: T; label: U }[]> {
+  // Default sort settings: sort by label column in ascending order
+  const sortColumn = sortOptions?.column || labelColumn;
+  const sortAscending = sortOptions?.ascending !== false; // Default to true if not specified
+
   const data = await supabaseListRead({
     table,
     columns: `${valueColumn}, ${labelColumn}`,
     filters: [
       (query) => query.neq(valueColumn, null),
-      (query) => query.neq(labelColumn, null)
+      (query) => query.neq(labelColumn, null),
+      (query) => query.order(sortColumn, { ascending: sortAscending })
     ]
   });
 

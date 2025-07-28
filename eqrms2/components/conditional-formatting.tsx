@@ -72,6 +72,90 @@ export function CoverageRating({ rating }: { rating: string }) {
   );
 }
 
+export function CrmImportanceRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      '4) Urgent': 5,
+      '3) High': 4,
+      '2) Medium': 3,
+      '1) Low': 2,
+      '1) Reassign': 2,
+      '0) Nil': 1,
+      '0) Avoid': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <span className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </span>
+  );
+}
+
+export function CrmWealthRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      '4) Ultra-HNI': 5,
+      '3) HNI': 4,
+      '2) Affluent': 3,
+      '1) Wealth': 2,
+      '0) Retail': 1,
+      '0) Unknown': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <span className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </span>
+  );
+}
+
+export function CrmProgressionRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      '4) Client': 5,
+      '3) Inv Consultation': 4,
+      '3) Ex-client': 4,
+      '2) Initial Discussion': 3,
+      '1) Contact Initiated': 2,
+      '0) No Contact': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <span className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </span>
+  );
+}
+
+export function CrmLeadSourceRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      '4) RM Contacts': 5,
+      '4) Ashi Contacts': 5,
+      '3) Partner Referral': 4,
+      '3) Client Referral': 4,
+      '2) IME Website': 3,
+      '2) IME Academy': 3,
+      '1) Digital Ads': 2,
+      '0) Database': 1,
+      '0) Unknown': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <span className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </span>
+  );
+}
+
 
 /**
  * Conditional formatting component for numbers, which use the same color System as rating styles
