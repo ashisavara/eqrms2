@@ -47,6 +47,7 @@ export default async function CrmDetailPage({ params }: { params: { id: string }
                 <p><span className="font-bold">Contact Details: </span>Phone [{lead.country_code} - {lead.phone_number} | Email: {lead.email_1}  {lead.email_2}  {lead.email_3} | LinkedIn: {lead.linkedin_url}</p>
                 <p>{lead.lead_background}</p>
             </div>
+            
         </div>
     );
 }

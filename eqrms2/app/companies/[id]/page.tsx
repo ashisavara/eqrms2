@@ -1,5 +1,4 @@
-import { SupabaseSingleResource } from "@/components/supabase/singleRead";
-import { fetchOptions, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
+import { fetchOptions, supabaseListRead, supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
@@ -15,22 +14,31 @@ import { RatingDisplay,CompQualityRating, NumberRating, ComGrowthNumberRating, C
 export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params; // Await the params to get the id
   
-  // Fetch options for qtr and result rating
-  const qtrOptions = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter");
-  const resultRatingOptions = await fetchOptions<string, string>("master", "result_rating", "result_rating");
-  const qtrNotes = await supabaseListRead<CompanyQrtNotesValues>({
-    table: "eq_rms_qrtly_notes_view",
-    columns: "*",
-    filters: [
-      (query) => query.order("quarter_sort", { ascending: false }),
-      (query) => query.eq("company_id", id)
-    ]
-  });
+  // Consolidate all Supabase calls into a single Promise.all for better performance
+  const [qtrOptions, resultRatingOptions, qtrNotes, company] = await Promise.all([
+    fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter"),
+    fetchOptions<string, string>("master", "result_rating", "result_rating"),
+    supabaseListRead<CompanyQrtNotesValues>({
+      table: "eq_rms_qrtly_notes_view",
+      columns: "*",
+      filters: [
+        (query) => query.order("quarter_sort", { ascending: false }),
+        (query) => query.eq("company_id", id)
+      ]
+    }),
+    supabaseSingleRead<Company>({
+      table: "eq_rms_company_view", 
+      columns: "*", 
+      filters: [(query) => query.eq("company_id", id)]
+    })
+  ]);
 
+  // Handle case where company is not found
+  if (!company) {
+    return <div className="p-4">Company not found</div>;
+  }
 
   return (
-    <SupabaseSingleResource<Company> table="eq_rms_company_view" columns="*" filters={[(query: any) => query.eq("company_id", id)]}>
-      {(company) => (
         <div className="p-4">
           <div className="p-4 m-4 bg-gray-400 rounded-lg shadow-md text-center">
             <h1 className="text-2xl font-bold">{company.ime_name}</h1>
@@ -121,10 +129,6 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
           </div>
 
         </div>
-
-        
-      )}
-    </SupabaseSingleResource>
-  );
-}
+      );
+    }
 

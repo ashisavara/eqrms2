@@ -38,6 +38,12 @@ export function TableValscreen({ data }: TableValscreenProps) {
       pagination: {
         pageSize: 50, // Set default page size
       },
+      sorting: [
+        {
+          id: "upside", // Column accessor key
+          desc: true, // true = descending, false = ascending
+        }
+      ],
     },
   });
 
