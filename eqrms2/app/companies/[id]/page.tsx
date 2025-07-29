@@ -19,12 +19,12 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
     fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter"),
     fetchOptions<string, string>("master", "result_rating", "result_rating"),
     supabaseListRead<CompanyQrtNotesValues>({
-      table: "eq_rms_qrtly_notes_view",
-      columns: "*",
-      filters: [
-        (query) => query.order("quarter_sort", { ascending: false }),
-        (query) => query.eq("company_id", id)
-      ]
+    table: "eq_rms_qrtly_notes_view",
+    columns: "*",
+    filters: [
+      (query) => query.order("quarter_sort", { ascending: false }),
+      (query) => query.eq("company_id", id)
+    ]
     }),
     supabaseSingleRead<Company>({
       table: "eq_rms_company_view", 
@@ -128,7 +128,12 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             />
           </div>
 
+
+
+          
+          console.log(session.data.session.user.user_metadata.user_roles);
+
         </div>
-      );
-    }
+  );
+}
 
