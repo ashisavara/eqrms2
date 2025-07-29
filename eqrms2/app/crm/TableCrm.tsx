@@ -52,6 +52,12 @@ export function TableCrm({ data, columnType = "core" }: TableCrmProps) {
         pagination: {
           pageSize: 30, // Set default page size
         },
+        sorting: [
+          {
+            id: "days_followup", // Column accessor key
+            desc: false, // true = descending, false = ascending
+          }
+        ],
       },
     });
 

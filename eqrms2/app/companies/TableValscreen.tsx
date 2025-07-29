@@ -15,6 +15,9 @@ export function TableValscreen({ data }: TableValscreenProps) {
   // Auto-configure sorting for all columns
   const autoSortedColumns = useAutoSorting(data, columns);
   
+
+
+  
   const table = useReactTable({
     data,
     columns: autoSortedColumns,
@@ -37,6 +40,8 @@ export function TableValscreen({ data }: TableValscreenProps) {
       },
     },
   });
+
+
 
   const filters = [
     { column: "sector_name", title: "Sector", placeholder: "Sectors" },

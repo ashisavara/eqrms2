@@ -12,15 +12,15 @@ export const columns: ColumnDef<LeadsTagging>[] = [
             return <div className="text-left"><Link href={`/crm/${row.original.lead_id}`} className="text-blue-700 font-bold !text-left">{row.original.lead_name}</Link></div>
         }
     }, 
-    {
+        {
         accessorKey: "days_followup",
         header: "Followup",
-        size:80   
+        size: 80
     },
     {
         accessorKey: "days_since_last_contact",  
         header: "Last Contact",
-        size:80 
+        size: 80, 
     },
     {
         accessorKey: "importance",

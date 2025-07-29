@@ -40,7 +40,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div>
               <SimpleTable 
                 headers = {[{label:"CMP"},{label:"Target"},{label:"Multiple"},{label:"Upside"}]}
-                body = {[{value:company.cmp},{value:company.target_price},{value:company.multiple},{value:<NumberRating rating={company.upside}/>}]}
+                body = {[{value:company.cmp},{value:company.target_price},{value:<span className="text-blue-600 font-bold">{Number(company.pe_t2).toFixed(1)} </span>},{value:<NumberRating rating={company.upside}/>}]}
               />
             </div>
             <div>
@@ -52,7 +52,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div>
               <SimpleTable 
                 headers = {[{label:"FY27pe"},{label:"FY26gr"},{label:"FY27gr"},{label:"FY28gr"},{label:"FY29gr"}]}
-                body = {[{value:<span className="text-blue-600 font-bold">{Math.round(company.pe_t2)}</span>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t1)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t2)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t3)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t4)}/>}]}
+                body = {[{value:<span className="text-blue-600 font-bold">{Number(company.pe_t2).toFixed(1)} </span>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t1)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t2)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t3)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t4)}/>}]}
               />
             </div>
             <div>

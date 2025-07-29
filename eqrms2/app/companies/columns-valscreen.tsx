@@ -84,22 +84,22 @@ export const columns: ColumnDef<Company>[] = [
   { 
     accessorKey: "multiple", 
     header: "TP PE",
-    cell: ({ getValue }) => <div className="font-bold text-blue-500"> {Math.round(Number(getValue()))} </div>
+    cell: ({ getValue }) => <div className="font-bold text-blue-500"> {Number(getValue()).toFixed(1)}  </div>
   },
   { 
     accessorKey: "gr_t1", 
     header: "26gr", 
-    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
+    cell: ({ getValue }) => getValue() == null ? null : <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "gr_t2", 
     header: "27gr", 
-    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
+    cell: ({ getValue }) => getValue() == null ? null : <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "1m_return", 
     header: "1 m ", 
-    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
+    cell: ({ getValue }) => getValue() == null ? null : <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "3m_return", 
@@ -108,16 +108,17 @@ export const columns: ColumnDef<Company>[] = [
   { 
     accessorKey: "1yr_return", 
     header: "1 yr ", 
-    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
+    cell: ({ getValue }) => getValue() == null ? null : <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "3yrs_return", 
-    header: "3 yr "
+    header: "3 yr ", 
+    cell: ({ getValue }) => getValue() == null ? null : <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "5yrs_return", 
     header: "5 yr ", 
-    cell: ({ getValue }) => <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
+    cell: ({ getValue }) => getValue() == null ? null : <ComGrowthNumberRating rating={Math.round(Number(getValue()))}/>
   },
   { 
     accessorKey: "coverage", 

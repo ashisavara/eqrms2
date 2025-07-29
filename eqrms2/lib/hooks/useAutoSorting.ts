@@ -17,6 +17,10 @@ export function useAutoSorting<TData>(
     return columns.map(column => {
       // Skip if column already has sorting configured
       if (column.enableSorting !== undefined || column.sortingFn !== undefined) {
+        // But still add sortUndefined if it's missing
+        if (column.sortUndefined === undefined) {
+          return { ...column, sortUndefined: 'last' };
+        }
         return column;
       }
 
@@ -51,19 +55,33 @@ export function useAutoSorting<TData>(
         return false;
       });
 
-      // Auto-configure sorting
-      let sortingFn = 'text'; // Default
+      // Use TanStack's built-in sorting with accessorFn that converts null to undefined
+      let sortingFn;
       if (isNumeric) {
-        sortingFn = 'basic';
+        sortingFn = 'basic'; // TanStack's built-in numeric sorting
       } else if (isDate) {
-        sortingFn = 'datetime';
+        sortingFn = 'datetime'; // TanStack's built-in date sorting
+      } else {
+        sortingFn = 'alphanumeric'; // TanStack's built-in text sorting
       }
 
-      return {
+      const result = {
         ...column,
         enableSorting: true,
-        sortingFn
+        sortingFn,
+        sortUndefined: 'last', // Now this should work properly
+        // Convert null to undefined so TanStack's sortUndefined can handle it
+        accessorFn: column.accessorFn || ((row: any) => {
+          const value = row[column.accessorKey];
+          return value === null ? undefined : value;
+        }),
+        // Remove accessorKey since we're using accessorFn
+        accessorKey: undefined,
+        // Keep column ID
+        id: column.id || column.accessorKey
       };
+
+      return result;
     });
   }, [data, columns]);
 } 
