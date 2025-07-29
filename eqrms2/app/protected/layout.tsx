@@ -2,14 +2,18 @@ import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { getUserRoles } from "@/lib/auth/getUserRoles";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 
-export default function ProtectedLayout({
+export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Cache user roles for all child components (empty array for guests)
+  await getUserRoles();
+  
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
