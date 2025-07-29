@@ -6,18 +6,21 @@ import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSour
 export const columns: ColumnDef<LeadsTagging>[] = [
     {
         accessorKey: "lead_name",
-        header: "Lead Name",
+        header: () => <div className="!text-left">Lead Name</div>,
+        size: 200,
         cell: ({ row }) => {
-            return <Link href={`/crm/${row.original.lead_id}`} className="text-blue-700 underline">{row.original.lead_name}</Link>
+            return <div className="text-left"><Link href={`/crm/${row.original.lead_id}`} className="text-blue-700 font-bold !text-left">{row.original.lead_name}</Link></div>
         }
     }, 
     {
         accessorKey: "days_followup",
-        header: "Followup"   
+        header: "Followup",
+        size:80   
     },
     {
-        accessorKey: "days_since_last_contact",
-        header: "Last Contact"   
+        accessorKey: "days_since_last_contact",  
+        header: "Last Contact",
+        size:80 
     },
     {
         accessorKey: "importance",
@@ -25,7 +28,8 @@ export const columns: ColumnDef<LeadsTagging>[] = [
         filterFn: "arrIncludesSome",
         cell: ({ row }) => {
             return <CrmImportanceRating rating={row.original.importance ?? ""} />
-        }
+        },
+        size:120
     },
     {
         accessorKey: "wealth_level",
@@ -33,19 +37,25 @@ export const columns: ColumnDef<LeadsTagging>[] = [
         filterFn: "arrIncludesSome",
         cell: ({ row }) => {
             return <CrmWealthRating rating={row.original.wealth_level ?? ""} />
-        }
+        },
+        size:120
     },
     {
         accessorKey: "lead_progression",
-        header: "Lead Progression",
+        header: "Lead Progression", 
         filterFn: "arrIncludesSome",
         cell: ({ row }) => {
             return <CrmProgressionRating rating={row.original.lead_progression ?? ""} />
-        }
+        },
+        size: 120  // ✅ More realistic for badge content
     },
     {
         accessorKey: "lead_summary",
-        header: "Summary"
+        header: "Summary", 
+        size: 1000, // ✅ Set a large size to claim remaining space
+        cell: ({ row }) => {
+            return <div className="!text-left">{row.original.lead_summary}</div>
+        }
     },
     {
         accessorKey: "lead_source",

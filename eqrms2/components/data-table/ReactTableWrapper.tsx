@@ -224,6 +224,7 @@ export function ReactTableWrapper<TData>({
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
+                      style={{ width: header.getSize() }} // ✅ Add this line
                       className={`px-1 py-2 font-semibold ${
                         header.column.getCanSort() 
                           ? 'cursor-pointer select-none hover:bg-muted/50 transition-colors' 
@@ -279,7 +280,11 @@ export function ReactTableWrapper<TData>({
                     if (isFilterOnly) return null;
                     
                     return (
-                      <td key={cell.id} className="px-1 py-1">
+                      <td 
+                        key={cell.id} 
+                        style={{ width: cell.column.getSize() }} // ✅ Add this line
+                        className="px-2 py-2"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

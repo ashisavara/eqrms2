@@ -36,7 +36,7 @@ export default async function CrmDetailPage({ params }: { params: { id: string }
                         <p className="text-sm">Days Followup: {lead.days_followup} | Days Last Contact: {lead.days_since_last_contact}</p>
                         <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} />
                     </div>
-                    <div>
+                    <div className="text-sm">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.primary_rm} | </p>
                         <p>Place for Custom Tags</p>
                         <p className="text-base italic">{lead.lead_summary}</p>
