@@ -5,7 +5,7 @@ import { EditLeadsButton } from "@/components/forms/EditLeads";
 import SimpleTable from "@/components/tables/singleRowTable";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
 
-export default async function CrmDetailPage({ params }: { params: { id: string } }) {
+export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const [lead, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
