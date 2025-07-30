@@ -13,8 +13,8 @@
  * whatever options are passed to it and reports changes back to the parent.
  */
 
-import React, { useState } from "react";
-import { ChevronDown, X } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { ChevronDown, X, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 
 interface MultiSelectFilterProps {
   title: string;
@@ -42,13 +43,35 @@ export function MultiSelectFilter({
   placeholder = "Select options..."
 }: MultiSelectFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter options based on search term
+  const filteredOptions = useMemo(() => {
+    if (!searchTerm) return options;
+    return options.filter(option => 
+      option.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [options, searchTerm]);
+
+  // Determine if we should show search (more than 7 options)
+  const shouldShowSearch = options.length > 7;
 
   const handleSelectAll = () => {
-    onSelectionChange(options);
+    // When searching, only select filtered options; otherwise select all
+    const optionsToSelect = shouldShowSearch && searchTerm ? filteredOptions : options;
+    onSelectionChange([...new Set([...selectedValues, ...optionsToSelect])]);
   };
 
   const handleClearAll = () => {
     onSelectionChange([]);
+  };
+
+  const handleDropdownOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    // Clear search when closing dropdown
+    if (!open) {
+      setSearchTerm("");
+    }
   };
 
   const handleToggleOption = (option: string) => {
@@ -64,7 +87,7 @@ export function MultiSelectFilter({
 
   return (
     <div className="space-y-2">
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenu open={isOpen} onOpenChange={handleDropdownOpenChange}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
@@ -81,8 +104,27 @@ export function MultiSelectFilter({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="start">
-          <DropdownMenuLabel>{title}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
+          {/* Conditional header: Search input or Title */}
+          {shouldShowSearch ? (
+            <div className="p-2">
+              <div className="relative">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={`Search ${title.toLowerCase()}...`}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-8 h-8"
+                  autoFocus
+                />
+              </div>
+            </div>
+          ) : (
+            <>
+              <DropdownMenuLabel>{title}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          {shouldShowSearch && <DropdownMenuSeparator />}
           <div className="flex justify-between gap-2 p-2">
             <Button
               variant="ghost"
@@ -90,7 +132,9 @@ export function MultiSelectFilter({
               className="text-xs h-6"
               onClick={handleSelectAll}
             >
-              Select All
+              {shouldShowSearch && searchTerm 
+                ? `Select ${filteredOptions.length}` 
+                : "Select All"}
             </Button>
             <Button
               variant="ghost"
@@ -103,15 +147,21 @@ export function MultiSelectFilter({
           </div>
           <DropdownMenuSeparator />
           <div className="max-h-48 overflow-y-auto">
-            {options.map((option) => (
-              <DropdownMenuCheckboxItem
-                key={option}
-                checked={selectedValues.includes(option)}
-                onCheckedChange={() => handleToggleOption(option)}
-              >
-                {option}
-              </DropdownMenuCheckboxItem>
-            ))}
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <DropdownMenuCheckboxItem
+                  key={option}
+                  checked={selectedValues.includes(option)}
+                  onCheckedChange={() => handleToggleOption(option)}
+                >
+                  {option}
+                </DropdownMenuCheckboxItem>
+              ))
+            ) : (
+              <div className="p-2 text-sm text-muted-foreground text-center">
+                No options found
+              </div>
+            )}
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
