@@ -175,7 +175,7 @@ export function ReactTableWrapper<TData>({
             placeholder={searchPlaceholder}
             value={(table.getState().globalFilter as string) ?? ""}
             onChange={(event) => table.setGlobalFilter(String(event.target.value))}
-            className="max-w-sm w-250"
+            className="max-w-sm w-200"
           />
         </div>
       )}
