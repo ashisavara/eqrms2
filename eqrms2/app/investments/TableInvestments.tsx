@@ -1,6 +1,6 @@
 "use client";
 
-import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel, getGroupedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { columns } from "./columns-investments";
 import { Investments } from "@/types/investment-detail";
@@ -17,8 +17,12 @@ export default function TableInvestments({ data }: { data: Investments[] }) {
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getGroupedRowModel: getGroupedRowModel(), // ✅ Enable grouping
+    enableGrouping: true, // ✅ Enable grouping feature
     enableSortingRemoval: false,
     globalFilterFn: "includesString",
+    autoResetPageIndex: false, // ✅ Prevent auto page reset
+    autoResetExpanded: false, // ✅ Prevent auto expansion reset
     filterFns: {
         // Custom filter function for multi-select
         arrIncludesSome: (row, columnId, value) => {
@@ -29,10 +33,14 @@ export default function TableInvestments({ data }: { data: Investments[] }) {
       initialState: {
         pagination: {
           pageSize: 30, // Set default page size
+          pageIndex: 0,
         },
         sorting: [
           { id: "cur_amt", desc: true },
         ],
+        // Uncomment below to enable grouping by asset class by default
+        // grouping: ['asset_class_name'],
+        // expanded: true,
       },
     });
 
