@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { toast } from "sonner";
+import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateActions";
 
 // Constants
 const STORAGE_KEY = 'ime_group_mandate_selected';
@@ -131,21 +132,16 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     }, 1000); // Small delay to show toast
   }, []);
 
-  // Placeholder functions for data loading (Stage 4)
+  // Real Supabase data loading - RLS handles access control
   const loadAvailableGroups = useCallback(async (): Promise<void> => {
     setIsLoadingGroups(true);
     try {
-      // TODO: Replace with actual Supabase call in Stage 4
-      // For now, mock data
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate loading
-      setAvailableGroups([
-        { id: 1, name: "Retail Clients" },
-        { id: 2, name: "Institutional Clients" },
-        { id: 3, name: "High Net Worth" },
-      ]);
+      const groups = await loadUserGroups();
+      setAvailableGroups(groups);
     } catch (error) {
       console.error('Error loading groups:', error);
       toast.error("Error loading groups. Please try again.");
+      setAvailableGroups([]); // Set empty array on error
     } finally {
       setIsLoadingGroups(false);
     }
@@ -154,32 +150,12 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   const loadMandatesForGroup = useCallback(async (groupId: number): Promise<void> => {
     setIsLoadingMandates(true);
     try {
-      // TODO: Replace with actual Supabase call in Stage 4
-      // For now, mock data based on group
-      await new Promise(resolve => setTimeout(resolve, 300)); // Simulate loading
-      
-      const mockMandates: Record<number, Mandate[]> = {
-        1: [
-          { id: 101, name: "Conservative Growth" },
-          { id: 102, name: "Balanced Portfolio" },
-          { id: 103, name: "Aggressive Growth" },
-        ],
-        2: [
-          { id: 201, name: "Large Cap Equity" },
-          { id: 202, name: "Multi Asset" },
-          { id: 203, name: "Fixed Income" },
-        ],
-        3: [
-          { id: 301, name: "Private Equity" },
-          { id: 302, name: "Alternative Investments" },
-          { id: 303, name: "Custom Portfolio" },
-        ],
-      };
-      
-      setAvailableMandates(mockMandates[groupId] || []);
+      const mandates = await loadGroupMandates(groupId);
+      setAvailableMandates(mandates);
     } catch (error) {
-      console.error('Error loading mandates:', error);
+      console.error('Error loading mandates for group:', groupId, error);
       toast.error("Error loading mandates. Please try again.");
+      setAvailableMandates([]); // Set empty array on error
     } finally {
       setIsLoadingMandates(false);
     }
