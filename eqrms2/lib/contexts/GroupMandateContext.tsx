@@ -6,16 +6,24 @@ import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateAct
 
 // Constants
 const STORAGE_KEY = 'ime_group_mandate_selected';
+const GROUP_COOKIE = 'ime_group_id';
+const MANDATE_COOKIE = 'ime_mandate_id';
 
-// Helper functions for localStorage
+// Helper functions for localStorage + cookies
 const saveToStorage = (group: Group, mandate: Mandate) => {
   try {
     if (typeof window !== 'undefined') {
+      // Save to localStorage (for fast client access)
       const data = { group, mandate, timestamp: Date.now() };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      
+      // Save to cookies (for server access)
+      const cookieOptions = 'path=/; max-age=31536000; SameSite=Lax'; // 1 year expiry
+      document.cookie = `${GROUP_COOKIE}=${group.id}; ${cookieOptions}`;
+      document.cookie = `${MANDATE_COOKIE}=${mandate.id}; ${cookieOptions}`;
     }
   } catch (error) {
-    console.warn('Failed to save group/mandate to localStorage:', error);
+    console.warn('Failed to save group/mandate to storage:', error);
   }
 };
 
@@ -40,10 +48,15 @@ const loadFromStorage = (): { group: Group; mandate: Mandate } | null => {
 const clearStorage = () => {
   try {
     if (typeof window !== 'undefined') {
+      // Clear localStorage
       localStorage.removeItem(STORAGE_KEY);
+      
+      // Clear cookies by setting them to expire
+      document.cookie = `${GROUP_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      document.cookie = `${MANDATE_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     }
   } catch (error) {
-    console.warn('Failed to clear group/mandate from localStorage:', error);
+    console.warn('Failed to clear group/mandate from storage:', error);
   }
 };
 
