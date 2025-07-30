@@ -1,5 +1,6 @@
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { getCurrentGroupId } from "@/lib/auth/serverGroupMandate";
+import TableInvestments  from "./TableInvestments";
 
 export default async function InvestmentsPage() {
   // Get current group ID from cookies (server-side)
@@ -16,11 +17,10 @@ export default async function InvestmentsPage() {
       </div>
     );
   }
-
   // Fetch investments for the selected group (server-side)
   const investments = await supabaseListRead({
-    table: "investments",
-    columns: "*",
+    table: "view_investments_details",
+    columns: "fund_name, fund_rating, investor_name, pur_amt, cur_amt, gain_loss, abs_ret, cagr, cat_long_name, fund_rms_name, asset_class_name, cat_name, structure_name, slug, one_yr,three_yr,five_yr, advisor_name",
     filters: [
       (query) => query.eq("group_id", groupId)
     ]
@@ -29,21 +29,7 @@ export default async function InvestmentsPage() {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Investments</h1>
-      <p className="text-sm text-muted-foreground mb-6">
-        Showing investments for Group ID: {groupId}
-      </p>
-      
-      {investments.length === 0 ? (
-        <p>No investments found for this group.</p>
-      ) : (
-        <div>
-          <p className="mb-4">Found {investments.length} investments</p>
-          {/* Replace this with your actual investment display component */}
-          <pre className="bg-muted p-4 rounded text-xs overflow-auto">
-            {JSON.stringify(investments, null, 2)}
-          </pre>
-        </div>
-      )}
+      <TableInvestments data={investments} />
     </div>
   );
 }
