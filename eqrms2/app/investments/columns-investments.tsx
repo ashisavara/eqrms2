@@ -12,9 +12,9 @@ export const columns: ColumnDef<Investments>[] = [
         if (row.original.slug) {
             return <div className="text-left"><Link href={`/funds/${row.original.slug}`} className="text-blue-600 font-bold hover:underline">{row.original.fund_name}</Link></div>
         } else {
-            return<div className="text-left">{row.original.fund_name}</div>
+            return <div className="text-left">{row.original.fund_name}</div>
         }
-    },
+      }
     },
     { accessorKey: "fund_rating", header: "Fund Rating",size:60,cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} /> },
     { accessorKey: "investor_name", header: "Investor", size: 100, filterFn: "arrIncludesSome", cell: ({ getValue }) => {

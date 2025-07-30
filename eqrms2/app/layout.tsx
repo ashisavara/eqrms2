@@ -39,7 +39,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <GroupMandateProvider>
-              <div className="px-4 pt-6">
+              <div className="pt-2 pl-5 pr-5 pb-2 bg-gray-100">
                 {/* Main Navigation */}
                 <div className="flex items-center justify-between pb-2">
                   <p className="font-bold text-blue-700">
@@ -51,17 +51,14 @@ export default function RootLayout({
                     <a href="/funds/changelog"> ChangeLog</a> | 
                     <a href="/sectors"> Sectors</a> | 
                     <a href="/crm"> CRM</a> | 
+                    <a href="/investments"> Investments</a> | 
                     <SearchButton />
                   </p>
                   <ChangeGroup />
                 </div>
                 
-                {/* Context Display for debugging */}
-                <div className="flex justify-center pb-4">
-                  <ContextDisplay />
-                </div>
               </div>
-              {children}
+              <div className="px-5">{children}</div>
               <Toaster />
             </GroupMandateProvider>
           </ThemeProvider>

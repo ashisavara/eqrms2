@@ -159,7 +159,7 @@ export default async function FundPage({ params }: PageProps) {
           </div>
           </TabsContent>
           <TabsContent value="rating_rationale">
-            <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
+            <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-sm">
                   <h3 className="ime-basic-h3"> Rationale behind our fund rating</h3>
                   <div className="flex mb-4">
                       <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
@@ -178,7 +178,7 @@ export default async function FundPage({ params }: PageProps) {
                       <div className="flex-1 min-w-0">{fund.oth_salient_points}</div>
                   </div>
           </div>
-          <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
+          <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-sm">
                   <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
                   <div className="flex mb-4">
                       <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">View on AMC</span></div>

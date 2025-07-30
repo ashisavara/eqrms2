@@ -194,7 +194,7 @@ export function ReactTableWrapper<TData>({
              - Industry dropdown shows all industries again
       */}
       {filters.length > 0 && (
-        <div className="flex flex-wrap gap-4 py-4">
+        <div className="flex flex-wrap gap-4">
           {filters.map((filter) => (
             <div key={filter.column} className=" pl-3 min-w-[180px]">
               <MultiSelectFilter

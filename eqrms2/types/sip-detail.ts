@@ -1,5 +1,5 @@
 export type SipDetail = {
-    id: number,
+    sip_id: number,
     sip_fund_name: string,
     group_id: number,
     investor_id: number,
@@ -11,5 +11,16 @@ export type SipDetail = {
     sip_amount: number,
     months_left: number,
     sip_fv: number,
-    unique_sip_name: string
+    group_name: string,
+    group_type: string,
+    investor_name: string,
+    goal_name: string,
+    goal_description: string,
+    goal_date: number,
+    cat_name: string,
+    exp_return: number,
+    asset_class_name: string,
+    fund_rms_name: string
 };
+
+
