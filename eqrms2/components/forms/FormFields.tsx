@@ -13,8 +13,17 @@ import { format } from "date-fns"; // Comment out the DatePicker import
 import { Calendar } from "@/components/ui/calendar"; // Comment out the DatePicker import
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Comment out the DatePicker import
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react"; // Make sure you have lucide-react installed // Comment out the DatePicker import
+import { CalendarIcon, ChevronDown, Search } from "lucide-react"; // Make sure you have lucide-react installed // Comment out the DatePicker import
 import { cn } from "@/lib/utils"; // shadcn utility for combining classNames
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState, useMemo } from "react";
 
 // Update the Props type to include optional type and step
 type Props = { 
@@ -184,22 +193,110 @@ export function MultiToggleGroupInput({
   );
 }
 
-// Select option field
+// Select option field with search functionality for long lists
 export function SelectInput({ name, label, control, options }: { name: string; label: string; control: Control<any>; options: { value: string; label: string }[] }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter options based on search term
+  const filteredOptions = useMemo(() => {
+    if (!searchTerm) return options;
+    return options.filter(option => 
+      option.label.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [options, searchTerm]);
+
+  // Determine if we should show search (more than 7 options)
+  const shouldShowSearch = options.length > 7;
+
+  const handleDropdownOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    // Clear search when closing dropdown
+    if (!open) {
+      setSearchTerm("");
+    }
+  };
+
+  // If 7 or fewer options, use the original simple select
+  if (!shouldShowSearch) {
+    return (
+      <div>
+        <Label htmlFor={name} className="font-bold">{label}</Label>
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => (
+            <select id={name} {...field} className="form-select w-full p-2 border border-gray-300 rounded-md text-sm">
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          )}
+        />
+      </div>
+    );
+  }
+
+  // For more than 7 options, use enhanced dropdown with search
   return (
     <div>
-      <Label htmlFor={name} className="font-bold">{label}</Label>
+      <Label className="font-bold">{label}</Label>
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <select id={name} {...field} className="form-select w-full p-2 border border-gray-300 rounded-md text-sm">
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <DropdownMenu open={isOpen} onOpenChange={handleDropdownOpenChange}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-between text-left font-normal"
+              >
+                <span className="truncate">
+                  {field.value 
+                    ? options.find(opt => opt.value === field.value)?.label || "Select option..."
+                    : "Select option..."}
+                </span>
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="start">
+              {/* Search input replaces title for space efficiency */}
+              <div className="p-2">
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder={`Search ${label.toLowerCase()}...`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-8 h-8"
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <div className="max-h-48 overflow-y-auto">
+                {filteredOptions.length > 0 ? (
+                  filteredOptions.map((option) => (
+                    <DropdownMenuItem
+                      key={option.value}
+                      onClick={() => {
+                        field.onChange(option.value);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {option.label}
+                    </DropdownMenuItem>
+                  ))
+                ) : (
+                  <div className="p-2 text-sm text-muted-foreground text-center">
+                    No options found
+                  </div>
+                )}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       />
     </div>
