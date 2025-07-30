@@ -3,11 +3,14 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { toast } from "sonner";
 import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateActions";
+import { loadMandateFavourites, toggleFavouriteServer } from "@/lib/actions/favouriteActions";
+import { EntityType, FavouritesData } from "@/types/favourites-detail";
 
 // Constants
 const STORAGE_KEY = 'ime_group_mandate_selected';
 const GROUP_COOKIE = 'ime_group_id';
 const MANDATE_COOKIE = 'ime_mandate_id';
+const FAVOURITES_STORAGE_PREFIX = 'ime_mandate_favourites_';
 
 // Helper functions for localStorage + cookies
 const saveToStorage = (group: Group, mandate: Mandate) => {
@@ -60,6 +63,64 @@ const clearStorage = () => {
   }
 };
 
+// Helper functions for favourites storage
+const getFavouritesStorageKey = (mandateId: number | undefined): string => {
+  return `${FAVOURITES_STORAGE_PREFIX}${mandateId || 'none'}`;
+};
+
+const saveToFavouritesStorage = (mandateId: number, groupId: number, favourites: FavouritesData) => {
+  try {
+    if (typeof window !== 'undefined' && mandateId) {
+      const data = {
+        mandateId,
+        groupId,
+        favourites,
+        lastSync: new Date().toISOString()
+      };
+      const storageKey = getFavouritesStorageKey(mandateId);
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    }
+  } catch (error) {
+    console.warn('Failed to save favourites to storage:', error);
+  }
+};
+
+const loadFromFavouritesStorage = (mandateId: number | undefined): FavouritesData => {
+  const emptyFavourites: FavouritesData = {
+    categories: [],
+    funds: [],
+    asset_class: [],
+    structure: []
+  };
+
+  try {
+    if (typeof window !== 'undefined' && mandateId) {
+      const storageKey = getFavouritesStorageKey(mandateId);
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const data = JSON.parse(stored);
+        if (data.favourites && data.mandateId === mandateId) {
+          return data.favourites;
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to load favourites from localStorage:', error);
+  }
+  return emptyFavourites;
+};
+
+const clearFavouritesStorage = (mandateId: number | undefined) => {
+  try {
+    if (typeof window !== 'undefined' && mandateId) {
+      const storageKey = getFavouritesStorageKey(mandateId);
+      localStorage.removeItem(storageKey);
+    }
+  } catch (error) {
+    console.warn('Failed to clear favourites from storage:', error);
+  }
+};
+
 // Types
 export type Group = {
   id: number;
@@ -83,6 +144,10 @@ export type GroupMandateContextType = {
   // Loading states
   isLoadingGroups: boolean;
   isLoadingMandates: boolean;
+  isLoadingFavourites: boolean;
+  
+  // Favourites
+  favourites: FavouritesData;
   
   // Actions
   setCurrentGroup: (group: Group | null) => void;
@@ -90,6 +155,11 @@ export type GroupMandateContextType = {
   setGroupAndMandate: (group: Group, mandate: Mandate) => void;
   loadAvailableGroups: () => Promise<void>;
   loadMandatesForGroup: (groupId: number) => Promise<void>;
+  
+  // Favourites actions
+  toggleFavourite: (entityType: EntityType, entityId: number) => Promise<void>;
+  isFavourite: (entityType: EntityType, entityId: number) => boolean;
+  loadFavourites: () => Promise<void>;
   
   // Reset functions
   resetContext: () => void;
@@ -117,6 +187,15 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   const [availableMandates, setAvailableMandates] = useState<Mandate[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState(false);
   const [isLoadingMandates, setIsLoadingMandates] = useState(false);
+  
+  // Favourites state
+  const [favourites, setFavourites] = useState<FavouritesData>({
+    categories: [],
+    funds: [],
+    asset_class: [],
+    structure: []
+  });
+  const [isLoadingFavourites, setIsLoadingFavourites] = useState(false);
 
   // Restore saved selection from localStorage on mount
   useEffect(() => {
@@ -125,16 +204,64 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
       setCurrentGroup(savedSelection.group);
       setCurrentMandate(savedSelection.mandate);
       console.log('Restored saved selection:', savedSelection);
+      
+      // Load favourites for the restored mandate
+      const savedFavourites = loadFromFavouritesStorage(savedSelection.mandate.id);
+      setFavourites(savedFavourites);
     }
   }, []);
 
+  // Tab synchronization - listen for favourites changes in other tabs
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key && e.key.startsWith(FAVOURITES_STORAGE_PREFIX) && currentMandate) {
+        const expectedKey = getFavouritesStorageKey(currentMandate.id);
+        if (e.key === expectedKey && e.newValue) {
+          try {
+            const data = JSON.parse(e.newValue);
+            if (data.favourites && data.mandateId === currentMandate.id) {
+              setFavourites(data.favourites);
+              console.log('Synced favourites from another tab');
+            }
+          } catch (error) {
+            console.warn('Failed to sync favourites from another tab:', error);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [currentMandate?.id]);
+
   // Actions - memoized to prevent infinite re-renders
   const setGroupAndMandate = useCallback((group: Group, mandate: Mandate) => {
+    // Clear existing favourites
+    setFavourites({
+      categories: [],
+      funds: [],
+      asset_class: [],
+      structure: []
+    });
+    
+    // Clear old favourites storage
+    if (currentMandate) {
+      clearFavouritesStorage(currentMandate.id);
+    }
+    
     setCurrentGroup(group);
     setCurrentMandate(mandate);
     
     // Save to localStorage for persistence
     saveToStorage(group, mandate);
+    
+    // Load favourites for new mandate (async - don't block)
+    loadMandateFavourites().then((newFavourites) => {
+      setFavourites(newFavourites);
+      saveToFavouritesStorage(mandate.id, group.id, newFavourites);
+    }).catch((error) => {
+      console.error('Failed to load favourites for new mandate:', error);
+    });
     
     // Toast success message and reload page
     toast.success(`Group: ${group.name} | Mandate: ${mandate.name} set successfully!`);
@@ -143,7 +270,7 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     setTimeout(() => {
       window.location.reload();
     }, 1000); // Small delay to show toast
-  }, []);
+  }, [currentMandate]);
 
   // Real Supabase data loading - RLS handles access control
   const loadAvailableGroups = useCallback(async (): Promise<void> => {
@@ -174,6 +301,71 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // Favourites functions
+  const loadFavourites = useCallback(async (): Promise<void> => {
+    if (!currentMandate) return;
+    
+    setIsLoadingFavourites(true);
+    try {
+      const newFavourites = await loadMandateFavourites();
+      setFavourites(newFavourites);
+      
+      // Save to localStorage
+      if (currentGroup) {
+        saveToFavouritesStorage(currentMandate.id, currentGroup.id, newFavourites);
+      }
+    } catch (error) {
+      console.error('Error loading favourites:', error);
+      toast.error("Error loading favourites. Please try again.");
+    } finally {
+      setIsLoadingFavourites(false);
+    }
+  }, [currentMandate, currentGroup]);
+
+  const isFavourite = useCallback((entityType: EntityType, entityId: number): boolean => {
+    return favourites[entityType]?.includes(entityId) || false;
+  }, [favourites]);
+
+  const toggleFavourite = useCallback(async (entityType: EntityType, entityId: number): Promise<void> => {
+    if (!currentMandate || !currentGroup) {
+      toast.error("Please select a group and mandate first");
+      return;
+    }
+
+    const wasAlreadyFavourite = isFavourite(entityType, entityId);
+    
+    // Optimistic update - immediately update UI
+    const updateLocalFavourites = (shouldAdd: boolean) => {
+      setFavourites(prev => {
+        const newFavourites = { ...prev };
+        if (shouldAdd) {
+          // Add to favourites
+          newFavourites[entityType] = [...prev[entityType], entityId];
+        } else {
+          // Remove from favourites
+          newFavourites[entityType] = prev[entityType].filter(id => id !== entityId);
+        }
+        
+        // Save to localStorage
+        saveToFavouritesStorage(currentMandate.id, currentGroup.id, newFavourites);
+        return newFavourites;
+      });
+    };
+
+    // Apply optimistic update
+    updateLocalFavourites(!wasAlreadyFavourite);
+
+    try {
+      // Sync to server
+      await toggleFavouriteServer(entityType, entityId, wasAlreadyFavourite);
+    } catch (error) {
+      // Rollback on failure
+      updateLocalFavourites(wasAlreadyFavourite);
+      console.error(`Error toggling favourite ${entityType}:`, error);
+      toast.error("Failed to update favourite");
+    }
+  }, [currentMandate, currentGroup, isFavourite]);
+
   const handleSetCurrentGroup = useCallback((group: Group | null) => {
     setCurrentGroup(group);
     // Clear mandate when group changes
@@ -187,22 +379,44 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   }, [loadMandatesForGroup]);
 
   const clearSelection = useCallback(() => {
+    // Clear favourites storage for current mandate
+    if (currentMandate) {
+      clearFavouritesStorage(currentMandate.id);
+    }
+    
     setCurrentGroup(null);
     setCurrentMandate(null);
+    setFavourites({
+      categories: [],
+      funds: [],
+      asset_class: [],
+      structure: []
+    });
     
     // Clear localStorage
     clearStorage();
-  }, []);
+  }, [currentMandate]);
 
   const resetContext = useCallback(() => {
+    // Clear favourites storage for current mandate
+    if (currentMandate) {
+      clearFavouritesStorage(currentMandate.id);
+    }
+    
     setCurrentGroup(null);
     setCurrentMandate(null);
     setAvailableGroups([]);
     setAvailableMandates([]);
+    setFavourites({
+      categories: [],
+      funds: [],
+      asset_class: [],
+      structure: []
+    });
     
     // Clear localStorage
     clearStorage();
-  }, []);
+  }, [currentMandate]);
 
   const value: GroupMandateContextType = {
     // Current selections
@@ -216,6 +430,10 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     // Loading states
     isLoadingGroups,
     isLoadingMandates,
+    isLoadingFavourites,
+    
+    // Favourites
+    favourites,
     
     // Actions
     setCurrentGroup: handleSetCurrentGroup,
@@ -223,6 +441,11 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     setGroupAndMandate,
     loadAvailableGroups,
     loadMandatesForGroup,
+    
+    // Favourites actions
+    toggleFavourite,
+    isFavourite,
+    loadFavourites,
     
     // Reset functions
     resetContext,

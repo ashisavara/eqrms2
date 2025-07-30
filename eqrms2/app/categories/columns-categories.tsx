@@ -1,8 +1,29 @@
 import { ColumnDef } from "@tanstack/react-table";  
 import { Category } from "@/types/category-detail";
 import Link from "next/link";
+import { FavouriteHeart } from "@/components/ui/favourite-heart";
 
 export const columns: ColumnDef<Category>[] = [
+  {
+    id: "is_favourite",
+    header: "♥",
+    size: 40,
+    accessorFn: (row) => {
+      // This enables sorting - favourites will sort to top (1) vs bottom (0)
+      // Note: This requires the favourites context to be available
+      // We'll implement this in the table wrapper component
+      return 0; // Placeholder - actual sorting handled by useAutoSorting
+    },
+    cell: ({ row }) => (
+      <FavouriteHeart 
+        entityType="categories" 
+        entityId={row.original.category_id} 
+        size="sm"
+      />
+    ),
+    enableSorting: true,
+    meta: { isFilterOnly: false }
+  },
   {
     accessorKey: "cat_name",
     header: () => <div className="text-left">Category</div>,
