@@ -4,6 +4,7 @@ import { Category } from "@/types/category-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import TableFundBasic from "@/app/funds/TableFundBasic";
 import { EditCatButton } from "@/components/forms/EditCategory";
+import { FavouriteHeart } from "@/components/ui/favourite-heart";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -37,7 +38,14 @@ export default async function CategoryPage({ params }: PageProps) {
   return (
     <div>
         <div className="p-4 bg-gray-100 rounded-lg text-center">
-            <h1 className="text-2xl font-bold">{category.cat_name}</h1>
+            <div className="flex items-center justify-center gap-4">
+                <h1 className="text-2xl font-bold">{category.cat_name}</h1>
+                <FavouriteHeart 
+                    entityType="categories" 
+                    entityId={category.category_id} 
+                    size="lg"
+                />
+            </div>
             <p className="font-bold">{category.cat_summary}</p>
             <p>{category.cat_description}</p>
             <EditCatButton categoryData={category} categoryId={category.category_id} />

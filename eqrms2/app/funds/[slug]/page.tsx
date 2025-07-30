@@ -6,6 +6,7 @@ import { EditFundsButton } from "@/components/forms/EditFunds";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
+import { FavouriteHeart } from "@/components/ui/favourite-heart";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -41,7 +42,14 @@ export default async function FundPage({ params }: PageProps) {
   return (
     <div>
       <div>
-        <h1 className="text-2xl font-bold p-4 bg-gray-100 rounded text-center">{fund.fund_name}</h1>
+        <div className="flex items-center justify-center gap-4 p-4 bg-gray-100 rounded">
+          <h1 className="text-2xl font-bold">{fund.fund_name}</h1>
+          <FavouriteHeart 
+            entityType="funds" 
+            entityId={fund.fund_id} 
+            size="lg"
+          />
+        </div>
         <div className="flex flex-row gap-2 justify-center">
             <div> {fund.amc_name} |  </div>
             <div> {fund.structure_name} -  </div>

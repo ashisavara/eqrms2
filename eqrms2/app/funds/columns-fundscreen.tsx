@@ -2,8 +2,23 @@ import { ColumnDef } from "@tanstack/react-table";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import Link from "next/link";
 import { ComGrowthNumberRating, RatingDisplay } from "@/components/conditional-formatting";
+import { FavouriteHeart } from "@/components/ui/favourite-heart";
 
 export const columns: ColumnDef<RmsFundsScreener>[] = [
+  {
+    id: "is_favourite",
+    header: "♥",
+    size: 40,
+    cell: ({ row }) => (
+      <FavouriteHeart 
+        entityType="funds" 
+        entityId={row.original.fund_id} 
+        size="sm"
+      />
+    ),
+    enableSorting: true,
+    meta: { isFilterOnly: false }
+  },
   {
     accessorKey: "fund_name",
     header: () => <div className="text-left">Fund Name</div>,

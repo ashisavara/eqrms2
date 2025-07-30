@@ -3,6 +3,7 @@ import { AssetClass } from "@/types/asset-class-detail";
 import { Category } from "@/types/category-detail";
 import { TableCategories } from "@/app/categories/TableCategories";
 import { EditAssetClassButton } from "@/components/forms/EditAssetClass";
+import { FavouriteHeart } from "@/components/ui/favourite-heart";
 
 interface PageProps {
     params: Promise<{slug:string}>;
@@ -34,7 +35,14 @@ export default async function AssetClassPage({params}: PageProps) {
     return (
         <div>
             <div className="pageHeadingBox">
-                <h1 className="text-2xl font-bold">{assetClass.asset_class_name}</h1>
+                <div className="flex items-center gap-4">
+                    <h1 className="text-2xl font-bold">{assetClass.asset_class_name}</h1>
+                    <FavouriteHeart 
+                        entityType="asset_class" 
+                        entityId={assetClass.asset_class_id} 
+                        size="lg"
+                    />
+                </div>
                 <p className="font-bold">{assetClass.asset_class_summary}</p>
                 <p>{assetClass.asset_class_desc}</p>
                 <EditAssetClassButton assetClassData={assetClass} assetClassId={assetClass.asset_class_id} />
