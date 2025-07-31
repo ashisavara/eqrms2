@@ -35,6 +35,7 @@
     "react-hook-form": "^7.60.0",
     "react-markdown": "^10.1.0",
     "react-textarea-autosize": "^8.5.9",
+    "recharts": "^2.15.4",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "sonner": "^2.0.6",

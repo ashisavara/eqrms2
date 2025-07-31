@@ -14,6 +14,7 @@ import { calculateAggregations } from "@/lib/table-aggregations";
 import { useMemo } from "react";
 import TableSystematic from "./TableSip";
 import TableStp from "./TableStp";
+import { PieChart } from "@/components/charts/InvestmentPieCharts";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -172,7 +173,30 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
           </TabsContent>
           
           <TabsContent value="analysis">
-            
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              <PieChart 
+                table={table} 
+                aggCol="asset_class_name" 
+                valCol="cur_amt" 
+                title="Asset Class Distribution"
+                description="Current value by asset class"
+              />
+              <PieChart 
+                table={table} 
+                aggCol="investor_name" 
+                valCol="cur_amt" 
+                title="Investor Distribution"
+                description="Current value by investor"
+              />
+              <PieChart 
+                table={table} 
+                aggCol="cat_name" 
+                valCol="cur_amt" 
+                title="Category Distribution"
+                description="Current value by category (top 8)"
+                maxItems={8}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
