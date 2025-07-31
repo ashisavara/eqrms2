@@ -93,8 +93,8 @@ export function PieChart<TData>({
                 ))}
               </Pie>
               <ChartTooltip 
-                content={<ChartTooltipContent />}
-                formatter={(value: number) => [`${value.toFixed(0)}`, ' lakhs']}
+                content={<ChartTooltipContent className="font-bold text-gray-500" />}
+                formatter={(value: number, name: string, props: any) => [`${props.payload.name} (${value.toFixed(0)} lakhs)`, '']}
               />
               <Legend 
                 verticalAlign="bottom" 
