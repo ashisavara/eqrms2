@@ -7,7 +7,10 @@ export const columns: ColumnDef<SipDetail>[] = [
     { accessorKey: "investor_name", header: "Investor"},
     { accessorKey: "asset_class_name", header: "Asset Class"},
     { accessorKey: "cat_name", header: "Category"},
-    { accessorKey: "sip_amount", header: "Amount"},
+    { accessorKey: "sip_amount", 
+        header: "Amount",
+        aggregationFn: 'sum', 
+        aggregatedCell: ({ cell }: { cell: any }) => (<div>{Number(cell.getValue()).toFixed(1)}</div>)},
     { accessorKey: "installment_date", header: "Installment Date"},
     { accessorKey: "months_left", header: "Months Left"},
 ];

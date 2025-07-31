@@ -272,9 +272,7 @@ export function ReactTableWrapper<TData>({
               table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className={`border-b hover:bg-muted/50 transition-colors ${
-                    row.getIsGrouped() ? 'bg-muted/20 font-medium' : ''
-                  }`}
+                  className="border-b hover:bg-muted/50 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => {
                     // Hide cells for filter-only columns
@@ -285,40 +283,11 @@ export function ReactTableWrapper<TData>({
                       <td 
                         key={cell.id} 
                         style={{ width: cell.column.getSize() }}
-                        className={`px-2 py-2 ${
-                          cell.getIsGrouped() ? 'bg-muted/30' : 
-                          cell.getIsAggregated() ? 'bg-muted/10' : ''
-                        }`}
+                        className="px-2 py-2"
                       >
-                        {cell.getIsGrouped() ? (
-                          // ✅ Render grouped cell
-                          <button
-                            {...{
-                              onClick: row.getToggleExpandedHandler(),
-                              style: {
-                                cursor: row.getCanExpand() ? 'pointer' : 'normal',
-                              },
-                            }}
-                          >
-                            {row.getIsExpanded() ? '📂' : '📁'}{' '}
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}{' '}
-                            ({row.subRows.length})
-                          </button>
-                        ) : cell.getIsAggregated() ? (
-                          // ✅ Render aggregated cell
-                          flexRender(
-                            cell.column.columnDef.aggregatedCell ?? cell.column.columnDef.cell,
-                            cell.getContext()
-                          )
-                        ) : cell.getIsPlaceholder() ? null : (
-                          // ✅ Render regular cell
-                          flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
                         )}
                       </td>
                     );
@@ -337,61 +306,7 @@ export function ReactTableWrapper<TData>({
               </tr>
             )}
           </tbody>
-          
-          {/* ✅ Table Footer */}
-          <tfoot className="bg-muted font-semibold">
-            <tr className="border-t">
-              {table.getAllColumns().filter(col => !col.columnDef.meta?.isFilterOnly).map((column) => {
-                const columnId = column.id;
-                let footerContent = null;
-                
-                // Calculate totals for specific columns
-                if (columnId === 'pur_amt') {
-                  const total = table.getFilteredRowModel().rows.reduce((sum, row) => {
-                    const value = row.getValue(columnId);
-                    return sum + (Number(value) || 0);
-                  }, 0);
-                  footerContent = (
-                    <div className="text-green-600 font-bold bg-green-50 px-2 py-1 rounded">
-                      ₹{total.toFixed(1)}
-                    </div>
-                  );
-                } else if (columnId === 'cur_amt') {
-                  const total = table.getFilteredRowModel().rows.reduce((sum, row) => {
-                    const value = row.getValue(columnId);
-                    return sum + (Number(value) || 0);
-                  }, 0);
-                  footerContent = (
-                    <div className="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">
-                      ₹{total.toFixed(1)}
-                    </div>
-                  );
-                } else if (columnId === 'gain_loss') {
-                  const total = table.getFilteredRowModel().rows.reduce((sum, row) => {
-                    const value = row.getValue(columnId);
-                    return sum + (Number(value) || 0);
-                  }, 0);
-                  const textColor = total >= 0 ? 'text-green-600' : 'text-red-600';
-                  const bgColor = total >= 0 ? 'bg-green-50' : 'bg-red-50';
-                  footerContent = (
-                    <div className={`${textColor} font-bold ${bgColor} px-2 py-1 rounded`}>
-                      ₹{total.toFixed(1)}
-                    </div>
-                  );
-                }
-                
-                return (
-                  <td
-                    key={column.id}
-                    style={{ width: column.getSize() }}
-                    className="px-2 py-2"
-                  >
-                    {footerContent}
-                  </td>
-                );
-              })}
-            </tr>
-          </tfoot>
+
         </table>
       </div>
 
