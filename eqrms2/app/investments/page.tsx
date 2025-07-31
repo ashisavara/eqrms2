@@ -48,26 +48,14 @@ export default async function InvestmentsPage() {
 
   return (
     <div>
-      <Tabs defaultValue="investments" className="w-full mx-auto mt-6 text-sm">
-        <TabsList className="w-full">
-          <TabsTrigger value="investments">Investments</TabsTrigger>
-          <TabsTrigger value="analysis">Analysis</TabsTrigger>
-          <TabsTrigger value="reallocation">Reallocation</TabsTrigger>
-        </TabsList>
-        <TabsContent value="investments">
-          <TableInvestments data={investments} />
+
+          <TableInvestments data={investments} sipData={sip} stpData={stp} />
           <h2>SIP Details</h2>
           <TableSystematic data={sip} />
           <h2>STP Details</h2>
           <TableStp data={stp} />
-        </TabsContent>
-        <TabsContent value="analysis">
-          <div>Analysis to be created in next phase</div>
-        </TabsContent>
-        <TabsContent value="reallocation">
-          <div>reallocation to be created in next phase</div>
-        </TabsContent>
-      </Tabs>
+
+
     </div>
   );
 }

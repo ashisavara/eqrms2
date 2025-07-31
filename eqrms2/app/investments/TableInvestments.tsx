@@ -2,11 +2,24 @@
 
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
+import { MultiSelectFilter } from "@/components/data-table/MultiSelectFilter";
 import { columns } from "./columns-investments";
 import { Investments } from "@/types/investment-detail";
+import { SipDetail } from "@/types/sip-detail";
+import { StpDetails } from "@/types/stp-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AggregateCard } from "@/components/ui/aggregate-card";
+import { calculateAggregations } from "@/lib/table-aggregations";
+import { useMemo } from "react";
 
-export default function TableInvestments({ data }: { data: Investments[] }) {
+interface TableInvestmentsProps {
+  data: Investments[];
+  sipData?: SipDetail[];
+  stpData?: StpDetails[];
+}
+
+export default function TableInvestments({ data, sipData = [], stpData = [] }: TableInvestmentsProps) {
 
   const autoSortedColumns = useAutoSorting(data, columns);
 
@@ -46,14 +59,115 @@ export default function TableInvestments({ data }: { data: Investments[] }) {
         { column: "investor_name", title: "Investor", placeholder: "Investor" },
         { column: "advisor_name", title: "Advisor", placeholder: "Advisor" },
       ];
+
+    // ✅ Generate filter options for top-level filters
+    const originalOptions = useMemo(() => {
+      const options: Record<string, string[]> = {};
+      
+      filters.forEach(filter => {
+        const uniqueValues = new Set<string>();
+        table.getCoreRowModel().rows.forEach(row => {
+          const value = row.getValue(filter.column);
+          if (value != null && value !== '') {
+            uniqueValues.add(String(value));
+          }
+        });
+        options[filter.column] = Array.from(uniqueValues).sort();
+      });
+      
+      return options;
+    }, [table.getCoreRowModel().rows, filters]);
+
+    // ✅ Filter change handler
+    const handleFilterChange = (column: string, selectedValues: string[]) => {
+      const columnObj = table.getColumn(column);
+      if (columnObj) {
+        columnObj.setFilterValue(selectedValues.length > 0 ? selectedValues : undefined);
+      }
+    };
+
+    // ✅ Get current filter values
+    const getCurrentFilterValues = (column: string): string[] => {
+      const filterValue = table.getColumn(column)?.getFilterValue();
+      return Array.isArray(filterValue) ? filterValue : [];
+    };
+
+    // ✅ Calculate aggregations for cards
+    const aggregations = calculateAggregations(table, ['pur_amt', 'cur_amt', 'gain_loss']);
     
-      return <ReactTableWrapper 
-        table={table} 
-        className="text-xs text-center" 
-        filters={filters} 
-        aggregations={['pur_amt', 'cur_amt', 'gain_loss']}
-        aggregationFormat={{
-          formatter: (value) => value.toFixed(1)
-        }}
-      />;
+    // ✅ Calculate SIP and STP totals manually from raw data
+    const sipTotal = sipData.reduce((sum, row) => sum + (Number(row.sip_amount) || 0), 0);
+    const stpTotal = stpData.reduce((sum, row) => sum + (Number(row.stp_amt) || 0), 0);
+    
+    return (
+      <div className="space-y-4">
+        {/* ✅ Top-level filters */}
+        <div className="flex flex-wrap gap-4">
+          {filters.map((filter) => (
+            <div key={filter.column} className="min-w-[180px]">
+              <MultiSelectFilter
+                title={filter.title}
+                options={originalOptions[filter.column] || []}
+                selectedValues={getCurrentFilterValues(filter.column)}
+                onSelectionChange={(values) => handleFilterChange(filter.column, values)}
+                placeholder={filter.placeholder || `Filter ${filter.title}...`}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* ✅ Tabs for table and cards */}
+        <Tabs defaultValue="table" className="w-full">
+          <TabsList>
+            <TabsTrigger value="table">Table View</TabsTrigger>
+            <TabsTrigger value="cards">Summary Cards</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="table">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <AggregateCard 
+                title="Total Purchase" 
+                value={aggregations.pur_amt || 0}
+                formatter={(value) => `${value.toFixed(1)}`}
+              />
+              <AggregateCard 
+                title="Total Value" 
+                value={aggregations.cur_amt || 0}
+                formatter={(value) => `${value.toFixed(1)}`}
+              />
+              <AggregateCard 
+                title="Total Gain/Loss" 
+                value={aggregations.gain_loss || 0}
+                formatter={(value) => `${value.toFixed(1)}`}
+                className={aggregations.gain_loss >= 0 ? "border-green-200" : "border-red-200"}
+              />
+              <AggregateCard 
+                title="Total SIP" 
+                value={sipTotal}
+                formatter={(value) => `${value.toFixed(1)}`}
+              />
+              <AggregateCard 
+                title="Total STP" 
+                value={stpTotal}
+                formatter={(value) => `${value.toFixed(1)}`}
+              />
+            </div>
+            <ReactTableWrapper 
+              table={table} 
+              className="text-xs text-center" 
+              filters={[]} 
+              showSearch={true}
+              aggregations={['pur_amt', 'cur_amt', 'gain_loss']}
+              aggregationFormat={{
+                formatter: (value) => value.toFixed(1)
+              }}
+            />
+          </TabsContent>
+          
+          <TabsContent value="cards">
+            
+          </TabsContent>
+        </Tabs>
+      </div>
+    );
     }
