@@ -125,6 +125,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
           <TabsList className="w-full">
             <TabsTrigger value="investments">Investments</TabsTrigger>
             <TabsTrigger value="analysis">Analysis</TabsTrigger>
+            <TabsTrigger value="systematic">Systematic</TabsTrigger>
           </TabsList>
           
           <TabsContent value="investments">
@@ -166,10 +167,6 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 formatter: (value) => value.toFixed(1)
               }}
             />
-            <h2>SIP Details</h2>
-            <TableSystematic data={sipData} />
-            <h2>STP Details</h2>
-            <TableStp data={stpData} />
           </TabsContent>
           
           <TabsContent value="analysis">
@@ -179,24 +176,28 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 aggCol="asset_class_name" 
                 valCol="cur_amt" 
                 title="Asset Class Distribution"
-                description="Current value by asset class"
+                height="1000px"
               />
               <PieChart 
                 table={table} 
                 aggCol="investor_name" 
                 valCol="cur_amt" 
                 title="Investor Distribution"
-                description="Current value by investor"
               />
               <PieChart 
                 table={table} 
                 aggCol="cat_name" 
                 valCol="cur_amt" 
                 title="Category Distribution"
-                description="Current value by category (top 8)"
                 maxItems={8}
               />
             </div>
+          </TabsContent>
+          <TabsContent value="systematic">
+          <h2>SIP Details</h2>
+            <TableSystematic data={sipData} />
+            <h2>STP Details</h2>
+            <TableStp data={stpData} />
           </TabsContent>
         </Tabs>
       </div>

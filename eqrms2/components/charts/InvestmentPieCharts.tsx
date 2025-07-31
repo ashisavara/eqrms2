@@ -2,7 +2,7 @@
 
 import { type Table as TanStackTable } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
@@ -22,7 +22,6 @@ interface PieChartProps<TData> {
   title: string;           // Chart title
   description?: string;    // Chart description
   maxItems?: number;       // Limit number of items (default: no limit)
-  height?: string;         // Chart height (default: '300px')
 }
 
 // ✅ Reusable Pie Chart Component
@@ -32,8 +31,7 @@ export function PieChart<TData>({
   valCol, 
   title, 
   description, 
-  maxItems,
-  height = "300px" 
+  maxItems
 }: PieChartProps<TData>) {
   const chartData = useMemo(() => {
     const rows = table.getFilteredRowModel().rows;
@@ -72,23 +70,23 @@ export function PieChart<TData>({
   }, [chartData]);
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-[425px]">
+      <CardHeader className="pb-2">
         <CardTitle>{title}</CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className={`h-[${height}]`}>
-          <ResponsiveContainer width="100%" height="100%">
-            <RechartsPieChart>
+        <ChartContainer config={chartConfig}> 
+          <div>
+            <RechartsPieChart width={400} height={350}>
               <Pie
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
+                outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                labelLine={false}
               >
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={chartConfig[entry.name]?.color} />
@@ -96,11 +94,16 @@ export function PieChart<TData>({
               </Pie>
               <ChartTooltip 
                 content={<ChartTooltipContent />}
-                formatter={(value: number) => [`₹${value.toFixed(1)}`, 'Value']}
+                formatter={(value: number) => [`${value.toFixed(0)}`, ' lakhs']}
+              />
+              <Legend 
+                verticalAlign="bottom" 
+                height={60}
+                wrapperStyle={{ paddingTop: '0px' }}
               />
             </RechartsPieChart>
-          </ResponsiveContainer>
-        </ChartContainer>
+          </div>
+         </ChartContainer> 
       </CardContent>
     </Card>
   );
