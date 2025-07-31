@@ -18,5 +18,5 @@ export default function TableInvestments({ data }: { data: SipDetail[] }) {
     enableSortingRemoval: false,
     });
 
-      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false} />;
+      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false} aggregations={['sip_amount']} />;
     }

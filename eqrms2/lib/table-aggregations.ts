@@ -32,9 +32,12 @@ export function calculateAggregations<TData>(
 /**
  * Format aggregated value for display
  */
-export function formatAggregatedValue(value: number, type: 'currency' | 'number' = 'number'): string {
-  if (type === 'currency') {
-    return `₹${value.toLocaleString()}`;
+export function formatAggregatedValue(
+  value: number, 
+  formatter?: (value: number) => string | React.ReactNode
+): string | React.ReactNode {
+  if (formatter) {
+    return formatter(value);
   }
   return value.toLocaleString();
 }

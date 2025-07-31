@@ -18,5 +18,5 @@ export default function TableInvestments({ data }: { data: StpDetails[] }) {
     enableSortingRemoval: false,
     });
 
-      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false} />;
+      return <ReactTableWrapper table={table} className="text-xs text-center" aggregations={['stp_amt']} showPagination={false} showSearch={false} />;
     }

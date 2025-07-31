@@ -29,8 +29,6 @@ export const columns: ColumnDef<Investments>[] = [
         size: 50, 
         cell: ({ getValue }) => getValue() == null ? null : <div className="text-gray-800"> {Number(getValue()).toFixed(1)}</div>,
         aggregationFn: 'sum', // ✅ Enable sum aggregation
-        aggregatedCell: ({ cell }: { cell: any }) => (<div>{Number(cell.getValue()).toFixed(1)}</div>
-        )
     },
     { 
         accessorKey: "cur_amt", 
@@ -38,9 +36,6 @@ export const columns: ColumnDef<Investments>[] = [
         size: 50, 
         aggregationFn: 'sum', // ✅ Enable sum aggregation
         cell: ({ getValue }) => getValue() == null ? null : <div className="text-gray-800 font-bold"> {Number(getValue()).toFixed(1)}</div>,
-        aggregatedCell: ({ cell }: { cell: any }) => (
-          <div>{Number(cell.getValue()).toFixed(1)} </div>
-        )
     },
     { 
         accessorKey: "gain_loss", 
@@ -48,7 +43,6 @@ export const columns: ColumnDef<Investments>[] = [
         size: 50, 
         aggregationFn: 'sum', // ✅ Enable sum aggregation
         cell: ({ getValue }) => getValue() == null ? null : <div className="text-gray-800 font-bold"> {Number(getValue()).toFixed(1)}</div>,
-        aggregatedCell: ({ cell }: { cell: any }) => <div>{Number(cell.getValue()).toFixed(1)}</div>
     },
     { accessorKey: "abs_ret", header: "Abs Ret (%)",size:50, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "cagr", header: "CAGR (%)",size:50, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },

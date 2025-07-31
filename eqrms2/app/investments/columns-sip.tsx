@@ -9,8 +9,8 @@ export const columns: ColumnDef<SipDetail>[] = [
     { accessorKey: "cat_name", header: "Category"},
     { accessorKey: "sip_amount", 
         header: "Amount",
-        aggregationFn: 'sum', 
-        aggregatedCell: ({ cell }: { cell: any }) => (<div>{Number(cell.getValue()).toFixed(1)}</div>)},
+        aggregationFn: 'sum',
+    },
     { accessorKey: "installment_date", header: "Installment Date"},
     { accessorKey: "months_left", header: "Months Left"},
 ];

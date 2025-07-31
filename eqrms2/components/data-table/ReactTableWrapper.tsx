@@ -19,6 +19,12 @@ interface FilterConfig {
   placeholder?: string;
 }
 
+// ✅ Aggregation formatting interface
+interface AggregationFormat {
+  className?: string;
+  formatter?: (value: number) => string | React.ReactNode;
+}
+
 // ✅ This is the reusable table component you can call from any page.
 //    It receives a TanStack `table` instance and renders a complete <table>.
 interface BasicTableProps<TData> {
@@ -30,6 +36,7 @@ interface BasicTableProps<TData> {
   searchPlaceholder?: string;  // Custom search placeholder
   filters?: FilterConfig[];    // Column filters configuration
   aggregations?: string[];     // Column IDs to show aggregation totals for
+  aggregationFormat?: AggregationFormat; // Formatting options for aggregated values
 }
 
 export function ReactTableWrapper<TData>({
@@ -41,6 +48,7 @@ export function ReactTableWrapper<TData>({
   searchPlaceholder = "Search all columns...",
   filters = [],
   aggregations = [],
+  aggregationFormat = {},
 }: BasicTableProps<TData>) {
   // ✅ STEP 1: Generate original options from the FULL dataset (never changes)
   // This ensures users can always multi-select within the same filter
@@ -323,9 +331,16 @@ export function ReactTableWrapper<TData>({
                     const aggregatedValues = calculateAggregations(table, [columnId]);
                     const aggregatedValue = aggregatedValues[columnId] || 0;
                     
+                    // Apply formatting
+                    const formattedValue = aggregationFormat.formatter 
+                      ? aggregationFormat.formatter(aggregatedValue)
+                      : aggregatedValue.toLocaleString();
+                    
+                    const className = aggregationFormat.className || "font-bold px-2 py-1";
+                    
                     footerContent = (
-                      <div className="font-bold px-2 py-1">
-                        {aggregatedValue.toLocaleString()}
+                      <div className={className}>
+                        {formattedValue}
                       </div>
                     );
                   }

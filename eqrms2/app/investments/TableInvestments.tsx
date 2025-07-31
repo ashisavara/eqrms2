@@ -47,5 +47,13 @@ export default function TableInvestments({ data }: { data: Investments[] }) {
         { column: "advisor_name", title: "Advisor", placeholder: "Advisor" },
       ];
     
-      return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} aggregations={['pur_amt', 'cur_amt', 'gain_loss']} />;
+      return <ReactTableWrapper 
+        table={table} 
+        className="text-xs text-center" 
+        filters={filters} 
+        aggregations={['pur_amt', 'cur_amt', 'gain_loss']}
+        aggregationFormat={{
+          formatter: (value) => value.toFixed(1)
+        }}
+      />;
     }
