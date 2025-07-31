@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { MultiSelectFilter } from "./MultiSelectFilter";
 import { useMemo } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { calculateAggregations } from "@/lib/table-aggregations";
 
 // ✅ Filter configuration interface
 interface FilterConfig {
@@ -28,6 +29,7 @@ interface BasicTableProps<TData> {
   showSearch?: boolean;        // Toggle search input
   searchPlaceholder?: string;  // Custom search placeholder
   filters?: FilterConfig[];    // Column filters configuration
+  aggregations?: string[];     // Column IDs to show aggregation totals for
 }
 
 export function ReactTableWrapper<TData>({
@@ -38,6 +40,7 @@ export function ReactTableWrapper<TData>({
   showSearch = true,
   searchPlaceholder = "Search all columns...",
   filters = [],
+  aggregations = [],
 }: BasicTableProps<TData>) {
   // ✅ STEP 1: Generate original options from the FULL dataset (never changes)
   // This ensures users can always multi-select within the same filter
@@ -306,6 +309,40 @@ export function ReactTableWrapper<TData>({
               </tr>
             )}
           </tbody>
+
+          {/* ✅ Table Footer - Only show if aggregations are provided */}
+          {aggregations.length > 0 && (
+            <tfoot className="bg-muted font-semibold">
+              <tr className="border-t">
+                {table.getAllColumns().filter(col => !col.columnDef.meta?.isFilterOnly).map((column) => {
+                  const columnId = column.id;
+                  let footerContent = null;
+                  
+                  // Check if this column should show aggregation
+                  if (aggregations.includes(columnId)) {
+                    const aggregatedValues = calculateAggregations(table, [columnId]);
+                    const aggregatedValue = aggregatedValues[columnId] || 0;
+                    
+                    footerContent = (
+                      <div className="font-bold px-2 py-1">
+                        {aggregatedValue.toLocaleString()}
+                      </div>
+                    );
+                  }
+                  
+                  return (
+                    <td
+                      key={column.id}
+                      style={{ width: column.getSize() }}
+                      className="px-2 py-2"
+                    >
+                      {footerContent}
+                    </td>
+                  );
+                })}
+              </tr>
+            </tfoot>
+          )}
 
         </table>
       </div>
