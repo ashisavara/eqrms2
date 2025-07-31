@@ -50,11 +50,6 @@ export default async function InvestmentsPage() {
     <div>
 
           <TableInvestments data={investments} sipData={sip} stpData={stp} />
-          <h2>SIP Details</h2>
-          <TableSystematic data={sip} />
-          <h2>STP Details</h2>
-          <TableStp data={stp} />
-
 
     </div>
   );

@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AggregateCard } from "@/components/ui/aggregate-card";
 import { calculateAggregations } from "@/lib/table-aggregations";
 import { useMemo } from "react";
+import TableSystematic from "./TableSip";
+import TableStp from "./TableStp";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -101,6 +103,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
     
     return (
       <div className="space-y-4">
+        <h3 className="text-lg font-bold pt-4">Investments</h3>
         {/* ✅ Top-level filters */}
         <div className="flex flex-wrap gap-4">
           {filters.map((filter) => (
@@ -117,13 +120,13 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
         </div>
 
         {/* ✅ Tabs for table and cards */}
-        <Tabs defaultValue="table" className="w-full">
-          <TabsList>
-            <TabsTrigger value="table">Table View</TabsTrigger>
-            <TabsTrigger value="cards">Summary Cards</TabsTrigger>
+        <Tabs defaultValue="investments" className="w-full">
+          <TabsList className="w-full">
+            <TabsTrigger value="investments">Investments</TabsTrigger>
+            <TabsTrigger value="analysis">Analysis</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="table">
+          <TabsContent value="investments">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Purchase" 
@@ -162,9 +165,13 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 formatter: (value) => value.toFixed(1)
               }}
             />
+            <h2>SIP Details</h2>
+            <TableSystematic data={sipData} />
+            <h2>STP Details</h2>
+            <TableStp data={stpData} />
           </TabsContent>
           
-          <TabsContent value="cards">
+          <TabsContent value="analysis">
             
           </TabsContent>
         </Tabs>
