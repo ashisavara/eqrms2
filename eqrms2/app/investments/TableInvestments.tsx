@@ -146,16 +146,6 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 formatter={(value) => `${value.toFixed(1)}`}
                 className={aggregations.gain_loss >= 0 ? "border-green-200" : "border-red-200"}
               />
-              <AggregateCard 
-                title="Total SIP" 
-                value={sipTotal}
-                formatter={(value) => `${value.toFixed(1)}`}
-              />
-              <AggregateCard 
-                title="Total STP" 
-                value={stpTotal}
-                formatter={(value) => `${value.toFixed(1)}`}
-              />
             </div>
             <ReactTableWrapper 
               table={table} 
@@ -175,29 +165,58 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 table={table} 
                 aggCol="asset_class_name" 
                 valCol="cur_amt" 
-                title="Asset Class Distribution"
-                height="1000px"
-              />
-              <PieChart 
-                table={table} 
-                aggCol="investor_name" 
-                valCol="cur_amt" 
-                title="Investor Distribution"
+                title="Asset Class"
               />
               <PieChart 
                 table={table} 
                 aggCol="cat_name" 
                 valCol="cur_amt" 
-                title="Category Distribution"
+                title="Category"
+              />
+              <PieChart 
+                table={table} 
+                aggCol="structure_name" 
+                valCol="cur_amt" 
+                title="Structure"
                 maxItems={8}
+              />
+              <PieChart 
+                table={table} 
+                aggCol="fund_rating" 
+                valCol="cur_amt" 
+                title="Rating"
+              />
+              <PieChart 
+                table={table} 
+                aggCol="investor_name" 
+                valCol="cur_amt" 
+                title="Investor"
+              />
+              <PieChart 
+                table={table} 
+                aggCol="advisor_name" 
+                valCol="cur_amt" 
+                title="Advisor"
               />
             </div>
           </TabsContent>
           <TabsContent value="systematic">
-          <h2>SIP Details</h2>
-            <TableSystematic data={sipData} />
-            <h2>STP Details</h2>
-            <TableStp data={stpData} />
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <AggregateCard 
+                  title="Total SIP" 
+                  value={sipTotal}
+                  formatter={(value) => `${value.toFixed(1)}`}
+                />
+                <AggregateCard 
+                  title="Total STP" 
+                  value={stpTotal}
+                  formatter={(value) => `${value.toFixed(1)}`}
+                />
+              </div>
+              <h2>SIP Details</h2>
+              <TableSystematic data={sipData} />
+              <h2>STP Details</h2>
+              <TableStp data={stpData} />
           </TabsContent>
         </Tabs>
       </div>
