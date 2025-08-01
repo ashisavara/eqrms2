@@ -8,5 +8,5 @@ export const columns: ColumnDef<SipDetail>[] = [
     { accessorKey: "investor_name", header: "Investor"},
     { accessorKey: "sip_amount", header: "Amount"},
     { accessorKey: "months_left", header: "Months Left"},  
-    { accessorKey: "sip_fv", header: "SIP Future Value"},    
+    { accessorKey: "sip_fv", header: "SIP Future Value", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },    
 ];

@@ -29,14 +29,14 @@ export default async function FinPlan() {
         }),
         supabaseListRead({
           table: "view_investments_details",
-          columns: "fund_name, goal_name, investor_name, asset_class_name, cur_amt, fv_inv",
+          columns: "fund_name, goal_name, investor_name, asset_class_name, cur_amt, fv_inv, goal_id, exp_return",
           filters: [
             (query) => query.eq("group_id", groupId)
           ]
         }),
         supabaseListRead({
           table: "view_inv_sip_details",
-          columns: "sip_fund_name, goal_name, investor_name, sip_amount, months_left, sip_fv",
+          columns: "sip_fund_name, goal_name, investor_name, sip_amount, months_left, sip_fv, goal_id, exp_return",
           filters: [
             (query) => query.eq("group_id", groupId)
           ], 

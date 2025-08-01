@@ -53,8 +53,8 @@ export function calculateFutureValueSIPs(sipAmount: number, monthsLeft: number, 
   if (monthsToGoal <= monthsLeft) {
     // Calculate FV for the months to goal period only
     const n = monthsToGoal;
-    const fvSip = sipAmount * ((Math.pow(1 + monthlyReturn, n) - 1) / monthlyReturn) * (1 + monthlyReturn);
-    return fvSip;
+    const fvSip = (sipAmount * ((Math.pow(1 + monthlyReturn, n) - 1) / monthlyReturn) * (1 + monthlyReturn));
+    return fvSip / 100000; // Convert from INR to Rs. lakh
   } 
   // Situation 2: SIP months left < Months to Goal
   else {
@@ -67,7 +67,7 @@ export function calculateFutureValueSIPs(sipAmount: number, monthsLeft: number, 
     const remainingYears = remainingMonths / 12;
     fvSip = fvSip * Math.pow(1 + annualReturn, remainingYears);
     
-    return fvSip;
+    return fvSip / 100000; // Convert from INR to Rs. lakh
   }
 }
 
@@ -173,16 +173,64 @@ export function orchestrateCalculations(
   finGoals: FinGoalsDetail[],
   investments: Investments[],
   sips: SipDetail[]
-): FinGoalsDetail[] {
-  return finGoals.map(goal => {
+): {
+  calculatedGoals: FinGoalsDetail[];
+  calculatedInvestments: Investments[];
+  calculatedSips: SipDetail[];
+} {
+  // First, create a goals map with years to goal for easy lookup
+  const goalsMap = new Map<number, { goal: FinGoalsDetail; yearsToGoal: number; pvGoal: number }>();
+  
+  finGoals.forEach(goal => {
     // Step 1: Calculate years to goal
     const yearsToGoal = calculateYearsToGoal(new Date(goal.goal_date));
     
     // Step 2: Calculate present value of goals
     const pvGoal = calculatePresentValueGoals(goal.fv_goals, goal.inflation_rate, yearsToGoal);
     
-    // Step 5: Calculate allocations for this goal
-    const { pvInv, fvInv } = calculateGoalAllocations(goal.goal_id, investments, sips, yearsToGoal);
+    goalsMap.set(goal.goal_id, { goal, yearsToGoal, pvGoal });
+  });
+
+  // Step 3: Calculate FV for each individual investment
+  const calculatedInvestments = investments.map(investment => {
+    const goalData = goalsMap.get(investment.goal_id);
+    const yearsToGoal = goalData ? goalData.yearsToGoal : 0;
+    const fvInv = calculateFutureValueInvestments(
+      investment.cur_amt || 0, 
+      investment.exp_return || 0, 
+      yearsToGoal
+    );
+    
+    return {
+      ...investment,
+      fv_inv: fvInv
+    };
+  });
+
+  // Step 4: Calculate FV for each individual SIP
+  const calculatedSips = sips.map(sip => {
+    const goalData = goalsMap.get(sip.goal_id);
+    const yearsToGoal = goalData ? goalData.yearsToGoal : 0;
+    const sipFv = calculateFutureValueSIPs(
+      sip.sip_amount || 0,
+      sip.months_left || 0,
+      sip.exp_return || 0,
+      yearsToGoal
+    );
+    
+    return {
+      ...sip,
+      sip_fv: sipFv
+    };
+  });
+
+  // Step 5: Calculate allocations for each goal using the calculated FVs
+  const calculatedGoals = finGoals.map(goal => {
+    const goalData = goalsMap.get(goal.goal_id)!;
+    const { yearsToGoal, pvGoal } = goalData;
+    
+    // Use the calculated FVs from steps 3 and 4
+    const { pvInv, fvInv } = calculateGoalAllocations(goal.goal_id, calculatedInvestments, calculatedSips, yearsToGoal);
     
     // Step 6: Calculate pending amount
     const pendingAmt = calculatePendingAmount(goal.fv_goals, fvInv);
@@ -209,4 +257,10 @@ export function orchestrateCalculations(
       sip_req: sipReq
     };
   });
+
+  return {
+    calculatedGoals,
+    calculatedInvestments,
+    calculatedSips
+  };
 }

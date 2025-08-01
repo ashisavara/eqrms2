@@ -5,6 +5,7 @@ import { MultiSelectFilter } from "@/components/data-table/MultiSelectFilter";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { Investments } from "@/types/investment-detail";
 import { SipDetail } from "@/types/sip-detail";
+import { orchestrateCalculations } from "./finplan-util";
 import TableFinPlan from "./TableFingoals";
 import TableInvFinPlan from "./TableInvFinPlan";
 import TableSipFinPlan from "./TableSipFinPlan";
@@ -24,36 +25,41 @@ export default function FinPlanClientWrapper({
   // State for selected goals filter
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  // Extract unique goal names from finGoals (master source)
+  // Calculate all financial planning data using utility functions
+  const calculatedData = useMemo(() => {
+    return orchestrateCalculations(finGoalsData, investmentFinPlanData, sipFinGoalsData);
+  }, [finGoalsData, investmentFinPlanData, sipFinGoalsData]);
+
+  // Extract unique goal names from calculated goals (master source)
   const goalOptions = useMemo(() => {
     const uniqueGoals = new Set<string>();
-    finGoalsData.forEach(goal => {
+    calculatedData.calculatedGoals.forEach(goal => {
       if (goal.goal_name && goal.goal_name.trim() !== '') {
         uniqueGoals.add(goal.goal_name);
       }
     });
     return Array.from(uniqueGoals).sort();
-  }, [finGoalsData]);
+  }, [calculatedData.calculatedGoals]);
 
-  // Filter each dataset based on selected goals
+  // Filter each calculated dataset based on selected goals
   const filteredFinGoals = useMemo(() => {
-    if (selectedGoals.length === 0) return finGoalsData;
-    return finGoalsData.filter(item => selectedGoals.includes(item.goal_name));
-  }, [finGoalsData, selectedGoals]);
+    if (selectedGoals.length === 0) return calculatedData.calculatedGoals;
+    return calculatedData.calculatedGoals.filter(item => selectedGoals.includes(item.goal_name));
+  }, [calculatedData.calculatedGoals, selectedGoals]);
 
   const filteredInvestmentFinPlan = useMemo(() => {
-    if (selectedGoals.length === 0) return investmentFinPlanData;
-    return investmentFinPlanData.filter(item => 
+    if (selectedGoals.length === 0) return calculatedData.calculatedInvestments;
+    return calculatedData.calculatedInvestments.filter(item => 
       item.goal_name && selectedGoals.includes(item.goal_name)
     );
-  }, [investmentFinPlanData, selectedGoals]);
+  }, [calculatedData.calculatedInvestments, selectedGoals]);
 
   const filteredSipFinGoals = useMemo(() => {
-    if (selectedGoals.length === 0) return sipFinGoalsData;
-    return sipFinGoalsData.filter(item => 
+    if (selectedGoals.length === 0) return calculatedData.calculatedSips;
+    return calculatedData.calculatedSips.filter(item => 
       item.goal_name && selectedGoals.includes(item.goal_name)
     );
-  }, [sipFinGoalsData, selectedGoals]);
+  }, [calculatedData.calculatedSips, selectedGoals]);
 
   return (
     <div className="space-y-4">
