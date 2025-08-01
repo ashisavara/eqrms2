@@ -33,9 +33,6 @@ export default function TableFinPlan({ data }: { data: FinGoalsDetail[] }) {
       },
     });
 
-    const filters = [
-        { column: "goal_name", title: "Goal", placeholder: "Goal" }
-      ];
     
-      return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
+      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false} />;
     }
