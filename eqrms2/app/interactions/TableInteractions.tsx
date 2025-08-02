@@ -27,10 +27,10 @@ export default function TableInteractions({ data }: { data: InteractionDetail[] 
       },
       initialState: {
         pagination: {
-          pageSize: 10, // Set default page size
+          pageSize: 20, // Set default page size
         },
         sorting: [
-          { id: "meeting_date", desc: true },
+          { id: "created_at", desc: true },
         ],
       },
     });

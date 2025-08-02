@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { EditLeadsButton } from "@/components/forms/EditLeads";
 import SimpleTable from "@/components/tables/singleRowTable";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
-import TableInteractions from "./TableInteractions";
+import TableInteractions from "../../interactions/TableInteractions";
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
