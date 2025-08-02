@@ -30,4 +30,5 @@ export type LeadsTagging = {
     rel_group_id?: number;
     primary_rm?: string;
     created_by?: string;
+    rm_name: string
 };

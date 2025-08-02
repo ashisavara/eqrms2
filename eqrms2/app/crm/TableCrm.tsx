@@ -51,7 +51,13 @@ export function TableCrm({ data, columnType = "core" }: TableCrmProps) {
       initialState: {
         pagination: {
           pageSize: 50, // Set default page size
-        }
+        },
+        sorting: [
+          {
+            id: "days_followup", // Column accessor key
+            desc: false, // true = descending, false = ascending
+          }
+        ]
       },
     });
 
@@ -61,7 +67,7 @@ export function TableCrm({ data, columnType = "core" }: TableCrmProps) {
         { column: "lead_source", title: "Lead Source", placeholder: "Lead Source" },
         { column: "lead_type", title: "Lead Type", placeholder: "Lead Type" },
         { column: "wealth_level", title: "Wealth Level", placeholder: "Wealth Level" },
-        { column: "primary_rm", title: "Primary RM", placeholder: "Primary RM" }
+        { column: "rm_name", title: "RM", placeholder: "RM" }
       ];
     
       return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;

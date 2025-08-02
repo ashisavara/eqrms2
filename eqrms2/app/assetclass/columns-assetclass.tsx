@@ -20,18 +20,22 @@ export const columns: ColumnDef<AssetClass>[] = [
     },
     {
         accessorKey:"asset_class_name",
-        header: "Asset Class",
+        header: () => <div className="!text-left">Asset Class</div>,
+        size: 200,
         cell: ({row}) => {
             const assetClass = row.original;
             return (
-                <Link href={`/assetclass/${assetClass.asset_class_slug}`} className="text-blue-600 font-bold hover:underline">
-                    {assetClass.asset_class_name}
-                </Link>
+                <div className="text-left">
+                    <Link href={`/assetclass/${assetClass.asset_class_slug}`} className="text-blue-600 font-bold hover:underline">
+                        {assetClass.asset_class_name}
+                    </Link>
+                </div>
             )
         }
     },
     {
         accessorKey:"asset_class_summary",
         header: "Summary",
+        size: 800,
     }
 ];

@@ -29,7 +29,7 @@ export const columns: ColumnDef<LeadsTagging>[] = [
         cell: ({ row }) => {
             return <CrmImportanceRating rating={row.original.importance ?? ""} />
         },
-        size:120
+        size:150
     },
     {
         accessorKey: "wealth_level",
@@ -38,7 +38,7 @@ export const columns: ColumnDef<LeadsTagging>[] = [
         cell: ({ row }) => {
             return <CrmWealthRating rating={row.original.wealth_level ?? ""} />
         },
-        size:120
+        size:150
     },
     {
         accessorKey: "lead_progression",
@@ -47,12 +47,12 @@ export const columns: ColumnDef<LeadsTagging>[] = [
         cell: ({ row }) => {
             return <CrmProgressionRating rating={row.original.lead_progression ?? ""} />
         },
-        size: 120  // ✅ More realistic for badge content
+        size: 150  // ✅ More realistic for badge content
     },
     {
         accessorKey: "lead_summary",
         header: "Summary", 
-        size: 1000, // ✅ Set a large size to claim remaining space
+        size: 600, // ✅ Set a large size to claim remaining space
         cell: ({ row }) => {
             return <div className="!text-left">{row.original.lead_summary}</div>
         }
@@ -73,7 +73,7 @@ export const columns: ColumnDef<LeadsTagging>[] = [
         filterFn: "arrIncludesSome",
     },
     {
-        accessorKey: "primary_rm",
+        accessorKey: "rm_name",
         header: "RM",
         meta: { isFilterOnly: true },
         filterFn: "arrIncludesSome",

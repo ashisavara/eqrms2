@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Category } from "@/types/category-detail";
 import Link from "next/link";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
+import { ComGrowthNumberRating } from "@/components/conditional-formatting";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -44,33 +45,44 @@ export const columns: ColumnDef<Category>[] = [
     accessorKey: "asset_class_name",
     header: "Asset Class",
     filterFn: "arrIncludesSome",
+    size: 100,
   },
   {
     accessorKey: "one_yr",
     header: "1yr",
     cell: ({ getValue }) => {
-      const value = getValue() as number;
-      return value !== null && value !== undefined ? (Math.round(value * 10) / 10).toFixed(1) : '';
-    }
+      const value = getValue();
+      if (value == null) return null;
+      const num = Number(value);
+      return <ComGrowthNumberRating rating={Number(num.toFixed(1))} />;
+    },
+    size: 100,
   },
   {
     accessorKey: "three_yr",
     header: "3yr",
     cell: ({ getValue }) => {
-      const value = getValue() as number;
-      return value !== null && value !== undefined ? (Math.round(value * 10) / 10).toFixed(1) : '';
-    }
+      const value = getValue();
+      if (value == null) return null;
+      const num = Number(value);
+      return <ComGrowthNumberRating rating={Number(num.toFixed(1))} />;
+    },
+    size: 100,
   },
   {
     accessorKey: "five_yr",
     header: "5yr",
     cell: ({ getValue }) => {
-      const value = getValue() as number;
-      return value !== null && value !== undefined ? (Math.round(value * 10) / 10).toFixed(1) : '';
-    }
+      const value = getValue();
+      if (value == null) return null;
+      const num = Number(value);
+      return <ComGrowthNumberRating rating={Number(num.toFixed(1))} />;
+    },
+    size: 100,
   },
   {
     accessorKey: "cat_summary",
-    header: "Summary",
+    header: "Summary",  
+    size: 800,
   },
 ];

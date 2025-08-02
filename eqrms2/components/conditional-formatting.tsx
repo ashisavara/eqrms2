@@ -15,7 +15,7 @@ import React from 'react';
 function getRatingStyles(rating: number) {
   switch (rating) {
     case 1:
-      return "bg-red-800 text-red-100";
+      return "bg-red-700 text-red-100";
     case 2:
       return "bg-red-100 text-red-800";
     case 3:
@@ -23,7 +23,7 @@ function getRatingStyles(rating: number) {
     case 4:
       return "bg-green-100 text-green-800";
     case 5:
-      return "bg-green-800 text-green-100";
+      return "bg-green-700 text-green-100";
     case 6:
       return ""; // using as an alternate default
     default:
@@ -186,7 +186,7 @@ export function ComGrowthNumberRating({ rating }: { rating: number }) {
   const getNumericRating = (num: number): number => {
     if (num > 25) return 5;
     if (num > 15) return 4;
-    if (num < 0) return 1;
+    if (num < 0) return 2;
     return 6; // num <= 0
   };
   const numericRating = getNumericRating(rating);

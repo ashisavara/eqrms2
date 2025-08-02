@@ -22,6 +22,7 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "fund_name",
     header: () => <div className="text-left">Fund Name</div>,
+    size: 275,
     cell: ({ row }) => {
       const fundSlug = row.original.slug;
       const fundName = row.original.fund_name;
@@ -38,11 +39,13 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "fund_rating",
     header: "Fund",
+    size: 100,
     cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
   },
   {
     accessorKey: "fund_performance_rating",
     header: "Perf",
+    size: 100,
     cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
   },
   {
@@ -53,6 +56,7 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "amc_rating",
     header: "AMC",
+    size: 100,
     cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
   },
   {
@@ -63,6 +67,7 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "structure_name",
     header: "Structure",
+    size: 100,
   },
   {
     accessorKey: "category_name",
@@ -91,21 +96,25 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "one_yr",
     header: "1 Year",
+    size: 100,
     cell: ({ getValue }) => <ComGrowthNumberRating rating={getValue() as number} />
   },
   {
     accessorKey: "three_yr",
     header: "3 Year",
+    size: 100,
     cell: ({ getValue }) => <ComGrowthNumberRating rating={getValue() as number} />
   },
   {
     accessorKey: "five_yr",
     header: "5 Year",
+    size: 100,
     cell: ({ getValue }) => <ComGrowthNumberRating rating={getValue() as number} />
   },
   {
     accessorKey: "since_inception",
     header: "Since Inception",
+    size: 100,
     cell: ({ getValue }) => <ComGrowthNumberRating rating={getValue() as number} />
   },
 ];

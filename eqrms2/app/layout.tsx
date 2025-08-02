@@ -44,18 +44,19 @@ export default function RootLayout({
                 <div className="flex items-center justify-between pb-2">
                   <p className="font-bold text-blue-700">
                     <a href="/companies">Val Screen</a> | 
-                    <a href="/funds"> Funds</a> | 
+                    <a href="/funds"> RMS</a> | 
                     <a href="/funds/all"> AllFunds</a> | 
-                    <a href="/amc"> AMC</a> | 
-                    <a href="/categories"> Categories</a> | 
-                    <a href="/funds/changelog"> ChangeLog</a> | 
-                    <a href="/sectors"> Sectors</a> | 
+                    <a href="/funds/changelog"> ChangeLog</a> |
                     <a href="/crm"> CRM</a> | 
                     <a href="/investments"> Investments</a> | 
+                    <a href="/finplan"> Fin Plan</a> | 
                     <SearchButton />
                   </p>
                   <ChangeGroup />
                 </div>
+
+
+                
                 
               </div>
               <div className="px-5">{children}</div>
