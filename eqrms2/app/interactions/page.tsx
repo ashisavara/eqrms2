@@ -15,11 +15,10 @@ export default async function CrmDetailPage() {
             ]
         }),
         supabaseListRead<InteractionDetail>({
-            table: "view_meeting_notes_with_leads",
+            table: "view_crm_meeting_notes",
             columns: "*",
             filters: [
-                (query) => query.order('created_at', { ascending: false }),
-                (query) => query.eq('interaction_type', 'Interaction')
+                (query) => query.order('created_at', { ascending: false })
             ]
         }),
     ]);

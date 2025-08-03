@@ -229,3 +229,26 @@ export const LeadsTaggingSchema = z.object({
 });
 
 export type LeadsTaggingValues = z.infer<typeof LeadsTaggingSchema>;
+
+// -----------------------
+// MEETING NOTE FORM 
+// -----------------------
+
+export const MeetingNoteSchema = z.object({
+  interaction_channel: z.string(),
+  interaction_tag: z.string(),
+  interaction_type: z.string(),
+  meeting_name: z.string(),
+  meeting_notes: z.string(),
+  meeting_summary: z.string(),
+  rel_lead_id: z.number(),
+  show_to_client: z.boolean(),
+});
+
+export type MeetingNoteValues = z.infer<typeof MeetingNoteSchema>;
+
+
+// -----------------------
+// DEAL FORM 
+// -----------------------
+

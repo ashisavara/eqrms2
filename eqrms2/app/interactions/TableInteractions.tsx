@@ -15,6 +15,7 @@ export default function TableInteractions({ data }: { data: InteractionDetail[] 
     columns: autoSortedColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     enableSortingRemoval: false,
     globalFilterFn: "includesString",
@@ -27,13 +28,17 @@ export default function TableInteractions({ data }: { data: InteractionDetail[] 
       },
       initialState: {
         pagination: {
-          pageSize: 20, // Set default page size
+          pageSize: 30, // Set default page size
         },
         sorting: [
           { id: "created_at", desc: true },
         ],
       },
     });
+
+    const filters = [
+      { column: "interaction_type", title: "Interaction Type", placeholder: "Interaction Type" },
+    ];
     
-      return <ReactTableWrapper table={table} className="text-sm text-center" />;
+      return <ReactTableWrapper table={table} className="text-sm text-center" filters={filters} />;
     }

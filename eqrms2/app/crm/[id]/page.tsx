@@ -10,7 +10,7 @@ import TableInteractions from "../../interactions/TableInteractions";
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, InteractionDetail, Deals, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -19,7 +19,14 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             ]
         }),
         supabaseListRead<InteractionDetail>({
-            table: "view_meeting_notes_with_leads",
+            table: "view_crm_meeting_notes",
+            columns: "*",  
+            filters: [
+                (query) => query.eq('rel_lead_id', id)
+            ]
+        }),
+        supabaseListRead<InteractionDetail>({
+            table: "view_crm_followup_notes",
             columns: "*",  
             filters: [
                 (query) => query.eq('rel_lead_id', id)
@@ -63,7 +70,17 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             </div> 
             <div className="mt-5">
                 <p>{lead.lead_background}</p>
-                <TableInteractions data={InteractionDetail} />
+                <h3 className="text-base font-bold">Followups (last 30)</h3>
+                <div className="text-sm bg-gray-100 p-2 rounded-md">
+                    {Followups.slice(0, 30).map((followup, index) => (
+                        <span key={index}>
+                            {formatDate(followup.created_at)} ({followup.interaction_channel})
+                            {index < Followups.length - 1 && " | "}
+                        </span>
+                    ))}
+                </div>
+                <TableInteractions data={Meetings} />
+                
             </div>
             
         </div>
