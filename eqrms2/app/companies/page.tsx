@@ -4,9 +4,19 @@ import { Company } from "@/types/company-detail";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TableSectors } from "../sectors/TableSectors";
 import { SectorValues } from "@/types/forms";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 export default async function CompaniesPage() {
   // Fetch data server-side
+
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'research', 'view_detailed')) {
+    redirect('/protected'); // or wherever you want to send them
+  }
 
   const [companies, sectors] = await Promise.all([
     supabaseListRead<Company>({

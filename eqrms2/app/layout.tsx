@@ -45,13 +45,13 @@ export default function RootLayout({
                   <p className="font-bold text-blue-700">
                     <a href="/companies">Val Screen</a> | 
                     <a href="/funds"> RMS</a> | 
-                    <a href="/funds/all"> AllFunds</a> | 
-                    <a href="/funds/changelog"> ChangeLog</a> |
                     <a href="/crm"> CRM</a> | 
                     <a href="/investments"> Investments</a> | 
                     <a href="/finplan"> Fin Plan</a> | 
                     <a href="/protected"> Logout</a> | 
-                    <SearchButton />
+                    <SearchButton /> ......... | 
+                    <a href="/funds/all"> AllFunds</a> | 
+                    <a href="/funds/changelog"> ChangeLog</a> |
                   </p>
                   <ChangeGroup />
                 </div>
