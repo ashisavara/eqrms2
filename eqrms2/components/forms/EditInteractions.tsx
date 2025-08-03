@@ -8,12 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { MeetingNoteSchema, MeetingNoteValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea, TextInput, BooleanToggleInput } from "./FormFields";
+import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 
 // Internal form component
-function EditInteractionForm({initialData, id, onSuccess}: {initialData: MeetingNoteValues | null, id: number, onSuccess: () => void}) {
+function EditInteractionForm(
+    {initialData, id, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, onSuccess}: 
+    {initialData: MeetingNoteValues | null, id: number, interactionTypeOptions: { value: string; label: string }[], interactionTagOptions: { value: string; label: string }[], interactionChannelOptions: { value: string; label: string }[], onSuccess: () => void}) 
+    {
     const [isLoading, setIsLoading] = useState(false);
 
     const cleanedData: MeetingNoteValues = {
@@ -23,7 +26,6 @@ function EditInteractionForm({initialData, id, onSuccess}: {initialData: Meeting
       meeting_name: initialData?.meeting_name || "",
       meeting_notes: initialData?.meeting_notes || "",
       meeting_summary: initialData?.meeting_summary || "",
-      rel_lead_id: initialData?.rel_lead_id || 0,
       show_to_client: initialData?.show_to_client || false,
     };
 
@@ -56,14 +58,23 @@ function EditInteractionForm({initialData, id, onSuccess}: {initialData: Meeting
     return (
         <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
+
+            <div className="grid grid-cols-3 gap-4">
+              <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
+              <ToggleGroupInput name="interaction_type" label="Interaction Type" control={control} options={interactionTypeOptions} />      
+              <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
+            </div>
             
-            <TextInput name="meeting_name" label="Meeting Name" control={control} />
-            <TextInput name="interaction_type" label="Interaction Type" control={control} />
-            <TextInput name="interaction_channel" label="Interaction Channel" control={control} />
-            <TextInput name="interaction_tag" label="Interaction Tag" control={control} />
+            
+            <div className="grid grid-cols-3 gap-4">
+              
+              <SelectInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} />
+              <SelectInput name="interaction_channel" label="Interaction Channel" control={control} options={interactionChannelOptions} />
+            </div>
+            
             <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
-            <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
-            <TextInput name="rel_lead_id" label="Related Lead ID" control={control} />
+            
+            
             <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
 
             <div className="flex justify-end">
@@ -78,10 +89,16 @@ function EditInteractionForm({initialData, id, onSuccess}: {initialData: Meeting
 // Main component that exports the button and handles sheet state
 export function EditInteractionButton({ 
   interactionData,
-  meetingId
+  meetingId,
+  interactionTypeOptions, 
+  interactionTagOptions, 
+  interactionChannelOptions,
 }: { 
   interactionData: any;
   meetingId: number;
+  interactionTypeOptions: { value: string; label: string }[];
+  interactionTagOptions: { value: string; label: string }[];
+  interactionChannelOptions: { value: string; label: string }[];
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -97,7 +114,6 @@ export function EditInteractionButton({
     meeting_name: interactionData.meeting_name ?? "",
     meeting_notes: interactionData.meeting_notes ?? "",
     meeting_summary: interactionData.meeting_summary ?? "",
-    rel_lead_id: interactionData.rel_lead_id ?? "",
     show_to_client: interactionData.show_to_client ?? "",
   };
 
@@ -115,12 +131,15 @@ export function EditInteractionButton({
         <Sheet open={true} onOpenChange={() => setShowEditSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Edit Asset Class Details</SheetTitle>
+              <SheetTitle>Edit Interaction Details</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditInteractionForm
                 initialData={interactionUpdateData}
                 id={meetingId}
+                interactionTypeOptions={interactionTypeOptions}
+                interactionTagOptions={interactionTagOptions}
+                interactionChannelOptions={interactionChannelOptions}
                 onSuccess={() => setShowEditSheet(false)}
               />
             </div>

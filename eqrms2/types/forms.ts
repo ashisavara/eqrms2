@@ -241,7 +241,6 @@ export const MeetingNoteSchema = z.object({
   meeting_name: z.string(),
   meeting_notes: z.string(),
   meeting_summary: z.string(),
-  rel_lead_id: z.number(),
   show_to_client: z.boolean(),
 });
 
@@ -251,4 +250,15 @@ export type MeetingNoteValues = z.infer<typeof MeetingNoteSchema>;
 // -----------------------
 // DEAL FORM 
 // -----------------------
+export const DealsSchema = z.object({
+  rel_lead_id: z.number().nullable(),
+  deal_name: z.string().nullable(),
+  est_closure: z.string().nullable(),
+  deal_likelihood: z.number().nullable(),
+  deal_stage: z.string().nullable(),
+  deal_segment: z.string().nullable(),
+  total_deal_aum: z.number().nullable(),
+  deal_summary: z.string().nullable(),
+});
 
+export type DealsValues = z.infer<typeof DealsSchema>;
