@@ -29,7 +29,7 @@ export const createColumns = (
         header: "Meeting Date", size:120, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{formatDate(getValue() as string)}</p>},
 
     { accessorKey: "meeting_name", header: "Meeting Name", size:200, 
-        cell: ({ row }) => row.original.meeting_name == null ? null : <EditInteractionButton meetingId={row.original.meeting_id} interactionData={row.original} interactionChannelOptions={interactionChannelOptions} interactionTagOptions={interactionTagOptions} interactionTypeOptions={interactionTypeOptions}/>,
+        cell: ({ row }) => row.original.meeting_name == null ? null : <EditInteractionButton meetingId={row.original.meeting_id} interactionData={row.original} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} />,
     },
     { accessorKey: "interaction_type", header: "Type", size:100, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
     { accessorKey: "rm_name", header: "Created By", size:150, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},

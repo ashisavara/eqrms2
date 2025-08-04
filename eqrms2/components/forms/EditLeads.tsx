@@ -33,8 +33,8 @@ function EditLeadsForm({
   // Convert null values to empty strings/defaults for form inputs
   const cleanedData: LeadsTaggingValues = {
     lead_name: initialData.lead_name ?? "",
-    last_contact_date: initialData.last_contact_date ?? null,
-    followup_date: initialData.followup_date ?? null,
+    last_contact_date: initialData.last_contact_date ? new Date(initialData.last_contact_date) : null,
+    followup_date: initialData.followup_date ? new Date(initialData.followup_date) : null,
     importance: initialData.importance ?? "",
     lead_progression: initialData.lead_progression ?? "",
     lead_source: initialData.lead_source ?? "",
@@ -43,8 +43,8 @@ function EditLeadsForm({
     first_name: initialData.first_name ?? "",
     last_name: initialData.last_name ?? "",
     linkedin_url: initialData.linkedin_url ?? "",
-    phone_valid_date: initialData.phone_valid_date ?? false,
-    email_valid_date: initialData.email_valid_date ?? false,
+            phone_validated: initialData.phone_validated ?? false,
+        email_validated: initialData.email_validated ?? false,
     country_code: initialData.country_code ?? "",
     phone_number: initialData.phone_number ?? "",
     email_1: initialData.email_1 ?? "",
@@ -55,7 +55,7 @@ function EditLeadsForm({
     primary_rm: initialData.primary_rm ?? ""
   };
 
-  const { control, handleSubmit } = useForm<LeadsTaggingValues>({
+  const { control, handleSubmit, formState: { errors } } = useForm<LeadsTaggingValues>({
     defaultValues: cleanedData,
     resolver: zodResolver(LeadsTaggingSchema),
   });
@@ -66,7 +66,32 @@ function EditLeadsForm({
         throw new Error('lead_id is required for updates');
       }
       
-      await supabaseUpdateRow('leads_tagging', 'lead_id', id, data);
+      // Convert Date objects to ISO strings for Supabase and filter out non-existent columns
+      const processedData = {
+        lead_name: data.lead_name,
+        last_contact_date: data.last_contact_date instanceof Date ? data.last_contact_date.toISOString() : data.last_contact_date,
+        followup_date: data.followup_date instanceof Date ? data.followup_date.toISOString() : data.followup_date,
+        importance: data.importance,
+        lead_progression: data.lead_progression,
+        lead_source: data.lead_source,
+        lead_type: data.lead_type,
+        wealth_level: data.wealth_level,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        linkedin_url: data.linkedin_url,
+        country_code: data.country_code,
+        phone_number: data.phone_number,
+        email_1: data.email_1,
+        email_2: data.email_2,
+        email_3: data.email_3,
+        lead_summary: data.lead_summary,
+        lead_background: data.lead_background,
+        primary_rm: data.primary_rm,
+        phone_validated: data.phone_validated,
+        email_validated: data.email_validated,
+      };
+      
+      await supabaseUpdateRow('leads_tagging', 'lead_id', id, processedData);
       
       if (typeof window !== "undefined") {
         toast.success("Lead updated successfully!");
@@ -117,25 +142,18 @@ function EditLeadsForm({
       </div>
 
       <div className="grid grid-cols-4 gap-4">
-        <BooleanToggleInput name="phone_valid_date" label="Phone Validated" control={control} />
+        <BooleanToggleInput name="phone_validated" label="Phone Validated" control={control} />
         <TextInput name="country_code" label="Country Code" control={control} placeholder="+1" />
         <TextInput name="phone_number" label="Phone Number" control={control} placeholder="Enter phone number" />
         <TextInput name="linkedin_url" label="LinkedIn URL" control={control} placeholder="LinkedIn profile URL" />
       </div>
       
       <div className="grid grid-cols-4 gap-4">
-        <BooleanToggleInput name="email_valid_date" label="Email Validated" control={control} />
+        <BooleanToggleInput name="email_validated" label="Email Validated" control={control} />
         <TextInput name="email_1" label="Primary Email" control={control} type="email" placeholder="Enter primary email" />
         <TextInput name="email_2" label="Secondary Email" control={control} type="email" placeholder="Enter secondary email" />
         <TextInput name="email_3" label="Tertiary Email" control={control} type="email" placeholder="Enter tertiary email" />
       </div>
-      
-      {/* Additional Information */}
-      
-      
-      {/* Text Areas for Descriptions */}
-      
-      
       
       <Button type="submit" className="w-full">Update Lead</Button>
     </form>
@@ -169,8 +187,8 @@ export function EditLeadsButton({
   // Convert lead data to LeadsTaggingValues format
   const leadUpdateData: LeadsTaggingValues = {
     lead_name: leadData.lead_name ?? "",
-    last_contact_date: leadData.last_contact_date ?? null,
-    followup_date: leadData.followup_date ?? null,
+    last_contact_date: leadData.last_contact_date ? new Date(leadData.last_contact_date) : null,
+    followup_date: leadData.followup_date ? new Date(leadData.followup_date) : null,
     importance: leadData.importance ?? "",
     lead_progression: leadData.lead_progression ?? "",
     lead_source: leadData.lead_source ?? "",
@@ -179,8 +197,8 @@ export function EditLeadsButton({
     first_name: leadData.first_name ?? "",
     last_name: leadData.last_name ?? "",
     linkedin_url: leadData.linkedin_url ?? "",
-    phone_valid_date: leadData.phone_valid_date ?? false,
-    email_valid_date: leadData.email_valid_date ?? false,
+    phone_validated: leadData.phone_validated ?? false,
+    email_validated: leadData.email_validated ?? false,
     country_code: leadData.country_code ?? "",
     phone_number: leadData.phone_number ?? "",
     email_1: leadData.email_1 ?? "",

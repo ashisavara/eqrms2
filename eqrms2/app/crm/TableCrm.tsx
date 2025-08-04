@@ -2,35 +2,24 @@
 
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
+import { createColumns } from "./columns-crm-core";
 import { LeadsTagging } from "@/types/lead-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 
-// Import all column types
-import { columns as coreColumns } from "./columns-crm-core";
-// import { detailColumns } from "./columns-crm-detail";
-// import { contactColumns } from "./columns-crm-contact";
-// import { analysisColumns } from "./columns-crm-analysis";
-
-// Create a mapping object
-const columnTypes = {
-  core: coreColumns,
-  // detail: detailColumns,
-  // contact: contactColumns,
-  // analysis: analysisColumns,
-} as const;
-
-type ColumnType = keyof typeof columnTypes;
-
-interface TableCrmProps {
+export default function TableCrm({ 
+  data, 
+  importanceOptions = [], 
+  leadProgressionOptions = [], 
+  wealthLevelOptions = [],
+}: { 
   data: LeadsTagging[];
-  columnType?: ColumnType;
-}
+  importanceOptions?: { value: string; label: string }[];
+  leadProgressionOptions?: { value: string; label: string }[];
+  wealthLevelOptions?: { value: string; label: string }[];
+}) {
 
-export function TableCrm({ data, columnType = "core" }: TableCrmProps) {
-  // Select the appropriate column set from the mapping
-  const selectedColumns = columnTypes[columnType];
-  
-  const autoSortedColumns = useAutoSorting(data, selectedColumns);
+  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions);
+  const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({
     data,
@@ -50,14 +39,11 @@ export function TableCrm({ data, columnType = "core" }: TableCrmProps) {
       },
       initialState: {
         pagination: {
-          pageSize: 50, // Set default page size
+          pageSize: 30, // Set default page size
         },
         sorting: [
-          {
-            id: "days_followup", // Column accessor key
-            desc: false, // true = descending, false = ascending
-          }
-        ]
+          { id: "days_followup", desc: false },
+        ],
       },
     });
 
@@ -68,7 +54,7 @@ export function TableCrm({ data, columnType = "core" }: TableCrmProps) {
         { column: "lead_type", title: "Lead Type", placeholder: "Lead Type" },
         { column: "wealth_level", title: "Wealth Level", placeholder: "Wealth Level" },
         { column: "rm_name", title: "RM", placeholder: "RM" }
-      ];
+    ];
     
-      return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
+      return <ReactTableWrapper table={table} className="text-sm text-center" filters={filters} />;
     }

@@ -37,7 +37,7 @@ function EditInteractionForm(
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await supabaseUpdateRow('meeting_note', 'meeting_id', id, data);
+            await supabaseUpdateRow('meeting_notes', 'meeting_id', id, data);
             
             if (typeof window !== "undefined") {
                 toast.success("Interaction updated successfully!");

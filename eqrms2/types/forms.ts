@@ -203,7 +203,6 @@ export type SectorValues = z.infer<typeof sectorSchema>;
 // LEAD FORM 
 // -----------------------
 
-
 export const LeadsTaggingSchema = z.object({
   lead_name: z.string().nullable(),
   last_contact_date: z.date().nullable(),
@@ -216,8 +215,8 @@ export const LeadsTaggingSchema = z.object({
   first_name: z.string().nullable(),
   last_name: z.string().nullable(),
   linkedin_url: z.string().nullable(),
-  phone_valid_date: z.boolean().nullable(),
-  email_valid_date: z.boolean().nullable(),
+  phone_validated: z.boolean().nullable(),
+  email_validated: z.boolean().nullable(),
   country_code: z.string().nullable(),
   phone_number: z.string().nullable(),
   email_1: z.string().nullable(),
@@ -229,6 +228,21 @@ export const LeadsTaggingSchema = z.object({
 });
 
 export type LeadsTaggingValues = z.infer<typeof LeadsTaggingSchema>;
+
+// -----------------------
+// LEAD TAG FORM 
+// -----------------------
+
+export const LeadsTagShortSchema = z.object({
+  last_contact_date: z.date().nullable(),
+  followup_date: z.date().nullable(),
+  importance: z.string().nullable(),
+  lead_progression: z.string().nullable(),
+  wealth_level: z.string().nullable(),
+  lead_summary: z.string().nullable(),
+});
+
+export type LeadsTagShortValues = z.infer<typeof LeadsTagShortSchema>;
 
 // -----------------------
 // MEETING NOTE FORM 

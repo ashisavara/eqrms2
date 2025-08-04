@@ -2,14 +2,31 @@ import { ColumnDef } from "@tanstack/react-table";
 import { LeadsTagging } from "@/types/lead-detail";
 import Link from "next/link";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
+import { EditLeadTagsButton } from "@/components/forms/EditLeadTags";
 
-export const columns: ColumnDef<LeadsTagging>[] = [
+export const createColumns = (
+    importanceOptions: { value: string; label: string }[],
+    leadProgressionOptions: { value: string; label: string }[],
+    wealthLevelOptions: { value: string; label: string }[],
+): ColumnDef<LeadsTagging>[] => [
     {
         accessorKey: "lead_name",
         header: () => <div className="!text-left">Lead Name</div>,
         size: 200,
         cell: ({ row }) => {
-            return <div className="text-left"><Link href={`/crm/${row.original.lead_id}`} className="text-blue-700 font-bold !text-left">{row.original.lead_name}</Link></div>
+            return <div className="text-left">
+                <Link href={`/crm/${row.original.lead_id}`} className="text-blue-700 font-bold !text-left">{row.original.lead_name}</Link> |  
+                <EditLeadTagsButton
+  leadData={row.original}
+  leadId={row.original.lead_id}
+  importanceOptions={importanceOptions}
+  leadProgressionOptions={leadProgressionOptions}
+  wealthLevelOptions={wealthLevelOptions}
+  leadName={row.original.lead_name ?? 'Unknown Lead'}
+  country_code={row.original.country_code ?? ''}
+  phone_number={row.original.phone_number ?? ''}
+/>
+                </div>
         }
     }, 
         {

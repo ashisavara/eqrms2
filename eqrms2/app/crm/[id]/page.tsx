@@ -11,7 +11,7 @@ import TableInteractions from "../TableInteractions";
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -30,7 +30,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             table: "view_crm_followup_notes",
             columns: "*",  
             filters: [
-                (query) => query.eq('rel_lead_id', id)
+                (query) => query.eq('rel_lead_id', id),
             ]
         }),
         supabaseListRead<Deals>({
@@ -44,7 +44,10 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         fetchOptions<string,string>("master","lead_progression","lead_progression"),
         fetchOptions<string,string>("master","lead_source","lead_source"),
         fetchOptions<string,string>("master","lead_type","lead_type"),
-        fetchOptions<string,string>("master","wealth_level","wealth_level")
+        fetchOptions<string,string>("master","wealth_level","wealth_level"),
+        fetchOptions<string, string>("master","interaction_type", "interaction_type"),
+        fetchOptions<string, string>("master","interaction_tag", "interaction_tag"),
+        fetchOptions<string, string>("master","interaction_channel_tag","interaction_channel_tag"),
     ]);
 
     if (!lead) {
@@ -80,7 +83,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         </span>
                     ))}
                 </div>
-                <TableInteractions data={Meetings} />
+                <TableInteractions data={Meetings} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} />
                 
             </div>
             
