@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { LeadsTaggingSchema, LeadsTaggingValues } from "@/types/forms";
@@ -29,7 +30,8 @@ function EditLeadsForm({
   leadSourceOptions: { value: string; label: string }[];
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
-}) {  
+}) {
+  const router = useRouter();  
   // Convert null values to empty strings/defaults for form inputs
   const cleanedData: LeadsTaggingValues = {
     lead_name: initialData.lead_name ?? "",
@@ -97,7 +99,7 @@ function EditLeadsForm({
         toast.success("Lead updated successfully!");
         setTimeout(() => {
           onSuccess?.();
-          window.location.reload();
+          router.refresh(); // Refresh server data without resetting client state
         }, 1500);
       }
     } catch (error) {

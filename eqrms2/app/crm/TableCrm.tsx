@@ -11,14 +11,20 @@ export default function TableCrm({
   importanceOptions = [], 
   leadProgressionOptions = [], 
   wealthLevelOptions = [],
+  dealEstClosureOptions = [],
+  dealStageOptions = [],
+  dealSegmentOptions = [],
 }: { 
   data: LeadsTagging[];
   importanceOptions?: { value: string; label: string }[];
   leadProgressionOptions?: { value: string; label: string }[];
-  wealthLevelOptions?: { value: string; label: string }[];
+  wealthLevelOptions?: { value: string; label: string }[];  
+  dealEstClosureOptions?: { value: string; label: string }[];
+  dealStageOptions?: { value: string; label: string }[];
+  dealSegmentOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions);
+  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions);
   const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({

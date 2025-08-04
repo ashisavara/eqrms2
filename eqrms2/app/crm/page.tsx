@@ -52,7 +52,7 @@ export default async function CrmPage() {
                         <TabsTrigger value="deals">Deals</TabsTrigger>
                 </TabsList>
                     <TabsContent value="crm">
-                        <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                        <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} />
                     </TabsContent>
                     <TabsContent value="interactions">
                          <TableInteractions data={interactions} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} />

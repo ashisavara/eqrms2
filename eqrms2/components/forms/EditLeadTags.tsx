@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { LeadsTagShortSchema, LeadsTagShortValues } from "@/types/forms";
@@ -32,11 +33,12 @@ function EditLeadTagsForm({
   leadName: string;
   country_code: string;
   phone_number: string;
-}) {  
+}) {
+  const router = useRouter();
   // Convert null values to empty strings/defaults for form inputs
   const cleanedData: LeadsTagShortValues = {
-    last_contact_date: initialData.last_contact_date ?? null,
-    followup_date: initialData.followup_date ?? null,
+    last_contact_date: initialData.last_contact_date ? new Date(initialData.last_contact_date) : null,
+    followup_date: initialData.followup_date ? new Date(initialData.followup_date) : null,
     importance: initialData.importance ?? "",
     lead_progression: initialData.lead_progression ?? "",
     wealth_level: initialData.wealth_level ?? "",
@@ -54,13 +56,20 @@ function EditLeadTagsForm({
         throw new Error('lead_id is required for updates');
       }
       
-      await supabaseUpdateRow('leads_tagging', 'lead_id', id, data);
+      // Convert Date objects to ISO strings for Supabase
+      const processedData = {
+        ...data,
+        last_contact_date: data.last_contact_date instanceof Date ? data.last_contact_date.toISOString() : data.last_contact_date,
+        followup_date: data.followup_date instanceof Date ? data.followup_date.toISOString() : data.followup_date,
+      };
+      
+      await supabaseUpdateRow('leads_tagging', 'lead_id', id, processedData);
       
       if (typeof window !== "undefined") {
         toast.success("Lead updated successfully!");
         setTimeout(() => {
           onSuccess?.();
-          window.location.reload();
+          router.refresh(); // Refresh server data without resetting client state
         }, 1500);
       }
     } catch (error) {
@@ -139,9 +148,9 @@ export function EditLeadTagsButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer inline-flex items-center"
+        className="text-blue-500 hover:text-blue-800 hover:underline font-bold cursor-pointer inline-flex items-center"
         >
-        <EditIcon className="w-5 h-5 ml-1 pt-1" />
+         |  T |
         </span>
 
       {/* Edit Sheet */}

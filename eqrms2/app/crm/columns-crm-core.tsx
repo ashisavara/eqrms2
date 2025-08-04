@@ -3,29 +3,39 @@ import { LeadsTagging } from "@/types/lead-detail";
 import Link from "next/link";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
 import { EditLeadTagsButton } from "@/components/forms/EditLeadTags";
+import { AddDealButton } from "@/components/forms/AddDeals";
 
 export const createColumns = (
     importanceOptions: { value: string; label: string }[],
     leadProgressionOptions: { value: string; label: string }[],
     wealthLevelOptions: { value: string; label: string }[],
+    dealEstClosureOptions: { value: string; label: string }[],
+    dealStageOptions: { value: string; label: string }[],
+    dealSegmentOptions: { value: string; label: string }[],
 ): ColumnDef<LeadsTagging>[] => [
     {
         accessorKey: "lead_name",
         header: () => <div className="!text-left">Lead Name</div>,
-        size: 200,
+        size: 250,
         cell: ({ row }) => {
             return <div className="text-left">
-                <Link href={`/crm/${row.original.lead_id}`} className="text-blue-700 font-bold !text-left">{row.original.lead_name}</Link> |  
+                <Link href={`/crm/${row.original.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
                 <EditLeadTagsButton
-  leadData={row.original}
-  leadId={row.original.lead_id}
-  importanceOptions={importanceOptions}
-  leadProgressionOptions={leadProgressionOptions}
-  wealthLevelOptions={wealthLevelOptions}
-  leadName={row.original.lead_name ?? 'Unknown Lead'}
-  country_code={row.original.country_code ?? ''}
-  phone_number={row.original.phone_number ?? ''}
-/>
+                    leadData={row.original}
+                    leadId={row.original.lead_id}
+                    importanceOptions={importanceOptions}
+                    leadProgressionOptions={leadProgressionOptions}
+                    wealthLevelOptions={wealthLevelOptions}
+                    leadName={row.original.lead_name ?? 'Unknown Lead'}
+                    country_code={row.original.country_code ?? ''}
+                    phone_number={row.original.phone_number ?? ''}
+                /> 
+                <AddDealButton
+                    relLeadId={row.original.lead_id}
+                    dealEstClosureOptions={dealEstClosureOptions}
+                    dealStageOptions={dealStageOptions}
+                    dealSegmentOptions={dealSegmentOptions}
+                />
                 </div>
         }
     }, 

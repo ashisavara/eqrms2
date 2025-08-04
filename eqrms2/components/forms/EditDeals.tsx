@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { DealsSchema, DealsValues } from "@/types/forms";
@@ -20,6 +21,7 @@ function EditDealForm({initialData, id, onSuccess, dealEstClosureOptions, dealSt
         dealStageOptions: { value: string; label: string }[], 
         dealSegmentOptions: { value: string; label: string }[]})
     {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
     const cleanedData: DealsValues = {
@@ -47,7 +49,7 @@ function EditDealForm({initialData, id, onSuccess, dealEstClosureOptions, dealSt
                 toast.success("Deal updated successfully!");
                 setTimeout(() => {
                     onSuccess?.();
-                    window.location.reload();
+                    router.refresh(); // Refresh server data without resetting client state
                 }, 1500);
             }
         } catch (error) {
