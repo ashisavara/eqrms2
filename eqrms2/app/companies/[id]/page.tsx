@@ -10,9 +10,14 @@ import { TableQuarterlyNotes } from "./TableQuarterlyNotes";
 import { EditQuarterSheet } from "./EditQuarterSheet";
 import { CompanyQrtNotesValues } from "@/types/forms";
 import { RatingDisplay,CompQualityRating, NumberRating, ComGrowthNumberRating, CoverageRating } from "@/components/conditional-formatting";
+import { getUserRoles } from "@/lib/auth/getUserRoles";
+import { can } from "@/lib/permissions";
 
 export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params; // Await the params to get the id
+  
+  // Get user roles for permission checking
+  const userRoles = await getUserRoles();
   
   // Consolidate all Supabase calls into a single Promise.all for better performance
   const [qtrOptions, resultRatingOptions, qtrNotes, company] = await Promise.all([
@@ -78,7 +83,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div>
               <SimpleTable
               headers={[{ label: "Coverage"},{ label: "Sector"},{ label: "Industry"},{ label: "Sector Stance"},{ label: "Edit"}]}
-              body={[{ value: <CoverageRating rating={company.coverage}/>},{ value: company.sector_name},{ value: company.industry },{ value: company.sector_name},{ value: <Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link> }]}
+              body={[{ value: <CoverageRating rating={company.coverage}/>},{ value: company.sector_name},{ value: company.industry },{ value: company.sector_name},{ value: can(userRoles, 'research', 'edit') ? <Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link> : <span className="text-gray-400">-</span> }]}
               />
             </div>
           </div>
@@ -127,11 +132,6 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
               sheetComponent={EditQuarterSheet} 
             />
           </div>
-
-
-
-          
-          console.log(session.data.session.user.user_metadata.user_roles);
 
         </div>
   );

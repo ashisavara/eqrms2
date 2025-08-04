@@ -7,6 +7,9 @@ import { EditAMCButton } from "@/components/forms/EditAMC";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+const userRoles = await getUserRoles();
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -57,28 +60,32 @@ export default async function FundPage({ params }: PageProps) {
             <div> {fund.category_name} |  </div>
             <div> AUM: {fund.fund_aum} cr |  </div>
             <div> Open for Subscription: {fund.open_for_subscription}  | </div>
-            <div>
-              <span>Edit: </span>
-              <EditFundsButton 
-              fundData={fund} 
-              openSubsOptions={openSubsOptions}
-              strategyTagOptions={strategyTagOptions}
-              />
-              {fund.amc_id && (
-                <>
-                  <EditAMCButton 
-                  amcData={fund} 
-                  amcId={fund.amc_id}
-                  amcPedigreeOptions={amcPedigreeOptions}
-                  amcTeamPedigreeOptions={amcTeamPedigreeOptions}
-                  amcTeamChurnOptions={amcTeamChurnOptions}
-                  amcMaturityOptions={amcMaturityOptions}
-                  amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
-                  />
-                  <EditAmcDueDilButton amcData={fund} amcId={fund.amc_id} />
-                </>
-              )}
-        </div>
+            {can(userRoles, 'research', 'edit') ? 
+              <div>
+                <span>Edit: </span>
+                <EditFundsButton 
+                fundData={fund} 
+                openSubsOptions={openSubsOptions}
+                strategyTagOptions={strategyTagOptions}
+                />
+                {fund.amc_id && (
+                  <>
+                    <EditAMCButton 
+                    amcData={fund} 
+                    amcId={fund.amc_id}
+                    amcPedigreeOptions={amcPedigreeOptions}
+                    amcTeamPedigreeOptions={amcTeamPedigreeOptions}
+                    amcTeamChurnOptions={amcTeamChurnOptions}
+                    amcMaturityOptions={amcMaturityOptions}
+                    amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
+                    />
+                    <EditAmcDueDilButton amcData={fund} amcId={fund.amc_id} />
+                  </>
+                )}
+            </div>
+            :
+            null
+            }
         </div>
       <div>
         <Tabs defaultValue="rating_snapshot" className="w-full mx-auto mt-6 text-sm">
