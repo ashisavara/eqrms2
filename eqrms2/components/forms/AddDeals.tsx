@@ -120,8 +120,8 @@ export function AddDealButton({
     <>
       <span 
         onClick={() => setShowAddSheet(true)}
-        className="font-bold text-green-600 hover:text-green-800 hover:underline cursor-pointer inline-flex items-center"
-        >   |  $  | 
+        className="pl-2 font-bold text-green-600 hover:bg-green-200 hover:underline cursor-pointer inline-flex items-center"
+        >   |_$_
         </span>
 
       {/* Add Sheet */}

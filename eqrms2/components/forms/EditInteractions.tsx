@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { MeetingNoteSchema, MeetingNoteValues } from "@/types/forms";
@@ -17,6 +18,7 @@ function EditInteractionForm(
     {initialData, id, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, onSuccess}: 
     {initialData: MeetingNoteValues | null, id: number, interactionTypeOptions: { value: string; label: string }[], interactionTagOptions: { value: string; label: string }[], interactionChannelOptions: { value: string; label: string }[], onSuccess: () => void}) 
     {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
     const cleanedData: MeetingNoteValues = {
@@ -43,7 +45,7 @@ function EditInteractionForm(
                 toast.success("Interaction updated successfully!");
                 setTimeout(() => {
                     onSuccess?.();
-                    window.location.reload();
+                    router.refresh(); // Refresh server data without resetting client state
                 }, 1500);
             }
         } catch (error) {

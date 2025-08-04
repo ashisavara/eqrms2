@@ -14,6 +14,9 @@ export default function TableCrm({
   dealEstClosureOptions = [],
   dealStageOptions = [],
   dealSegmentOptions = [],
+  interactionTypeOptions = [],
+  interactionTagOptions = [],
+  interactionChannelOptions = [],
 }: { 
   data: LeadsTagging[];
   importanceOptions?: { value: string; label: string }[];
@@ -22,9 +25,12 @@ export default function TableCrm({
   dealEstClosureOptions?: { value: string; label: string }[];
   dealStageOptions?: { value: string; label: string }[];
   dealSegmentOptions?: { value: string; label: string }[];
+  interactionTypeOptions?: { value: string; label: string }[];
+  interactionTagOptions?: { value: string; label: string }[];
+  interactionChannelOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions);
+  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions);
   const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({

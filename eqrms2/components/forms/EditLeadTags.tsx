@@ -148,9 +148,9 @@ export function EditLeadTagsButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-800 hover:underline font-bold cursor-pointer inline-flex items-center"
+        className="text-gray-500 hover:bg-gray-200 hover:underline font-bold cursor-pointer inline-flex items-center"
         >
-         |  T |
+          |_T_ 
         </span>
 
       {/* Edit Sheet */}
