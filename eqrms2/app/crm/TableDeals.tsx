@@ -6,7 +6,7 @@ import { createColumns } from "./columns-crm-deals";
 import { Deals } from "@/types/deals";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 
-export default function TableInteractions({ 
+export default function TableDeals({ 
   data, 
   //dealLikelihoodOptions = [], 
   dealEstClousureOptions = [], 
