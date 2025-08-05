@@ -87,7 +87,7 @@ export function EditCatButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Asset Class View |  
+        Edit Category  
       </span>
 
       {/* Edit Sheet */}

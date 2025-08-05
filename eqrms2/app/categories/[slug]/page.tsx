@@ -5,6 +5,7 @@ import { RmsFundsScreener } from "@/types/funds-detail";
 import TableFundBasic from "@/app/funds/TableFundBasic";
 import { EditCatButton } from "@/components/forms/EditCategory";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
+import { TableCategories } from "@/app/categories/TableCategories";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -46,23 +47,16 @@ export default async function CategoryPage({ params }: PageProps) {
                     size="lg"
                 />
             </div>
-            <p className="font-bold">{category.cat_summary}</p>
             <p>{category.cat_description}</p>
             <EditCatButton categoryData={category} categoryId={category.category_id} />
         </div>
             <div className="p-4 text-sm">
                 <h3 className="text-base font-bold text-center">Trailing Returns</h3>
-                <SimpleTable 
-                headers={[{label:"Category"},{label:"1 yr"},{label:"3 yr"},{label:"5 yr"}]} 
-                body={[{value:category.cat_name},{value:Math.round(category.one_yr*10)/10},{value:Math.round(category.three_yr*10)/10},{value:Math.round(category.five_yr*10)/10}]} 
-                />
+                <TableCategories data={[category]} columnType="summary"/>
             </div>
             <div className="p-4 text-sm">  
                 <h3 className="text-base font-bold text-center">Annual Returns</h3>
-                <SimpleTable 
-                headers={[{label:"Category"},{label:"2024"},{label:"2023"},{label:"2022"},{label:"2021"},{label:"2020"},{label:"2019"},{label:"2018"},{label:"2017"},{label:"2016"},{label:"2015"}]} 
-                body={[{value:category.cat_name},{value:Math.round(category.cy_1*10)/10},{value:Math.round(category.cy_2*10)/10},{value:Math.round(category.cy_3*10)/10},{value:Math.round(category.cy_4*10)/10},{value:Math.round(category.cy_5*10)/10},{value:Math.round(category.cy_6*10)/10},{value:Math.round(category.cy_7*10)/10},{value:Math.round(category.cy_8*10)/10},{value:Math.round(category.cy_9*10)/10},{value:Math.round(category.cy_10*10)/10}]} 
-                />
+                <TableCategories data={[category]} columnType="annual"/>
             </div>
             <div className="p-4 text-sm">
                 <h3 className="text-base font-bold text-center">Recommended Funds</h3>

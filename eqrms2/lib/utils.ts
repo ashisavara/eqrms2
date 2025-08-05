@@ -35,7 +35,7 @@ export function formatDate(value: Date | string | number | null | undefined): st
     const month = date.toLocaleString("en-US", { month: "short" });
     const year = date.getFullYear();
     
-    return `${day}-${month}-${year}`;
+    return `${day}-${month}-${year.toString().slice(-2)}`;
   } catch (error) {
     console.warn('Invalid date format:', value);
     return '';

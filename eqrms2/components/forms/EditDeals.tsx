@@ -133,7 +133,7 @@ export function EditDealButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer text-left"
+        className="text-blue-500 hover:text-blue-700 cursor-pointer text-left font-bold hover:underline"
       >
         {dealData.deal_name}  
       </span>

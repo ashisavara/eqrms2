@@ -197,6 +197,30 @@ export function ComGrowthNumberRating({ rating }: { rating: number }) {
   );
 }
 
+
+/**
+ * NUMBER FORMATTING - DEAL LIKELIHOOD
+ */
+export function DealLikelihoodRating({ rating }: { rating: number }) {
+  // Map the number to a 1-5 rating based on the specified ranges
+  const getNumericRating = (num: number): number => {
+    if (num == 1) return 5;
+    if (num == 0.8) return 4;
+    if (num == 0.6) return 3;
+    if (num == 0.4) return 2;
+    if (num == 0.2) return 1;
+    return 1; // num <= 0
+  };
+  const numericRating = getNumericRating(rating);
+  return (
+    <div className={`px-0 py-0.5 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+
+
 /**
  * CRM FOLLOW UP
  */

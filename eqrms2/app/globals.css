@@ -91,6 +91,10 @@
     @apply text-2xl font-bold;
   }
 
+  h3.ime-table-heading {
+    @apply text-base font-bold text-center m-4;
+  }
+
   p.imeFormFieldDesc {
     @apply text-xs text-gray-500;
   }
@@ -188,22 +192,22 @@ div.ime-fm h4 {
   font-weight: 600;
   margin-bottom: 0;
   color: rgb(100, 100, 100);
-  font-size: 1.25em;
+  font-size: 1 em;
   margin-block-start: 15px;
 }
 
 div.ime-fm p.ime-fm-details {
-  font-size: 0.95em;
-  margin-bottom: 5px;
-  margin-top: 5px;
+  font-size: 0.8em;
+  margin-bottom: 0;
+  margin-top: 0;
   color: #525758;
 }
 
 div.ime-fm p {
   font-family: 'Open Sans', sans-serif;
-  font-size: 1em;
+  font-size: 0.85em;
   margin-bottom: 10px;
-  margin-top: 10px;
+  margin-top: 5px;
   color: #525758;
 }
 

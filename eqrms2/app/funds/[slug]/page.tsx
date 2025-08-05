@@ -93,7 +93,7 @@ export default async function FundPage({ params }: PageProps) {
             <TabsTrigger value="rating_snapshot">Rating Snapshot</TabsTrigger>
             <TabsTrigger value="rating_rationale">Rating Rationale</TabsTrigger>
             <TabsTrigger value="investment_team">Team</TabsTrigger>
-            <TabsTrigger value="fees">Fees</TabsTrigger>
+            <TabsTrigger value="fund_details">Fund Details</TabsTrigger>
           </TabsList>
           <TabsContent value="rating_snapshot">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -223,7 +223,7 @@ export default async function FundPage({ params }: PageProps) {
               {fund.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: fund.amc_fm_html }} />}
             </div>
           </TabsContent>
-          <TabsContent value="fees">
+          <TabsContent value="fund_details">
             <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
               <h3 className="ime-basic-h3"> Fee Structure </h3>
               {fund.fee_structure_html && <div dangerouslySetInnerHTML={{ __html: fund.fee_structure_html }} />}

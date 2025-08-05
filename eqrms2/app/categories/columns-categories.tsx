@@ -42,12 +42,6 @@ export const columns: ColumnDef<Category>[] = [
     }
   },    
   {
-    accessorKey: "asset_class_name",
-    header: "Asset Class",
-    filterFn: "arrIncludesSome",
-    size: 100,
-  },
-  {
     accessorKey: "one_yr",
     header: "1yr",
     cell: ({ getValue }) => {

@@ -31,7 +31,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Equity'),  
@@ -40,7 +40,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Debt'),  
@@ -49,7 +49,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Hybrid'),  
@@ -58,7 +58,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Alternatives'),  
@@ -67,7 +67,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Global - Equity'),  
@@ -76,7 +76,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Global - Debt'),  
@@ -85,7 +85,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Global - Alt'),  
@@ -135,16 +135,28 @@ export default async function FundsPage() {
                             <TableAssetClass data={DomesticAssetClass}/>
                         </TabsContent> 
                         <TabsContent value="Equity">
-                            <TableCategories data={Eqcategory}/>
+                            <h3 className="ime-table-heading"> Trailing Returns </h3>
+                            <TableCategories data={Eqcategory} columnType="summary"/>
+                            <h3 className="ime-table-heading"> Annual Returns </h3>
+                            <TableCategories data={Eqcategory} columnType="annual"/>
                         </TabsContent>  
                         <TabsContent value="Debt">
-                            <TableCategories data={Debtcategory}/>
+                            <h3 className="ime-table-heading"> Trailing Returns </h3>
+                            <TableCategories data={Debtcategory} columnType="summary"/>
+                            <h3 className="ime-table-heading"> Annual Returns </h3>
+                            <TableCategories data={Debtcategory} columnType="annual"/>
                         </TabsContent>
                         <TabsContent value="Hybrid">
-                            <TableCategories data={Hybridcategory}/>
+                            <h3 className="ime-table-heading"> Trailing Returns </h3>
+                            <TableCategories data={Hybridcategory} columnType="summary"/>
+                            <h3 className="ime-table-heading"> Annual Returns </h3>
+                            <TableCategories data={Hybridcategory} columnType="annual"/>
                         </TabsContent>
                         <TabsContent value="Alternatives">
-                            <TableCategories data={Altcategory}/>
+                            <h3 className="ime-table-heading"> Trailing Returns </h3>
+                            <TableCategories data={Altcategory} columnType="summary"/>
+                            <h3 className="ime-table-heading"> Annual Returns </h3>
+                            <TableCategories data={Altcategory} columnType="annual"/>
                         </TabsContent>
                     </Tabs>
                 </TabsContent>  
@@ -159,13 +171,20 @@ export default async function FundsPage() {
                             <TableAssetClass data={GlobalAssetClass}/>
                         </TabsContent>
                         <TabsContent value="Global-Equity">
-                            <TableCategories data={GlobalEqcategory}/>
+                            <h3 className="ime-table-heading"> Trailing Returns </h3>
+                            <TableCategories data={GlobalEqcategory} columnType="summary"/>
+                            <h3 className="ime-table-heading"> Annual Returns </h3>
+                            <TableCategories data={GlobalEqcategory} columnType="annual"/>
                         </TabsContent>
                         <TabsContent value="Global-Others">
                             <h3 className="text-base font-bold text-center text-gray-500 p-5">Global Debt</h3>
-                            <TableCategories data={GlobalDebtcategory}/>
+                            <TableCategories data={GlobalDebtcategory} columnType="summary"/>
+                            <h3 className="ime-table-heading"> Annual Returns </h3>
+                            <TableCategories data={GlobalDebtcategory} columnType="annual"/>
                             <h3 className="text-base font-bold text-center text-gray-500 p-5">Global Alternatives</h3>
-                            <TableCategories data={GlobalAltcategory}/>
+                            <TableCategories data={GlobalAltcategory} columnType="summary"/>
+                            <h3 className="ime-table-heading"> Annual Returns </h3>
+                            <TableCategories data={GlobalAltcategory} columnType="annual"/>
                         </TabsContent>
                     </Tabs>
                 </TabsContent>
