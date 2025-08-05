@@ -9,6 +9,7 @@ export type Deals = {
     deal_segment?: string;
     total_deal_aum?: number;
     total_deal_likely?: number;
+    lead_name?: string;
 };
 
 

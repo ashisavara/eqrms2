@@ -281,3 +281,60 @@ export function TextRatingContainer({ rating, children }: { rating: string; chil
     </div>
   );
 }
+
+
+/**
+ * Text-based rating container for deal est Closure
+ */
+export function DealEstClosureRating({ rating, children }: { rating: string; children: React.ReactNode }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Current Month': 5,
+      'Next Month': 4,
+      'Within 3m': 3,
+      'Within 6m': 2,
+      'After 6m': 1,
+      'Better Markets': 2,
+      'Awaiting Funds': 2,
+    };
+    
+    return ratingMap[textRating] || 3;
+  };
+
+  const numericRating = getNumericRating(rating);
+  
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {children}
+    </div>
+  );
+}
+
+
+/**
+ * Text-based rating container for deal stage
+ */
+export function DealStageRating({ rating, children }: { rating: string; children: React.ReactNode }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      '7) Won': 5,
+      '6) Execution': 5,
+      '5) Documentation': 4,
+      '4) Confirmed': 3,
+      '3) Likely': 2, 
+      '2) Indicated': 2,
+      '1) Cold': 1,
+      '0) Lost': 1,
+    };
+    
+    return ratingMap[textRating] || 3;
+  };
+
+  const numericRating = getNumericRating(rating);
+  
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {children}
+    </div>
+  );
+}

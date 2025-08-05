@@ -44,6 +44,7 @@ export default function TableDeals({
         },
         sorting: [
           { id: "deal_likelihood", desc: true },
+          { id: "total_deal_aum", desc: true },
         ],
       },
     });
