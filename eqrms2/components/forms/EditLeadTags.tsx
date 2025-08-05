@@ -83,7 +83,7 @@ function EditLeadTagsForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full px-4 pt-4 pb-2 space-y-3">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-      <p className="text-sm text-gray-500">{leadName} | {country_code} | {phone_number}</p>
+      <p className="text-sm font-bold text-gray-700">{leadName} | +{country_code}-{phone_number}</p>
 
       <div className="mb-5">
         <TextInput name="lead_summary" label="Lead Summary" control={control} />

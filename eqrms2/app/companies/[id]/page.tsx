@@ -52,8 +52,8 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
           <div className="mb-5 text-xs grid grid-cols-2 gap-x-6 gap-y-8">
             <div>
               <SimpleTable 
-                headers = {[{label:"CMP"},{label:"Target"},{label:"Multiple"},{label:"Upside"}]}
-                body = {[{value:company.cmp},{value:company.target_price},{value:<span className="text-blue-600 font-bold">{Number(company.pe_t2).toFixed(1)} </span>},{value:<NumberRating rating={company.upside}/>}]}
+                headers = {[{label:"CMP"},{label:"Target"},{label:"TP Multiple"},{label:"Upside"}]}
+                body = {[{value:company.cmp},{value:company.target_price},{value:<span className="text-blue-600 font-bold">{Number(company.multiple).toFixed(1)} </span>},{value:<NumberRating rating={company.upside}/>}]}
               />
             </div>
             <div>
