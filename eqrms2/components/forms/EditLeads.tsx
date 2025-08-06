@@ -130,8 +130,8 @@ function EditLeadsForm({
         <div className="grid grid-cols-5 gap-4">
           <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
-          <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
+          <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="primary_rm" label="Primary RM" control={control} options={primaryRmOptions} />
         </div>
       </div>

@@ -123,9 +123,9 @@ export function EditInteractionButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        className="text-blue-500 hover:text-blue-700 hover:underline hover:font-bold cursor-pointer"
       >
-        {interactionData.meeting_name} 
+        {interactionData.interaction_type} 
       </span>
 
       {/* Edit Sheet */}

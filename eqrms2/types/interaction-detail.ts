@@ -15,5 +15,6 @@ export type InteractionDetail = {
     lead_name: string;
     rel_group_id: number;
     primary_rm: string;
+    rm_name: string;
 };
 

@@ -74,7 +74,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                 </div>
             </div> 
             <div className="mt-5">
-                <p>{lead.lead_background}</p>
+                <p className="text-sm">{lead.lead_background}</p>
                 <h3 className="text-base font-bold">Followups (last 30)</h3>
                 <div className="text-sm bg-gray-100 p-2 rounded-md">
                     {Followups.slice(0, 30).map((followup, index) => (

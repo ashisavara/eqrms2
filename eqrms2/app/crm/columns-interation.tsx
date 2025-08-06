@@ -26,13 +26,22 @@ export const createColumns = (
 ): ColumnDef<InteractionDetail>[] => [
     { 
         accessorKey: "created_at", 
-        header: "Meeting Date", size:120, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{formatDate(getValue() as string)}</p>},
+        header: "Meeting Date", size:120, 
+        cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{formatDate(getValue() as string)}</p>},
 
     { accessorKey: "meeting_name", header: "Meeting Name", size:200, 
-        cell: ({ row }) => row.original.meeting_name == null ? null : <EditInteractionButton meetingId={row.original.meeting_id} interactionData={row.original} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} />,
+        cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
+    { accessorKey: "interaction_type", header: "Type", size:100, cell: ({ row }) => row.original.meeting_name == null ? null : 
+        <div className="text-left">
+        <EditInteractionButton meetingId={row.original.meeting_id} interactionData={row.original} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} />
+        </div>
     },
-    { accessorKey: "interaction_type", header: "Type", size:100, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
     { accessorKey: "rm_name", header: "Created By", size:150, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
+    { accessorKey: "lead_name", header: "Lead", size:150, cell: ({ row }) => {
+        return <div className="text-left">
+            <Link href={`/crm/${row.original.rel_lead_id}`} className="text-blue-500 hover:text-blue-800 hover:font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
+            </div>
+    }},
     { accessorKey: "meeting_summary", header: "Summary", size:800, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
     
 ];
