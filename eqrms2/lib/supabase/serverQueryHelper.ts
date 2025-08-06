@@ -97,16 +97,22 @@ export async function fetchOptions<T, U>(
     table,
     columns: `${valueColumn}, ${labelColumn}`,
     filters: [
-      (query) => query.neq(valueColumn, null),
-      (query) => query.neq(labelColumn, null),
+      (query) => query.not(valueColumn, 'is', null),
+      (query) => query.not(labelColumn, 'is', null),
       (query) => query.order(sortColumn, { ascending: sortAscending })
     ]
   });
 
-  return data.map((item: Record<string, any>) => ({
-    value: item[valueColumn] as T,
-    label: item[labelColumn] as U,
-  }));
+  return data
+    .filter((item: Record<string, any>) => {
+      const value = item[valueColumn];
+      const label = item[labelColumn];
+      return value && label && value !== "null" && label !== "null" && value !== "" && label !== "";
+    })
+    .map((item: Record<string, any>) => ({
+      value: item[valueColumn] as T,
+      label: item[labelColumn] as U,
+    }));
 }
 
 // Generic search function for entities

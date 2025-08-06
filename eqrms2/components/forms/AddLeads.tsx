@@ -18,7 +18,8 @@ function AddLeadForm({
   leadProgressionOptions,
   leadSourceOptions,
   leadTypeOptions,
-  wealthLevelOptions
+  wealthLevelOptions, 
+  primaryRmOptions
 }: { 
   onSuccess?: () => void;
   importanceOptions: { value: string; label: string }[];
@@ -26,6 +27,7 @@ function AddLeadForm({
   leadSourceOptions: { value: string; label: string }[];
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
+  primaryRmOptions: { value: string; label: string }[];
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -126,7 +128,7 @@ function AddLeadForm({
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
-          <TextInput name="primary_rm" label="Primary RM" control={control} placeholder="Relationship Manager" />
+          <SelectInput name="primary_rm" label="Primary RM" control={control} options={primaryRmOptions} />
         </div>
       </div>
       {/* Categorization Fields with Options */}
@@ -166,13 +168,15 @@ export function AddLeadButton({
   leadProgressionOptions,
   leadSourceOptions,
   leadTypeOptions,
-  wealthLevelOptions
+  wealthLevelOptions, 
+  primaryRmOptions
 }: { 
   importanceOptions: { value: string; label: string }[];
   leadProgressionOptions: { value: string; label: string }[];
   leadSourceOptions: { value: string; label: string }[];
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
+  primaryRmOptions: { value: string; label: string }[];
 }) {
   const [showAddSheet, setShowAddSheet] = useState(false);
 
@@ -200,6 +204,7 @@ export function AddLeadButton({
                 leadSourceOptions={leadSourceOptions}
                 leadTypeOptions={leadTypeOptions}
                 wealthLevelOptions={wealthLevelOptions}
+                primaryRmOptions={primaryRmOptions}
               />
             </div>
           </SheetContent>

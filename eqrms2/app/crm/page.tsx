@@ -10,7 +10,7 @@ import { AddLeadButton } from "@/components/forms/AddLeads";
 
 export default async function CrmPage() {
 
-    const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions] = await Promise.all([
+    const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions] = await Promise.all([
         supabaseListRead<LeadsTagging>({
             table:"view_leads_tagcrm", 
             columns:"lead_id, lead_name, days_followup, days_since_last_contact, importance, wealth_level, lead_progression, lead_summary, lead_source, lead_type, rm_name, last_contact_date, followup_date, country_code, phone_number",
@@ -45,6 +45,7 @@ export default async function CrmPage() {
         fetchOptions<string, string>("master","wealth_level", "wealth_level"),
         fetchOptions<string, string>("master","lead_source", "lead_source"),
         fetchOptions<string, string>("master","lead_type", "lead_type"),
+        fetchOptions<string, string>("ime_emp","auth_id", "name"),
     ]);
 
     return (
@@ -56,7 +57,7 @@ export default async function CrmPage() {
                         <TabsTrigger value="deals">Deals</TabsTrigger>
                 </TabsList>
                     <TabsContent value="crm">
-                        <AddLeadButton importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} />
+                        <AddLeadButton importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
                         <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} interactionTagOptions={interactionTagOptions} interactionTypeOptions={interactionTypeOptions} />
                     </TabsContent>
                     <TabsContent value="interactions">
