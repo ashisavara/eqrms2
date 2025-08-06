@@ -20,7 +20,8 @@ function EditLeadsForm({
   leadProgressionOptions,
   leadSourceOptions,
   leadTypeOptions,
-  wealthLevelOptions
+  wealthLevelOptions,
+  primaryRmOptions
 }: { 
   initialData: LeadsTaggingValues; 
   id: number;  
@@ -30,6 +31,7 @@ function EditLeadsForm({
   leadSourceOptions: { value: string; label: string }[];
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
+  primaryRmOptions: { value: string; label: string }[];
 }) {
   const router = useRouter();  
   // Convert null values to empty strings/defaults for form inputs
@@ -130,7 +132,7 @@ function EditLeadsForm({
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
-          <TextInput name="primary_rm" label="Primary RM" control={control} placeholder="Relationship Manager" />
+          <SelectInput name="primary_rm" label="Primary RM" control={control} options={primaryRmOptions} />
         </div>
       </div>
       {/* Categorization Fields with Options */}
@@ -170,7 +172,8 @@ export function EditLeadsButton({
   leadProgressionOptions,
   leadSourceOptions,
   leadTypeOptions,
-  wealthLevelOptions
+  wealthLevelOptions,
+  primaryRmOptions
 }: { 
   leadData: any;
   leadId: number;  
@@ -179,6 +182,7 @@ export function EditLeadsButton({
   leadSourceOptions: { value: string; label: string }[];
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
+  primaryRmOptions: { value: string; label: string }[];
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -237,6 +241,7 @@ export function EditLeadsButton({
                 leadSourceOptions={leadSourceOptions}
                 leadTypeOptions={leadTypeOptions}
                 wealthLevelOptions={wealthLevelOptions}
+                primaryRmOptions={primaryRmOptions}
               />
             </div>
           </SheetContent>

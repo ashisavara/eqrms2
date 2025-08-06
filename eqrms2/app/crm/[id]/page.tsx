@@ -11,7 +11,7 @@ import TableInteractions from "../TableInteractions";
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -48,6 +48,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         fetchOptions<string, string>("master","interaction_type", "interaction_type"),
         fetchOptions<string, string>("master","interaction_tag", "interaction_tag"),
         fetchOptions<string, string>("master","interaction_channel_tag","interaction_channel_tag"),
+        fetchOptions<string, string>("ime_emp","auth_id", "name"),
     ]);
 
     if (!lead) {
@@ -63,7 +64,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         <p className="text-sm">Last Contact Date: {formatDate(lead.last_contact_date)} | Followup Date: {formatDate(lead.followup_date)}</p>
                         <p className="text-sm">Days Followup: {lead.days_followup} | Days Last Contact: {lead.days_since_last_contact}</p>
                         <p className="text-sm"><span className="font-bold">Phone:</span> {lead.country_code} - {lead.phone_number} | <span className="font-bold">Email:</span> {lead.email_1}  {lead.email_2}  {lead.email_3} |  <span className="font-bold">Linkedin:</span>  {lead.linkedin_url}</p>
-                        <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} />
+                        <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
                     </div>
                     <div className="text-sm">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
