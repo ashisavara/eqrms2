@@ -274,6 +274,7 @@ export type MeetingNoteValues = z.infer<typeof MeetingNoteSchema>;
 // DEAL FORM 
 // -----------------------
 export const DealsSchema = z.object({
+  //deal fields
   rel_lead_id: z.number().nullable(),
   deal_name: z.string().nullable(),
   est_closure: z.string().nullable(),
@@ -282,6 +283,13 @@ export const DealsSchema = z.object({
   deal_segment: z.string().nullable(),
   total_deal_aum: z.number().nullable(),
   deal_summary: z.string().nullable(),
+
+  //lead fields
+  followup_date: z.date().nullable(),
+  importance: z.string().nullable(),
+  lead_progression: z.string().nullable(),
+  wealth_level: z.string().nullable(),
+  lead_summary: z.string().nullable(),
 });
 
 export type DealsValues = z.infer<typeof DealsSchema>;

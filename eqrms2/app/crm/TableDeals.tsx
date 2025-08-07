@@ -4,6 +4,7 @@ import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowMo
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { createColumns } from "./columns-crm-deals";
 import { Deals } from "@/types/deals";
+import { LeadsTagging } from "@/types/lead-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 
 export default function TableDeals({ 
@@ -11,15 +12,23 @@ export default function TableDeals({
   //dealLikelihoodOptions = [], 
   dealEstClousureOptions = [], 
   dealStageOptions = [], 
-  dealSegmentOptions = [] 
+  dealSegmentOptions = [],
+  leadsData = [],
+  importanceOptions = [],
+  leadProgressionOptions = [],
+  wealthLevelOptions = []
 }: { 
   data: Deals[];
   dealEstClousureOptions?: { value: string; label: string }[];
   dealStageOptions?: { value: string; label: string }[];
   dealSegmentOptions?: { value: string; label: string }[];
+  leadsData?: LeadsTagging[];
+  importanceOptions?: { value: string; label: string }[];
+  leadProgressionOptions?: { value: string; label: string }[];
+  wealthLevelOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(dealEstClousureOptions, dealStageOptions,dealSegmentOptions);
+  const columns = createColumns(dealEstClousureOptions, dealStageOptions, dealSegmentOptions, leadsData, importanceOptions, leadProgressionOptions, wealthLevelOptions);
   const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({

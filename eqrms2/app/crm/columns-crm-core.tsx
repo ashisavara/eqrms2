@@ -39,6 +39,10 @@ export const createColumns = (
                     dealEstClosureOptions={dealEstClosureOptions}
                     dealStageOptions={dealStageOptions}
                     dealSegmentOptions={dealSegmentOptions}
+                    initialLeadData={row.original}
+                    importanceOptions={importanceOptions}
+                    leadProgressionOptions={leadProgressionOptions}
+                    wealthLevelOptions={wealthLevelOptions}
                 />
                 <AddInteractionButton
                     relLeadId={row.original.lead_id}

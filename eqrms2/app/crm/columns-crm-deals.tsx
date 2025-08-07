@@ -4,18 +4,42 @@ import { Deals } from "@/types/deals";
 import { formatDate } from "@/lib/utils";
 import { EditDealButton } from "@/components/forms/EditDeals";
 import { DealLikelihoodRating, DealEstClosureRating, DealStageRating } from "@/components/conditional-formatting";
+import { LeadsTagging } from "@/types/lead-detail";
 
 export const createColumns = (
     dealEstClousureOptions: { value: string; label: string }[],
     dealStageOptions: { value: string; label: string }[],
     dealSegmentOptions: { value: string; label: string }[],
+    leadsData: LeadsTagging[],
+    importanceOptions: { value: string; label: string }[],
+    leadProgressionOptions: { value: string; label: string }[],
+    wealthLevelOptions: { value: string; label: string }[]
 ): ColumnDef<Deals>[] => [
     { 
         accessorKey: "created_at", 
         header: "Date", size:120, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{formatDate(getValue() as string)}</p>},
 
     { accessorKey: "deal_name", header: "Deal", size:250, 
-        cell: ({ row }) => row.original.deal_name == null ? null : <div className="text-left"><EditDealButton dealData={row.original} dealId={row.original.deal_id} dealEstClosureOptions={dealEstClousureOptions} dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} /></div>,
+        cell: ({ row }) => {
+            // Find the corresponding lead data for this deal
+            const currentLeadData = leadsData.find(lead => lead.lead_id === row.original.rel_lead_id);
+            
+            return row.original.deal_name == null ? null : 
+            <div className="text-left">
+                <EditDealButton 
+                    dealData={row.original} 
+                    dealId={row.original.deal_id} 
+                    dealEstClosureOptions={dealEstClousureOptions} 
+                    dealStageOptions={dealStageOptions} 
+                    dealSegmentOptions={dealSegmentOptions}
+                    relLeadId={row.original.rel_lead_id}
+                    initialLeadData={currentLeadData}
+                    importanceOptions={importanceOptions}
+                    leadProgressionOptions={leadProgressionOptions}
+                    wealthLevelOptions={wealthLevelOptions}
+                />
+            </div>
+        },
     },
     { accessorKey: "lead_name", header: "Lead", size:150,
         cell: ({ row }) => {
