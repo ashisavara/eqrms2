@@ -40,7 +40,7 @@ function parseSearchParams(params: { [key: string]: string | string[] | undefine
     const value = params[key];
     if (value) {
       if (key.includes('rating') || key.includes('_id')) {
-        // Convert numeric fields to numbers
+        // Convert numeric fields to numbers .. can add other keys that need to be treated as numbers here
         filters[key] = Array.isArray(value) ? value.map(Number) : [Number(value)];
       } else {
         // Keep string fields as strings
@@ -49,15 +49,15 @@ function parseSearchParams(params: { [key: string]: string | string[] | undefine
     }
   });
 
-  // 📄 PAGINATION: Parse page and pageSize from URL
+  // PAGINATION: Parse page and pageSize from URL
   const page = Number(params.page) || 1;
   const pageSize = Number(params.pageSize) || 50;
 
-  // 🔄 SORTING: Parse sort column and direction from URL
+  // SORTING: Parse sort column and direction from URL
   const sortColumn = (params.sort as string) || 'fund_rating';  // 📝 Change default sort column here
   const sortOrder = (params.order as string) || 'desc';         // 📝 Change default sort direction here
 
-  // 🔍 SEARCH: Parse global search query from URL
+  // SEARCH: Parse global search query from URL
   const search = (params.search as string) || '';
 
   return {
@@ -78,11 +78,11 @@ function parseSearchParams(params: { [key: string]: string | string[] | undefine
  * 4. Render ServerTablePage
  */
 export default async function AllFundsPage({ searchParams }: PageProps) {
-  // 📥 STEP 2: Parse incoming URL parameters
+  //  STEP 2: Parse incoming URL parameters
   const params = await searchParams;
   const { filters, pagination, sorting, search } = parseSearchParams(params);
 
-  // 🔧 STEP 3: Configure filter data sources
+  // STEP 3: Configure filter data sources
   // This tells the system where to fetch filter options from
   const filterConfig = {
     // Special handling: fund_rating uses hardcoded 1-5 values (handled automatically)
@@ -98,7 +98,7 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
     us_investors: { table: 'view_rms_funds_screener', valueCol: 'us_investors', labelCol: 'us_investors' }
   };
 
-  // 📊 STEP 4: Fetch data and filter options in parallel (for performance)
+  // STEP 4: Fetch data and filter options in parallel (for performance)
   const [filterOptions, tableData] = await Promise.all([
     // Fetch all filter dropdown options
     getMultipleFilterOptions(['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'], filterConfig),
@@ -109,14 +109,14 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
       columns: "fund_id,fund_name,fund_rating,fund_performance_rating,amc_name,amc_rating,asset_class_name,category_name,cat_long_name,structure_name,open_for_subscription,estate_duty_exposure,us_investors,one_yr,three_yr,five_yr,since_inception,slug",
       filters,
       search,
-      searchColumns: ['fund_name', 'amc_name', 'category_name', 'structure_name'], // 📝 Which columns to search in
+      searchColumns: ['fund_name', 'amc_name', 'category_name', 'structure_name'], // Which columns to search in
       pagination,
       sorting,
-      staticFilters: [] // 📝 Add any always-applied filters here (e.g., status='active')
+      staticFilters: [] // Add any always-applied filters here (e.g., status='active')
     })
   ]);
 
-  // 🎉 STEP 5: Render using client component!
+  // STEP 5: Render using client component!
   // The client component handles all the render functions and UI configuration
   // while the server component handles data fetching and URL parsing
   return (
