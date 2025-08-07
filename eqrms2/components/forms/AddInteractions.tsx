@@ -76,7 +76,7 @@ function AddInteractionForm({
   // Default values - empty interaction, pre-populated lead data
   const defaultData: MeetingNoteValues = {
     // Interaction fields (empty for new interaction)
-    interaction_channel: "",
+    interaction_channel: "WA",
     interaction_tag: "",
     interaction_type: "",
     meeting_name: "",

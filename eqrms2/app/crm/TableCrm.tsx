@@ -68,5 +68,5 @@ export default function TableCrm({
         { column: "rm_name", title: "RM", placeholder: "RM" }
     ];
     
-      return <ReactTableWrapper table={table} className="text-sm text-center" filters={filters} />;
+      return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
     }

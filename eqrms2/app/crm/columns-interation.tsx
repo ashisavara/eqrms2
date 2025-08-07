@@ -3,6 +3,7 @@ import Link from "next/link";
 import {InteractionDetail} from"@/types/interaction-detail";
 import { formatDate } from "@/lib/utils";
 import { EditInteractionButton } from "@/components/forms/EditInteractions";
+import { LeadsTagging } from "@/types/lead-detail";
 
 /**
  * Creates column definitions for the interactions table.
@@ -22,7 +23,11 @@ import { EditInteractionButton } from "@/components/forms/EditInteractions";
 export const createColumns = (
     interactionTypeOptions: { value: string; label: string }[],
     interactionTagOptions: { value: string; label: string }[],
-    interactionChannelOptions: { value: string; label: string }[]
+    interactionChannelOptions: { value: string; label: string }[],
+    leadsData: LeadsTagging[],
+    importanceOptions: { value: string; label: string }[],
+    leadProgressionOptions: { value: string; label: string }[],
+    wealthLevelOptions: { value: string; label: string }[]
 ): ColumnDef<InteractionDetail>[] => [
     { 
         accessorKey: "created_at", 
@@ -31,11 +36,26 @@ export const createColumns = (
 
     { accessorKey: "meeting_name", header: "Meeting Name", size:200, 
         cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
-    { accessorKey: "interaction_type", header: "Type", size:100, cell: ({ row }) => row.original.meeting_name == null ? null : 
+    { accessorKey: "interaction_type", header: "Type", size:100, cell: ({ row }) => {
+        // Find the corresponding lead data for this interaction
+        const currentLeadData = leadsData.find(lead => lead.lead_id === row.original.rel_lead_id);
+        
+        return row.original.meeting_name == null ? null : 
         <div className="text-left">
-        <EditInteractionButton meetingId={row.original.meeting_id} interactionData={row.original} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} />
+        <EditInteractionButton 
+            meetingId={row.original.meeting_id} 
+            interactionData={row.original} 
+            interactionTypeOptions={interactionTypeOptions} 
+            interactionTagOptions={interactionTagOptions} 
+            interactionChannelOptions={interactionChannelOptions}
+            relLeadId={row.original.rel_lead_id}
+            initialLeadData={currentLeadData}
+            importanceOptions={importanceOptions}
+            leadProgressionOptions={leadProgressionOptions}
+            wealthLevelOptions={wealthLevelOptions}
+        />
         </div>
-    },
+    }},
     { accessorKey: "rm_name", header: "Created By", size:150, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
     { accessorKey: "lead_name", header: "Lead", size:150, cell: ({ row }) => {
         return <div className="text-left">

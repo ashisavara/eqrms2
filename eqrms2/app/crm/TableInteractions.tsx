@@ -5,20 +5,29 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { createColumns } from "./columns-interation";
 import { InteractionDetail } from "@/types/interaction-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { LeadsTagging } from "@/types/lead-detail";
 
 export default function TableInteractions({ 
   data, 
   interactionTypeOptions = [], 
   interactionTagOptions = [], 
-  interactionChannelOptions = [] 
+  interactionChannelOptions = [],
+  leadsData = [],
+  importanceOptions = [],
+  leadProgressionOptions = [],
+  wealthLevelOptions = []
 }: { 
   data: InteractionDetail[];
   interactionTypeOptions?: { value: string; label: string }[];
   interactionTagOptions?: { value: string; label: string }[];
   interactionChannelOptions?: { value: string; label: string }[];
+  leadsData?: LeadsTagging[];
+  importanceOptions?: { value: string; label: string }[];
+  leadProgressionOptions?: { value: string; label: string }[];
+  wealthLevelOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(interactionTypeOptions, interactionTagOptions, interactionChannelOptions);
+  const columns = createColumns(interactionTypeOptions, interactionTagOptions, interactionChannelOptions, leadsData, importanceOptions, leadProgressionOptions, wealthLevelOptions);
   const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({

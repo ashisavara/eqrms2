@@ -22,7 +22,7 @@ export const createColumns = (
         header: () => <div className="!text-left">Lead Name</div>,
         size: 250,
         cell: ({ row }) => {
-            return <div className="text-left text-xs">
+            return <div className="text-left">
                 <Link href={`/crm/${row.original.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
                 <EditLeadTagsButton
                     leadData={row.original}
