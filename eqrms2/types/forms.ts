@@ -278,10 +278,10 @@ export const DealsSchema = z.object({
   rel_lead_id: z.number().nullable(),
   deal_name: z.string().nullable(),
   est_closure: z.string().nullable(),
-  deal_likelihood: z.number().nullable(),
+  deal_likelihood: z.coerce.number().nullable(),
   deal_stage: z.string().nullable(),
   deal_segment: z.string().nullable(),
-  total_deal_aum: z.number().nullable(),
+  total_deal_aum: z.coerce.number().nullable(),
   deal_summary: z.string().nullable(),
 
   //lead fields
