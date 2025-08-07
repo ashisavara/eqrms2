@@ -116,10 +116,12 @@ export function CrmWealthRating({ rating }: { rating: string }) {
 export function CrmProgressionRating({ rating }: { rating: string }) {
   const getNumericRating = (textRating: string): number => {
     const ratingMap: Record<string, number> = {
-      '4) Client': 5,
-      '3) Inv Consultation': 4,
-      '3) Ex-client': 4,
-      '2) Initial Discussion': 3,
+      '6) Client': 5,
+      '5) Documentation': 4,
+      '4) Deal Indicated': 4,
+      '3) Inv Consultation': 3,
+      '3) Ex-client': 3,
+      '2) Initial Discussion': 2,
       '1) Contact Initiated': 2,
       '0) No Contact': 1
     }; 
