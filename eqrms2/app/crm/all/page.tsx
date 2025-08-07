@@ -37,8 +37,8 @@ function parseSearchParams(params: { [key: string]: string | string[] | undefine
   const pageSize = Number(params.pageSize) || 50;
 
   // SORTING: Parse sort column and direction from URL
-  const sortColumn = (params.sort as string) || 'days_followup ';  // Change default sort column here
-  const sortOrder = (params.order as string) || 'asc '; // SEARCH: Parse global search query from URL
+  const sortColumn = (params.sort as string) || 'days_followup';  // Change default sort column here
+  const sortOrder = (params.order as string) || 'asc'; // SEARCH: Parse global search query from URL
   const search = (params.search as string) || '';
 
   return {
@@ -82,7 +82,7 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
     // Fetch the actual table data with server-side filtering/sorting/pagination
     serverSideQuery<LeadsTagging>({
       table: "view_leads_tagcrm",
-      columns: "lead_name,days_followup,days_since_last_contact,importance,wealth_level,lead_progression,lead_summary,lead_source,lead_type,rm_name",
+      columns: "lead_name,days_followup,days_since_last_contact,importance,wealth_level,lead_progression,lead_summary,lead_source,lead_type,rm_name,lead_id",
       filters,
       search,
         searchColumns: ['lead_name', 'lead_summary'], // Which columns to search in

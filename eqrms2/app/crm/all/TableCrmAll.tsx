@@ -1,7 +1,7 @@
 "use client";
 
 import { ServerTablePage, ServerTablePageConfig } from "@/components/server-table";
-import { ComGrowthNumberRating, RatingDisplay } from "@/components/conditional-formatting";
+import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating, CrmFollowupNumberRating } from "@/components/conditional-formatting";
 import {LeadsTagging} from "@/types/lead-detail";
 import Link from "next/link";
 
@@ -59,16 +59,66 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
     searchPlaceholder: 'Search leads ... ',
 
     columns: [
-      { key: 'lead_name', header: 'Name ' },
-      { key: 'days_followup', header: 'Days Followup ' },
-      { key: 'days_since_last_contact', header: 'Days Last Contact ' },
-      { key: 'importance', header: 'Importance ' },
-      { key: 'wealth_level', header: 'Wealth ' },
-      { key: 'lead_progression', header: 'Progression ' },
-      { key: 'lead_summary', header: 'Summary ' },
-      { key: 'lead_source', header: 'Source ' },
-      { key: 'lead_type', header: 'Type ' },
-      { key: 'rm_name', header: 'RM ' },
+      { 
+        key: 'lead_name', 
+        header: 'Name', 
+        render: (value, row) => (
+          <div className="w-[140px] truncate text-left">
+            <Link href={`/crm/${row.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.lead_name} </Link>
+          </div>
+        )
+      },
+      { 
+        key: 'days_followup', 
+        header: 'Followup', 
+        render: (value) => (
+          <div className="w-[60px] text-center">
+            <CrmFollowupNumberRating rating={value as number} />
+          </div>
+        )
+      },
+      { 
+        key: 'days_since_last_contact', 
+        header: 'LastCont', 
+        render: (value) => (
+          <div className="w-[60px] text-center">
+            {value}
+          </div>
+        )
+      },
+      { 
+        key: 'importance', 
+        header: 'Importance', 
+        render: (value) => (<div><CrmImportanceRating rating={value ?? ""} /></div>)
+      },
+      { 
+        key: 'wealth_level', 
+        header: 'Wealth', 
+        render: (value) => (<div><CrmWealthRating rating={value ?? ""} /></div>)
+      },
+      { 
+        key: 'lead_progression', 
+        header: 'Progression', 
+        render: (value) => (<div><CrmProgressionRating rating={value ?? ""} /></div>)
+      },
+      { 
+        key: 'rm_name', 
+        header: 'RM', 
+        render: (value) => (
+          <div className="w-[80px] truncate" title={value}>
+            {value}
+          </div>
+        )
+      },
+      { 
+        key: 'lead_summary', 
+        header: 'Summary', 
+        render: (value) => (
+          <div className="w-[500px] truncate text-left" title={value}>
+            {value}
+          </div>
+        )
+      },
       ],
 
     emptyMessage: 'no leads found with current filters .. ',sourceTable: 'view_leads_tagcrm ',  
