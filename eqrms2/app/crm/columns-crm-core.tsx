@@ -20,9 +20,9 @@ export const createColumns = (
     {
         accessorKey: "lead_name",
         header: () => <div className="!text-left">Lead Name</div>,
-        size: 300,
+        size: 250,
         cell: ({ row }) => {
-            return <div className="text-left">
+            return <div className="text-left text-xs">
                 <Link href={`/crm/${row.original.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
                 <EditLeadTagsButton
                     leadData={row.original}
@@ -45,6 +45,10 @@ export const createColumns = (
                     interactionTypeOptions={interactionTypeOptions}
                     interactionTagOptions={interactionTagOptions}
                     interactionChannelOptions={interactionChannelOptions}
+                    initialLeadData={row.original}
+                    importanceOptions={importanceOptions}
+                    leadProgressionOptions={leadProgressionOptions}
+                    wealthLevelOptions={wealthLevelOptions}
                 />
                 </div>
         }
@@ -69,7 +73,7 @@ export const createColumns = (
         cell: ({ row }) => {
             return <div className="text-xs"><CrmImportanceRating rating={row.original.importance ?? ""} /></div>
         },
-        size:150
+        size:80
     },
     {
         accessorKey: "wealth_level",
@@ -78,7 +82,7 @@ export const createColumns = (
         cell: ({ row }) => {
             return <div className="text-xs"><CrmWealthRating rating={row.original.wealth_level ?? ""} /></div>
         },
-        size:150
+        size:100
     },
     {
         accessorKey: "lead_progression",
@@ -94,7 +98,7 @@ export const createColumns = (
         header: "Summary", 
         size: 500, // ✅ Set a large size to claim remaining space
         cell: ({ row }) => {
-            return <div className="!text-left">{row.original.lead_summary}</div>
+            return <div className="!text-left text-xs">{row.original.lead_summary}</div>
         }
     },
     {

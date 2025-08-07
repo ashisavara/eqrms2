@@ -249,6 +249,8 @@ export type LeadsTagShortValues = z.infer<typeof LeadsTagShortSchema>;
 // -----------------------
 
 export const MeetingNoteSchema = z.object({
+
+  // meeting notes fields
   interaction_channel: z.string(),
   interaction_tag: z.string(),
   interaction_type: z.string(),
@@ -256,6 +258,13 @@ export const MeetingNoteSchema = z.object({
   meeting_notes: z.string(),
   meeting_summary: z.string(),
   show_to_client: z.boolean(),
+
+  //lead fields
+  followup_date: z.date().nullable(),
+  importance: z.string().nullable(),
+  lead_progression: z.string().nullable(),
+  wealth_level: z.string().nullable(),
+  lead_summary: z.string().nullable(),
 });
 
 export type MeetingNoteValues = z.infer<typeof MeetingNoteSchema>;

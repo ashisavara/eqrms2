@@ -7,9 +7,46 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { MeetingNoteSchema, MeetingNoteValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, SelectInput } from "./FormFields";
+import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, SelectInput, DatePicker } from "./FormFields";
 import { toast, Toaster } from "sonner";
-import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
+import { supabaseInsertRow, supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+
+// Field extraction arrays
+const INTERACTION_FIELDS = [
+  'meeting_name', 'meeting_notes', 'meeting_summary',
+  'interaction_type', 'interaction_tag', 'interaction_channel',
+  'show_to_client'
+] as const;
+
+const LEAD_FIELDS = [
+  'lead_summary', 'followup_date',
+  'importance', 'wealth_level', 'lead_progression'
+] as const;
+
+// Field extraction functions
+function extractInteractionFields(formData: MeetingNoteValues) {
+  const interactionData: any = {};
+  
+  INTERACTION_FIELDS.forEach(field => {
+    if (formData[field] !== undefined && formData[field] !== '') {
+      interactionData[field] = formData[field];
+    }
+  });
+  
+  return interactionData;
+}
+
+function extractLeadFields(formData: MeetingNoteValues) {
+  const leadData: any = {};
+  
+  LEAD_FIELDS.forEach(field => {
+    if (formData[field] !== undefined && formData[field] !== '') {
+      leadData[field] = formData[field];
+    }
+  });
+  
+  return leadData;
+}
 
 // Internal form component
 function AddInteractionForm({
@@ -17,19 +54,28 @@ function AddInteractionForm({
   interactionTypeOptions, 
   interactionTagOptions, 
   interactionChannelOptions,
-  relLeadId
+  relLeadId,
+  initialLeadData,
+  importanceOptions,
+  leadProgressionOptions,
+  wealthLevelOptions
 }: {
   onSuccess: () => void,
   interactionTypeOptions: { value: string; label: string }[],
   interactionTagOptions: { value: string; label: string }[],
   interactionChannelOptions: { value: string; label: string }[],
-  relLeadId?: number
+  relLeadId?: number,
+  initialLeadData?: any,
+  importanceOptions: { value: string; label: string }[],
+  leadProgressionOptions: { value: string; label: string }[],
+  wealthLevelOptions: { value: string; label: string }[]
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Default empty values for new interaction
+  // Default values - empty interaction, pre-populated lead data
   const defaultData: MeetingNoteValues = {
+    // Interaction fields (empty for new interaction)
     interaction_channel: "",
     interaction_tag: "",
     interaction_type: "",
@@ -37,6 +83,13 @@ function AddInteractionForm({
     meeting_notes: "",
     meeting_summary: "",
     show_to_client: false,
+    
+    // Lead fields (pre-populated from current lead data)
+    followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
+    importance: initialLeadData?.importance ?? null,
+    lead_progression: initialLeadData?.lead_progression ?? null,
+    wealth_level: initialLeadData?.wealth_level ?? null,
+    lead_summary: initialLeadData?.lead_summary ?? null,
   };
 
   const { control, handleSubmit } = useForm<MeetingNoteValues>({
@@ -46,21 +99,57 @@ function AddInteractionForm({
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
+    
+    // Extract interaction and lead data
+    const interactionData = extractInteractionFields(data);
+    const leadData = extractLeadFields(data);
+    
     try {
-      // Add relLeadId to the data if provided
-      const insertData = relLeadId ? { ...data, rel_lead_id: relLeadId } : data;
-      
+      // Step 1: Insert interaction
+      const insertData = relLeadId ? { ...interactionData, rel_lead_id: relLeadId } : interactionData;
       await supabaseInsertRow('meeting_notes', insertData);
       
-      if (typeof window !== "undefined") {
-        toast.success("Interaction created successfully!");
-        setTimeout(() => {
-          onSuccess?.();
-          router.refresh(); // Refresh server data without resetting client state
-        }, 1500);
+      // Step 2: Update lead (if we have lead data and relLeadId)
+      if (relLeadId && Object.keys(leadData).length > 0) {
+        try {
+          // Convert Date objects to ISO strings for Supabase
+          const processedLeadData = {
+            ...leadData,
+            followup_date: leadData.followup_date instanceof Date 
+              ? leadData.followup_date.toISOString() 
+              : leadData.followup_date,
+          };
+          
+          await supabaseUpdateRow('leads_tagging', 'lead_id', relLeadId, processedLeadData);
+          
+          if (typeof window !== "undefined") {
+            toast.success("Interaction added and lead updated successfully!");
+            setTimeout(() => {
+              onSuccess?.();
+              router.refresh();
+            }, 1500);
+          }
+          
+        } catch (leadError) {
+          console.error('Lead update failed:', leadError);
+          if (typeof window !== "undefined") {
+            toast.error("Interaction was saved successfully, but lead update failed. Please update lead information manually.");
+          }
+          setIsLoading(false);
+        }
+      } else {
+        // Only interaction was saved
+        if (typeof window !== "undefined") {
+          toast.success("Interaction created successfully!");
+          setTimeout(() => {
+            onSuccess?.();
+            router.refresh();
+          }, 1500);
+        }
       }
-    } catch (error) {
-      console.error('Error creating Interaction:', error);
+      
+    } catch (interactionError) {
+      console.error('Error creating Interaction:', interactionError);
       if (typeof window !== "undefined") {
         toast.error("Failed to create Interaction. Please try again.");
       }
@@ -72,24 +161,45 @@ function AddInteractionForm({
     <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
 
-      <div className="grid grid-cols-3 gap-4">
-        <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
-        <ToggleGroupInput name="interaction_type" label="Interaction Type" control={control} options={interactionTypeOptions} />      
-        <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
+      {/* Section 1: Interaction Details */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Interaction Details</h3>
+        
+        <div className="grid grid-cols-3 gap-4">
+          <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
+          <ToggleGroupInput name="interaction_type" label="Interaction Type" control={control} options={interactionTypeOptions} className="ime-choice-chips" />      
+          <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
+        </div>
+        
+        <div className="grid grid-cols-3 gap-4">
+          <SelectInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} />
+          <SelectInput name="interaction_channel" label="Interaction Channel" control={control} options={interactionChannelOptions} />
+        </div>
+        
+        <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
+        
+        <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
       </div>
-      
-      <div className="grid grid-cols-3 gap-4">
-        <SelectInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} />
-        <SelectInput name="interaction_channel" label="Interaction Channel" control={control} options={interactionChannelOptions} />
+
+      {/* Section 2: Update Lead Details (Optional) */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Update Lead Details (Optional)</h3>
+        
+        <div className="mb-5">
+          <TextInput name="lead_summary" label="Lead Summary" control={control} />
+        </div>
+        
+        <div className="grid grid-cols-4 gap-4 mt-0">
+          <DatePicker name="followup_date" label="Follow-up Date" control={control} />
+          <SelectInput name="importance" label="Importance" control={control} options={importanceOptions} />
+          <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
+          <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
+        </div>
       </div>
-      
-      <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
-      
-      <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
 
       <div className="flex justify-end">
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Creating...' : 'Create Interaction'}
+          {isLoading ? 'Creating...' : 'Create Interaction & Update Lead'}
         </Button>
       </div>
     </form>
@@ -101,12 +211,20 @@ export function AddInteractionButton({
   interactionTypeOptions, 
   interactionTagOptions, 
   interactionChannelOptions,
-  relLeadId
+  relLeadId,
+  initialLeadData,
+  importanceOptions,
+  leadProgressionOptions,
+  wealthLevelOptions
 }: { 
   interactionTypeOptions: { value: string; label: string }[];
   interactionTagOptions: { value: string; label: string }[];
   interactionChannelOptions: { value: string; label: string }[];
   relLeadId?: number;
+  initialLeadData?: any;
+  importanceOptions: { value: string; label: string }[];
+  leadProgressionOptions: { value: string; label: string }[];
+  wealthLevelOptions: { value: string; label: string }[];
 }) {
   const [showAddSheet, setShowAddSheet] = useState(false);
 
@@ -133,6 +251,10 @@ export function AddInteractionButton({
                 interactionTagOptions={interactionTagOptions}
                 interactionChannelOptions={interactionChannelOptions}
                 relLeadId={relLeadId}
+                initialLeadData={initialLeadData}
+                importanceOptions={importanceOptions}
+                leadProgressionOptions={leadProgressionOptions}
+                wealthLevelOptions={wealthLevelOptions}
               />
             </div>
           </SheetContent>
