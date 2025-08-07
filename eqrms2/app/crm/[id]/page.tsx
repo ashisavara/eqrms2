@@ -34,7 +34,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             table: "view_crm_followup_notes",
             columns: "*",  
             filters: [
-                (query) => query.eq('rel_lead_id', id),
+                (query) => query.eq('rel_lead_id', id).order('created_at', { ascending: false })
             ]
         }),
         supabaseListRead<Deals>({
@@ -84,8 +84,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             </div> 
             <div className="mt-5">
                 <p className="text-sm">{lead.lead_background}</p>
-                <div className="text-sm bg-green-100 p-2 rounded-md">
-                    <span className="font-bold">Ongoing Deals:</span>
+                <span className="font-bold">Ongoing Deals:</span>
+                <div className="text-sm bg-green-100 p-2 rounded-md mb-4">
                     {Deals.length > 0 ? (
                         <div className="mt-1">
                             {Deals.map((deal, index) => (
