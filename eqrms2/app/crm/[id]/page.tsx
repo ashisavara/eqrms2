@@ -5,9 +5,12 @@ import { Deals } from "@/types/deals";
 import { formatDate } from "@/lib/utils";
 import { EditLeadsButton } from "@/components/forms/EditLeads";
 import { AddDealButton } from "@/components/forms/AddDeals";
+import { EditDealButton } from "@/components/forms/EditDeals";
 import { AddInteractionButton } from "@/components/forms/AddInteractions";
+import { EditInteractionButton } from "@/components/forms/EditInteractions";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
 import TableInteractions from "../TableInteractions";
+import TableDeals from "../TableDeals";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -81,11 +84,49 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             </div> 
             <div className="mt-5">
                 <p className="text-sm">{lead.lead_background}</p>
+                <div className="text-sm bg-green-100 p-2 rounded-md">
+                    <span className="font-bold">Ongoing Deals:</span>
+                    {Deals.length > 0 ? (
+                        <div className="mt-1">
+                            {Deals.map((deal, index) => (
+                                <div key={index}>
+                                    <EditDealButton 
+                                        dealData={deal} 
+                                        dealId={deal.deal_id} 
+                                        dealEstClosureOptions={dealEstClosureOptions} 
+                                        dealStageOptions={dealStageOptions} 
+                                        dealSegmentOptions={dealSegmentOptions}
+                                        relLeadId={lead.lead_id}
+                                        initialLeadData={lead}
+                                        importanceOptions={importanceOptions}
+                                        leadProgressionOptions={leadProgressionOptions}
+                                        wealthLevelOptions={wealthLevelOptions}
+                                    /> | {deal.total_deal_aum} | {deal.deal_likelihood} | {deal.est_closure} | {deal.deal_stage} | {deal.deal_segment}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <span> None</span>
+                    )}
+                </div>
                 <h3 className="text-base font-bold">Followups (last 30)</h3>
                 <div className="text-sm bg-gray-100 p-2 rounded-md">
                     {Followups.slice(0, 30).map((followup, index) => (
                         <span key={index}>
-                            {formatDate(followup.created_at)} ({followup.interaction_channel})
+                            <EditInteractionButton
+                                meetingId={followup.meeting_id}
+                                interactionData={followup}
+                                interactionTypeOptions={interactionTypeOptions}
+                                interactionTagOptions={interactionTagOptions}
+                                interactionChannelOptions={interactionChannelOptions}
+                                relLeadId={lead.lead_id}
+                                initialLeadData={lead}
+                                importanceOptions={importanceOptions}
+                                leadProgressionOptions={leadProgressionOptions}
+                                wealthLevelOptions={wealthLevelOptions}
+                            >
+                                {formatDate(followup.created_at)}
+                            </EditInteractionButton> ({followup.interaction_channel})
                             {index < Followups.length - 1 && " | "}
                         </span>
                     ))}

@@ -60,5 +60,5 @@ export default function TableInteractions({
       { column: "interaction_type", title: "Interaction Type", placeholder: "Interaction Type" },
     ];
     
-      return <ReactTableWrapper table={table} className="text-sm text-center" filters={filters} />;
+      return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
     }

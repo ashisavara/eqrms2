@@ -191,15 +191,16 @@ function EditInteractionForm(
 // Main component that exports the button and handles sheet state
 export function EditInteractionButton({ 
   interactionData,
-  meetingId,
-  interactionTypeOptions, 
-  interactionTagOptions, 
+  meetingId, 
+  interactionTypeOptions,
+  interactionTagOptions,
   interactionChannelOptions,
   relLeadId,
   initialLeadData,
   importanceOptions,
   leadProgressionOptions,
-  wealthLevelOptions
+  wealthLevelOptions,
+  children
 }: { 
   interactionData: any;
   meetingId: number;
@@ -211,6 +212,7 @@ export function EditInteractionButton({
   importanceOptions: { value: string; label: string }[];
   leadProgressionOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
+  children?: React.ReactNode;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -239,11 +241,11 @@ export function EditInteractionButton({
 
   return (
     <>
-      <span 
+            <span 
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 hover:underline hover:font-bold cursor-pointer"
       >
-        {interactionData.interaction_type} 
+        {children || interactionData.interaction_type}
       </span>
 
       {/* Edit Sheet */}
