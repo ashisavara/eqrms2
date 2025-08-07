@@ -41,3 +41,21 @@ export function formatDate(value: Date | string | number | null | undefined): st
     return '';
   }
 }
+
+/**
+ * Converts a Date object to YYYY-MM-DD format using local timezone
+ * This prevents timezone issues when saving dates to the database
+ * 
+ * @param date - Date object or null/undefined
+ * @returns Date string in YYYY-MM-DD format or the original value if not a Date
+ * 
+ * @example
+ * toLocalDateString(new Date("2025-08-20")) // "2025-08-20" (preserves local date)
+ * toLocalDateString(null) // null
+ */
+export function toLocalDateString(date: Date | string | null | undefined): string | null | undefined {
+  if (date instanceof Date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+  return date;
+}

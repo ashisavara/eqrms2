@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, SelectInput, DatePicker } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+import { toLocalDateString } from "@/lib/utils";
 
 // Field extraction arrays
 const INTERACTION_FIELDS = [
@@ -96,12 +97,10 @@ function EditInteractionForm(
             if (relLeadId && Object.keys(leadData).length > 0) {
                 try {
                     // Convert Date objects to ISO strings for Supabase
-                    const processedLeadData = {
-                        ...leadData,
-                        followup_date: leadData.followup_date instanceof Date 
-                            ? leadData.followup_date.toISOString() 
-                            : leadData.followup_date,
-                    };
+                                    const processedLeadData = {
+                    ...leadData,
+                    followup_date: toLocalDateString(leadData.followup_date),
+                };
                     
                     await supabaseUpdateRow('leads_tagging', 'lead_id', relLeadId, processedLeadData);
                     

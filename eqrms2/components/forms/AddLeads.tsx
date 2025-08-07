@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, ToggleGroupInput, DatePicker, BooleanToggleInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
+import { toLocalDateString } from "@/lib/utils";
 
 // Internal form component
 function AddLeadForm({ 
@@ -68,8 +69,8 @@ function AddLeadForm({
       // Convert Date objects to ISO strings for Supabase
       const processedData = {
         lead_name: data.lead_name,
-        last_contact_date: data.last_contact_date instanceof Date ? data.last_contact_date.toISOString() : data.last_contact_date,
-        followup_date: data.followup_date instanceof Date ? data.followup_date.toISOString() : data.followup_date,
+        last_contact_date: toLocalDateString(data.last_contact_date),
+        followup_date: toLocalDateString(data.followup_date),
         importance: data.importance,
         lead_progression: data.lead_progression,
         lead_source: data.lead_source,

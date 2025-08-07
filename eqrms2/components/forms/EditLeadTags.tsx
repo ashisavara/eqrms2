@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, ToggleGroupInput, DatePicker, BooleanTogg
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { EditIcon } from "lucide-react";
+import { toLocalDateString } from "@/lib/utils";
 
 // Internal form component
 function EditLeadTagsForm({ 
@@ -59,8 +60,8 @@ function EditLeadTagsForm({
       // Convert Date objects to ISO strings for Supabase
       const processedData = {
         ...data,
-        last_contact_date: data.last_contact_date instanceof Date ? data.last_contact_date.toISOString() : data.last_contact_date,
-        followup_date: data.followup_date instanceof Date ? data.followup_date.toISOString() : data.followup_date,
+        last_contact_date: toLocalDateString(data.last_contact_date),
+        followup_date: toLocalDateString(data.followup_date),
       };
       
       await supabaseUpdateRow('leads_tagging', 'lead_id', id, processedData);
