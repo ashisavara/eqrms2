@@ -36,4 +36,6 @@ export type LeadsTagging = {
     subs_whatsapp?: boolean;
     subs_imecapital?: boolean;
     subs_imepms?: boolean;
+    digital_campaign?: string;
+    custom_tag?: string;
 };

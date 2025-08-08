@@ -69,7 +69,13 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                     <div className="text-left">
                         <h1>{lead.lead_name}</h1>
                         <p className="text-sm"><span className="font-bold">Last Contact Date:</span> {formatDate(lead.last_contact_date)} <span className="text-blue-500 font-bold">({lead.days_since_last_contact})</span> | <span className="font-bold">Followup Date:</span> {formatDate(lead.followup_date)} <span className="text-blue-500 font-bold">({lead.days_followup})</span> </p>
-                        <p className="text-sm"><span className="font-bold">Phone:</span> {lead.country_code} - {lead.phone_number} | <span className="font-bold">Email:</span> {lead.email_1}  {lead.email_2}  {lead.email_3} |  <span className="font-bold">Linkedin:</span>  {lead.linkedin_url}</p>
+                        <p className="text-sm">
+                        <a href={`https://wa.me/${lead.country_code}${lead.phone_number}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">{lead.country_code}-{lead.phone_number}</a>
+                             | {lead.email_1}  {lead.email_2}  {lead.email_3} |  
+                            <a href={lead.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">Linkedin</a>
+                            
+
+                        </p>
                         <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
                         <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} relLeadId={lead.lead_id} initialLeadData={lead}  importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
                         <AddInteractionButton interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} initialLeadData={lead} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
@@ -77,7 +83,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                     <div className="text-sm gap-2 flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
                         <p><span className="font-bold">Client Group:</span> {lead.group_name || "None"} | <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span></p>
-                        <p>Place for Custom Tags</p>
+                        <p><span className="font-bold">Tags:</span> {lead.digital_campaign || ""} | {lead.custom_tag || ""}</p>
                         <p className="text-sm italic">{lead.lead_summary}</p>
                     </div>
                 </div>
