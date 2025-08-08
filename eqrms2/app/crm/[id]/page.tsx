@@ -10,12 +10,13 @@ import { AddInteractionButton } from "@/components/forms/AddInteractions";
 import { EditInteractionButton } from "@/components/forms/EditInteractions";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
 import TableInteractions from "../TableInteractions";
-import TableDeals from "../TableDeals";
+import { LeadRoleDetail } from "@/types/lead-role-detail";
+import { DigitalAdsDetail } from "@/types/digital-ads-detail";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -42,6 +43,20 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             columns: "*",  
             filters: [
                 (query) => query.eq('rel_lead_id', id)
+            ]
+        }),
+        supabaseListRead<LeadRoleDetail>({
+            table: "view_lead_roles",
+            columns: "*",  
+            filters: [
+                (query) => query.eq('lead_id', id)
+            ]
+        }),
+        supabaseListRead<DigitalAdsDetail>({
+            table: "view_lead_digital_ads",
+            columns: "*",  
+            filters: [
+                (query) => query.eq('lead_id', id)
             ]
         }),
         fetchOptions<string,string>("master","importance","importance"),
@@ -84,6 +99,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
                         <p><span className="font-bold">Client Group:</span> {lead.group_name || "None"} | <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span></p>
                         <p><span className="font-bold">Tags:</span> {lead.digital_campaign || ""} | {lead.custom_tag || ""}</p>
+                        <p><span className="font-bold">Roles:</span> {leadRoles.map((role) => role.lead_role).join(", ")}</p>
+                        <p><span className="font-bold">Digital Ads:</span> {leadDigitalAds.map((ad) => `${ad.digital_channel} - ${ad.digital_campaign}`).join(", ")}</p>
                         <p className="text-sm italic">{lead.lead_summary}</p>
                     </div>
                 </div>
