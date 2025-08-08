@@ -48,8 +48,8 @@ function EditLeadsForm({
     first_name: initialData.first_name ?? "",
     last_name: initialData.last_name ?? "",
     linkedin_url: initialData.linkedin_url ?? "",
-            phone_validated: initialData.phone_validated ?? false,
-        email_validated: initialData.email_validated ?? false,
+    phone_validated: initialData.phone_validated ?? false,
+    email_validated: initialData.email_validated ?? false,
     country_code: initialData.country_code ?? "",
     phone_number: initialData.phone_number ?? "",
     email_1: initialData.email_1 ?? "",
@@ -57,7 +57,11 @@ function EditLeadsForm({
     email_3: initialData.email_3 ?? "",
     lead_summary: initialData.lead_summary ?? "",
     lead_background: initialData.lead_background ?? "",
-    primary_rm: initialData.primary_rm ?? ""
+    primary_rm: initialData.primary_rm ?? "",
+    subs_email: initialData.subs_email ?? false,
+    subs_whatsapp: initialData.subs_whatsapp ?? false,
+    subs_imecapital: initialData.subs_imecapital ?? false,
+    subs_imepms: initialData.subs_imepms ?? false
   };
 
   const { control, handleSubmit, formState: { errors } } = useForm<LeadsTaggingValues>({
@@ -94,6 +98,10 @@ function EditLeadsForm({
         primary_rm: data.primary_rm,
         phone_validated: data.phone_validated,
         email_validated: data.email_validated,
+        subs_email: data.subs_email,
+        subs_whatsapp: data.subs_whatsapp,
+        subs_imecapital: data.subs_imecapital,
+        subs_imepms: data.subs_imepms
       };
       
       await supabaseUpdateRow('leads_tagging', 'lead_id', id, processedData);
@@ -159,6 +167,13 @@ function EditLeadsForm({
         <TextInput name="email_2" label="Secondary Email" control={control} type="email" placeholder="Enter secondary email" />
         <TextInput name="email_3" label="Tertiary Email" control={control} type="email" placeholder="Enter tertiary email" />
       </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        <BooleanToggleInput name="subs_email" label="Subs Email" control={control} />
+        <BooleanToggleInput name="subs_whatsapp" label="Subs WhatsApp" control={control} />
+        <BooleanToggleInput name="subs_imecapital" label="Subs IME Capital" control={control} />
+        <BooleanToggleInput name="subs_imepms" label="Subs IME PMS" control={control} />
+      </div>
       
       <Button type="submit" className="w-full">Update Lead</Button>
     </form>
@@ -213,7 +228,11 @@ export function EditLeadsButton({
     email_3: leadData.email_3 ?? "",
     lead_summary: leadData.lead_summary ?? "",
     lead_background: leadData.lead_background ?? "",
-    primary_rm: leadData.primary_rm ?? ""
+    primary_rm: leadData.primary_rm ?? "",
+    subs_email: leadData.subs_email ?? false,
+    subs_whatsapp: leadData.subs_whatsapp ?? false,
+    subs_imecapital: leadData.subs_imecapital ?? false,
+    subs_imepms: leadData.subs_imepms ?? false
   };
 
   return (

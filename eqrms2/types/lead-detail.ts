@@ -32,4 +32,8 @@ export type LeadsTagging = {
     created_by?: string;
     rm_name: string;
     group_name: string;
+    subs_email?: boolean;
+    subs_whatsapp?: boolean;
+    subs_imecapital?: boolean;
+    subs_imepms?: boolean;
 };
