@@ -13,11 +13,13 @@ import TableInteractions from "../TableInteractions";
 import { LeadRoleDetail } from "@/types/lead-role-detail";
 import { DigitalAdsDetail } from "@/types/digital-ads-detail";
 import { CustomTagDetail } from "@/types/custom-tag";
+import { CustomTagValues, LeadRoleValues, DigitalAdValues } from "@/types/forms";
+import { AddLeadTags } from "@/components/forms/AddLeadTags";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -67,6 +69,9 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                 (query) => query.eq('lead_id', id)
             ]
         }),
+        fetchOptions<string,string>("lead_tag_custom_tags","id","custom_tag"),
+        fetchOptions<string,string>("lead_roles","lead_role_id","lead_role"),
+        fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign"),
         fetchOptions<string,string>("master","importance","importance"),
         fetchOptions<string,string>("master","lead_progression","lead_progression"),
         fetchOptions<string,string>("master","lead_source","lead_source"),
@@ -90,6 +95,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
     const hasLeadDigitalAds = leadDigitalAds.length > 0;
     const hasAnyTags = hasLeadCustomTags || hasLeadRoles || hasLeadDigitalAds;
 
+    
     return (
         <div className="p-5">
             <div className="pageHeadingBox">
@@ -104,6 +110,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             
 
                         </p>
+                        <AddLeadTags leadId={lead.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} digitalAdOptions={digitalAdOptions} />
                         <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
                         <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} relLeadId={lead.lead_id} initialLeadData={lead}  importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
                         <AddInteractionButton interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} initialLeadData={lead} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />

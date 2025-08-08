@@ -299,3 +299,31 @@ export const DealsSchema = z.object({
 export type DealsValues = z.infer<typeof DealsSchema>;
 
 
+// ----------------------
+// CUSTOM TAG FORM 
+// -----------------------
+export const CustomTagSchema = z.object({
+  custom_tag_id: z.coerce.number(),
+});
+
+export type CustomTagValues = z.infer<typeof CustomTagSchema>;
+
+// ----------------------
+// LEAD ROLE FORM 
+// -----------------------
+export const LeadRoleSchema = z.object({
+  lead_role_id: z.coerce.number(),
+});
+
+export type LeadRoleValues = z.infer<typeof LeadRoleSchema>;
+
+// ----------------------
+// DIGITAL AD FORM 
+// -----------------------
+export const DigitalAdSchema = z.object({
+  digital_id: z.coerce.number(),
+});
+
+export type DigitalAdValues = z.infer<typeof DigitalAdSchema>;
+
+
