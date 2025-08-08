@@ -16,6 +16,10 @@
     @apply data-[state=on]:!bg-blue-600 data-[state=on]:!text-white data-[state=on]:!border-blue-600 data-[state=on]:hover:!bg-blue-700;
     @apply !transition-all !duration-200;
   }
+
+  .ime-tags {
+    @apply bg-blue-600 rounded-full px-2 py-1 mx-3 text-sm text-white;
+  }
 }
 
 @layer base {
