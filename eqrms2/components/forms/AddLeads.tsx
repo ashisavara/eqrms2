@@ -55,7 +55,11 @@ function AddLeadForm({
     email_3: "",
     lead_summary: "",
     lead_background: "",
-    primary_rm: ""
+    primary_rm: "",
+    subs_email: false,
+    subs_whatsapp: false,
+    subs_imecapital: false,
+    subs_imepms: false
   };
 
   const { control, handleSubmit, formState: { errors } } = useForm<LeadsTaggingValues>({
