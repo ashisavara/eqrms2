@@ -167,7 +167,7 @@ function AddInteractionForm({
         
         <div className="grid grid-cols-3 gap-4">
           <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
-          <ToggleGroupInput name="interaction_type" label="Interaction Type" control={control} options={interactionTypeOptions} className="ime-choice-chips" />      
+          <ToggleGroupInput name="interaction_type" label="Interaction Type" control={control} options={interactionTypeOptions} itemClassName="ime-choice-chips" />      
           <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
         </div>
         

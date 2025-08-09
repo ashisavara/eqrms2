@@ -115,6 +115,17 @@ export async function fetchOptions<T, U>(
     }));
 }
 
+// Fetch options but normalize both value and label to strings for form components
+export async function fetchStringOptions(
+  table: string,
+  valueColumn: string,
+  labelColumn: string,
+  sortOptions?: { column?: string; ascending?: boolean }
+): Promise<{ value: string; label: string }[]> {
+  const raw = await fetchOptions<any, any>(table, valueColumn, labelColumn, sortOptions);
+  return raw.map((o) => ({ value: String(o.value), label: String(o.label ?? "") }));
+}
+
 // Generic search function for entities
 export async function searchEntities(
   entityType: 'fund' | 'amc' | 'company',

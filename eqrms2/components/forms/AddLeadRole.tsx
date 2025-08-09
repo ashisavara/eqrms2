@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { LeadRoleSchema, LeadRoleValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SelectInput } from "./FormFields";
+import { ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 import { User } from "lucide-react";
@@ -71,11 +71,13 @@ function AddLeadRoleForm({
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Add Lead Role</h3>
         
-        <SelectInput 
+        <ToggleGroupInput 
           name="lead_role_id" 
           label="Select Lead Role" 
           control={control} 
-          options={leadRoleOptions} 
+          options={leadRoleOptions}
+          valueType="number"
+          itemClassName="ime-choice-chips"
         />
       </div>
 

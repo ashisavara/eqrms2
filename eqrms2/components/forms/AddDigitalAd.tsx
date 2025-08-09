@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { DigitalAdSchema, DigitalAdValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SelectInput } from "./FormFields";
+import { ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 import { Zap } from "lucide-react";
@@ -71,11 +71,13 @@ function AddDigitalAdForm({
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Add Digital Ad</h3>
         
-        <SelectInput 
+        <ToggleGroupInput 
           name="digital_id" 
           label="Select Digital Channel/Campaign" 
           control={control} 
           options={digitalAdOptions} 
+          valueType="number"
+          itemClassName="ime-choice-chips"
         />
       </div>
 

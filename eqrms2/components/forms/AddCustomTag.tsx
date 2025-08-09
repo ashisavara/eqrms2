@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { CustomTagSchema, CustomTagValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SelectInput } from "./FormFields";
+import { SelectInput, ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 import { Tag } from "lucide-react";
@@ -27,13 +27,25 @@ function AddCustomTagForm({
 
   // Default values
   const defaultData: CustomTagValues = {
-    custom_tag_id: 0,
-  };
+  custom_tag_id: 0,
+ };
 
   const { control, handleSubmit } = useForm<CustomTagValues>({
     defaultValues: defaultData,
     resolver: zodResolver(CustomTagSchema)
   });
+
+  // Debug logs for options (client-side; visible in browser console)
+  try {
+    // Only log a small sample to avoid noise
+    // eslint-disable-next-line no-console
+    console.log("[AddCustomTag] options sample:", customTagOptions.slice(0, 5));
+    // eslint-disable-next-line no-console
+    console.log("[AddCustomTag] option value types:", customTagOptions.slice(0, 5).map((o) => typeof o.value));
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log("[AddCustomTag] options debug failed:", e);
+  }
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
@@ -71,11 +83,13 @@ function AddCustomTagForm({
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Add Custom Tag</h3>
         
-        <SelectInput 
+        <ToggleGroupInput 
           name="custom_tag_id" 
           label="Select Custom Tag" 
           control={control} 
           options={customTagOptions} 
+          valueType="number"
+          itemClassName="ime-choice-chips"
         />
       </div>
 

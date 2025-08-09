@@ -1,6 +1,6 @@
 import TableCrm from "./TableCrm";
 import { LeadsTagging } from "@/types/lead-detail";
-import { supabaseListRead, fetchOptions } from "@/lib/supabase/serverQueryHelper";
+import { supabaseListRead, fetchOptions, fetchStringOptions } from "@/lib/supabase/serverQueryHelper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableInteractions from "./TableInteractions";
 import TableDeals from "./TableDeals";
@@ -46,13 +46,23 @@ export default async function CrmPage() {
         fetchOptions<string, string>("master","lead_source", "lead_source"),
         fetchOptions<string, string>("master","lead_type", "lead_type"),
         fetchOptions<string, string>("ime_emp","auth_id", "name"),
-        fetchOptions<string,string>("lead_tag_custom_tags","id","custom_tag"),
-        fetchOptions<string,string>("lead_roles","lead_role_id","lead_role"),
-        fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign"),
+        fetchStringOptions("lead_tag_custom_tags","id","custom_tag"),
+        fetchStringOptions("lead_roles","lead_role_id","lead_role"),
+        fetchStringOptions("lead_tag_digital_ads","id","digital_campaign"),
     ]);
+
+    // Debug logs for options (server-side; visible in server console)
+    try {
+        console.log("customTagOptions sample (stringified):", customTagOptions.slice(0, 5));
+        console.log("customTagOptions value types:", customTagOptions.slice(0, 5).map((o: any) => typeof o.value));
+        console.log("all customTagOptions values are strings?", customTagOptions.every((o: any) => typeof o.value === "string"));
+    } catch (e) {
+        console.log("customTagOptions debug logging failed:", e);
+    }
 
     return (
         <div>
+            
             <Tabs defaultValue="crm" className="w-full mx-auto mt-6 text-sm">
                 <TabsList className="w-full">
                         <TabsTrigger value="crm">CRM</TabsTrigger>

@@ -303,7 +303,7 @@ export type DealsValues = z.infer<typeof DealsSchema>;
 // CUSTOM TAG FORM 
 // -----------------------
 export const CustomTagSchema = z.object({
-  custom_tag_id: z.coerce.number(),
+  custom_tag_id: z.number(),
 });
 
 export type CustomTagValues = z.infer<typeof CustomTagSchema>;

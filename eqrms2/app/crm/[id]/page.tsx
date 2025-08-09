@@ -146,7 +146,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         <p className="text-sm">
                         <a href={`https://wa.me/${lead.country_code}${lead.phone_number}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">{lead.country_code}-{lead.phone_number}</a>
                              | {lead.email_1}  {lead.email_2}  {lead.email_3} |  
-                            <a href={lead.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">Linkedin</a>
+                            {lead.linkedin_url ? <a href={lead.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">Linkedin</a> : ""}
                         </p>
                         
                     </div>
