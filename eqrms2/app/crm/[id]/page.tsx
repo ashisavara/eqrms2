@@ -15,6 +15,7 @@ import { DigitalAdsDetail } from "@/types/digital-ads-detail";
 import { CustomTagDetail } from "@/types/custom-tag";
 import { CustomTagValues, LeadRoleValues, DigitalAdValues } from "@/types/forms";
 import { AddLeadTags } from "@/components/forms/AddLeadTags";
+import { AddClientGroup } from "@/components/forms/AddGroup";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -152,7 +153,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                     </div>
                     <div className="text-sm gap-2 flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
-                        <p><span className="font-bold">Client Group:</span> {lead.group_name || "None"} | <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span></p>
+                        <p><span className="font-bold">Client Group:</span> {lead.group_name || <AddClientGroup leadId={lead.lead_id}/>} | <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span></p>
                         {hasAnyTags && (
                             <p>
                                 <span className="font-bold">Tags:</span>

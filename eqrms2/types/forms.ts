@@ -303,7 +303,7 @@ export type DealsValues = z.infer<typeof DealsSchema>;
 // CUSTOM TAG FORM 
 // -----------------------
 export const CustomTagSchema = z.object({
-  custom_tag_id: z.number(),
+  custom_tag_id: z.coerce.number(),
 });
 
 export type CustomTagValues = z.infer<typeof CustomTagSchema>;
@@ -325,5 +325,15 @@ export const DigitalAdSchema = z.object({
 });
 
 export type DigitalAdValues = z.infer<typeof DigitalAdSchema>;
+
+// ----------------------
+// DIGITAL AD FORM 
+// -----------------------
+export const ClientGroupSchema = z.object({
+  group_name: z.string(),
+});
+
+export type ClientGroupValues = z.infer<typeof ClientGroupSchema>;
+
 
 
