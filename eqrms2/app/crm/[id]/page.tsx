@@ -130,23 +130,25 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             <div className="pageHeadingBox">
                 <div className="grid grid-cols-2 gap-4 text-left">
                     <div className="text-left">
-                        <h1>{lead.lead_name}</h1>
+                        <div className="flex flex-row gap-2">
+                            <h1>{lead.lead_name}</h1>
+                            <AddLeadTags leadId={lead.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
+                            digitalAdOptions={digitalAdOptions} lead={leadForForm} importanceOptions={importanceOptions} 
+                            leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
+                            leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} 
+                            primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
+                            dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
+                            interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
+                            interactionChannelOptions={interactionChannelOptions} />
+                            </div>
+                        
                         <p className="text-sm"><span className="font-bold">Last Contact Date:</span> {formatDate(lead.last_contact_date)} <span className="text-blue-500 font-bold">({lead.days_since_last_contact})</span> | <span className="font-bold">Followup Date:</span> {formatDate(lead.followup_date)} <span className="text-blue-500 font-bold">({lead.days_followup})</span> </p>
                         <p className="text-sm">
                         <a href={`https://wa.me/${lead.country_code}${lead.phone_number}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">{lead.country_code}-{lead.phone_number}</a>
                              | {lead.email_1}  {lead.email_2}  {lead.email_3} |  
                             <a href={lead.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">Linkedin</a>
-                            
-
                         </p>
-                        <AddLeadTags leadId={lead.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
-                        digitalAdOptions={digitalAdOptions} lead={leadForForm} importanceOptions={importanceOptions} 
-                        leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-                        leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} 
-                        primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
-                        dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
-                        interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-                        interactionChannelOptions={interactionChannelOptions} />
+                        
                     </div>
                     <div className="text-sm gap-2 flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>

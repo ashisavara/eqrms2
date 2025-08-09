@@ -5,6 +5,8 @@ import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSour
 import { EditLeadTagsButton } from "@/components/forms/EditLeadTags";
 import { AddDealButton } from "@/components/forms/AddDeals";
 import { AddInteractionButton } from "@/components/forms/AddInteractions";
+import { AddLeadTags } from "@/components/forms/AddLeadTags";
+import { LeadsTaggingValues } from "@/types/forms";
 
 export const createColumns = (
     importanceOptions: { value: string; label: string }[],
@@ -16,6 +18,12 @@ export const createColumns = (
     interactionTypeOptions: { value: string; label: string }[],
     interactionTagOptions: { value: string; label: string }[],
     interactionChannelOptions: { value: string; label: string }[],
+    customTagOptions: { value: string; label: string }[],
+    leadRoleOptions: { value: string; label: string }[],
+    digitalAdOptions: { value: string; label: string }[],
+    leadSourceOptions: { value: string; label: string }[],
+    leadTypeOptions: { value: string; label: string }[],
+    primaryRmOptions: { value: string; label: string }[],
 ): ColumnDef<LeadsTagging>[] => [
     {
         accessorKey: "lead_name",
@@ -24,36 +32,14 @@ export const createColumns = (
         cell: ({ row }) => {
             return <div className="text-left">
                 <Link href={`/crm/${row.original.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
-                <EditLeadTagsButton
-                    leadData={row.original}
-                    leadId={row.original.lead_id}
-                    importanceOptions={importanceOptions}
-                    leadProgressionOptions={leadProgressionOptions}
-                    wealthLevelOptions={wealthLevelOptions}
-                    leadName={row.original.lead_name ?? 'Unknown Lead'}
-                    country_code={row.original.country_code ?? ''}
-                    phone_number={row.original.phone_number ?? ''}
-                /> 
-                <AddDealButton
-                    relLeadId={row.original.lead_id}
-                    dealEstClosureOptions={dealEstClosureOptions}
-                    dealStageOptions={dealStageOptions}
-                    dealSegmentOptions={dealSegmentOptions}
-                    initialLeadData={row.original}
-                    importanceOptions={importanceOptions}
-                    leadProgressionOptions={leadProgressionOptions}
-                    wealthLevelOptions={wealthLevelOptions}
-                />
-                <AddInteractionButton
-                    relLeadId={row.original.lead_id}
-                    interactionTypeOptions={interactionTypeOptions}
-                    interactionTagOptions={interactionTagOptions}
-                    interactionChannelOptions={interactionChannelOptions}
-                    initialLeadData={row.original}
-                    importanceOptions={importanceOptions}
-                    leadProgressionOptions={leadProgressionOptions}
-                    wealthLevelOptions={wealthLevelOptions}
-                />
+                <AddLeadTags leadId={row.original.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
+                digitalAdOptions={digitalAdOptions} lead={row.original as LeadsTaggingValues} importanceOptions={importanceOptions} 
+                leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
+                leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} 
+                primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
+                dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
+                interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
+                interactionChannelOptions={interactionChannelOptions} />
                 </div>
         }
     }, 

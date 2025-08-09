@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { AddCustomTag } from "./AddCustomTag";
 import { AddLeadRole } from "./AddLeadRole";
 import { AddDigitalAd } from "./AddDigitalAd";
@@ -56,9 +56,8 @@ export function AddLeadTags({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Tags
+        <Button variant="ghost" className="px-2 py-0 h-3">
+          <Pencil className="!w-3 !h-3 text-blue-700" />
         </Button>
       </DropdownMenuTrigger>
       

@@ -5,6 +5,7 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { createColumns } from "./columns-crm-core";
 import { LeadsTagging } from "@/types/lead-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { LeadsTaggingValues } from "@/types/forms";
 
 export default function TableCrm({ 
   data, 
@@ -17,6 +18,12 @@ export default function TableCrm({
   interactionTypeOptions = [],
   interactionTagOptions = [],
   interactionChannelOptions = [],
+  customTagOptions = [],
+  leadRoleOptions = [],
+  digitalAdOptions = [],
+  leadSourceOptions = [],
+  leadTypeOptions = [],
+  primaryRmOptions = [],
 }: { 
   data: LeadsTagging[];
   importanceOptions?: { value: string; label: string }[];
@@ -28,9 +35,15 @@ export default function TableCrm({
   interactionTypeOptions?: { value: string; label: string }[];
   interactionTagOptions?: { value: string; label: string }[];
   interactionChannelOptions?: { value: string; label: string }[];
+  customTagOptions?: { value: string; label: string }[];
+  leadRoleOptions?: { value: string; label: string }[];
+  digitalAdOptions?: { value: string; label: string }[];
+  leadSourceOptions?: { value: string; label: string }[];
+  leadTypeOptions?: { value: string; label: string }[];
+  primaryRmOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions);
+  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, customTagOptions, leadRoleOptions, digitalAdOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions);
   const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({

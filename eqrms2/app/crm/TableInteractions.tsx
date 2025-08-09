@@ -15,7 +15,7 @@ export default function TableInteractions({
   leadsData = [],
   importanceOptions = [],
   leadProgressionOptions = [],
-  wealthLevelOptions = []
+  wealthLevelOptions = [],
 }: { 
   data: InteractionDetail[];
   interactionTypeOptions?: { value: string; label: string }[];
