@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, ToggleGroupInput, DatePicker, BooleanTogg
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { Pencil } from "lucide-react";
 
 // Internal form component
 function EditLeadsForm({ 
@@ -239,8 +240,9 @@ export function EditLeadsButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        className="cursor-pointer flex items-center w-full p-2 hover:bg-gray-100 rounded"
       >
+        <Pencil className="w-4 h-4 mr-2" />
           Edit Lead
       </span>
 

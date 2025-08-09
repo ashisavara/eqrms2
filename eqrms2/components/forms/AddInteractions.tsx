@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, Sel
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow, supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { Handshake } from "lucide-react";
 
 // Field extraction arrays
 const INTERACTION_FIELDS = [
@@ -79,7 +80,7 @@ function AddInteractionForm({
     // Interaction fields (empty for new interaction)
     interaction_channel: "WA",
     interaction_tag: "",
-    interaction_type: "",
+    interaction_type: "Follow up",
     meeting_name: "",
     meeting_notes: "",
     meeting_summary: "",
@@ -231,9 +232,9 @@ export function AddInteractionButton({
     <>
       <span 
         onClick={() => setShowAddSheet(true)}
-        className="pl-2 font-bold text-red-600 hover:bg-red-200 hover:underline cursor-pointer inline-flex items-center"
+        className="cursor-pointer flex items-center w-full p-2 hover:bg-gray-100 rounded"
       >
-        |_M_
+        <Handshake className="w-4 h-4 mr-2" /> Add Interaction
       </span>
 
       {/* Add Sheet */}

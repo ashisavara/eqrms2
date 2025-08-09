@@ -95,6 +95,35 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
     const hasLeadDigitalAds = leadDigitalAds.length > 0;
     const hasAnyTags = hasLeadCustomTags || hasLeadRoles || hasLeadDigitalAds;
 
+    // Convert lead data to LeadsTaggingValues format for AddLeadTags component
+    const leadForForm = {
+        lead_name: lead.lead_name ?? "",
+        last_contact_date: lead.last_contact_date ? new Date(lead.last_contact_date) : null,
+        followup_date: lead.followup_date ? new Date(lead.followup_date) : null,
+        importance: lead.importance ?? "",
+        lead_progression: lead.lead_progression ?? "",
+        lead_source: lead.lead_source ?? "",
+        lead_type: lead.lead_type ?? "",
+        wealth_level: lead.wealth_level ?? "",
+        first_name: lead.first_name ?? "",
+        last_name: lead.last_name ?? "",
+        linkedin_url: lead.linkedin_url ?? "",
+        phone_validated: lead.phone_validated ?? false,
+        email_validated: lead.email_validated ?? false,
+        country_code: lead.country_code ?? "",
+        phone_number: lead.phone_number ?? "",
+        email_1: lead.email_1 ?? "",
+        email_2: lead.email_2 ?? "",
+        email_3: lead.email_3 ?? "",
+        lead_summary: lead.lead_summary ?? "",
+        lead_background: lead.lead_background ?? "",
+        primary_rm: lead.primary_rm ?? "",
+        subs_email: lead.subs_email ?? false,
+        subs_whatsapp: lead.subs_whatsapp ?? false,
+        subs_imecapital: lead.subs_imecapital ?? false,
+        subs_imepms: lead.subs_imepms ?? false
+    };
+
     
     return (
         <div className="p-5">
@@ -110,10 +139,14 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             
 
                         </p>
-                        <AddLeadTags leadId={lead.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} digitalAdOptions={digitalAdOptions} />
-                        <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
-                        <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} relLeadId={lead.lead_id} initialLeadData={lead}  importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
-                        <AddInteractionButton interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} initialLeadData={lead} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                        <AddLeadTags leadId={lead.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
+                        digitalAdOptions={digitalAdOptions} lead={leadForForm} importanceOptions={importanceOptions} 
+                        leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
+                        leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} 
+                        primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
+                        dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
+                        interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
+                        interactionChannelOptions={interactionChannelOptions} />
                     </div>
                     <div className="text-sm gap-2 flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>

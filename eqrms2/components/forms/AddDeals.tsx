@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, SelectInput, ToggleGroupInput, DatePicker
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow, supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { CircleDollarSign } from "lucide-react";
 
 // Field extraction arrays
 const DEAL_FIELDS = [
@@ -238,8 +239,8 @@ export function AddDealButton({
     <>
       <span 
         onClick={() => setShowAddSheet(true)}
-        className="pl-2 font-bold text-green-600 hover:bg-green-200 hover:underline cursor-pointer inline-flex items-center"
-        >   |_$_
+        className="cursor-pointer flex items-center w-full p-2 hover:bg-gray-100 rounded"
+        >   <CircleDollarSign className="w-4 h-4 mr-2" /> Add Deal
         </span>
 
       {/* Add Sheet */}

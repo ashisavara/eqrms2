@@ -25,6 +25,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState, useMemo } from "react";
 
+// Tiny shared error utilities
+function FormErrorMessage({ error, id, className = "mt-1 text-xs text-red-600 bg-red-100 p-2 rounded-md" }: { error?: { message?: string }; id?: string; className?: string }) {
+  if (!error?.message) return null;
+  return <p id={id} className={className}>{error.message}</p>;
+}
+
+function withErrorClass(base: string | undefined, hasError: boolean, errorClass = "border-red-500 focus-visible:ring-red-500") {
+  return hasError ? [base, errorClass].filter(Boolean).join(" ") : base || "";
+}
+
 // Update the Props type to include optional type and step
 type Props = { 
   name: string; 
@@ -43,15 +53,25 @@ export function TextInput({ name, label, control, placeholder, type, step }: Pro
       <Controller 
         name={name} 
         control={control} 
-        render={({ field }) => (
-          <Input 
-            {...field}
-            id={name} 
-            placeholder={placeholder} 
-            type={type}
-            step={step}
-          />
-        )} 
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <Input 
+                {...field}
+                id={name} 
+                placeholder={placeholder} 
+                type={type}
+                step={step}
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errId : undefined}
+                className={withErrorClass(undefined, hasError)}
+              />
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }} 
       />
     </div>
   );
@@ -62,7 +82,20 @@ export function TextArea({ name, label, control, placeholder }: Props) {
   return (
     <div>
       <Label htmlFor={name}>{label}</Label>
-      <Controller name={name} control={control} render={({ field }) => <Textarea id={name} placeholder={placeholder} className="min-h-[120px] resize-y" {...field} />} />
+      <Controller 
+        name={name} 
+        control={control} 
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <Textarea id={name} placeholder={placeholder} className={withErrorClass("min-h-[120px] resize-y", hasError)} aria-invalid={hasError} aria-describedby={hasError ? errId : undefined} {...field} />
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
+      />
     </div>
   );
 }
@@ -75,15 +108,24 @@ export function ResizableTextArea({ name, label, control }: { name: string; labe
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <TextareaAutosize
-            {...field}
-            id={name}
-            className="form-textarea w-full p-2 border border-gray-300 rounded-md text-sm"
-            minRows={2}
-            maxRows={15}
-          />
-        )}
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <TextareaAutosize
+                {...field}
+                id={name}
+                className={withErrorClass("form-textarea w-full p-2 border border-gray-300 rounded-md text-sm", hasError)}
+                minRows={2}
+                maxRows={15}
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errId : undefined}
+              />
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
       />
     </div>
   );
@@ -115,31 +157,40 @@ export function ToggleGroupInput({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <ToggleGroup
-            type="single"
-            value={field.value?.toString() || ""}
-            onValueChange={(value) => {
-              if (valueType === "number") {
-                field.onChange(value ? parseInt(value) : 0);
-              } else {
-                field.onChange(value || "");
-              }
-            }}
-            className={toggleGroupClassName || "justify-start"}
-          >
-            {options.map((option) => (
-              <ToggleGroupItem 
-                key={option.value} 
-                value={option.value} 
-                aria-label={option.label}
-                className={itemClassName}
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <ToggleGroup
+                type="single"
+                value={field.value?.toString() || ""}
+                onValueChange={(value) => {
+                  if (valueType === "number") {
+                    field.onChange(value ? parseInt(value) : 0);
+                  } else {
+                    field.onChange(value || "");
+                  }
+                }}
+                className={cn(toggleGroupClassName || "justify-start", hasError && "outline outline-1 outline-red-500 rounded-md")}
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errId : undefined}
               >
-                {option.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        )}
+                {options.map((option) => (
+                  <ToggleGroupItem 
+                    key={option.value} 
+                    value={option.value} 
+                    aria-label={option.label}
+                    className={itemClassName}
+                  >
+                    {option.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
       />
     </div>
   );
@@ -169,25 +220,34 @@ export function MultiToggleGroupInput({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <ToggleGroup
-            type="multiple"
-            value={field.value || []}
-            onValueChange={(values) => field.onChange(values)}
-            className={toggleGroupClassName || "justify-start"}
-          >
-            {options.map((option) => (
-              <ToggleGroupItem 
-                key={option.value} 
-                value={option.value} 
-                aria-label={option.label}
-                className={itemClassName}
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <ToggleGroup
+                type="multiple"
+                value={field.value || []}
+                onValueChange={(values) => field.onChange(values)}
+                className={cn(toggleGroupClassName || "justify-start", hasError && "outline outline-1 outline-red-500 rounded-md")}
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errId : undefined}
               >
-                {option.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        )}
+                {options.map((option) => (
+                  <ToggleGroupItem 
+                    key={option.value} 
+                    value={option.value} 
+                    aria-label={option.label}
+                    className={itemClassName}
+                  >
+                    {option.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
       />
     </div>
   );
@@ -225,15 +285,22 @@ export function SelectInput({ name, label, control, options }: { name: string; l
         <Controller
           name={name}
           control={control}
-          render={({ field }) => (
-            <select id={name} {...field} className="form-select w-full p-2 border border-gray-300 rounded-md text-sm">
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          )}
+          render={({ field, fieldState }) => {
+            const hasError = !!fieldState.error;
+            const errId = `${name}-error`;
+            return (
+              <>
+                <select id={name} {...field} className={withErrorClass("form-select w-full p-2 border border-gray-300 rounded-md text-sm", hasError)} aria-invalid={hasError} aria-describedby={hasError ? errId : undefined}>
+                  {options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <FormErrorMessage error={fieldState.error as any} id={errId} />
+              </>
+            );
+          }}
         />
       </div>
     );
@@ -246,58 +313,66 @@ export function SelectInput({ name, label, control, options }: { name: string; l
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <DropdownMenu open={isOpen} onOpenChange={handleDropdownOpenChange}>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-between text-left font-normal"
-              >
-                <span className="truncate">
-                  {field.value 
-                    ? options.find(opt => opt.value === field.value)?.label || "Select option..."
-                    : "Select option..."}
-                </span>
-                <ChevronDown className="h-4 w-4 opacity-50" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="start">
-              {/* Search input replaces title for space efficiency */}
-              <div className="p-2">
-                <div className="relative">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder={`Search ${label.toLowerCase()}...`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-8 h-8"
-                    autoFocus
-                  />
-                </div>
-              </div>
-              <DropdownMenuSeparator />
-              <div className="max-h-48 overflow-y-auto">
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map((option) => (
-                    <DropdownMenuItem
-                      key={option.value}
-                      onClick={() => {
-                        field.onChange(option.value);
-                        setIsOpen(false);
-                      }}
-                    >
-                      {option.label}
-                    </DropdownMenuItem>
-                  ))
-                ) : (
-                  <div className="p-2 text-sm text-muted-foreground text-center">
-                    No options found
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <DropdownMenu open={isOpen} onOpenChange={handleDropdownOpenChange}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn("w-full justify-between text-left font-normal", hasError && "border-red-500 focus-visible:ring-red-500")}
+                    aria-invalid={hasError}
+                    aria-describedby={hasError ? errId : undefined}
+                  >
+                    <span className="truncate">
+                      {field.value 
+                        ? options.find(opt => opt.value === field.value)?.label || "Select option..."
+                        : "Select option..."}
+                    </span>
+                    <ChevronDown className="h-4 w-4 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="start">
+                  <div className="p-2">
+                    <div className="relative">
+                      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder={`Search ${label.toLowerCase()}...`}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-8 h-8"
+                        autoFocus
+                      />
+                    </div>
                   </div>
-                )}
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+                  <DropdownMenuSeparator />
+                  <div className="max-h-48 overflow-y-auto">
+                    {filteredOptions.length > 0 ? (
+                      filteredOptions.map((option) => (
+                        <DropdownMenuItem
+                          key={option.value}
+                          onClick={() => {
+                            field.onChange(option.value);
+                            setIsOpen(false);
+                          }}
+                        >
+                          {option.label}
+                        </DropdownMenuItem>
+                      ))
+                    ) : (
+                      <div className="p-2 text-sm text-muted-foreground text-center">
+                        No options found
+                      </div>
+                    )}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
       />
     </div>
   );
@@ -323,22 +398,29 @@ export function RadioInput({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <div className={`flex ${direction === 'vertical' ? 'flex-col' : 'flex-row'}`}>
-            {options.map((option) => (
-              <label key={option.value} className="inline-flex items-center mr-4">
-                <input
-                  type="radio"
-                  value={option.value}
-                  checked={field.value === option.value}
-                  onChange={() => field.onChange(option.value)}
-                  className="form-radio text-blue-600"
-                />
-                <span className="ml-2">{option.label}</span>
-              </label>
-            ))}
-          </div>
-        )}
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <div className={cn(`flex ${direction === 'vertical' ? 'flex-col' : 'flex-row'}`, hasError && "outline outline-1 outline-red-500 rounded-md p-2")} aria-invalid={hasError} aria-describedby={hasError ? errId : undefined}>
+                {options.map((option) => (
+                  <label key={option.value} className="inline-flex items-center mr-4">
+                    <input
+                      type="radio"
+                      value={option.value}
+                      checked={field.value === option.value}
+                      onChange={() => field.onChange(option.value)}
+                      className="form-radio text-blue-600"
+                    />
+                    <span className="ml-2">{option.label}</span>
+                  </label>
+                ))}
+              </div>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
       />
     </div>
   );
@@ -362,31 +444,41 @@ export function DatePicker({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                id={name}
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !field.value && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {field.value ? format(new Date(field.value), "PPP") : placeholder}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={field.value ? new Date(field.value) : undefined}
-                onSelect={field.onChange}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        )}
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    id={name}
+                    variant={"outline"}
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !field.value && "text-muted-foreground",
+                      hasError && "border-red-500 focus-visible:ring-red-500"
+                    )}
+                    aria-invalid={hasError}
+                    aria-describedby={hasError ? errId : undefined}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {field.value ? format(new Date(field.value), "PPP") : placeholder}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value ? new Date(field.value) : undefined}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
       />
     </div>
   );
@@ -423,27 +515,36 @@ export function BooleanToggleInput({
       <Controller
         name={name}
         control={control}
-        render={({ field }: { field: any }) => (
-          <ToggleGroup
-            type="single"
-            value={field.value?.toString() || ""}
-            onValueChange={(value: string) => {
-              field.onChange(value === "true");
-            }}
-            className={toggleGroupClassName || "gap-2 flex-wrap justify-start"}
-          >
-            {booleanOptions.map((option) => (
-              <ToggleGroupItem 
-                key={option.value} 
-                value={option.value} 
-                aria-label={option.label}
-                className={itemClassName || "!rounded-full border border-gray-300 px-4 py-2 min-w-fit whitespace-nowrap hover:bg-gray-100 hover:border-gray-400 data-[state=on]:bg-blue-600 data-[state=on]:text-white data-[state=on]:border-blue-600 data-[state=on]:hover:bg-blue-700 transition-all duration-200"}
+        render={({ field, fieldState }: { field: any; fieldState: any }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <ToggleGroup
+                type="single"
+                value={field.value?.toString() || ""}
+                onValueChange={(value: string) => {
+                  field.onChange(value === "true");
+                }}
+                className={cn(toggleGroupClassName || "gap-2 flex-wrap justify-start", hasError && "outline outline-1 outline-red-500 rounded-md")}
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errId : undefined}
               >
-                {option.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        )}
+                {booleanOptions.map((option) => (
+                  <ToggleGroupItem 
+                    key={option.value} 
+                    value={option.value} 
+                    aria-label={option.label}
+                    className={itemClassName || "!rounded-full border border-gray-300 px-4 py-2 min-w-fit whitespace-nowrap hover:bg-gray-100 hover:border-gray-400 data-[state=on]:bg-blue-600 data-[state=on]:text-white data-[state=on]:border-blue-600 data-[state=on]:hover:bg-blue-700 transition-all duration-200"}
+                  >
+                    {option.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
       />
     </div>
   );

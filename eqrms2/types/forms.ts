@@ -257,7 +257,7 @@ export const MeetingNoteSchema = z.object({
   // meeting notes fields
   interaction_channel: z.string(),
   interaction_tag: z.string(),
-  interaction_type: z.string(),
+  interaction_type: z.string().trim().min(1, 'Required'),
   meeting_name: z.string(),
   meeting_notes: z.string(),
   meeting_summary: z.string(),
