@@ -267,7 +267,7 @@ export function SelectInput({ name, label, control, options }: { name: string; l
   }, [options, searchTerm]);
 
   // Determine if we should show search (more than 7 options)
-  const shouldShowSearch = options.length > 1;
+  const shouldShowSearch = options.length > 5;
 
   const handleDropdownOpenChange = (open: boolean) => {
     setIsOpen(open);

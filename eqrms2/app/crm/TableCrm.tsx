@@ -24,6 +24,7 @@ export default function TableCrm({
   leadSourceOptions = [],
   leadTypeOptions = [],
   primaryRmOptions = [],
+  referralPartnerOptions = [],
 }: { 
   data: LeadsTagging[];
   importanceOptions?: { value: string; label: string }[];
@@ -41,9 +42,10 @@ export default function TableCrm({
   leadSourceOptions?: { value: string; label: string }[];
   leadTypeOptions?: { value: string; label: string }[];
   primaryRmOptions?: { value: string; label: string }[];
+  referralPartnerOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, customTagOptions, leadRoleOptions, digitalAdOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions);
+  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, customTagOptions, leadRoleOptions, digitalAdOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions, referralPartnerOptions);
   const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({

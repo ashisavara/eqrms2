@@ -24,7 +24,7 @@ import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, referralPartnerOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -89,6 +89,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         fetchOptions<string, string>("master","deal_est_closure","deal_est_closure"),
         fetchOptions<string, string>("master","deal_stage","deal_stage"),
         fetchOptions<string, string>("master","deal_segment","deal_segment"),
+        fetchOptions<string, string>("view_referral_partner","lead_name","lead_name"),
     ]);
 
     if (!lead) {
@@ -126,7 +127,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         subs_email: lead.subs_email ?? false,
         subs_whatsapp: lead.subs_whatsapp ?? false,
         subs_imecapital: lead.subs_imecapital ?? false,
-        subs_imepms: lead.subs_imepms ?? false
+        subs_imepms: lead.subs_imepms ?? false,
+        referral_partner: lead.referral_partner ?? "",
     };
 
     
@@ -140,7 +142,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             <ToggleVisibility toggleText="Edit">
                                 <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} 
                                 leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-                                leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
+                                leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} 
+                                referralPartnerOptions={referralPartnerOptions} />
                                 <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
                                 dealSegmentOptions={dealSegmentOptions} relLeadId={lead.lead_id} initialLeadData={lead}  
                                 importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
@@ -182,7 +185,6 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                     </div>
                     <div className="text-sm gap-2 flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
-                        <p><span className="font-bold">Client Group:</span> {lead.group_name || <AddClientGroup leadId={lead.lead_id}/>} | <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span></p>
                         {hasAnyTags && (
                             <p>
                                 <span className="font-bold">Tags:</span>
@@ -197,6 +199,11 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                                 )}
                             </p>
                         )}
+                        <p>
+                            <span className="font-bold">Client Group:</span> {lead.group_name || <AddClientGroup leadId={lead.lead_id}/>} | 
+                            <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span>
+                            {lead.referral_partner ? <span className="font-bold">Referral Partner: {lead.referral_partner} </span> :""}
+                        </p>
                         <p className="text-sm italic">{lead.lead_summary}</p>
                     </div>
                 </div>

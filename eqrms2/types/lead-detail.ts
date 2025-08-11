@@ -38,4 +38,5 @@ export type LeadsTagging = {
     subs_imepms?: boolean;
     digital_campaign?: string;
     custom_tag?: string;
+    referral_partner?: string;
 };

@@ -229,6 +229,7 @@ export const LeadsTaggingSchema = z.object({
   subs_whatsapp: z.boolean().nullable(),
   subs_imecapital: z.boolean().nullable(),
   subs_imepms: z.boolean().nullable(),
+  referral_partner: z.string().nullable(),
 });
 
 export type LeadsTaggingValues = z.infer<typeof LeadsTaggingSchema>;

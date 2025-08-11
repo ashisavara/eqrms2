@@ -10,7 +10,7 @@ import { AddLeadButton } from "@/components/forms/AddLeads";
 
 export default async function CrmPage() {
 
-    const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions, customTagOptions, leadRoleOptions, digitalAdOptions] = await Promise.all([
+    const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions] = await Promise.all([
         supabaseListRead<LeadsTagging>({
             table:"view_leads_tagcrm", 
             columns:"lead_id, lead_name, days_followup, days_since_last_contact, importance, wealth_level, lead_progression, lead_summary, lead_source, lead_type, rm_name, last_contact_date, followup_date, country_code, phone_number",
@@ -49,16 +49,8 @@ export default async function CrmPage() {
         fetchStringOptions("lead_tag_custom_tags","id","custom_tag"),
         fetchStringOptions("lead_roles","lead_role_id","lead_role"),
         fetchStringOptions("lead_tag_digital_ads","id","digital_campaign"),
+        fetchOptions<string, string>("view_referral_partner","lead_name","lead_name"),
     ]);
-
-    // Debug logs for options (server-side; visible in server console)
-    try {
-        console.log("customTagOptions sample (stringified):", customTagOptions.slice(0, 5));
-        console.log("customTagOptions value types:", customTagOptions.slice(0, 5).map((o: any) => typeof o.value));
-        console.log("all customTagOptions values are strings?", customTagOptions.every((o: any) => typeof o.value === "string"));
-    } catch (e) {
-        console.log("customTagOptions debug logging failed:", e);
-    }
 
     return (
         <div>
@@ -76,7 +68,7 @@ export default async function CrmPage() {
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 
                         interactionTagOptions={interactionTagOptions} interactionTypeOptions={interactionTypeOptions} customTagOptions={customTagOptions} 
                         leadRoleOptions={leadRoleOptions} digitalAdOptions={digitalAdOptions} leadSourceOptions={leadSourceOptions} 
-                        leadTypeOptions={leadTypeOptions} primaryRmOptions={primaryRmOptions}/>
+                        leadTypeOptions={leadTypeOptions} primaryRmOptions={primaryRmOptions} referralPartnerOptions={referralPartnerOptions}/>
                     </TabsContent>
                     <TabsContent value="interactions">
                          <TableInteractions data={interactions} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} leadsData={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />

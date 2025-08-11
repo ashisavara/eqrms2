@@ -27,6 +27,7 @@ export const createColumns = (
     leadSourceOptions: { value: string; label: string }[],
     leadTypeOptions: { value: string; label: string }[],
     primaryRmOptions: { value: string; label: string }[],
+    referralPartnerOptions: { value: string; label: string }[],
 ): ColumnDef<LeadsTagging>[] => [
     {
         accessorKey: "lead_name",
@@ -38,7 +39,8 @@ export const createColumns = (
                 <ToggleVisibility toggleText="Edit">
                     <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} importanceOptions={importanceOptions} 
                     leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-                    leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
+                    leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions}
+                    referralPartnerOptions={referralPartnerOptions} />
                     <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
                     dealSegmentOptions={dealSegmentOptions} relLeadId={row.original.lead_id} initialLeadData={row.original}  
                     importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />

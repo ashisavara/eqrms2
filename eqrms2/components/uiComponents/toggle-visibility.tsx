@@ -21,7 +21,7 @@ const ToggleVisibility: React.FC<ToggleVisibilityProps> = ({ toggleText, childre
       </button>
       {isVisible && (
         <div className="border p-4 rounded shadow-lg">
-          <button onClick={() => setIsVisible(false)} className="text-right mb-2 text-blue-500 text-sm text-bold">
+          <button onClick={() => setIsVisible(false)} className="text-right mb-2 text-red-500 text-sm font-bold">
             Close
           </button>
           {children}

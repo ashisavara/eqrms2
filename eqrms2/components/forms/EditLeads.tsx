@@ -23,7 +23,8 @@ function EditLeadsForm({
   leadSourceOptions,
   leadTypeOptions,
   wealthLevelOptions,
-  primaryRmOptions
+  primaryRmOptions, 
+  referralPartnerOptions
 }: { 
   initialData: LeadsTaggingValues; 
   id: number;  
@@ -34,6 +35,7 @@ function EditLeadsForm({
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
   primaryRmOptions: { value: string; label: string }[];
+  referralPartnerOptions: { value: string; label: string }[];
 }) {
   const router = useRouter();  
   // Convert null values to empty strings/defaults for form inputs
@@ -62,7 +64,8 @@ function EditLeadsForm({
     subs_email: initialData.subs_email ?? false,
     subs_whatsapp: initialData.subs_whatsapp ?? false,
     subs_imecapital: initialData.subs_imecapital ?? false,
-    subs_imepms: initialData.subs_imepms ?? false
+    subs_imepms: initialData.subs_imepms ?? false,
+    referral_partner: initialData.referral_partner ?? "",
   };
 
   const { control, handleSubmit, formState: { errors } } = useForm<LeadsTaggingValues>({
@@ -102,7 +105,8 @@ function EditLeadsForm({
         subs_email: data.subs_email,
         subs_whatsapp: data.subs_whatsapp,
         subs_imecapital: data.subs_imecapital,
-        subs_imepms: data.subs_imepms
+        subs_imepms: data.subs_imepms,
+        referral_partner: data.referral_partner,
       };
       
       await supabaseUpdateRow('leads_tagging', 'lead_id', id, processedData);
@@ -143,6 +147,7 @@ function EditLeadsForm({
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="primary_rm" label="Primary RM" control={control} options={primaryRmOptions} />
+          <SelectInput name="referral_partner" label="Referral Partner" control={control} options={referralPartnerOptions} />
         </div>
       </div>
       {/* Categorization Fields with Options */}
@@ -190,7 +195,8 @@ export function EditLeadsButton({
   leadSourceOptions,
   leadTypeOptions,
   wealthLevelOptions,
-  primaryRmOptions
+  primaryRmOptions,
+  referralPartnerOptions
 }: { 
   leadData: any;
   leadId: number;  
@@ -200,6 +206,7 @@ export function EditLeadsButton({
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
   primaryRmOptions: { value: string; label: string }[];
+  referralPartnerOptions: { value: string; label: string }[];
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -233,7 +240,8 @@ export function EditLeadsButton({
     subs_email: leadData.subs_email ?? false,
     subs_whatsapp: leadData.subs_whatsapp ?? false,
     subs_imecapital: leadData.subs_imecapital ?? false,
-    subs_imepms: leadData.subs_imepms ?? false
+    subs_imepms: leadData.subs_imepms ?? false,
+    referral_partner: leadData.referral_partner ?? "",
   };
 
   return (
@@ -264,6 +272,7 @@ export function EditLeadsButton({
                 leadTypeOptions={leadTypeOptions}
                 wealthLevelOptions={wealthLevelOptions}
                 primaryRmOptions={primaryRmOptions}
+                referralPartnerOptions={referralPartnerOptions}
               />
             </div>
           </SheetContent>
