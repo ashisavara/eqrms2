@@ -16,6 +16,10 @@ import { CustomTagDetail } from "@/types/custom-tag";
 import { CustomTagValues, LeadRoleValues, DigitalAdValues } from "@/types/forms";
 import { AddLeadTags } from "@/components/forms/AddLeadTags";
 import { AddClientGroup } from "@/components/forms/AddGroup";
+import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
+import { AddCustomTag } from "@/components/forms/AddCustomTag";
+import { AddLeadRole } from "@/components/forms/AddLeadRole";
+import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -133,6 +137,31 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                     <div className="text-left">
                         <div className="flex flex-row gap-2">
                             <h1>{lead.lead_name}</h1>
+                            <ToggleVisibility toggleText="Edit">
+                                <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} 
+                                leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
+                                leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
+                                <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
+                                dealSegmentOptions={dealSegmentOptions} relLeadId={lead.lead_id} initialLeadData={lead}  
+                                importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                                <AddInteractionButton interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
+                                interactionChannelOptions={interactionChannelOptions} initialLeadData={lead} 
+                                importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                                <AddCustomTag 
+                                    leadId={lead.lead_id} 
+                                    customTagOptions={customTagOptions} 
+                                />
+                                <AddLeadRole 
+                                leadId={lead.lead_id} 
+                                leadRoleOptions={leadRoleOptions} 
+                                />
+                                <AddDigitalAd 
+                                leadId={lead.lead_id} 
+                                digitalAdOptions={digitalAdOptions} 
+                                />
+                            </ToggleVisibility>
+
+                            {/* 
                             <AddLeadTags leadId={lead.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
                             digitalAdOptions={digitalAdOptions} lead={leadForForm} importanceOptions={importanceOptions} 
                             leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
@@ -140,7 +169,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
                             dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
                             interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-                            interactionChannelOptions={interactionChannelOptions} />
+                            interactionChannelOptions={interactionChannelOptions} />*/}
                             </div>
                         
                         <p className="text-sm"><span className="font-bold">Last Contact Date:</span> {formatDate(lead.last_contact_date)} <span className="text-blue-500 font-bold">({lead.days_since_last_contact})</span> | <span className="font-bold">Followup Date:</span> {formatDate(lead.followup_date)} <span className="text-blue-500 font-bold">({lead.days_followup})</span> </p>
