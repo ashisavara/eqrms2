@@ -63,7 +63,7 @@ export function AddLeadTags({
       
       <DropdownMenuContent align="end" className="w-48">
 
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+        <DropdownMenuItem>
           <EditLeadsButton leadData={lead} leadId={leadId} importanceOptions={importanceOptions} 
           leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
           leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />

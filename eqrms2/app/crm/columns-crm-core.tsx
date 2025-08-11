@@ -2,11 +2,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { LeadsTagging } from "@/types/lead-detail";
 import Link from "next/link";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating, CrmFollowupNumberRating } from "@/components/conditional-formatting";
-import { EditLeadTagsButton } from "@/components/forms/EditLeadTags";
+import { EditLeadsButton } from "@/components/forms/EditLeads";
 import { AddDealButton } from "@/components/forms/AddDeals";
 import { AddInteractionButton } from "@/components/forms/AddInteractions";
-import { AddLeadTags } from "@/components/forms/AddLeadTags";
+import { AddCustomTag } from "@/components/forms/AddCustomTag";
+import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 import { LeadsTaggingValues } from "@/types/forms";
+import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
+import { AddLeadRole } from "@/components/forms/AddLeadRole";
 
 export const createColumns = (
     importanceOptions: { value: string; label: string }[],
@@ -32,14 +35,37 @@ export const createColumns = (
         cell: ({ row }) => {
             return <div className="text-left">
                 <Link href={`/crm/${row.original.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
-                <AddLeadTags leadId={row.original.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
+                <ToggleVisibility toggleText="Edit">
+                    <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} importanceOptions={importanceOptions} 
+                    leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
+                    leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
+                    <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
+                    dealSegmentOptions={dealSegmentOptions} relLeadId={row.original.lead_id} initialLeadData={row.original}  
+                    importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                    <AddInteractionButton interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
+                    interactionChannelOptions={interactionChannelOptions} initialLeadData={row.original} 
+                    importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                    <AddCustomTag 
+                        leadId={row.original.lead_id} 
+                        customTagOptions={customTagOptions} 
+                    />
+                    <AddLeadRole 
+                    leadId={row.original.lead_id} 
+                    leadRoleOptions={leadRoleOptions} 
+                    />
+                    <AddDigitalAd 
+                    leadId={row.original.lead_id} 
+                    digitalAdOptions={digitalAdOptions} 
+                    />
+                </ToggleVisibility>
+                {/* <AddLeadTags leadId={row.original.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
                 digitalAdOptions={digitalAdOptions} lead={row.original as LeadsTaggingValues} importanceOptions={importanceOptions} 
                 leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
                 leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} 
                 primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
                 dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
                 interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-                interactionChannelOptions={interactionChannelOptions} />
+                interactionChannelOptions={interactionChannelOptions} /> */}
                 </div>
         }
     }, 
