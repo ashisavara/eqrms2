@@ -109,16 +109,22 @@ function AddInteractionForm({
     try {
       // Step 1: Insert interaction
       const insertData = relLeadId ? { ...interactionData, rel_lead_id: relLeadId } : interactionData;
+      // Debug payload for meeting_notes insert
+      // eslint-disable-next-line no-console
+      console.log('[AddInteractions] meeting_notes insertData:', insertData);
       await supabaseInsertRow('meeting_notes', insertData);
       
       // Step 2: Update lead (if we have lead data and relLeadId)
       if (relLeadId && Object.keys(leadData).length > 0) {
         try {
           // Convert Date objects to ISO strings for Supabase
-                      const processedLeadData = {
+          const processedLeadData = {
               ...leadData,
               followup_date: toLocalDateString(leadData.followup_date),
             };
+          // Debug payload for leads_tagging update
+          // eslint-disable-next-line no-console
+          console.log('[AddInteractions] leads_tagging update:', { lead_id: relLeadId, payload: processedLeadData });
           
           await supabaseUpdateRow('leads_tagging', 'lead_id', relLeadId, processedLeadData);
           

@@ -147,7 +147,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                                 <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
                                 dealSegmentOptions={dealSegmentOptions} relLeadId={lead.lead_id} initialLeadData={lead}  
                                 importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
-                                <AddInteractionButton interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
+                                <AddInteractionButton relLeadId={lead.lead_id} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
                                 interactionChannelOptions={interactionChannelOptions} initialLeadData={lead} 
                                 importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
                                 <AddCustomTag 
