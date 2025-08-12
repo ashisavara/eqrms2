@@ -20,7 +20,8 @@ function AddLeadForm({
   leadSourceOptions,
   leadTypeOptions,
   wealthLevelOptions, 
-  primaryRmOptions
+  primaryRmOptions,
+  referralPartnerOptions
 }: { 
   onSuccess?: () => void;
   importanceOptions: { value: string; label: string }[];
@@ -29,6 +30,7 @@ function AddLeadForm({
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
   primaryRmOptions: { value: string; label: string }[];
+  referralPartnerOptions: { value: string; label: string }[];
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +61,8 @@ function AddLeadForm({
     subs_email: false,
     subs_whatsapp: false,
     subs_imecapital: false,
-    subs_imepms: false
+    subs_imepms: false,
+    referral_partner: ""
   };
 
   const { control, handleSubmit, formState: { errors } } = useForm<LeadsTaggingValues>({
@@ -93,6 +96,7 @@ function AddLeadForm({
         primary_rm: data.primary_rm,
         phone_validated: data.phone_validated,
         email_validated: data.email_validated,
+        referral_partner: data.referral_partner
       };
       
       await supabaseInsertRow('leads_tagging', processedData);
@@ -134,6 +138,7 @@ function AddLeadForm({
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
           <SelectInput name="primary_rm" label="Primary RM" control={control} options={primaryRmOptions} />
+          <SelectInput name="referral_partner" label="Referral Partner" control={control} options={referralPartnerOptions} />
         </div>
       </div>
       {/* Categorization Fields with Options */}
@@ -174,7 +179,8 @@ export function AddLeadButton({
   leadSourceOptions,
   leadTypeOptions,
   wealthLevelOptions, 
-  primaryRmOptions
+  primaryRmOptions,
+  referralPartnerOptions
 }: { 
   importanceOptions: { value: string; label: string }[];
   leadProgressionOptions: { value: string; label: string }[];
@@ -182,6 +188,7 @@ export function AddLeadButton({
   leadTypeOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
   primaryRmOptions: { value: string; label: string }[];
+  referralPartnerOptions: { value: string; label: string }[];
 }) {
   const [showAddSheet, setShowAddSheet] = useState(false);
 
@@ -210,6 +217,7 @@ export function AddLeadButton({
                 leadTypeOptions={leadTypeOptions}
                 wealthLevelOptions={wealthLevelOptions}
                 primaryRmOptions={primaryRmOptions}
+                referralPartnerOptions={referralPartnerOptions}
               />
             </div>
           </SheetContent>

@@ -62,7 +62,7 @@ export default async function CrmPage() {
                         <TabsTrigger value="deals">Deals</TabsTrigger>
                 </TabsList>
                     <TabsContent value="crm">
-                        <AddLeadButton importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
+                        <AddLeadButton importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} referralPartnerOptions={referralPartnerOptions} />
                         <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} 
                         wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} 
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 
