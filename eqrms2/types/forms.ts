@@ -337,4 +337,24 @@ export const ClientGroupSchema = z.object({
 export type ClientGroupValues = z.infer<typeof ClientGroupSchema>;
 
 
+// ----------------------
+// ACL LEAD FORM
+// -----------------------
+export const AclLeadSchema = z.object({
+  auth_id_role: z.string()
+});
+
+export type AclLeadValues = z.infer<typeof AclLeadSchema>;
+
+// ----------------------
+// ACL GROUP FORM
+// -----------------------
+export const AclGroupSchema = z.object({
+  auth_id_role: z.string()
+});
+
+export type AclGroupValues = z.infer<typeof AclGroupSchema>;
+
+
+
 

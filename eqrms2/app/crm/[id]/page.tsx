@@ -20,11 +20,15 @@ import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { AddCustomTag } from "@/components/forms/AddCustomTag";
 import { AddLeadRole } from "@/components/forms/AddLeadRole";
 import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
+import { AclLeadsDetail } from "@/types/acl-leads-detail";
+import { AclGroupDetail } from "@/types/acl-group-detail";
+import { AddAclLeadButton } from "@/components/forms/AddAclLeads";
+import { AddAclGroupButton } from "@/components/forms/AddAclGroup";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, referralPartnerOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, referralPartnerOptions, rmOptions, aclLead, aclGroup] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -90,6 +94,21 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         fetchOptions<string, string>("master","deal_stage","deal_stage"),
         fetchOptions<string, string>("master","deal_segment","deal_segment"),
         fetchOptions<string, string>("view_referral_partner","lead_name","lead_name"),
+        fetchOptions<string, string>("ime_emp","auth_id", "name"),
+        supabaseListRead<AclLeadsDetail>({
+            table: "view_acl_leads",
+            columns: "*",  
+            filters: [
+                (query) => query.eq('lead_id', id)
+            ]
+        }),
+        supabaseListRead<AclGroupDetail>({
+            table:"view_acl_group",
+            columns: "*",
+            filters: [
+                (query) => query.eq('rel_lead_id', id)
+            ]
+        })
     ]);
 
     if (!lead) {
@@ -163,16 +182,6 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                                 digitalAdOptions={digitalAdOptions} 
                                 />
                             </ToggleVisibility>
-
-                            {/* 
-                            <AddLeadTags leadId={lead.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
-                            digitalAdOptions={digitalAdOptions} lead={leadForForm} importanceOptions={importanceOptions} 
-                            leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-                            leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} 
-                            primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
-                            dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
-                            interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-                            interactionChannelOptions={interactionChannelOptions} />*/}
                             </div>
                         
                         <p className="text-sm"><span className="font-bold">Last Contact Date:</span> {formatDate(lead.last_contact_date)} <span className="text-blue-500 font-bold">({lead.days_since_last_contact})</span> | <span className="font-bold">Followup Date:</span> {formatDate(lead.followup_date)} <span className="text-blue-500 font-bold">({lead.days_followup})</span> </p>
@@ -181,7 +190,12 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                              | {lead.email_1}  {lead.email_2}  {lead.email_3} |  
                             {lead.linkedin_url ? <a href={lead.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">Linkedin</a> : ""}
                         </p>
-                        
+                        <p className="text-sm">
+                            <span className="font-bold">Acess Control - Leads:</span> {aclLead.map((acll) => acll.name).join(", ")} 
+                            <span className="font-bold"> | Groups:</span> {aclGroup.map((acl) => acl.name).join(", ")} 
+                        </p>
+                        <AddAclLeadButton leadId={lead.lead_id} rmOptions={rmOptions} />
+                        { lead.rel_group_id && <AddAclGroupButton groupId={lead.rel_group_id} rmOptions={rmOptions} />}
                     </div>
                     <div className="text-sm gap-2 flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
