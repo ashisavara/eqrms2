@@ -1,5 +1,8 @@
 'use client';
 
+// IMPORTANT WE ARE NOT USING THIS COMPONENT ANYMORE, SINCE THE DROPDOWN MENU DOES NOT WORK ALONG WITH A SHEET
+// DEFAULT ACTION OF CLOSING DROPDOWN ALSO CLOSES SHEET, IF OVERRIDE THE DEFAULT THE OPEN DROPDOWN MENU INTEFERES WITH FOCUS ON THE SHEET
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +36,8 @@ export function AddLeadTags({
   dealSegmentOptions,
   interactionTypeOptions,
   interactionTagOptions,
-  interactionChannelOptions
+  interactionChannelOptions,
+  referralPartnerOptions
 }: { 
   leadId: number;
   customTagOptions: { value: string; label: string }[];
@@ -52,6 +56,7 @@ export function AddLeadTags({
   interactionTypeOptions: { value: string; label: string }[];
   interactionTagOptions: { value: string; label: string }[];
   interactionChannelOptions: { value: string; label: string }[];
+  referralPartnerOptions: { value: string; label: string }[];
 }) {
   return (
     <DropdownMenu>
@@ -66,7 +71,7 @@ export function AddLeadTags({
         <DropdownMenuItem>
           <EditLeadsButton leadData={lead} leadId={leadId} importanceOptions={importanceOptions} 
           leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-          leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} />
+          leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} referralPartnerOptions={referralPartnerOptions} />
         </DropdownMenuItem>
 
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
