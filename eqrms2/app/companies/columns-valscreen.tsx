@@ -3,22 +3,44 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Company } from "@/types/company-detail";
 import Link from "next/link";
 import { CompQualityRating, RatingDisplay, NumberRating, ComGrowthNumberRating } from "@/components/conditional-formatting";
+import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 
 export const columns: ColumnDef<Company>[] = [
   {
     accessorKey: "ime_name",
     header: () => <div className="text-left">Company</div>,
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const companyId = row.original.company_id;
       const companyName = row.original.ime_name;
 
-      return (
-        <div className="text-left">
-          <Link href={`/companies/${companyId}`} className="text-blue-600 font-bold hover:underline">
-            {companyName}
-          </Link>
-        </div>
-      );
+      if (isMobileView(table)) {
+        // Mobile view - show as card
+        return (
+          <div className="p-3 border rounded-lg space-y-2">
+            <div className="font-semibold text-left">
+              <Link href={`/companies/${companyId}`} className="text-blue-600 font-bold">
+                {companyName}
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>Rating: <RatingDisplay rating={row.original.stock_score} /></div>
+              <div>Upside: <NumberRating rating={row.original.upside} /></div>
+              <div>Quality: <CompQualityRating rating={row.original.quality} /></div>
+              <div>Growth: <CompQualityRating rating={row.original.mt_growth} /></div>
+              <div className="col-span-2">Momentum: <CompQualityRating rating={row.original.market_momentum} /></div>
+            </div>
+          </div>
+        );
+      } else {
+        // Desktop view - show as normal table cell
+        return (
+          <div className="text-left">
+            <Link href={`/companies/${companyId}`} className="text-blue-600 font-bold hover:underline">
+              {companyName}
+            </Link>
+          </div>
+        );
+      }
     }
   },
   { 

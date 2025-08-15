@@ -6,14 +6,18 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { columns } from "./columns-valscreen";
 import { Company } from "@/types/company-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
 interface TableValscreenProps {
   data: Company[];
 }
 
 export function TableValscreen({ data }: TableValscreenProps) {
+  // ✅ Use responsive columns helper
+  const { responsiveColumns } = useResponsiveColumns(columns, 'ime_name');
+  
   // Auto-configure sorting for all columns
-  const autoSortedColumns = useAutoSorting(data, columns);
+  const autoSortedColumns = useAutoSorting(data, responsiveColumns);
   
 
 

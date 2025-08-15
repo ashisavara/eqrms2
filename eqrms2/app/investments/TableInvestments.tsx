@@ -11,10 +11,11 @@ import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AggregateCard } from "@/components/ui/aggregate-card";
 import { calculateAggregations } from "@/lib/table-aggregations";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import TableSystematic from "./TableSip";
 import TableStp from "./TableStp";
 import { PieChart } from "@/components/charts/InvestmentPieCharts";
+import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -23,44 +24,9 @@ interface TableInvestmentsProps {
 }
 
 export default function TableInvestments({ data, sipData = [], stpData = [] }: TableInvestmentsProps) {
-  // ✅ Screen size detection for responsive columns
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  // ✅ Dynamically modify columns based on screen size
-  const responsiveColumns = useMemo(() => {
-    return columns.map(column => {
-      // Keep the first column (fund_name) visible on all screen sizes
-      const columnId = column.id || (column as any).accessorKey;
-      if (columnId === 'fund_name') {
-        return column;
-      }
-
-      // For mobile, mark all other columns as filter-only (except already filter-only columns)
-      if (isMobile) {
-        return {
-          ...column,
-          meta: {
-            ...column.meta,
-            isFilterOnly: true
-          }
-        };
-      }
-
-      // For desktop, use original column definitions
-      return column;
-    });
-  }, [isMobile]);
-
+  // ✅ Use responsive columns helper
+  const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
+  
   const autoSortedColumns = useAutoSorting(data, responsiveColumns);
 
   const table = useReactTable({

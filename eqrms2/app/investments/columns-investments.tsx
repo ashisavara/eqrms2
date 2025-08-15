@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { RatingDisplay } from "@/components/conditional-formatting";
 import {Investments} from"@/types/investment-detail";
+import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 
 export const columns: ColumnDef<Investments>[] = [
 
@@ -10,12 +11,7 @@ export const columns: ColumnDef<Investments>[] = [
     header: "Fund Name",
     size:200,
     cell: ({row, table}) => {
-        // Check if other columns are visible to determine if we're in mobile mode
-        // On mobile, other columns will be marked as isFilterOnly and won't be visible
-        const visibleColumns = table.getAllColumns().filter(col => !col.columnDef.meta?.isFilterOnly);
-        const isMobileView = visibleColumns.length === 1; // Only fund_name column visible
-        
-        if (isMobileView) {
+        if (isMobileView(table)) {
             // Mobile view - show as card
             return (
                 <div className="p-3 border rounded-lg space-y-2">
