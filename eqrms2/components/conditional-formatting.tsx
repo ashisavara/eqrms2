@@ -21,9 +21,9 @@ function getRatingStyles(rating: number) {
     case 3:
       return "bg-orange-100 text-orange-800";
     case 4:
-      return "bg-green-100 text-green-800";
+      return "bg-green-100 text-green-900";
     case 5:
-      return "bg-green-700 text-green-100";
+      return "bg-green-800 text-green-100";
     case 6:
       return ""; // using as an alternate default
     default:

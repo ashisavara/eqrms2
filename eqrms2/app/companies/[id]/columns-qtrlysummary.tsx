@@ -6,9 +6,10 @@ export const columns = (onQuarterClick: (data: CompanyQrtNotesValues) => void): 
   { 
     accessorKey: "qtr", 
     header: "Quarter",
+    size:40,
     cell: ({ getValue, row }) => (
       <button
-        className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100 cursor-pointer flex-grow"
+        className="text-xs font-semibold text-blue-800 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 cursor-pointer flex-grow"
         onClick={() => onQuarterClick(row.original)}
       >
         {getValue() as string}
@@ -18,13 +19,14 @@ export const columns = (onQuarterClick: (data: CompanyQrtNotesValues) => void): 
   { 
     accessorKey: "result_rating", 
     header: "Result Rating",
+    size:40,
     cell: ({ getValue }) => {
       const rating = getValue() as string;
-      const colorClass = rating === "Above" ? "text-green-600 text-center bg-green-50 flex flex-grow" : 
-                        rating === "Below" ? "text-red-600 text-center bg-red-50 flex flex-grow" : 
-                        "text-yellow-600 text-center bg-yellow-50 flex flex-grow";
+      const colorClass = rating === "Above" ? "text-green-800 text-center bg-green-100 flex flex-grow" : 
+                        rating === "Below" ? "text-red-700 text-center bg-red-100 flex flex-grow" : 
+                        "text-yellow-800 text-center bg-yellow-100 flex flex-grow";
       return (
-        <span className={`px-2 py-1 rounded font-medium ${colorClass}`}>
+        <span className={`px-2 py-1 text-center rounded font-bold ${colorClass}`}>
           {rating}
         </span>
       );
@@ -34,7 +36,7 @@ export const columns = (onQuarterClick: (data: CompanyQrtNotesValues) => void): 
     accessorKey: "positive", 
     header: "Positive",
     cell: ({ getValue }) => (
-      <div className="text-green-700 flex-grow-4 text-center">
+      <div className="text-green-800 flex-grow-4 text-center">
         {getValue() as string}
       </div>
     )
@@ -43,7 +45,7 @@ export const columns = (onQuarterClick: (data: CompanyQrtNotesValues) => void): 
     accessorKey: "negative", 
     header: "Negative",
     cell: ({ getValue }) => (
-      <div className="text-red-700 flex-grow-4">
+      <div className="text-red-800 flex-grow-4">
         {getValue() as string}
       </div>
     )
@@ -52,7 +54,7 @@ export const columns = (onQuarterClick: (data: CompanyQrtNotesValues) => void): 
     accessorKey: "outlook", 
     header: "Outlook",
     cell: ({ getValue }) => (
-      <div className="text-orange-700 flex-grow-4">
+      <div className="text-orange-800 flex-grow-4">
         {getValue() as string}
       </div>
     )

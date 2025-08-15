@@ -44,16 +44,16 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
   }
 
   return (
-        <div className="p-4">
-          <div className="p-4 m-4 bg-gray-400 rounded-lg shadow-md text-center">
-            <h1 className="text-2xl font-bold">{company.ime_name}</h1>
+        <div>
+          <div className="pageHeadingBox">
+            <h1>{company.ime_name}</h1>
           </div>
 
           <div className="mb-5 text-xs grid grid-cols-2 gap-x-6 gap-y-8">
             <div>
               <SimpleTable 
                 headers = {[{label:"CMP"},{label:"Target"},{label:"TP Multiple"},{label:"Upside"}]}
-                body = {[{value:company.cmp},{value:company.target_price},{value:<span className="text-blue-600 font-bold">{Number(company.multiple).toFixed(1)} </span>},{value:<NumberRating rating={company.upside}/>}]}
+                body = {[{value:company.cmp},{value:company.target_price},{value:<span className="text-blue-800 font-bold">{Number(company.multiple).toFixed(1)} </span>},{value:<NumberRating rating={company.upside}/>}]}
               />
             </div>
             <div>
@@ -65,7 +65,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div>
               <SimpleTable 
                 headers = {[{label:"FY27pe"},{label:"FY26gr"},{label:"FY27gr"},{label:"FY28gr"},{label:"FY29gr"}]}
-                body = {[{value:<span className="text-blue-600 font-bold">{Number(company.pe_t2).toFixed(1)} </span>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t1)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t2)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t3)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t4)}/>}]}
+                body = {[{value:<span className="text-blue-800 font-bold">{Number(company.pe_t2).toFixed(1)} </span>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t1)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t2)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t3)}/>},{value:<ComGrowthNumberRating rating={Math.round(company.gr_t4)}/>}]}
               />
             </div>
             <div>
@@ -89,29 +89,29 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
           </div>
 
           <div className="text-sm">
-            <div className="text-blue-900 mb-5">
+            <div className="text-blue-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.inv_view || ""}</ReactMarkdown>
             </div>
-            <div className="text-blue-700 mb-5">
+            <div className="text-blue-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.catalysts || ""}</ReactMarkdown>
             </div>
             <div className="text-gray-900 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.business_mix || ""}</ReactMarkdown>
             </div>
 
-            <div className="text-green-700 mb-5">
+            <div className="text-green-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.positive || ""}</ReactMarkdown>
             </div>
-            <div className="text-red-700 mb-5">
+            <div className="text-red-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.negative || ""}</ReactMarkdown>
             </div>
-            <div className="text-orange-700 mb-5">
+            <div className="text-orange-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.outlook || ""}</ReactMarkdown>
             </div>
             <div className="text-blue-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.snapshot || ""}</ReactMarkdown>
             </div>
-            <div className="text-gray-900 mb-5">
+            <div className="text-gray-800 mb-5">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.hidden || ""}</ReactMarkdown>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             />
           </ToggleVisibility>
         
-          <div className="flex w-screen text-xs text-center">
+          <div className="flex w-full text-xs text-center">
             <TableQuarterlyNotes 
               data={qtrNotes} 
               qtrOptions={qtrOptions}

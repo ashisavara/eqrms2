@@ -15,7 +15,7 @@ export default async function CompaniesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold m-1">AMCs</h1>
+      <div className="pageHeadingBox"><h1>AMCs</h1></div>
       <TableAmcScreen data={amc}/>
     </div>
   );

@@ -34,7 +34,7 @@ type SimpleTableProps = {
 
 const SimpleTable: React.FC<SimpleTableProps> = ({ headers, body }) => {
   return (
-    <table className="w-full border-collapse table-fixed">
+    <table className="w-full border border-gray-300 table-fixed">
       <thead>
         <tr className="bg-gray-100 text-gray-800">
           {headers.map((header, index) => (

@@ -47,7 +47,7 @@ export function TableQuarterlyNotes({ data, qtrOptions, resultRatingOptions, she
 
   return (
     <>
-      <ReactTableWrapper table={table} showSearch={false} />
+      <ReactTableWrapper className="w-full" table={table} showSearch={false} />
       {isSheetOpen && SheetComponent && (
         <SheetComponent 
           data={selectedData} 
