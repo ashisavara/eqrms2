@@ -38,27 +38,27 @@ export default async function CategoryPage({ params }: PageProps) {
 
   return (
     <div>
-        <div className="p-4 bg-gray-100 rounded-lg text-center">
+        <div className="pageHeadingBox">
             <div className="flex items-center justify-center gap-4">
-                <h1 className="text-2xl font-bold">{category.cat_name}</h1>
+                <h1>{category.cat_name}</h1>
                 <FavouriteHeart 
                     entityType="categories" 
                     entityId={category.category_id} 
                     size="lg"
                 />
             </div>
-            <p>{category.cat_description}</p>
+            <p className="text-sm">{category.cat_description}</p>
             <EditCatButton categoryData={category} categoryId={category.category_id} />
         </div>
-            <div className="p-4 text-sm">
+            <div className="text-sm">
                 <h3 className="text-base font-bold text-center">Trailing Returns</h3>
                 <TableCategories data={[category]} columnType="summary"/>
             </div>
-            <div className="p-4 text-sm">  
+            <div className="text-sm">  
                 <h3 className="text-base font-bold text-center">Annual Returns</h3>
                 <TableCategories data={[category]} columnType="annual"/>
             </div>
-            <div className="p-4 text-sm">
+            <div className="text-sm">
                 <h3 className="text-base font-bold text-center">Recommended Funds</h3>
                 <TableFundBasic data={funds}/>
             </div>

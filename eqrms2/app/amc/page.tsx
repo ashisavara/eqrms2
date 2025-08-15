@@ -1,22 +1,10 @@
 import { TableAmcScreen } from "./TableAmcScreen";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { AMC } from "@/types/amc-detail";
+import { redirect } from "next/navigation";
 
 export default async function CompaniesPage() {
-  // Fetch data server-side
-  const amc = await supabaseListRead<AMC>({
-    table: "rms_amc",
-    columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
-    filters: [
-      (query) => query.eq('open_for_distribution', ['Y']),
-      (query) => query.order('amc_rating', { ascending: false })
-    ]
-  });
 
   return (
-    <div>
-      <div className="pageHeadingBox"><h1>AMCs</h1></div>
-      <TableAmcScreen data={amc}/>
-    </div>
-  );
+    redirect('/funds'));
 }

@@ -35,7 +35,7 @@ export const createColumns = (
         size: 250,
         cell: ({ row }) => {
             return <div className="text-left">
-                <Link href={`/crm/${row.original.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
+                <Link href={`/crm/${row.original.lead_id}`} className="blue-hyperlink">{row.original.lead_name} </Link> 
                 <ToggleVisibility toggleText="Edit">
                     <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} importanceOptions={importanceOptions} 
                     leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 

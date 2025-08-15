@@ -64,11 +64,10 @@ export default async function AmcPage({ params }: PageProps) {
           <TabsList className="w-full">
                 <TabsTrigger value="rating_snapshot">Rating Snapshot</TabsTrigger>
                 <TabsTrigger value="rating_rationale">Rating Rationale</TabsTrigger>
-                <TabsTrigger value="investment_team">Team</TabsTrigger>
+                <TabsTrigger value="funds">Funds</TabsTrigger>
           </TabsList>
               <TabsContent value="rating_snapshot">
-                  <h3 className="text-center font-bold mb-2"> How we rate the AMC</h3>
-                  <SimpleTable 
+                  <div className="border-box"><SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[
                     {value: <RatingDisplay rating={AMC?.amc_rating ?? null} />},
@@ -76,7 +75,8 @@ export default async function AmcPage({ params }: PageProps) {
                     {value: <RatingDisplay rating={AMC?.amc_philosophy_rating ?? null} />}
                   ]}
                   />
-                  <div className="grid grid-cols-2 w-full mt-2 text-base">
+                  
+                  <div className="grid grid-cols-2 w-full mt-2">
                     <div>
                       <TwoColLayout label="AMC Pedigree">{AMC.amc_pedigree}</TwoColLayout>
                       <TwoColLayout label="Team Pedigree">{AMC.team_pedigree}</TwoColLayout>
@@ -89,20 +89,25 @@ export default async function AmcPage({ params }: PageProps) {
                       <TwoColLayout label="Investment Team">{AMC.core_amc_team}</TwoColLayout>
                     </div>
                   </div>
-                  <h3>Recommended Funds</h3>
-                  <TableFundScreen data={funds} />
+                  </div>
+                  <div className="border-box">
+                    <h3> Investment Team </h3>
+                    {AMC.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: AMC.amc_fm_html }} />}
+                  </div>
               </TabsContent>
               <TabsContent value="rating_rationale">
-              <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
-                  <TwoColLayout label="View on AMC" labelClassName="font-bold min-w-[200px]" containerClassName="mb-4">{AMC.amc_view}</TwoColLayout>
-                  <TwoColLayout label="AMC's Pedigree" labelClassName="font-bold min-w-[200px]" containerClassName="mb-4">{AMC.amc_pedigree_desc}</TwoColLayout>
-                  <TwoColLayout label="AMC's Team" labelClassName="font-bold min-w-[200px]" containerClassName="mb-4">{AMC.team_pedigree_desc}</TwoColLayout>
-                  <TwoColLayout label="AMC's Philosophy" labelClassName="font-bold min-w-[200px]" containerClassName="mb-4">{AMC.inv_phil_desc}</TwoColLayout>
-                  <TwoColLayout label="Other Salient Points" labelClassName="font-bold min-w-[200px]" containerClassName="mb-4">{AMC.salient_points}</TwoColLayout>
+                <div className="border-box flex-col gap-y-5">
+                  <TwoColLayout label="View on AMC" containerClassName="mb-4">{AMC.amc_view}</TwoColLayout>
+                  <TwoColLayout label="AMC Pedigree" containerClassName="mb-4">{AMC.amc_pedigree_desc}</TwoColLayout>
+                  <TwoColLayout label="AMC Team" containerClassName="mb-4">{AMC.team_pedigree_desc}</TwoColLayout>
+                  <TwoColLayout label="AMC's Philosophy" containerClassName="mb-4">{AMC.inv_phil_desc}</TwoColLayout>
+                  <TwoColLayout label="Other Salient Points" containerClassName="mb-4">{AMC.salient_points}</TwoColLayout>
+                </div>
               </TabsContent>
-              <TabsContent value="investment_team">
-                  <h3 className="ime-basic-h3"> Investment Team </h3>
-                  {AMC.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: AMC.amc_fm_html }} />}
+              <TabsContent value="funds">
+                  
+                  <h3>Recommended Funds</h3>
+                    <TableFundScreen data={funds} />
               </TabsContent>  
           </Tabs>
         </div>

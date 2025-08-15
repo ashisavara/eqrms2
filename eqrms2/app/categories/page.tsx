@@ -85,7 +85,7 @@ export default async function CategoriesPage() {
 
   return (
     <div>
-        <h2 className="text-2xl font-bold mt-10">Domestic Categories</h2>
+        <div className="pageHeadingBox"><h1>Domestic Categories</h1></div>
         <Tabs defaultValue="Asset Class" className="w-full mx-auto mt-6">
             <TabsList className="w-full">
                 <TabsTrigger value="Asset Class">Asset Class</TabsTrigger>
@@ -110,7 +110,7 @@ export default async function CategoriesPage() {
                 <TableCategories data={Altcategory}/>
             </TabsContent>
         </Tabs>
-        <h2 className="text-2xl font-bold mt-10">Global Categories</h2>
+        <div className="pageHeadingBox !mt-10"><h1>Global Categories</h1></div>
         <Tabs defaultValue="Global-Assets" className="w-full mx-auto mt-6">
             <TabsList className="w-full">
               <TabsTrigger value="Global-Assets">Global Assets</TabsTrigger>

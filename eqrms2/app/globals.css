@@ -43,7 +43,11 @@
 
   /* for pageHeadingBox */
   div.pageHeadingBox {
-    @apply p-2 mt-0 mb-4 bg-gray-300 rounded-lg text-center;
+    @apply p-2 mt-0 mb-4 bg-gray-200 rounded-lg text-center;
+  }
+
+  div.border-box {
+    @apply border-2 border-gray-200 rounded-md my-8 p-2 text-sm;
   }
 
 }
@@ -141,20 +145,24 @@
   }
   
   h3 {
-    @apply text-base text-center font-bold m-4;
+    @apply text-base text-center font-bold mt-8 mb-2 bg-blue-50 rounded-md text-gray-600 p-2;
   }
 
 
   /* Ensure all unordered and ordered lists have bullets/numbers and indentation */
   ul, ol {
     list-style-type: disc;   
-    margin-left: 1.5rem;     
-    padding-left: 1.5rem;   
+    margin-left: 1rem;     
+    padding-left: 0.5rem;   
   }
 
   ul ul, ol ol, ul ol, ol ul {
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
+  }
+
+  .blue-hyperlink {
+    @apply text-blue-600 hover:text-blue-800 font-bold !text-left hover:underline
   }
 }
 
@@ -218,28 +226,17 @@ td.rms-yellow { background: #FF914D; color: white; }
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* Headings */
-h2 {
-  font-size: 1.3em;
-  color: #494848;
-  text-align: center;
-  border-bottom: 1px dotted grey;
-  border-top: 1px dotted grey;
-  padding: 10px;
-  margin: 2em 0 0.5em 0;
-}
-
 /* IME Fund Manager Styling */
 div.ime-fm h4 {
   font-weight: 600;
   margin-bottom: 0;
   color: rgb(100, 100, 100);
-  font-size: 1em;
+  font-size: 1.2em;
   margin-block-start: 15px;
 }
 
 div.ime-fm p.ime-fm-details {
-  font-size: 0.8em;
+  font-size: 0.9em;
   margin-bottom: 0;
   margin-top: 0;
   color: #525758;
@@ -247,7 +244,7 @@ div.ime-fm p.ime-fm-details {
 
 div.ime-fm p {
   font-family: 'Open Sans', sans-serif;
-  font-size: 0.85em;
+  font-size: 1em;
   margin-bottom: 10px;
   margin-top: 5px;
   color: #525758;

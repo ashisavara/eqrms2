@@ -56,7 +56,7 @@ export function EditCompanyForm({ companyId, defaultValues, coverageOptions, qua
            <SelectInput name="quality" label="Quality" control={control} options={qualityOptions}/>
       </div>
       <div className="grid grid-cols-3 gap-4">
-        <TextInput name="positive_snapshot" label="Positive Snapshot" control={control} />
+        <TextInput name="positive_snapshot" label="Positive Snapshot" control={control}/>
         <TextInput name="negative_snapshot" label="Negative Snapshot" control={control} />
         <TextInput name="watch_for" label="Watch For" control={control} />
       </div>

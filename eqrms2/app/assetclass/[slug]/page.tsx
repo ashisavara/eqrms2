@@ -35,24 +35,22 @@ export default async function AssetClassPage({params}: PageProps) {
     return (
         <div>
             <div className="pageHeadingBox">
-                <div className="flex items-center gap-4">
-                    <h1 className="text-2xl font-bold">{assetClass.asset_class_name}</h1>
-                    <FavouriteHeart 
-                        entityType="asset_class" 
-                        entityId={assetClass.asset_class_id} 
-                        size="lg"
-                    />
+                <div className="flex flex-col items-center">
+                    <div className="flex items-center gap-4">
+                        <h1>{assetClass.asset_class_name}</h1>
+                        <FavouriteHeart entityType="asset_class" entityId={assetClass.asset_class_id}  size="lg" />
+                    </div>
                 </div>
                 <p className="font-bold">{assetClass.asset_class_summary}</p>
-                <p>{assetClass.asset_class_desc}</p>
+                <p className="text-sm">{assetClass.asset_class_desc}</p>
                 <EditAssetClassButton assetClassData={assetClass} assetClassId={assetClass.asset_class_id} />
             </div>
-            <div>
-                <h2> Trailing Returns</h2>
+            <div className="border-box">
+                <h3> Trailing Returns</h3>
                 <TableCategories data={catTrailing}/>
             </div>
-            <div>
-                <h2> Annual Returns</h2>
+            <div className="border-box">
+                <h3> Annual Returns</h3>
                 <TableCategories data={catAnnual} columnType="annual"/>
             </div>
         </div>

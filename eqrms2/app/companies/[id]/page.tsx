@@ -89,31 +89,53 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
           </div>
 
           <div className="text-sm">
-            <div className="text-blue-800 mb-5">
+          {company.inv_view && (
+            <div className=" text-blue-800 mb-5 bg-blue-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.inv_view || ""}</ReactMarkdown>
             </div>
-            <div className="text-blue-800 mb-5">
+            )}
+            
+            {company.catalysts && (
+            <div className="text-blue-800 mb-5 bg-blue-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.catalysts || ""}</ReactMarkdown>
             </div>
-            <div className="text-gray-900 mb-5">
+            )}
+
+            {company.business_mix && (
+            <div className="text-gray-900 mb-5 bg-gray-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.business_mix || ""}</ReactMarkdown>
             </div>
+            )}
 
-            <div className="text-green-800 mb-5">
+            {company.positive && (
+            <div className="text-green-800 mb-5 bg-green-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.positive || ""}</ReactMarkdown>
             </div>
-            <div className="text-red-800 mb-5">
+            )}
+
+            {company.negative && (
+            <div className="text-red-800 mb-5 bg-red-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.negative || ""}</ReactMarkdown>
             </div>
-            <div className="text-orange-800 mb-5">
+            )}
+
+            {company.outlook && (
+            <div className="text-orange-800 mb-5 bg-orange-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.outlook || ""}</ReactMarkdown>
             </div>
-            <div className="text-blue-800 mb-5">
+            )}
+
+            {company.snapshot && (
+            <div className="text-blue-800 mb-5 bg-blue-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.snapshot || ""}</ReactMarkdown>
             </div>
-            <div className="text-gray-800 mb-5">
+            )}
+
+            {company.hidden && (
+            <div className="text-gray-800 mb-5 bg-gray-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.hidden || ""}</ReactMarkdown>
             </div>
+            )}
           </div>
 
           <ToggleVisibility toggleText="Add quarter notes">
