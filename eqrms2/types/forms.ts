@@ -355,6 +355,18 @@ export const AclGroupSchema = z.object({
 
 export type AclGroupValues = z.infer<typeof AclGroupSchema>;
 
+// ----------------------
+// FIN GOALS FORM
+// -----------------------
+export const FinGoalsSchema = z.object({
+  goal_name: z.string(),
+  goal_description: z.string(),
+  goal_date: z.date(),
+  exp_returns: z.number(),
+  inflation_rate: z.number(),
+  fv_goals: z.number(),
+ });
 
+ export type FinGoalsValues = z.infer<typeof FinGoalsSchema>;
 
 

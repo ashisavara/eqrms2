@@ -146,6 +146,11 @@ function EditInteractionForm(
             {/* Section 1: Interaction Details */}
             <div className="space-y-4">
                 <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Interaction Details</h3>
+                <p className="bg-red-100 p-2 text-xs"><span className="font-bold">Interaction Type Guide:</span> 
+                (a) FOLLOW-UPS: You reaching out to a client with no response back yet .. no meeting name/summary/notes needed
+                (b) INTERACTIONS: Where client & you have intereacted ... meeting name & summary required
+                (c) MEETINGS: notes on the more detailed disccussion with the client ... typically consultations, portfolio discussions etc
+                </p>
                 
                 <div className="grid grid-cols-3 gap-4">
                   <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
