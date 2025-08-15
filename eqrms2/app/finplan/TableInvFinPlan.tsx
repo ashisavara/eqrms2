@@ -5,10 +5,13 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { columns } from "./columns-inv-finplan";
 import { Investments } from "@/types/investment-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
 export default function TableInvFinPlan({ data }: { data: Investments[] }) {
-
-  const autoSortedColumns = useAutoSorting(data, columns);
+  // ✅ Use responsive columns helper
+  const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
+  
+  const autoSortedColumns = useAutoSorting(data, responsiveColumns);
 
   const table = useReactTable({
     data,

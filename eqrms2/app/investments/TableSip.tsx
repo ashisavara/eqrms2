@@ -5,10 +5,13 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { columns } from "./columns-sip";
 import { SipDetail } from "@/types/sip-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
 export default function TableInvestments({ data }: { data: SipDetail[] }) {
-
-  const autoSortedColumns = useAutoSorting(data, columns);
+  // ✅ Use responsive columns helper
+  const { responsiveColumns } = useResponsiveColumns(columns, 'sip_fund_name');
+  
+  const autoSortedColumns = useAutoSorting(data, responsiveColumns);
 
   const table = useReactTable({
     data,

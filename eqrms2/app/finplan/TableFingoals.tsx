@@ -5,10 +5,13 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { columns } from "./columns-finplan";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
 export default function TableFinPlan({ data }: { data: FinGoalsDetail[] }) {
-
-  const autoSortedColumns = useAutoSorting(data, columns);
+  // ✅ Use responsive columns helper
+  const { responsiveColumns } = useResponsiveColumns(columns, 'goal_name');
+  
+  const autoSortedColumns = useAutoSorting(data, responsiveColumns);
 
   const table = useReactTable({
     data,

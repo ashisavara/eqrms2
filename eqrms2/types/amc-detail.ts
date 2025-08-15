@@ -3,6 +3,7 @@ export type AMC = {
     id: number,
     slug: string,
     aum: number,
+    structure: string,
     amc_rating: number,
     amc_pedigree_rating: number,
     amc_team_rating: number,

@@ -2,23 +2,42 @@ import { ColumnDef } from "@tanstack/react-table";
 import { AMC } from "@/types/amc-detail";
 import Link from "next/link";
 import { RatingDisplay } from "@/components/conditional-formatting";
+import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 
 export const columns: ColumnDef<AMC>[] = [
   {
     accessorKey: "amc_name",
     header: () => <div className="text-left">AMC</div>,
     size: 300,
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const amcSlug = row.original.slug;
       const amcName = row.original.amc_name;
 
-      return (
-        <div className="text-left">
-          <Link href={`/amc/${amcSlug}`} className="text-blue-600 font-bold hover:underline">
-            {amcName}
-          </Link>
-        </div>
-      );
+      if (isMobileView(table)) {
+        // Mobile view - show as card
+        return (
+          <div className="p-3 border rounded-lg space-y-2">
+            <div className="font-semibold text-left">
+              <Link href={`/amc/${amcSlug}`} className="text-blue-600 font-bold">
+                {amcName}
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>Structure: {row.original.structure}</div>
+              <div>AMC Rating: <RatingDisplay rating={row.original.amc_rating} /></div>
+            </div>
+          </div>
+        );
+      } else {
+        // Desktop view - show as normal table cell
+        return (
+          <div className="text-left">
+            <Link href={`/amc/${amcSlug}`} className="text-blue-600 font-bold hover:underline">
+              {amcName}
+            </Link>
+          </div>
+        );
+      }
     }
   },    
   {
