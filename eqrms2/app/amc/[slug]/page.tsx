@@ -76,7 +76,7 @@ export default async function AmcPage({ params }: PageProps) {
                   ]}
                   />
                   
-                  <div className="grid grid-cols-2 w-full mt-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-2">
                     <div>
                       <TwoColLayout label="AMC Pedigree">{AMC.amc_pedigree}</TwoColLayout>
                       <TwoColLayout label="Team Pedigree">{AMC.team_pedigree}</TwoColLayout>

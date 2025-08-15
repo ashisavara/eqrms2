@@ -80,19 +80,19 @@ export default function FinPlanClientWrapper({
 
       {/* Financial Goals Table */}
       <div>
-        <h2 className="text-md font-semibold mb-2">Financial Goals</h2>
+        <h3>Financial Goals</h3>
         <TableFinPlan data={filteredFinGoals} />
       </div>
 
       {/* Investment FinPlan Table */}
       <div>
-        <h2 className="text-md font-semibold mb-2">Investment FinPlan</h2>
+        <h3>Investment FinPlan</h3>
         <TableInvFinPlan data={filteredInvestmentFinPlan} />
       </div>
 
       {/* SIP FinGoals Table */}
       <div>
-        <h2 className="text-md font-semibold mb-2">SIP FinGoals</h2>
+        <h3>SIP FinGoals</h3>
         <TableSipFinPlan data={filteredSipFinGoals} />
       </div>
     </div>

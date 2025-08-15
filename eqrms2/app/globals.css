@@ -43,7 +43,7 @@
 
   /* for pageHeadingBox */
   div.pageHeadingBox {
-    @apply p-2 mt-0 mb-4 bg-gray-200 rounded-lg text-center;
+    @apply p-2 mt-0 mb-4 bg-blue-100 text-gray-600 rounded-lg text-center;
   }
 
   div.border-box {
@@ -145,7 +145,7 @@
   }
   
   h3 {
-    @apply text-base text-center font-bold mt-8 mb-2 bg-blue-50 rounded-md text-gray-600 p-2;
+    @apply text-base text-center font-bold mt-0 mb-2 bg-blue-50 rounded-md text-gray-600 p-2;
   }
 
 

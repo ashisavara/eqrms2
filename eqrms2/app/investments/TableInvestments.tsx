@@ -104,7 +104,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
     
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-bold pt-4">Investments</h3>
+        <div className="pageHeadingBox"><h1>Investments</h1></div>
         {/* ✅ Top-level filters */}
         <div className="flex flex-wrap gap-4">
           {filters.map((filter) => (
@@ -129,7 +129,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
           </TabsList>
           
           <TabsContent value="investments">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <AggregateCard 
                 title="Total Purchase" 
                 value={aggregations.pur_amt || 0}
@@ -201,7 +201,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
             </div>
           </TabsContent>
           <TabsContent value="systematic">
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <AggregateCard 
                   title="Total SIP" 
                   value={sipTotal}
@@ -213,10 +213,19 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                   formatter={(value) => `${value.toFixed(1)}`}
                 />
               </div>
-              <h2>SIP Details</h2>
-              <TableSystematic data={sipData} />
-              <h2>STP Details</h2>
-              <TableStp data={stpData} />
+              { sipData.length > 0 && (
+                <div>
+                  <h3 className="mt-6">SIP Details</h3>
+                  <TableSystematic data={sipData} />
+                </div>
+              )}
+              
+              { stpData.length > 0 && (
+                <div>
+                <h3 className="mt-6">STP Details</h3>
+                <TableStp data={stpData} />
+                </div>
+              )}
           </TabsContent>
         </Tabs>
       </div>

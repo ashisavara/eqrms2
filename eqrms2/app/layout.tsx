@@ -60,7 +60,7 @@ export default function RootLayout({
                 
                 
               </div>
-              <div className="p-10">{children}</div>
+              <div className="px-2 py-4 md:px-10">{children}</div>
               <Toaster />
             </GroupMandateProvider>
           </ThemeProvider>

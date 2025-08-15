@@ -12,11 +12,11 @@ const TwoColLayout = ({
   containerClassName = "mb-2"
 }: TwoColLayoutProps) => {
   return (
-    <div className={`flex ${containerClassName}`}>
-      <div className={`w-45 min-w-[180px] flex-shrink-0 ${labelClassName}`}>
+    <div className={`grid grid-cols-1 md:grid-cols-2 ${containerClassName}`}>
+      <div className={`${labelClassName}`}>
         {label}
       </div>
-      <div className="flex-1 min-w-0">
+      <div>
         {children}
       </div>
     </div>

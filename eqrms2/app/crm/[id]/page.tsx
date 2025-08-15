@@ -152,8 +152,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
 
     
     return (
-        <div className="p-5">
-            <div className="pageHeadingBox">
+        <div>
+            <div className="pageHeadingBox !p-5">
                 <div className="grid grid-cols-2 gap-4 text-left">
                     <div className="text-left">
                         <div className="flex flex-row gap-2">
@@ -224,10 +224,9 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             </div> 
             <div className="mt-5">
                 <p className="text-sm">{lead.lead_background}</p>
-                <span className="font-bold">Ongoing Deals:</span>
-                <div className="text-sm bg-green-100 p-2 rounded-md mb-4">
                     {Deals.length > 0 ? (
-                        <div className="mt-1">
+                        <div className="mt-1 text-sm bg-green-100 p-2 rounded-md mb-4">
+                            <span className="font-bold">Ongoing Deals:</span>
                             {Deals.map((deal, index) => (
                                 <div key={index}>
                                     <EditDealButton 
@@ -248,7 +247,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                     ) : (
                         <span> None</span>
                     )}
-                </div>
+                
                 <h3 className="text-base font-bold">Followups (last 30)</h3>
                 <div className="text-sm bg-gray-100 p-2 rounded-md">
                     {Followups.slice(0, 30).map((followup, index) => (
@@ -271,6 +270,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         </span>
                     ))}
                 </div>
+                <h3>Interactions</h3>
                 <TableInteractions data={Meetings} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} leadsData={[lead]} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
                 
             </div>
