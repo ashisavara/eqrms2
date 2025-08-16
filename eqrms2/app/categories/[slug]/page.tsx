@@ -27,6 +27,7 @@ export default async function CategoryPage({ params }: PageProps) {
         filters: [
         (query) => query.eq('category_slug', slug),
         (query) => query.gt('fund_rating', 3),
+        (query) => query.eq('open_for_subscription', 'Y'),
         (query) => query.order('fund_rating', {ascending: false})
         ]
     })
