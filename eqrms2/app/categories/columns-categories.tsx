@@ -3,6 +3,8 @@ import { Category } from "@/types/category-detail";
 import Link from "next/link";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { ComGrowthNumberRating } from "@/components/conditional-formatting";
+import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import SimpleTable from "@/components/tables/singleRowTable";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -16,11 +18,7 @@ export const columns: ColumnDef<Category>[] = [
       return 0; // Placeholder - actual sorting handled by useAutoSorting
     },
     cell: ({ row }) => (
-      <FavouriteHeart 
-        entityType="categories" 
-        entityId={row.original.category_id} 
-        size="sm"
-      />
+      <FavouriteHeart entityType="categories" entityId={row.original.category_id} size="sm" />
     ),
     enableSorting: true,
     meta: { isFilterOnly: false }
@@ -28,17 +26,30 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "cat_name",
     header: () => <div className="text-left">Category</div>,
-    cell: ({ row }) => {
-      const categorySlug = row.original.slug;
-      const categoryName = row.original.cat_name;
-
-      return (
-        <div className="text-left">
-          <Link href={`/categories/${categorySlug}`} className="text-blue-600 font-bold hover:underline">
-            {categoryName}
-          </Link>
-        </div>
-      );
+    cell: ({ row, table }) => {
+      if (isMobileView(table)) {
+        return (
+          <div className="mobile-card">
+            <div className="flex flex-row justify-between">
+              <Link href={`/categories/${row.original.slug}`} className="text-blue-600 font-bold hover:underline text-sm">{row.original.cat_name}</Link>
+              <FavouriteHeart entityType="categories" entityId={row.original.category_id} size="sm" />
+            </div>
+            <div className="text-left text-xs text-gray-600">{row.original.cat_summary}</div>
+            <SimpleTable 
+              headers={[{ label: "1yr" }, { label: "3yr" }, { label: "5yr" }]}
+              body={[{ value: <ComGrowthNumberRating rating={Number(row.original.one_yr.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.three_yr.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.five_yr.toFixed(1))} /> }]}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div className="text-left">
+            <Link href={`/categories/${row.original.slug}`} className="text-blue-600 font-bold hover:underline">
+              {row.original.cat_name}
+            </Link>
+          </div>
+        );
+      }
     }
   },    
   {

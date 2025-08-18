@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ComGrowthNumberRating, RatingDisplay } from "@/components/conditional-formatting";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import SimpleTable from "@/components/tables/singleRowTable";
 
 export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
@@ -22,7 +23,7 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   },
   {
     accessorKey: "fund_name",
-    header: () => <div className="text-left">Fund Name</div>,
+    header: () => <div className="text-left hidden md:block">Fund Name</div>,
     size: 275,
     cell: ({ row, table }) => {
       const fundSlug = row.original.slug;
@@ -31,26 +32,25 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
       if (isMobileView(table)) {
         // Mobile view - show as card
         return (
-          <div className="p-3 border rounded-lg space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="font-semibold text-left flex-1">
-                <Link href={`/funds/${fundSlug}`} className="text-blue-600 font-bold">
+          <div className="mobile-card">
+            <div className="flex flex-row flex-wrap justify-between">
+              <div className="font-semibold text-left shrink">
+                <Link href={`/funds/${fundSlug}`} className="text-blue-600 font-bold text-sm">
                   {fundName}
                 </Link>
+                <div className="text-xs text-gray-600">{row.original.structure_name} - {row.original.cat_long_name}</div>
               </div>
+              
               <FavouriteHeart 
                 entityType="funds" 
                 entityId={row.original.fund_id} 
                 size="sm"
               />
             </div>
-            <div className="text-sm text-gray-600">{row.original.cat_long_name}</div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div>Fund Rating: <RatingDisplay rating={row.original.fund_rating} /></div>
-              {row.original.one_yr && <div>1 Year: <ComGrowthNumberRating rating={row.original.one_yr} /></div>}
-              {row.original.three_yr && <div>3 Year: <ComGrowthNumberRating rating={row.original.three_yr} /></div>}
-              {row.original.five_yr && <div>5 Year: <ComGrowthNumberRating rating={row.original.five_yr} /></div>}
-            </div>
+            <SimpleTable 
+              headers={[{ label: "Rating" }, { label: "1yr" }, { label: "3yr" }, { label: "5yr" }]}
+              body={[{ value: <RatingDisplay rating={row.original.fund_rating} /> }, { value: <ComGrowthNumberRating rating={row.original.one_yr as number} /> }, { value: <ComGrowthNumberRating rating={row.original.three_yr as number} /> }, { value: <ComGrowthNumberRating rating={row.original.five_yr as number} /> }]}
+            />
           </div>
         );
       } else {

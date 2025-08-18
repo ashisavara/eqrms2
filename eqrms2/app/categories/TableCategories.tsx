@@ -4,6 +4,7 @@ import { useReactTable, getCoreRowModel, getSortedRowModel } from "@tanstack/rea
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { Category } from "@/types/category-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
 // Import all column types
 import { columns as summaryColumns } from "./columns-categories";
@@ -29,8 +30,9 @@ interface TableCategoryProps {
 export function TableCategories({ data, columnType = "summary" }: TableCategoryProps) {
   // Select the appropriate column set from the mapping
   const selectedColumns = columnTypes[columnType];
+  const { responsiveColumns } = useResponsiveColumns(selectedColumns, 'cat_name');
   
-  const autoSortedColumns = useAutoSorting(data, selectedColumns);
+  const autoSortedColumns = useAutoSorting(data, responsiveColumns);
   
   const table = useReactTable({
     data,

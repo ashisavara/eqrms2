@@ -265,7 +265,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                                 wealthLevelOptions={wealthLevelOptions}
                             >
                                 {formatDate(followup.created_at)}
-                            </EditInteractionButton> ({followup.interaction_channel})
+                            </EditInteractionButton> ({followup.interaction_channel} - {followup.interaction_tag})
                             {index < Followups.length - 1 && " | "}
                         </span>
                     ))}

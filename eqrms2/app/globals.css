@@ -50,6 +50,10 @@
     @apply border-2 border-gray-200 rounded-md my-8 p-2 text-sm;
   }
 
+  div.mobile-card {
+    @apply p-3 border-2 border-gray-200 rounded-lg space-y-2;
+  }
+
 }
 
 @layer base {
