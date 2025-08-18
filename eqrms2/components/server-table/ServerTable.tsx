@@ -95,7 +95,7 @@ export default function ServerTable<T = any>({
                     return (
                       <td 
                         key={column.key}
-                        className={`px-1 py-1 ${
+                        className={`px-1 py-2 ${
                           column.align === 'left' ? 'text-left' : 
                           column.align === 'right' ? 'text-right' : 
                           'text-center'

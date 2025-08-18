@@ -112,15 +112,8 @@ function buildSearchFilters(search: string, searchColumns: string[]): ((query: a
 
   // Create OR condition for search across multiple columns
   return [(query: any) => {
-    let searchQuery = query;
-    searchColumns.forEach((column, index) => {
-      if (index === 0) {
-        searchQuery = searchQuery.ilike(column, `%${search}%`);
-      } else {
-        searchQuery = searchQuery.or(`${column}.ilike.%${search}%`);
-      }
-    });
-    return searchQuery;
+    const orConditions = searchColumns.map(column => `${column}.ilike.%${search}%`);
+    return query.or(orConditions.join(','));
   }];
 }
 
@@ -142,6 +135,8 @@ export async function serverSideQuery<T = any>({
   
   // Build search filters
   const searchFilters = search ? buildSearchFilters(search, searchColumns) : [];
+  
+
   
   // Combine all filters
   const allFilters = [...staticFilters, ...dynamicFilters, ...searchFilters];

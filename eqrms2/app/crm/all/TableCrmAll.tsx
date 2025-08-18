@@ -58,6 +58,8 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
 
     searchPlaceholder: 'Search leads ... ',
 
+    searchColumns: ['lead_name', 'lead_summary', 'rm_name', 'lead_source', 'lead_type', 'lead_progression'],
+
     columns: [
       { 
         key: 'lead_name', 
@@ -89,17 +91,17 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
       { 
         key: 'importance', 
         header: 'Importance', 
-        render: (value) => (<div><CrmImportanceRating rating={value ?? ""} /></div>)
+        render: (value) => (<div className="w-[80px] text-center"><CrmImportanceRating rating={value ?? ""} /></div>)
       },
       { 
         key: 'wealth_level', 
         header: 'Wealth', 
-        render: (value) => (<div><CrmWealthRating rating={value ?? ""} /></div>)
+        render: (value) => (<div className="w-[80px] text-center"><CrmWealthRating rating={value ?? ""} /></div>)
       },
       { 
         key: 'lead_progression', 
         header: 'Progression', 
-        render: (value) => (<div><CrmProgressionRating rating={value ?? ""} /></div>)
+        render: (value) => (<div className="w-[120px] text-center"><CrmProgressionRating rating={value ?? ""} /></div>)
       },
       { 
         key: 'rm_name', 
@@ -122,8 +124,8 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
       ],
 
     emptyMessage: 'no leads found with current filters .. ',sourceTable: 'view_leads_tagcrm ',  
-    filterConfig: filterConfig,              
-    searchColumns: searchColumns             
+    filterConfig: filterConfig,
+    tableClassName: "divide-y divide-gray-200" // Adds spacing between rows
   };
 
   return <ServerTablePage config={config} data={data} pagination={pagination} />;

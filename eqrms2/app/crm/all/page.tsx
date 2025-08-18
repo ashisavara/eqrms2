@@ -55,6 +55,8 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
   //  STEP 2: Parse incoming URL parameters
   const params = await searchParams;
   const { filters, pagination, sorting, search } = parseSearchParams(params);
+  
+
 
   // STEP 3: Configure filter data sources
   // This tells the system where to fetch filter options from
@@ -79,20 +81,22 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
         'wealth_level',
         'rm_name',
     ], filterConfig),
-    // Fetch the actual table data with server-side filtering/sorting/pagination
+        // Fetch the actual table data with server-side filtering/sorting/pagination
     serverSideQuery<LeadsTagging>({
       table: "view_leads_tagcrm",
       columns: "lead_name,days_followup,days_since_last_contact,importance,wealth_level,lead_progression,lead_summary,lead_source,lead_type,rm_name,lead_id",
       filters,
       search,
-        searchColumns: ['lead_name', 'lead_summary'], // Which columns to search in
-        pagination,
-        sorting,
-        staticFilters: [] // Add any always-applied filters here (e.g., status='active')
-        })
-    ]);
+      searchColumns: ['lead_name', 'lead_summary', 'rm_name', 'lead_source', 'lead_type', 'lead_progression'], // Which columns to search in
+      pagination,
+      sorting,
+      staticFilters: [] // Add any always-applied filters here (e.g., status='active')
+    })
+  ]);
 
-    return (
+
+
+  return (
     <LeadsTable     
       data={tableData.data}
       pagination={{
@@ -114,6 +118,10 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
       searchColumns={[
         'lead_name',
         'lead_summary',
+        'rm_name',
+        'lead_source',
+        'lead_type',
+        'lead_progression'
         ]}
     />
   );
