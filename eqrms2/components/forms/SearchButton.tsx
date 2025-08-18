@@ -136,7 +136,7 @@ export function SearchButton() {
         onClick={() => setShowSearchSheet(true)}
         className="hover:bg-transparent"
       >
-        <Search className="h-5 w-5" />
+        <Search className="hidden h-5 w-5 pl-1" /> Search
       </Button>
 
       {/* Search Sheet */}

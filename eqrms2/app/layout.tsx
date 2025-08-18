@@ -18,6 +18,17 @@ import {
   SidebarMenuItem,
   MainContent,
 } from "@/components/ui/simple-sidebar";
+import {
+  TrendingUpIcon,
+  FolderIcon,
+  UsersIcon,
+  WalletIcon,
+  TargetIcon,
+  ArchiveIcon,
+  FileTextIcon,
+  SearchIcon,
+  LogOutIcon,
+} from "lucide-react";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -57,16 +68,19 @@ export default function RootLayout({
                   </SidebarHeader>
                   <SidebarContent>
                     <SidebarMenu>
-                      <SidebarMenuItem href="/companies">Val Screen</SidebarMenuItem>
-                      <SidebarMenuItem href="/funds">RMS</SidebarMenuItem>
-                      <SidebarMenuItem href="/crm">CRM</SidebarMenuItem>
-                      <SidebarMenuItem href="/investments">Investments</SidebarMenuItem>
-                      <SidebarMenuItem href="/finplan">Fin Plan</SidebarMenuItem>
+                      <SidebarMenuItem href="/companies" icon={<TrendingUpIcon />}>Val Screen</SidebarMenuItem>
+                      <SidebarMenuItem href="/funds" icon={<FolderIcon />}>RMS</SidebarMenuItem>
+                      <SidebarMenuItem href="/crm" icon={<UsersIcon />}>CRM</SidebarMenuItem>
+                      <SidebarMenuItem href="/investments" icon={<WalletIcon />}>Investments</SidebarMenuItem>
+                      <SidebarMenuItem href="/finplan" icon={<TargetIcon />}>Fin Plan</SidebarMenuItem>
+                      <SidebarMenuItem href="/funds/all" icon={<ArchiveIcon />}>All Funds</SidebarMenuItem>
+                      <SidebarMenuItem href="/funds/changelog" icon={<FileTextIcon />}>ChangeLog</SidebarMenuItem>
+                      <SidebarMenuItem icon={<SearchIcon />}><SearchButton /></SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarContent>
                   <SidebarFooter>
                     <SidebarMenu>
-                      <SidebarMenuItem href="/protected">Logout</SidebarMenuItem>
+                      <SidebarMenuItem href="/protected" icon={<LogOutIcon />}>Logout</SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarFooter>
                 </Sidebar>
@@ -75,12 +89,7 @@ export default function RootLayout({
                     {/* Top Navigation Bar */}
                     <div className="flex items-center justify-between pb-2">
                       <div className="flex items-center gap-2">
-                        <SidebarTrigger />
-                        <p className="font-bold text-blue-700">
-                          <SearchButton /> | 
-                          <a href="/funds/all"> AllFunds</a> | 
-                          <a href="/funds/changelog"> ChangeLog</a> |
-                        </p>
+                         <SidebarTrigger /> 
                       </div>
                       <ChangeGroup />
                     </div>

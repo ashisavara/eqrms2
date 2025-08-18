@@ -129,9 +129,10 @@ export function SidebarMenu({ children }: SidebarMenuProps) {
 interface SidebarMenuItemProps {
   children: React.ReactNode;
   href?: string;
+  icon?: React.ReactNode;
 }
 
-export function SidebarMenuItem({ children, href }: SidebarMenuItemProps) {
+export function SidebarMenuItem({ children, href, icon }: SidebarMenuItemProps) {
   const { isOpen } = useSidebar();
   
   if (href) {
@@ -139,24 +140,35 @@ export function SidebarMenuItem({ children, href }: SidebarMenuItemProps) {
       <a
         href={href}
         className={`flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors ${
-          isOpen ? 'justify-start' : 'justify-center'
+          isOpen ? 'justify-start gap-3' : 'justify-center'
         }`}
       >
-        <span className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden md:block'}`}>
-          {children}
-        </span>
-        {!isOpen && (
-          <span className="hidden md:block text-xs font-bold">
-            {typeof children === 'string' ? children.charAt(0) : '•'}
+        {icon && (
+          <span className="flex-shrink-0">
+            {React.cloneElement(icon as React.ReactElement<any>, { 
+              className: "w-4 h-4" 
+            })}
           </span>
         )}
+        <span className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+          {children}
+        </span>
       </a>
     );
   }
   
   return (
-    <div className={`flex items-center px-3 py-2 ${isOpen ? 'justify-start' : 'justify-center'}`}>
-      {children}
+    <div className={`flex items-center px-3 py-2 ${isOpen ? 'justify-start gap-3' : 'justify-center'}`}>
+      {icon && (
+        <span className="flex-shrink-0">
+          {React.cloneElement(icon as React.ReactElement<any>, { 
+            className: "w-4 h-4" 
+          })}
+        </span>
+      )}
+      <span className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+        {children}
+      </span>
     </div>
   );
 }
