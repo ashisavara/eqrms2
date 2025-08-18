@@ -7,6 +7,17 @@ import { GroupMandateProvider } from "@/lib/contexts/GroupMandateContext";
 import { ChangeGroup } from "@/components/forms/ChangeGroup";
 import { ContextDisplay } from "@/components/forms/ContextDisplay";
 import { Toaster } from "sonner";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarTrigger,
+  SidebarMenu,
+  SidebarMenuItem,
+  MainContent,
+} from "@/components/ui/simple-sidebar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -39,29 +50,45 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <GroupMandateProvider>
-              <div className="pt-2 pl-5 pr-5 pb-2 bg-gray-100">
-                {/* Main Navigation */}
-                <div className="flex items-center justify-between pb-2">
-                  <p className="font-bold text-blue-700">
-                    <a href="/companies">Val Screen</a> | 
-                    <a href="/funds"> RMS</a> | 
-                    <a href="/crm"> CRM</a> | 
-                    <a href="/investments"> Investments</a> | 
-                    <a href="/finplan"> Fin Plan</a> | 
-                    <a href="/protected"> Logout</a> | 
-                    <SearchButton /> ......... | 
-                    <a href="/funds/all"> AllFunds</a> | 
-                    <a href="/funds/changelog"> ChangeLog</a> |
-                  </p>
-                  <ChangeGroup />
-                </div>
-
-
-                
-                
-              </div>
-              <div className="px-2 py-4 md:px-10">{children}</div>
-              <Toaster />
+              <SidebarProvider>
+                <Sidebar>
+                  <SidebarHeader>
+                    <h2 className="text-lg font-semibold">IME RMS</h2>
+                  </SidebarHeader>
+                  <SidebarContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem href="/companies">Val Screen</SidebarMenuItem>
+                      <SidebarMenuItem href="/funds">RMS</SidebarMenuItem>
+                      <SidebarMenuItem href="/crm">CRM</SidebarMenuItem>
+                      <SidebarMenuItem href="/investments">Investments</SidebarMenuItem>
+                      <SidebarMenuItem href="/finplan">Fin Plan</SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarContent>
+                  <SidebarFooter>
+                    <SidebarMenu>
+                      <SidebarMenuItem href="/protected">Logout</SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarFooter>
+                </Sidebar>
+                <MainContent>
+                  <div className="pt-2 pl-5 pr-5 pb-2 bg-gray-100">
+                    {/* Top Navigation Bar */}
+                    <div className="flex items-center justify-between pb-2">
+                      <div className="flex items-center gap-2">
+                        <SidebarTrigger />
+                        <p className="font-bold text-blue-700">
+                          <SearchButton /> | 
+                          <a href="/funds/all"> AllFunds</a> | 
+                          <a href="/funds/changelog"> ChangeLog</a> |
+                        </p>
+                      </div>
+                      <ChangeGroup />
+                    </div>
+                  </div>
+                  <div className="px-2 py-4 md:px-10">{children}</div>
+                </MainContent>
+                <Toaster />
+              </SidebarProvider>
             </GroupMandateProvider>
           </ThemeProvider>
       </body>
