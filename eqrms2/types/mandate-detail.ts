@@ -1,0 +1,25 @@
+export type MandateDetail = {
+    im_id: number;
+    created_at?: string;
+    rt_score?: number;
+    ra_score?: number;
+    rp_score?: number;
+    rp_override?: string;
+    group_id?: number;
+    mandate_name?: string;
+    inv_plan?: string;
+    other_mandate_details?: string;
+    mandate_tags?: string;
+    rt1_score?: number;
+    rt2_score?: number;
+    rt3_score?: number;
+    rt4_score?: number;
+    rt5_score?: number;
+    ra1_score?: number;
+    ra2_score?: number;
+    ra3_score?: number;
+    ra4_score?: number;
+    ra5_score?: number;
+    one_line_objective?: string;
+    portfolio_reallocation_thoughts?: string;
+};
