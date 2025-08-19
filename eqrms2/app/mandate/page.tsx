@@ -4,9 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { MandateDetail } from "@/types/mandate-detail";
-import { FavStructure, FavAssetClass, FavCategory } from "@/types/favourite-detail";
+import { FavStructure, FavAssetClass, FavCategory, FavFunds } from "@/types/favourite-detail";
 import { TableCategories } from "@/app/categories/TableCategories";
+import TableFundScreen from "@/app/funds/TableFundScreen";
 import { Category } from "@/types/category-detail";
+import { RmsFundsScreener } from "@/types/funds-detail";
 
 export default async function MandatePage() {
     const groupId = await getCurrentGroupId();
@@ -24,7 +26,7 @@ export default async function MandatePage() {
     );
   }
 
-  const [invMandate, favStructure, favAssetClass, favCategory, catPerformance] = await Promise.all([ 
+  const [invMandate, favStructure, favAssetClass, favCategory, catPerformance, favFunds] = await Promise.all([ 
     supabaseSingleRead<MandateDetail>({
         table: "investment_mandate",
         columns: "*",
@@ -60,6 +62,14 @@ export default async function MandatePage() {
             (query) => query.eq("im_id", mandate)
         ],
     }),
+    supabaseListRead<RmsFundsScreener>({
+        table: "view_im_fav_funds",
+        columns: "*",
+        filters: [
+            (query) => query.eq("im_id", mandate)
+        ],
+    }),
+
   ])
 
   if (!invMandate) {
@@ -71,7 +81,7 @@ export default async function MandatePage() {
         <Tabs defaultValue="mandate" className="w-full">
           <TabsList className="w-full">
             <TabsTrigger value="mandate">Mandate</TabsTrigger>
-            <TabsTrigger value="favourites">Favourites</TabsTrigger>
+            <TabsTrigger value="favourites">Recommended Funds</TabsTrigger>
             <TabsTrigger value="finplan">Financial Plan</TabsTrigger>
           </TabsList>
           <TabsContent value="mandate">
@@ -136,7 +146,7 @@ export default async function MandatePage() {
                 </div>
           </TabsContent>
           <TabsContent value="favourites">
-            
+            <TableFundScreen data={favFunds}/>
                 
           </TabsContent>
           <TabsContent value="finplan"></TabsContent>

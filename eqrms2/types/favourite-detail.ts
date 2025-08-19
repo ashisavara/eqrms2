@@ -34,3 +34,22 @@ export type FavCategory = {
     cy_9: number;
     cy_10: number;
 }
+
+export type FavFunds = {
+    fav_fund_id: number;    
+    im_id: number;
+    fund_id: number;
+    fund_name: string;
+    mandate_name: string;
+    one_yr: number;
+    three_yr: number;
+    five_yr: number;
+    since_inception: number;
+    fund_rating: number;
+    fund_performance_rating: number;
+    amc_name: string;
+    amc_rating: number;
+    cat_long_name: string;
+    cat_name: string;
+    structure_name: string;
+}

@@ -128,11 +128,11 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
           <TabsList className="w-full">
             <TabsTrigger value="investments">Investments</TabsTrigger>
             <TabsTrigger value="analysis">Analysis</TabsTrigger>
-            <TabsTrigger value="systematic">Systematic</TabsTrigger>
+            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
           </TabsList>
           
           <TabsContent value="investments">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Purchase" 
                 value={aggregations.pur_amt || 0}
@@ -149,6 +149,16 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 formatter={(value) => `${value.toFixed(1)}`}
                 className={aggregations.gain_loss >= 0 ? "border-green-200" : "border-red-200"}
               />
+              <AggregateCard 
+                  title="Total SIP" 
+                  value={sipTotal}
+                  formatter={(value) => `${value.toFixed(1)}`}
+                />
+                <AggregateCard 
+                  title="Total STP" 
+                  value={stpTotal}
+                  formatter={(value) => `${value.toFixed(1)}`}
+                />
             </div>
             <ReactTableWrapper 
               table={table} 
@@ -160,6 +170,22 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 formatter: (value) => value.toFixed(1)
               }}
             />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              </div>
+              { sipData.length > 0 && (
+                <div>
+                  <h3 className="mt-6">SIP Details</h3>
+                  <TableSystematic data={sipData} />
+                </div>
+              )}
+              
+              { stpData.length > 0 && (
+                <div>
+                <h3 className="mt-6">STP Details</h3>
+                <TableStp data={stpData} />
+                </div>
+              )}
           </TabsContent>
           
           <TabsContent value="analysis">
@@ -203,32 +229,8 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
               />
             </div>
           </TabsContent>
-          <TabsContent value="systematic">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <AggregateCard 
-                  title="Total SIP" 
-                  value={sipTotal}
-                  formatter={(value) => `${value.toFixed(1)}`}
-                />
-                <AggregateCard 
-                  title="Total STP" 
-                  value={stpTotal}
-                  formatter={(value) => `${value.toFixed(1)}`}
-                />
-              </div>
-              { sipData.length > 0 && (
-                <div>
-                  <h3 className="mt-6">SIP Details</h3>
-                  <TableSystematic data={sipData} />
-                </div>
-              )}
-              
-              { stpData.length > 0 && (
-                <div>
-                <h3 className="mt-6">STP Details</h3>
-                <TableStp data={stpData} />
-                </div>
-              )}
+          <TabsContent value="recommendations">
+            
           </TabsContent>
         </Tabs>
       </div>
