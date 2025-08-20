@@ -13,6 +13,8 @@ import { RatingDisplay,CompQualityRating, NumberRating, ComGrowthNumberRating, C
 import { getUserRoles } from "@/lib/auth/getUserRoles";
 import { can } from "@/lib/permissions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params; // Await the params to get the id
   

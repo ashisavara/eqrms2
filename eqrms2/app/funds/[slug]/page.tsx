@@ -9,7 +9,8 @@ import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
-const userRoles = await getUserRoles();
+
+export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -17,6 +18,9 @@ interface PageProps {
 
 export default async function FundPage({ params }: PageProps) {
   const { slug } = await params;
+  
+  // Get user roles for permission checking
+  const userRoles = await getUserRoles();
 
   // Fetch options and fund data in parallel
   const [openSubsOptions, strategyTagOptions, amcPedigreeOptions, amcTeamPedigreeOptions, amcTeamChurnOptions, amcMaturityOptions, amcInvPhilosophyDefOptions, fund] = await Promise.all([
