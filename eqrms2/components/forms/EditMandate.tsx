@@ -10,11 +10,13 @@ import { TextInput, ResizableTextArea, ToggleGroupInput, SelectInput } from "./F
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 
 // Internal form component
 function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandateValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const masterOptions = useMasterOptions();
 
     const cleanedData: EditMandateValues = {
         mandate_name: initialData?.mandate_name || "",
@@ -60,13 +62,7 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
                   name="rp_override"
                   label="Risk Profile"
                   control={control}
-                  options={[
-                    { value: "Very Aggressive", label: "Very Aggressive" },
-                    { value: "Aggressive", label: "Aggressive" },
-                    { value: "Balanced", label: "Balanced" },
-                    { value: "Conservative", label: "Conservative" },
-                    { value: "Very Conservative", label: "Very Conservative" }
-                  ]}
+                  options={transformToValueLabel(masterOptions.riskProfile)}
                 />
             </div>
             <TextInput name="one_line_objective" label="One Line Objective" control={control} />

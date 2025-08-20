@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { SearchButton } from "@/components/forms/SearchButton";
 import { GroupMandateProvider } from "@/lib/contexts/GroupMandateContext";
+import { MasterOptionsProvider } from "@/lib/contexts/MasterOptionsContext";
 import { ChangeGroup } from "@/components/forms/ChangeGroup";
 import { ContextDisplay } from "@/components/forms/ContextDisplay";
 import { Toaster } from "sonner";
@@ -60,7 +61,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <GroupMandateProvider>
+            <MasterOptionsProvider>
+              <GroupMandateProvider>
               <SidebarProvider>
                 <Sidebar>
                   <SidebarHeader>
@@ -99,7 +101,8 @@ export default function RootLayout({
                 </MainContent>
                 <Toaster />
               </SidebarProvider>
-            </GroupMandateProvider>
+              </GroupMandateProvider>
+            </MasterOptionsProvider>
           </ThemeProvider>
       </body>
     </html>

@@ -346,6 +346,15 @@ export const MASTER_OPTIONS = {
     "4.0",
     "5.0",
     "0.0"
+  ],
+
+  // Risk Profile Options
+  riskProfile: [
+    "Very Aggressive",
+    "Aggressive", 
+    "Balanced",
+    "Conservative",
+    "Very Conservative"
   ]
 } as const;
 
