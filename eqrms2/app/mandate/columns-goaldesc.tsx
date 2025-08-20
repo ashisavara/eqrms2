@@ -9,6 +9,7 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
     { 
         accessorKey: "goal_name", 
         header: "Goal Name",
+        size:150,
         cell: ({ row, table }) => {
             if (isMobileView(table)) {
                 // Mobile view - show as card
@@ -27,6 +28,7 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
                             <div>Pending Amount: {(row.original.pending_amt as number)?.toFixed(0) || ""}</div>
                             <div>Lumpsum Required: {(row.original.lumpsum_req as number)?.toFixed(0) || ""}</div>
                             <div>SIP Required: {(row.original.sip_req as number)?.toFixed(0) || ""}</div>
+                            <div>Goal Description: {row.original.goal_description}</div>
                         </div>
                     </div>
                 );
@@ -44,20 +46,12 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
             }
         }
     },
-    { accessorKey: "goal_ach", header: "Achieved", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
     { 
-        accessorKey: "yrs_to_goal", 
-        header: "Yrs to Goal", 
-        size:80,
-        cell: ({ getValue }) => (getValue() as number)?.toFixed(1) || "" 
+        accessorKey: "goal_description", 
+        header: "Goal Description", 
+        size:500, 
+        cell: ({ getValue }) => (getValue() as string) || "" 
     },
-    { accessorKey: "pv_goal", header: "PV Goal", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "fv_goals", header: "FV Goal", size:80},
-    { accessorKey: "pv_inv", header: "PV Inv", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "fv_inv", header: "FV Inv", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "pending_amt", header: "Pending Amt", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "lumpsum_req", header: "Lumpsum Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "sip_req", header: "SIP Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" }
 ];
 
 

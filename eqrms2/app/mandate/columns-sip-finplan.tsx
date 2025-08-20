@@ -29,8 +29,11 @@ export const columns: ColumnDef<SipDetail>[] = [
             } else {
                 // Desktop view - show as normal table cell
                 return <div className="text-left flex items-center gap-2">
-                    {row.original.sip_fund_name}
-                    <EditSipGoalsButton sipData={row.original} sip_id={row.original.sip_id} />
+                    <EditSipGoalsButton sipData={row.original} sip_id={row.original.sip_id}>
+                        <span className="blue-hyperlink">
+                            {row.original.sip_fund_name}
+                        </span>
+                    </EditSipGoalsButton>
                     </div>;
             }
         }

@@ -29,8 +29,11 @@ export const columns: ColumnDef<Investments>[] = [
             } else {
                 // Desktop view - show as normal table cell
                 return <div className="text-left flex items-center gap-2">
-                    {row.original.fund_name}
-                    <EditInvGoalsButton investmentsData={row.original} investment_id={row.original.investment_id} />
+                    <EditInvGoalsButton investmentsData={row.original} investment_id={row.original.investment_id}>
+                        <span className="blue-hyperlink">
+                            {row.original.fund_name}
+                        </span>
+                    </EditInvGoalsButton>
                 </div>;
             }
         }

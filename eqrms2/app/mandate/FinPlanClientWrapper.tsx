@@ -9,6 +9,8 @@ import { orchestrateCalculations } from "./finplan-util";
 import TableFinPlan from "./TableFingoals";
 import TableInvFinPlan from "./TableInvFinPlan";
 import TableSipFinPlan from "./TableSipFinPlan";
+import TableGoalDesc from "./TableGoalDesc";
+import { AddFinGoalsButton } from "@/components/forms/AddFinGoals";
 
 interface FinPlanClientWrapperProps {
   finGoalsData: FinGoalsDetail[];
@@ -76,12 +78,15 @@ export default function FinPlanClientWrapper({
             placeholder="Filter by Goals..."
           />
         </div>
+        <AddFinGoalsButton />
       </div>
 
       {/* Financial Goals Table */}
       <div>
         <h3>Financial Goals</h3>
         <TableFinPlan data={filteredFinGoals} />
+        <div className="mt-6"></div>
+        <TableGoalDesc data={filteredFinGoals} />
       </div>
 
       {/* Investment FinPlan Table */}

@@ -65,10 +65,12 @@ function EditInvGoalsForm({initialData, id, onSuccess}: {initialData: LinkInvToG
 // Main component that exports the button and handles sheet state
 export function EditInvGoalsButton({ 
   investmentsData,
-  investment_id
+  investment_id,
+  children
 }: { 
   investmentsData: any;
   investment_id: number;
+  children?: React.ReactNode;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -87,7 +89,7 @@ export function EditInvGoalsButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Link
+        {children || 'Link'}
       </span>
 
       {/* Edit Sheet */}

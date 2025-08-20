@@ -65,10 +65,12 @@ function EditSipGoalsForm({initialData, id, onSuccess}: {initialData: LinkSipToG
 // Main component that exports the button and handles sheet state
 export function EditSipGoalsButton({ 
   sipData,
-  sip_id
+  sip_id,
+  children
 }: { 
   sipData: any;
   sip_id: number;
+  children?: React.ReactNode;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -87,7 +89,7 @@ export function EditSipGoalsButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Link
+        {children || 'Link'}
       </span>
 
       {/* Edit Sheet */}

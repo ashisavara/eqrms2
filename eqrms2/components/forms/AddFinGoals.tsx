@@ -2,50 +2,65 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { FinGoalsSchema, FinGoalsValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextInput, DatePicker, TextArea, ResizableTextArea } from "./FormFields";
+import { TextInput, DatePicker, TextArea } from "./FormFields";
 import { toast, Toaster } from "sonner";
-import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
-import { useRouter } from "next/navigation";
+import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
+import { useGroupMandate } from "@/lib/contexts/GroupMandateContext";
+
 
 // Internal form component
-function EditFinGoalsForm({initialData, id, onSuccess}: {initialData: FinGoalsValues | null, id: number, onSuccess: () => void}) {
+function AddFinGoalsForm({onSuccess}: {onSuccess?: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const { currentGroup } = useGroupMandate();
 
-    const cleanedData: FinGoalsValues = {
-        goal_name: initialData?.goal_name || "",
-        goal_description: initialData?.goal_description || "",
-        goal_date: initialData?.goal_date || new Date(),
-        exp_returns: initialData?.exp_returns || 0,
-        inflation_rate: initialData?.inflation_rate || 0,
-        fv_goals: initialData?.fv_goals || 0
+    // Default empty values for new goal
+    const defaultData: FinGoalsValues = {
+        goal_name: "",
+        goal_description: "",
+        goal_date: new Date(),
+        exp_returns: 0,
+        inflation_rate: 0,
+        fv_goals: 0
     };
 
     const { control, handleSubmit} = useForm<FinGoalsValues>({
-        defaultValues: cleanedData,
+        defaultValues: defaultData,
         resolver: zodResolver(FinGoalsSchema)
     });
 
     const onSubmit = handleSubmit(async (data) => {
+        if (!currentGroup) {
+            toast.error("Please select a group first");
+            return;
+        }
+
         setIsLoading(true);
         try {
-            await supabaseUpdateRow('fin_goals', 'goal_id', id, data);
+            // Include group_id in the data
+            const goalData = {
+                ...data,
+                group_id: currentGroup.id
+            };
+            
+            await supabaseInsertRow('fin_goals', goalData);
             
             if (typeof window !== "undefined") {
-                toast.success("goal updated successfully!");
+                toast.success("Goal created successfully!");
                 setTimeout(() => {
                     onSuccess?.();
                     router.refresh();
                 }, 1500);
             }
         } catch (error) {
-            console.error('Error updating goal:', error);
+            console.error('Error creating goal:', error);
             if (typeof window !== "undefined") {
-                toast.error("Failed to update goal. Please try again.");
+                toast.error("Failed to create goal. Please try again.");
             }
             setIsLoading(false);
         }
@@ -67,7 +82,7 @@ function EditFinGoalsForm({initialData, id, onSuccess}: {initialData: FinGoalsVa
 
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Saving...' : 'Save'}
+                    {isLoading ? 'Creating...' : 'Create Goal'}
                 </Button>
             </div>
         </form>
@@ -75,52 +90,32 @@ function EditFinGoalsForm({initialData, id, onSuccess}: {initialData: FinGoalsVa
 }
 
 // Main component that exports the button and handles sheet state
-export function EditFinGoalsButton({ 
-  goalData,
-  goalId,
+export function AddFinGoalsButton({ 
   children
 }: { 
-  goalData: any;
-  goalId: number;
   children?: React.ReactNode;
 }) {
-  const [showEditSheet, setShowEditSheet] = useState(false);
-
-  if (!goalId) {
-    console.error('Goal data is missing goal_id:', goalData);
-  }
-
-  // Convert goal data to FinGoalsValues format
-  const goalUpdateData: FinGoalsValues = {
-    goal_name: goalData.goal_name ?? "",
-    goal_description: goalData.goal_description ?? "",
-    goal_date: goalData.goal_date ?? new Date(),
-    exp_returns: goalData.exp_returns ?? 0,
-    inflation_rate: goalData.inflation_rate ?? 0,
-    fv_goals: goalData.fv_goals ?? 0
-  };
+  const [showAddSheet, setShowAddSheet] = useState(false);
 
   return (
     <>
       <span 
-        onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        onClick={() => setShowAddSheet(true)}
+        className="text-green-500 hover:text-green-700 underline cursor-pointer"
       >
-        {children || 'Edit Goal'}
+        {children || '+ Add Goal'}
       </span>
 
-      {/* Edit Sheet */}
-      {showEditSheet && (
-        <Sheet open={true} onOpenChange={() => setShowEditSheet(false)}>
+      {/* Add Sheet */}
+      {showAddSheet && (
+        <Sheet open={true} onOpenChange={() => setShowAddSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Edit Asset Class Details</SheetTitle>
+              <SheetTitle>Add New Financial Goal</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
-              <EditFinGoalsForm
-                initialData={goalUpdateData}
-                id={goalId}
-                onSuccess={() => setShowEditSheet(false)}
+              <AddFinGoalsForm
+                onSuccess={() => setShowAddSheet(false)}
               />
             </div>
           </SheetContent>
