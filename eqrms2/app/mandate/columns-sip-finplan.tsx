@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { SipDetail } from "@/types/sip-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import { EditSipGoalsButton } from "@/components/forms/EditSipGoals";
 
 export const columns: ColumnDef<SipDetail>[] = [
     { 
@@ -27,7 +28,10 @@ export const columns: ColumnDef<SipDetail>[] = [
                 );
             } else {
                 // Desktop view - show as normal table cell
-                return <div className="text-left">{row.original.sip_fund_name}</div>;
+                return <div className="text-left flex items-center gap-2">
+                    {row.original.sip_fund_name}
+                    <EditSipGoalsButton sipData={row.original} sip_id={row.original.sip_id} />
+                    </div>;
             }
         }
     },

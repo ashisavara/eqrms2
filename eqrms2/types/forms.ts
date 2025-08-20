@@ -374,7 +374,7 @@ export const FinGoalsSchema = z.object({
 // LINK INV TO GOALS 
 // -------------------
 export const LinkInvToGoalsSchema = z.object({
-  goal_id: z.number(),
+  goal_id: z.coerce.number().nullable(),
 });
 
 export type LinkInvToGoalsValues = z.infer<typeof LinkInvToGoalsSchema>;
@@ -383,7 +383,7 @@ export type LinkInvToGoalsValues = z.infer<typeof LinkInvToGoalsSchema>;
 // LINK SIP TO GOALS
 // -------------------
 export const LinkSipToGoalsSchema = z.object({
-  goal_id: z.number(),
+  goal_id: z.coerce.number().nullable(),
 });
 
 export type LinkSipToGoalsValues = z.infer<typeof LinkSipToGoalsSchema>;

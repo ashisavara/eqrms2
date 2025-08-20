@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { categorySchema, CategoryValues } from "@/types/forms";
@@ -13,6 +14,7 @@ import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 // Internal form component
 function EditAssetClassForm({initialData, id, onSuccess}: {initialData: CategoryValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const cleanedData: CategoryValues = {
         cat_summary: initialData?.cat_summary || "",
@@ -33,7 +35,7 @@ function EditAssetClassForm({initialData, id, onSuccess}: {initialData: Category
                 toast.success("Category updated successfully!");
                 setTimeout(() => {
                     onSuccess?.();
-                    window.location.reload();
+                    router.refresh();
                 }, 1500);
             }
         } catch (error) {

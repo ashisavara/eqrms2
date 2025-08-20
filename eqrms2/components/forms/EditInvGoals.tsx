@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { LinkInvToGoalsSchema, LinkInvToGoalsValues } from "@/types/forms";
@@ -14,6 +15,7 @@ import { useGoalOptions } from "@/lib/contexts/GoalOptionsContext";
 // Internal form component
 function EditInvGoalsForm({initialData, id, onSuccess}: {initialData: LinkInvToGoalsValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
     const { goalOptions } = useGoalOptions();
 
     const cleanedData: LinkInvToGoalsValues = {
@@ -28,13 +30,13 @@ function EditInvGoalsForm({initialData, id, onSuccess}: {initialData: LinkInvToG
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await supabaseUpdateRow('investments', 'goal_id', id, data);
+            await supabaseUpdateRow('investments', 'investment_id', id, data);
             
             if (typeof window !== "undefined") {
                 toast.success("Goal Linked successfully!");
                 setTimeout(() => {
                     onSuccess?.();
-                    window.location.reload();
+                    router.refresh();
                 }, 1500);
             }
         } catch (error) {
@@ -74,7 +76,7 @@ export function EditInvGoalsButton({
     console.error('Investments data is missing investment id:', investmentsData);
   }
 
-  // Convert category data to LinkInvToGoalsValues format
+  // Convert category data to LinkInvToGoalsValues format  
   const invUpdateData: LinkInvToGoalsValues = {
     goal_id: investmentsData.goal_id ?? 0,
   };

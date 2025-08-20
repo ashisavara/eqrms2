@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { changelogSchema, ChangelogValues } from "@/types/forms";
@@ -13,6 +14,7 @@ import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 // Internal form component
 function EditChangelogForm({initialData, id, onSuccess}: {initialData: ChangelogValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const cleanedData: ChangelogValues = {
         change_desc: initialData?.change_desc || "",
@@ -33,7 +35,7 @@ function EditChangelogForm({initialData, id, onSuccess}: {initialData: Changelog
                 toast.success("Changelog updated successfully!");
                 setTimeout(() => {
                     onSuccess?.();
-                    window.location.reload();
+                    router.refresh();
                 }, 1500);
             }
         } catch (error) {

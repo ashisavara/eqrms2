@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { amcUpdateSchema, AmcUpdateValues } from "@/types/forms";
@@ -29,7 +30,8 @@ function EditAmcForm({
   amcTeamChurnOptions: { value: string; label: string }[];
   amcMaturityOptions: { value: string; label: string }[];
   amcInvPhilosophyDefOptions: { value: string; label: string }[];
-}) {  
+}) {
+  const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: AmcUpdateValues = {
     amc_rating: initialData.amc_rating ?? 0,
@@ -68,7 +70,7 @@ function EditAmcForm({
         toast.success("AMC updated successfully!");
         setTimeout(() => {
           onSuccess?.();
-          window.location.reload();
+          router.refresh();
         }, 1500);
       }
     } catch (error) {

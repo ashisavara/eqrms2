@@ -1,6 +1,7 @@
 'use client'; // Keep this as a client component for form validation
 
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CompanyQrtNotesSchema, CompanyQrtNotesValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +16,8 @@ type Props = {
   onSuccess?: () => void;
 };
 
-export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions, onSuccess }: Props) {  
+export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions, onSuccess }: Props) {
+  const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: CompanyQrtNotesValues = {
     qtr: initialData.qtr ?? "",
@@ -51,7 +53,7 @@ export function EditQtrNotesForm({ initialData, qtrOptions, resultRatingOptions,
         toast.success("Quarterly notes updated successfully!");
         setTimeout(() => {
           onSuccess?.();
-          window.location.reload();
+          router.refresh();
         }, 1500);
       }
     } catch (error) {

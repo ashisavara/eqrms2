@@ -87,7 +87,7 @@ export default async function MandatePage() {
       }),
       supabaseListRead({
         table: "view_inv_sip_details",
-        columns: "sip_fund_name, goal_name, investor_name, sip_amount, months_left, sip_fv, goal_id, exp_return",
+        columns: "sip_fund_name, goal_name, investor_name, sip_amount, months_left, sip_fv, goal_id, exp_return, sip_id",
         filters: [
           (query) => query.eq("group_id", groupId)
         ], 
@@ -99,7 +99,7 @@ export default async function MandatePage() {
   }
 
   const goalOptionsForm = finGoals.map(goal => ({
-    value: goal.goal_id as string,
+    value: String(goal.goal_id),
     label: goal.goal_name as string
   }));
 

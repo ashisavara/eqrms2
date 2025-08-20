@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { sectorSchema, SectorValues } from "@/types/forms";
@@ -21,7 +22,8 @@ function EditSectorForm({
   initialData: SectorValues; 
   sectorSlug: string;
   onSuccess?: () => void;
-}) {  
+}) {
+  const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: SectorValues = {
     sector_name: initialData.sector_name ?? "",
@@ -53,7 +55,7 @@ function EditSectorForm({
         toast.success("Sector updated successfully!");
         setTimeout(() => {
           onSuccess?.();
-          window.location.reload();
+          router.refresh();
         }, 1500);
       }
     } catch (error) {

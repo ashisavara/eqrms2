@@ -5,43 +5,44 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import { assetClassSchema, AssetClassValues } from "@/types/forms";
+import { LinkSipToGoalsSchema, LinkSipToGoalsValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea } from "./FormFields";
+import { ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+import { useGoalOptions } from "@/lib/contexts/GoalOptionsContext";
 
 // Internal form component
-function EditAssetClassForm({initialData, id, onSuccess}: {initialData: AssetClassValues | null, id: number, onSuccess: () => void}) {
+function EditSipGoalsForm({initialData, id, onSuccess}: {initialData: LinkSipToGoalsValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const { goalOptions } = useGoalOptions();
 
-    const cleanedData: AssetClassValues = {
-        asset_class_summary: initialData?.asset_class_summary || "",
-        asset_class_desc: initialData?.asset_class_desc || ""
+    const cleanedData: LinkSipToGoalsValues = {
+        goal_id: initialData?.goal_id || 0,
     };
 
-    const { control, handleSubmit} = useForm<AssetClassValues>({
+    const { control, handleSubmit} = useForm<LinkSipToGoalsValues>({
         defaultValues: cleanedData,
-        resolver: zodResolver(assetClassSchema)
+        resolver: zodResolver(LinkSipToGoalsSchema)
     });
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await supabaseUpdateRow('rms_asset_class', 'asset_class_id', id, data);
+            await supabaseUpdateRow('inv_sip', 'id', id, data);
             
             if (typeof window !== "undefined") {
-                toast.success("Asset class updated successfully!");
+                toast.success("Goal Linked successfully!");
                 setTimeout(() => {
                     onSuccess?.();
                     router.refresh();
                 }, 1500);
             }
         } catch (error) {
-            console.error('Error updating asset class:', error);
+            console.error('Error linking Goal:', error);
             if (typeof window !== "undefined") {
-                toast.error("Failed to update asset class. Please try again.");
+                toast.error("Failed to link Goal. Please try again.");
             }
             setIsLoading(false);
         }
@@ -50,10 +51,8 @@ function EditAssetClassForm({initialData, id, onSuccess}: {initialData: AssetCla
     return (
         <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-            
-            <ResizableTextArea name="asset_class_summary" label="Asset Class Summary" control={control} />
-            <ResizableTextArea name="asset_class_desc" label="Asset Class Description" control={control} />
-
+            <ToggleGroupInput name="goal_id" label="Link Goal" control={control} options={goalOptions} valueType="number" itemClassName="ime-choice-chips" />
+        
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
                     {isLoading ? 'Saving...' : 'Save'}
@@ -64,23 +63,22 @@ function EditAssetClassForm({initialData, id, onSuccess}: {initialData: AssetCla
 }
 
 // Main component that exports the button and handles sheet state
-export function EditAssetClassButton({ 
-  assetClassData,
-  assetClassId
+export function EditSipGoalsButton({ 
+  sipData,
+  sip_id
 }: { 
-  assetClassData: any;
-  assetClassId: number;
+  sipData: any;
+  sip_id: number;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
-  if (!assetClassId) {
-    console.error('Asset class data is missing asset_class_id:', assetClassData);
+  if (!sip_id) {
+    console.error('SIP data is missing sip id:', sipData);
   }
 
-  // Convert asset class data to AssetClassValues format
-  const assetClassUpdateData: AssetClassValues = {
-    asset_class_summary: assetClassData.asset_class_summary ?? "",
-    asset_class_desc: assetClassData.asset_class_desc ?? "",
+  // Convert sip data to LinkSipToGoalsValues format  
+  const sipUpdateData: LinkSipToGoalsValues = {
+    goal_id: sipData.goal_id ?? 0,
   };
 
   return (
@@ -89,7 +87,7 @@ export function EditAssetClassButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Edit |  
+        Link
       </span>
 
       {/* Edit Sheet */}
@@ -97,12 +95,12 @@ export function EditAssetClassButton({
         <Sheet open={true} onOpenChange={() => setShowEditSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Edit Asset Class Details</SheetTitle>
+              <SheetTitle>Link SIP Goal</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
-              <EditAssetClassForm
-                initialData={assetClassUpdateData}
-                id={assetClassId}
+              <EditSipGoalsForm
+                initialData={sipUpdateData}
+                id={sip_id}
                 onSuccess={() => setShowEditSheet(false)}
               />
             </div>

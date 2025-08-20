@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { amcDueDiligenceSchema, AmcDueDiligenceValues } from "@/types/forms";
@@ -20,7 +21,8 @@ function EditAmcDueDilForm({
   initialData: AmcDueDiligenceValues; 
   id: number;
   onSuccess?: () => void;
-}) {  
+}) {
+  const router = useRouter();
   // Convert null values to appropriate defaults for form inputs
   const cleanedData: AmcDueDiligenceValues = {
     // DD Section
@@ -98,7 +100,7 @@ function EditAmcDueDilForm({
         toast.success("AMC Due Diligence updated successfully!");
         setTimeout(() => {
           onSuccess?.();
-          window.location.reload();
+          router.refresh();
         }, 1500);
       }
     } catch (error) {

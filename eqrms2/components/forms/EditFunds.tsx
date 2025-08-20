@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { fundsUpdateSchema, FundsUpdateValues } from "@/types/forms";
@@ -23,7 +24,8 @@ function EditFundsForm({
   onSuccess?: () => void;
   openSubsOptions: { value: string; label: string }[];
   strategyTagOptions: { value: string; label: string }[];
-}) {  
+}) {
+  const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: FundsUpdateValues = {
     fund_rating: initialData.fund_rating ?? 0,
@@ -56,7 +58,7 @@ function EditFundsForm({
         toast.success("Fund updated successfully!");
         setTimeout(() => {
           onSuccess?.();
-          window.location.reload();
+          router.refresh();
         }, 1500);
       }
     } catch (error) {
