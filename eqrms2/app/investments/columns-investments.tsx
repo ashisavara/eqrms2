@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RatingDisplay } from "@/components/conditional-formatting";
 import {Investments} from"@/types/investment-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import { EditInvAmtButton } from "@/components/forms/EditInvNewAmt";
 
 export const columns: ColumnDef<Investments>[] = [
 
@@ -38,9 +39,9 @@ export const columns: ColumnDef<Investments>[] = [
         } else {
             // Desktop view - show as normal table cell
             if (row.original.slug) {
-                return <div className="text-left"><Link href={`/funds/${row.original.slug}`} className="text-blue-600 font-bold hover:underline">{row.original.fund_name}</Link></div>
+                return <div className="text-left"><Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link> | <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
             } else {
-                return <div className="text-left">{row.original.fund_name}</div>
+                return <div className="text-left">{row.original.fund_name} | <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
             }
         }
     }

@@ -402,3 +402,31 @@ export const EditMandateSchema = z.object({
 });
 
 export type EditMandateValues = z.infer<typeof EditMandateSchema>;
+
+// -------------------
+// EDIT HELD AWAY ASSETS
+// -------------------
+export const EditHeldAwayAssetsSchema = z.object({
+  fund_name: z.string(),
+  asset_class_id: z.coerce.number().nullable(),
+  category_id: z.coerce.number().nullable(),
+  structure_id: z.coerce.number().nullable(),
+  investor_id: z.coerce.number().nullable(),
+  advisor_name: z.string().nullable(),
+  pur_amt: z.coerce.number().nullable(),
+  cur_amt: z.coerce.number(),
+  rms_fund_id: z.coerce.number().nullable(),
+  source: z.string()
+});
+
+export type EditHeldAwayAssetsValues = z.infer<typeof EditHeldAwayAssetsSchema>;
+
+// -------------------
+// EDIT INVETMENT NEW AMT
+// -------------------
+export const EditInvNewAmtSchema = z.object({
+  new_amt: z.coerce.number().nullable(),
+  recommendation: z.string().nullable(),
+});
+
+export type EditInvNewAmtValues = z.infer<typeof EditInvNewAmtSchema>;
