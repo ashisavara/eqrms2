@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import { EditFinGoalsButton } from "@/components/forms/EditFinancialGoals";
 
 export const columns: ColumnDef<FinGoalsDetail>[] = [
     { 
@@ -30,7 +31,12 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
                 );
             } else {
                 // Desktop view - show as normal table cell
-                return <div className="text-left">{row.original.goal_name}</div>;
+                return (
+                    <div className="text-left">
+                        {row.original.goal_name}
+                        <EditFinGoalsButton goalData={row.original} goalId={row.original.goal_id} />
+                    </div>
+                );
             }
         }
     },
@@ -38,15 +44,16 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
     { 
         accessorKey: "yrs_to_goal", 
         header: "Yrs to Goal", 
+        size:80,
         cell: ({ getValue }) => (getValue() as number)?.toFixed(1) || "" 
     },
-    { accessorKey: "pv_goal", header: "PV Goal", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "fv_goals", header: "FV Goal"},
-    { accessorKey: "pv_inv", header: "PV Inv", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "fv_inv", header: "FV Inv", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "pending_amt", header: "Pending Amt", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "lumpsum_req", header: "Lumpsum Req", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "sip_req", header: "SIP Req", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" }
+    { accessorKey: "pv_goal", header: "PV Goal", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
+    { accessorKey: "fv_goals", header: "FV Goal", size:80},
+    { accessorKey: "pv_inv", header: "PV Inv", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
+    { accessorKey: "fv_inv", header: "FV Inv", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
+    { accessorKey: "pending_amt", header: "Pending Amt", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
+    { accessorKey: "lumpsum_req", header: "Lumpsum Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
+    { accessorKey: "sip_req", header: "SIP Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" }
 ];
 
 
