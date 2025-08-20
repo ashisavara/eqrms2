@@ -2,14 +2,14 @@
 
 import { useReactTable, getCoreRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
-import { columns } from "./columns-sip-finplan";
-import { SipDetail } from "@/types/sip-detail";
+import { columns } from "../mandate/columns-inv-finplan";
+import { Investments } from "@/types/investment-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
-export default function TableSipFinPlan({ data }: { data: SipDetail[] }) {
+export default function TableInvFinPlan({ data }: { data: Investments[] }) {
   // ✅ Use responsive columns helper
-  const { responsiveColumns } = useResponsiveColumns(columns, 'sip_fund_name');
+  const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
   
   const autoSortedColumns = useAutoSorting(data, responsiveColumns);
 

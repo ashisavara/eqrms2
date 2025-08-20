@@ -370,3 +370,20 @@ export const FinGoalsSchema = z.object({
  export type FinGoalsValues = z.infer<typeof FinGoalsSchema>;
 
 
+// -------------------
+// LINK INV TO GOALS 
+// -------------------
+export const LinkInvToGoalsSchema = z.object({
+  goal_id: z.number(),
+});
+
+export type LinkInvToGoalsValues = z.infer<typeof LinkInvToGoalsSchema>;
+
+// -------------------
+// LINK SIP TO GOALS
+// -------------------
+export const LinkSipToGoalsSchema = z.object({
+  goal_id: z.number(),
+});
+
+export type LinkSipToGoalsValues = z.infer<typeof LinkSipToGoalsSchema>;

@@ -1,6 +1,6 @@
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { getCurrentGroupId } from "@/lib/auth/serverGroupMandate";
-import FinPlanClientWrapper from "./FinPlanClientWrapper";
+import FinPlanClientWrapper from "../mandate/FinPlanClientWrapper";
 
 
 export default async function FinPlan() {

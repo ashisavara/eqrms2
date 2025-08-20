@@ -2,7 +2,7 @@
 
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
-import { columns } from "./columns-finplan";
+import { columns } from "../mandate/columns-finplan";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";

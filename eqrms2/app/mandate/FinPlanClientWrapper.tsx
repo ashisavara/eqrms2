@@ -19,7 +19,7 @@ interface FinPlanClientWrapperProps {
 export default function FinPlanClientWrapper({ 
   finGoalsData, 
   investmentFinPlanData, 
-  sipFinGoalsData 
+  sipFinGoalsData
 }: FinPlanClientWrapperProps) {
   
   // State for selected goals filter

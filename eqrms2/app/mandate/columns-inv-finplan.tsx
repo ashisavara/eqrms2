@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { Investments } from "@/types/investment-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import { EditInvGoalsButton } from "@/components/forms/EditInvGoals";
 
 export const columns: ColumnDef<Investments>[] = [
     { 
@@ -27,7 +28,10 @@ export const columns: ColumnDef<Investments>[] = [
                 );
             } else {
                 // Desktop view - show as normal table cell
-                return <div className="text-left">{row.original.fund_name}</div>;
+                return <div className="text-left flex items-center gap-2">
+                    {row.original.fund_name}
+                    <EditInvGoalsButton investmentsData={row.original} investment_id={row.original.investment_id} />
+                </div>;
             }
         }
     },
