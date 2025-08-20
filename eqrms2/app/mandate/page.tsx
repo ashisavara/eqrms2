@@ -11,6 +11,7 @@ import { Category } from "@/types/category-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import FinPlanClientWrapper from "./FinPlanClientWrapper";
 import { GoalOptionsProvider } from "@/lib/contexts/GoalOptionsContext";
+import { EditMandateButton } from "@/components/forms/EditMandate";
 
 export default async function MandatePage() {
     const groupId = await getCurrentGroupId();
@@ -113,6 +114,7 @@ export default async function MandatePage() {
               <TabsTrigger value="finplan">Financial Plan</TabsTrigger>
             </TabsList>
             <TabsContent value="mandate">
+              <EditMandateButton mandateData={invMandate} mandateId={mandate} />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="border-box">
                           <p className="font-bold">Risk Profile</p>

@@ -387,3 +387,18 @@ export const LinkSipToGoalsSchema = z.object({
 });
 
 export type LinkSipToGoalsValues = z.infer<typeof LinkSipToGoalsSchema>;
+
+
+// -------------------
+// EDIT MANDATE
+// -------------------
+export const EditMandateSchema = z.object({
+  mandate_name: z.string(),
+  inv_plan: z.string(),
+  other_mandate_details: z.string(),
+  one_line_objective: z.string(),
+  portfolio_reallocation_thoughts: z.string(),
+  rp_override: z.string(),
+});
+
+export type EditMandateValues = z.infer<typeof EditMandateSchema>;
