@@ -9,25 +9,15 @@ import { LeadsTagging } from "@/types/lead-detail";
  * Creates column definitions for the interactions table.
  * 
  * Why this is a function instead of static columns:
- * - The EditInteractionButton component needs access to dropdown options (interactionTypeOptions, etc.)
- * - These options are fetched dynamically in page.tsx using fetchOptions()
+ * - The EditInteractionButton component needs access to lead data for context
  * - Static column definitions can't access dynamic data from the parent page
- * - By making this a factory function, we can inject the options data at runtime
+ * - By making this a factory function, we can inject the lead data at runtime
  * 
- * Data flow:
- * page.tsx (fetches options) → TableInteractions (receives options) → createColumns (uses options in EditInteractionButton)
- * 
- * This pattern allows the form components to have proper dropdown options while maintaining
- * clean separation of concerns and avoiding prop drilling through multiple levels.
+ * Note: Form options are now sourced from MasterOptionsContext within the form components,
+ * eliminating the need to pass them through the column definition.
  */
 export const createColumns = (
-    interactionTypeOptions: { value: string; label: string }[],
-    interactionTagOptions: { value: string; label: string }[],
-    interactionChannelOptions: { value: string; label: string }[],
-    leadsData: LeadsTagging[],
-    importanceOptions: { value: string; label: string }[],
-    leadProgressionOptions: { value: string; label: string }[],
-    wealthLevelOptions: { value: string; label: string }[]
+    leadsData: LeadsTagging[]
 ): ColumnDef<InteractionDetail>[] => [
     { 
         accessorKey: "created_at", 
@@ -45,14 +35,8 @@ export const createColumns = (
         <EditInteractionButton 
             meetingId={row.original.meeting_id} 
             interactionData={row.original} 
-            interactionTypeOptions={interactionTypeOptions} 
-            interactionTagOptions={interactionTagOptions} 
-            interactionChannelOptions={interactionChannelOptions}
             relLeadId={row.original.rel_lead_id}
             initialLeadData={currentLeadData}
-            importanceOptions={importanceOptions}
-            leadProgressionOptions={leadProgressionOptions}
-            wealthLevelOptions={wealthLevelOptions}
         />
         </div>
     }},
