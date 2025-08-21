@@ -28,7 +28,7 @@ import { AddAclGroupButton } from "@/components/forms/AddAclGroup";
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, importanceOptions, leadProgressionOptions, leadSourceOptions, leadTypeOptions, wealthLevelOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, primaryRmOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, referralPartnerOptions, rmOptions, aclLead, aclGroup] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions, rmOptions, aclLead, aclGroup] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -81,18 +81,6 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         fetchOptions<string,string>("lead_tag_custom_tags","id","custom_tag"),
         fetchOptions<string,string>("lead_roles","lead_role_id","lead_role"),
         fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign"),
-        fetchOptions<string,string>("master","importance","importance"),
-        fetchOptions<string,string>("master","lead_progression","lead_progression"),
-        fetchOptions<string,string>("master","lead_source","lead_source"),
-        fetchOptions<string,string>("master","lead_type","lead_type"),
-        fetchOptions<string,string>("master","wealth_level","wealth_level"),
-        fetchOptions<string, string>("master","interaction_type", "interaction_type"),
-        fetchOptions<string, string>("master","interaction_tag", "interaction_tag"),
-        fetchOptions<string, string>("master","interaction_channel_tag","interaction_channel_tag"),
-        fetchOptions<string, string>("ime_emp","auth_id", "name"),
-        fetchOptions<string, string>("master","deal_est_closure","deal_est_closure"),
-        fetchOptions<string, string>("master","deal_stage","deal_stage"),
-        fetchOptions<string, string>("master","deal_segment","deal_segment"),
         fetchOptions<string, string>("view_referral_partner","lead_name","lead_name"),
         fetchOptions<string, string>("ime_emp","auth_id", "name"),
         supabaseListRead<AclLeadsDetail>({
@@ -159,16 +147,9 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         <div className="flex flex-row gap-2">
                             <h1>{lead.lead_name}</h1>
                             <ToggleVisibility toggleText="Edit">
-                                <EditLeadsButton leadData={lead} leadId={lead.lead_id} importanceOptions={importanceOptions} 
-                                leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-                                leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} 
-                                referralPartnerOptions={referralPartnerOptions} />
-                                <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
-                                dealSegmentOptions={dealSegmentOptions} relLeadId={lead.lead_id} initialLeadData={lead}  
-                                importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
-                                <AddInteractionButton relLeadId={lead.lead_id} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-                                interactionChannelOptions={interactionChannelOptions} initialLeadData={lead} 
-                                importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                                <EditLeadsButton leadData={lead} leadId={lead.lead_id} referralPartnerOptions={referralPartnerOptions} />
+                                <AddDealButton relLeadId={lead.lead_id} initialLeadData={lead} />
+                                <AddInteractionButton relLeadId={lead.lead_id} initialLeadData={lead} />
                                 <AddCustomTag 
                                     leadId={lead.lead_id} 
                                     customTagOptions={customTagOptions} 
@@ -232,14 +213,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                                     <EditDealButton 
                                         dealData={deal} 
                                         dealId={deal.deal_id} 
-                                        dealEstClosureOptions={dealEstClosureOptions} 
-                                        dealStageOptions={dealStageOptions} 
-                                        dealSegmentOptions={dealSegmentOptions}
                                         relLeadId={lead.lead_id}
                                         initialLeadData={lead}
-                                        importanceOptions={importanceOptions}
-                                        leadProgressionOptions={leadProgressionOptions}
-                                        wealthLevelOptions={wealthLevelOptions}
                                     /> | {deal.total_deal_aum} | {deal.deal_likelihood} | {deal.est_closure} | {deal.deal_stage} | {deal.deal_segment}
                                 </div>
                             ))}
@@ -265,7 +240,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                     ))}
                 </div>
                 <h3>Interactions</h3>
-                <TableInteractions data={Meetings} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} interactionChannelOptions={interactionChannelOptions} leadsData={[lead]} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                <TableInteractions data={Meetings} leadsData={[lead]} />
                 
             </div>
             
