@@ -16,13 +16,8 @@ interface PageProps {
 export default async function AmcPage({ params }: PageProps) {
   const { slug } = await params;
 
-  // Fetch options and fund data in parallel
-  const [amcPedigreeOptions, amcTeamPedigreeOptions, amcTeamChurnOptions, amcMaturityOptions, amcInvPhilosophyDefOptions, AMC, funds] = await Promise.all([
-    fetchOptions<string, string>("master", "amc_pedigree_tag", "amc_pedigree_tag"),
-    fetchOptions<string, string>("master", "amc_team_pedigree_tag", "amc_team_pedigree_tag"),
-    fetchOptions<string, string>("master", "amc_team_churn_tag", "amc_team_churn_tag"),
-    fetchOptions<string, string>("master", "amc_maturity_tag", "amc_maturity_tag"),
-    fetchOptions<string, string>("master", "amc_inv_philosophy_def_tag", "amc_inv_philosophy_def_tag"),
+  // Fetch AMC and fund data in parallel
+  const [AMC, funds] = await Promise.all([
     supabaseSingleRead<AMC>({
       table: "rms_amc",
       columns: "*",
@@ -50,11 +45,6 @@ export default async function AmcPage({ params }: PageProps) {
           <EditAMCButton 
               amcData={AMC} 
               amcId={AMC.id}
-              amcPedigreeOptions={amcPedigreeOptions}
-              amcTeamPedigreeOptions={amcTeamPedigreeOptions}
-              amcTeamChurnOptions={amcTeamChurnOptions}
-              amcMaturityOptions={amcMaturityOptions}
-              amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
               />
               <EditAmcDueDilButton amcData={AMC} amcId={AMC.id} />
         </div>

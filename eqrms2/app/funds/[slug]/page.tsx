@@ -22,25 +22,14 @@ export default async function FundPage({ params }: PageProps) {
   // Get user roles for permission checking
   const userRoles = await getUserRoles();
 
-  // Fetch options and fund data in parallel
-  const [openSubsOptions, strategyTagOptions, amcPedigreeOptions, amcTeamPedigreeOptions, amcTeamChurnOptions, amcMaturityOptions, amcInvPhilosophyDefOptions, fund] = await Promise.all([
-    fetchOptions<string, string>("master", "open_for_subscription_tag", "open_for_subscription_tag"),
-    fetchOptions<string, string>("master", "fund_strategy_def_tag", "fund_strategy_def_tag"),
-
-    fetchOptions<string, string>("master", "amc_pedigree_tag", "amc_pedigree_tag"),
-    fetchOptions<string, string>("master", "amc_team_pedigree_tag", "amc_team_pedigree_tag"),
-    fetchOptions<string, string>("master", "amc_team_churn_tag", "amc_team_churn_tag"),
-    fetchOptions<string, string>("master", "amc_maturity_tag", "amc_maturity_tag"),
-    fetchOptions<string, string>("master", "amc_inv_philosophy_def_tag", "amc_inv_philosophy_def_tag"),
-
-    supabaseSingleRead<RmsFundAmc>({
-      table: "view_rms_funds_amc",
-      columns: "*",
-      filters: [
-        (query) => query.eq('slug', slug)
-      ]
-    }), 
-  ]);
+  // Fetch fund data
+  const fund = await supabaseSingleRead<RmsFundAmc>({
+    table: "view_rms_funds_amc",
+    columns: "*",
+    filters: [
+      (query) => query.eq('slug', slug)
+    ]
+  });
 
   if (!fund) {
     return <div>Fund not found</div>;
@@ -69,19 +58,12 @@ export default async function FundPage({ params }: PageProps) {
                 <span>Edit: </span>
                 <EditFundsButton 
                 fundData={fund} 
-                openSubsOptions={openSubsOptions}
-                strategyTagOptions={strategyTagOptions}
                 />
                 {fund.amc_id && (
                   <>
                     <EditAMCButton 
                     amcData={fund} 
                     amcId={fund.amc_id}
-                    amcPedigreeOptions={amcPedigreeOptions}
-                    amcTeamPedigreeOptions={amcTeamPedigreeOptions}
-                    amcTeamChurnOptions={amcTeamChurnOptions}
-                    amcMaturityOptions={amcMaturityOptions}
-                    amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
                     />
                     <EditAmcDueDilButton amcData={fund} amcId={fund.amc_id} />
                   </>
