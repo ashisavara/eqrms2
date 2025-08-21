@@ -37,16 +37,9 @@ export const createColumns = (
             return <div className="text-left">
                 <Link href={`/crm/${row.original.lead_id}`} className="blue-hyperlink">{row.original.lead_name} </Link> 
                 <ToggleVisibility toggleText="Edit">
-                    <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} importanceOptions={importanceOptions} 
-                    leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-                    leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions}
-                    referralPartnerOptions={referralPartnerOptions} />
-                    <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
-                    dealSegmentOptions={dealSegmentOptions} relLeadId={row.original.lead_id} initialLeadData={row.original}  
-                    importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
-                    <AddInteractionButton relLeadId={row.original.lead_id} interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-                    interactionChannelOptions={interactionChannelOptions} initialLeadData={row.original} 
-                    importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+                    <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} referralPartnerOptions={referralPartnerOptions} />
+                    <AddDealButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
+                    <AddInteractionButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
                     <AddCustomTag 
                         leadId={row.original.lead_id} 
                         customTagOptions={customTagOptions} 
@@ -60,14 +53,6 @@ export const createColumns = (
                     digitalAdOptions={digitalAdOptions} 
                     />
                 </ToggleVisibility>
-                {/* <AddLeadTags leadId={row.original.lead_id} customTagOptions={customTagOptions} leadRoleOptions={leadRoleOptions} 
-                digitalAdOptions={digitalAdOptions} lead={row.original as LeadsTaggingValues} importanceOptions={importanceOptions} 
-                leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-                leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} 
-                primaryRmOptions={primaryRmOptions} dealEstClosureOptions={dealEstClosureOptions} 
-                dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} 
-                interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-                interactionChannelOptions={interactionChannelOptions} /> */}
                 </div>
         }
     }, 

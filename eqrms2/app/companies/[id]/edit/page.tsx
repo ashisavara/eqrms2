@@ -25,12 +25,9 @@ export default async function EditCompanyPage({ params }: Props) {
     Object.entries(companyData).map(([key, value]) => [key, value ?? ""])
   ) as CompanySnapshotFormValues;
 
-  const coverageOptions = await fetchOptions<string,string>("master", "coverage_tags", "coverage_tags");
-  const qualityOptions = await fetchOptions<string,string>("master", "company_quality_tags", "company_quality_tags");
-
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <EditCompanyForm companyId={id} defaultValues={sanitizedData} coverageOptions={coverageOptions} qualityOptions={qualityOptions} />
+      <EditCompanyForm companyId={id} defaultValues={sanitizedData} />
     </div>
   );
 }

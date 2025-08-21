@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, ToggleGroupInput, DatePicker, BooleanTogg
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 import { Pencil } from "lucide-react";
 
 // Internal form component
@@ -18,25 +19,21 @@ function EditLeadsForm({
   initialData, 
   id,  // lead_id
   onSuccess,
-  importanceOptions,
-  leadProgressionOptions,
-  leadSourceOptions,
-  leadTypeOptions,
-  wealthLevelOptions,
-  primaryRmOptions, 
   referralPartnerOptions
 }: { 
   initialData: LeadsTaggingValues; 
   id: number;  
   onSuccess?: () => void;
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  leadSourceOptions: { value: string; label: string }[];
-  leadTypeOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
-  primaryRmOptions: { value: string; label: string }[];
   referralPartnerOptions: { value: string; label: string }[];
 }) {
+  // Get options from context (static options)
+  const masterOptions = useMasterOptions();
+  const importanceOptions = transformToValueLabel(masterOptions.importance);
+  const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
+  const leadSourceOptions = transformToValueLabel(masterOptions.leadSource);
+  const leadTypeOptions = transformToValueLabel(masterOptions.leadType);
+  const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
+  const primaryRmOptions = transformToValueLabel(masterOptions.primaryRm);
   const router = useRouter();  
   // Convert null values to empty strings/defaults for form inputs
   const cleanedData: LeadsTaggingValues = {
@@ -190,22 +187,10 @@ function EditLeadsForm({
 export function EditLeadsButton({ 
   leadData,
   leadId,  
-  importanceOptions,
-  leadProgressionOptions,
-  leadSourceOptions,
-  leadTypeOptions,
-  wealthLevelOptions,
-  primaryRmOptions,
   referralPartnerOptions
 }: { 
   leadData: any;
   leadId: number;  
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  leadSourceOptions: { value: string; label: string }[];
-  leadTypeOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
-  primaryRmOptions: { value: string; label: string }[];
   referralPartnerOptions: { value: string; label: string }[];
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
@@ -266,12 +251,6 @@ export function EditLeadsButton({
                 initialData={leadUpdateData}
                 id={leadId}  
                 onSuccess={() => setShowEditSheet(false)}
-                importanceOptions={importanceOptions}
-                leadProgressionOptions={leadProgressionOptions}
-                leadSourceOptions={leadSourceOptions}
-                leadTypeOptions={leadTypeOptions}
-                wealthLevelOptions={wealthLevelOptions}
-                primaryRmOptions={primaryRmOptions}
                 referralPartnerOptions={referralPartnerOptions}
               />
             </div>

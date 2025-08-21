@@ -13,6 +13,7 @@ import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, Sel
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 
 // Field extraction arrays
 const INTERACTION_FIELDS = [
@@ -53,9 +54,17 @@ function extractLeadFields(formData: MeetingNoteValues) {
 
 // Internal form component
 function EditInteractionForm(
-    {initialData, id, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, onSuccess, relLeadId, initialLeadData, importanceOptions, leadProgressionOptions, wealthLevelOptions}: 
-    {initialData: MeetingNoteValues | null, id: number, interactionTypeOptions: { value: string; label: string }[], interactionTagOptions: { value: string; label: string }[], interactionChannelOptions: { value: string; label: string }[], onSuccess: () => void, relLeadId?: number, initialLeadData?: any, importanceOptions: { value: string; label: string }[], leadProgressionOptions: { value: string; label: string }[], wealthLevelOptions: { value: string; label: string }[]}) 
+    {initialData, id, onSuccess, relLeadId, initialLeadData}: 
+    {initialData: MeetingNoteValues | null, id: number, onSuccess: () => void, relLeadId?: number, initialLeadData?: any}) 
     {
+    // Get options from context (all options available in MasterOptionsContext)
+    const masterOptions = useMasterOptions();
+    const importanceOptions = transformToValueLabel(masterOptions.importance);
+    const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
+    const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
+    const interactionTypeOptions = transformToValueLabel(masterOptions.interactionType);
+    const interactionTagOptions = transformToValueLabel(masterOptions.interactionTag);
+    const interactionChannelOptions = transformToValueLabel(masterOptions.interactionChannelTag);
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -197,26 +206,14 @@ function EditInteractionForm(
 export function EditInteractionButton({ 
   interactionData,
   meetingId, 
-  interactionTypeOptions,
-  interactionTagOptions,
-  interactionChannelOptions,
   relLeadId,
   initialLeadData,
-  importanceOptions,
-  leadProgressionOptions,
-  wealthLevelOptions,
   children
 }: { 
   interactionData: any;
   meetingId: number;
-  interactionTypeOptions: { value: string; label: string }[];
-  interactionTagOptions: { value: string; label: string }[];
-  interactionChannelOptions: { value: string; label: string }[];
   relLeadId?: number;
   initialLeadData?: any;
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
   children?: React.ReactNode;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
@@ -264,15 +261,9 @@ export function EditInteractionButton({
               <EditInteractionForm
                 initialData={interactionUpdateData}
                 id={meetingId}
-                interactionTypeOptions={interactionTypeOptions}
-                interactionTagOptions={interactionTagOptions}
-                interactionChannelOptions={interactionChannelOptions}
                 onSuccess={() => setShowEditSheet(false)}
                 relLeadId={relLeadId}
                 initialLeadData={initialLeadData}
-                importanceOptions={importanceOptions}
-                leadProgressionOptions={leadProgressionOptions}
-                wealthLevelOptions={wealthLevelOptions}
               />
             </div>
           </SheetContent>

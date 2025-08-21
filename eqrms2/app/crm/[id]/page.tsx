@@ -255,14 +255,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             <EditInteractionButton
                                 meetingId={followup.meeting_id}
                                 interactionData={followup}
-                                interactionTypeOptions={interactionTypeOptions}
-                                interactionTagOptions={interactionTagOptions}
-                                interactionChannelOptions={interactionChannelOptions}
                                 relLeadId={lead.lead_id}
                                 initialLeadData={lead}
-                                importanceOptions={importanceOptions}
-                                leadProgressionOptions={leadProgressionOptions}
-                                wealthLevelOptions={wealthLevelOptions}
                             >
                                 {formatDate(followup.created_at)}
                             </EditInteractionButton> ({followup.interaction_channel} - {followup.interaction_tag})

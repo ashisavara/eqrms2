@@ -10,27 +10,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 
 // Internal form component
 function EditAmcForm({ 
   initialData, 
   id,  // Add explicit id prop
-  onSuccess,
-  amcPedigreeOptions,
-  amcTeamPedigreeOptions,
-  amcTeamChurnOptions,
-  amcMaturityOptions,
-  amcInvPhilosophyDefOptions
+  onSuccess
 }: { 
   initialData: AmcUpdateValues; 
   id: number;  // Add type for id
   onSuccess?: () => void;
-  amcPedigreeOptions: { value: string; label: string }[];
-  amcTeamPedigreeOptions: { value: string; label: string }[];
-  amcTeamChurnOptions: { value: string; label: string }[];
-  amcMaturityOptions: { value: string; label: string }[];
-  amcInvPhilosophyDefOptions: { value: string; label: string }[];
 }) {
+  // Get options from context (all options available in MasterOptionsContext)
+  const masterOptions = useMasterOptions();
+  const amcPedigreeOptions = transformToValueLabel(masterOptions.amcPedigreeTag);
+  const amcTeamPedigreeOptions = transformToValueLabel(masterOptions.amcTeamPedigreeTag);
+  const amcTeamChurnOptions = transformToValueLabel(masterOptions.amcTeamChurnTag);
+  const amcMaturityOptions = transformToValueLabel(masterOptions.amcMaturityTag);
+  const amcInvPhilosophyDefOptions = transformToValueLabel(masterOptions.amcInvPhilosophyDefTag);
   const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: AmcUpdateValues = {
@@ -163,20 +161,10 @@ function EditAmcForm({
 // Main component that exports the button and handles sheet state
 export function EditAMCButton({ 
   amcData,
-  amcId,  // Add explicit amcId prop
-  amcPedigreeOptions,
-  amcTeamPedigreeOptions,
-  amcTeamChurnOptions,
-  amcMaturityOptions,
-  amcInvPhilosophyDefOptions
+  amcId  // Add explicit amcId prop
 }: { 
   amcData: any;
   amcId: number;  // Add explicit amcId prop type
-  amcPedigreeOptions: { value: string; label: string }[];
-  amcTeamPedigreeOptions: { value: string; label: string }[];
-  amcTeamChurnOptions: { value: string; label: string }[];
-  amcMaturityOptions: { value: string; label: string }[];
-  amcInvPhilosophyDefOptions: { value: string; label: string }[];
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -227,11 +215,6 @@ export function EditAMCButton({
                 initialData={amcUpdateData}
                 id={amcId}  // Use the explicit amcId prop
                 onSuccess={() => setShowEditSheet(false)}
-                amcPedigreeOptions={amcPedigreeOptions}
-                amcTeamPedigreeOptions={amcTeamPedigreeOptions}
-                amcTeamChurnOptions={amcTeamChurnOptions}
-                amcMaturityOptions={amcMaturityOptions}
-                amcInvPhilosophyDefOptions={amcInvPhilosophyDefOptions}
               />
             </div>
           </SheetContent>

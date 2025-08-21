@@ -12,6 +12,7 @@ import { ResizableTextArea, TextInput, SelectInput, ToggleGroupInput, DatePicker
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 
 // Field extraction arrays
 const DEAL_FIELDS = [
@@ -50,19 +51,21 @@ function extractLeadFields(formData: DealsValues) {
 }
 
 // Internal form component
-function EditDealForm({initialData, id, onSuccess, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, relLeadId, initialLeadData, importanceOptions, leadProgressionOptions, wealthLevelOptions}: 
+function EditDealForm({initialData, id, onSuccess, relLeadId, initialLeadData}: 
     {initialData: DealsValues | null, 
         id: number, 
         onSuccess: () => void, 
-        dealEstClosureOptions: { value: string; label: string }[], 
-        dealStageOptions: { value: string; label: string }[], 
-        dealSegmentOptions: { value: string; label: string }[],
         relLeadId?: number,
-        initialLeadData?: any,
-        importanceOptions: { value: string; label: string }[],
-        leadProgressionOptions: { value: string; label: string }[],
-        wealthLevelOptions: { value: string; label: string }[]})
+        initialLeadData?: any})
     {
+    // Get options from context (all options available in MasterOptionsContext)
+    const masterOptions = useMasterOptions();
+    const importanceOptions = transformToValueLabel(masterOptions.importance);
+    const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
+    const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
+    const dealEstClosureOptions = transformToValueLabel(masterOptions.dealEstClosure);
+    const dealStageOptions = transformToValueLabel(masterOptions.dealStage);
+    const dealSegmentOptions = transformToValueLabel(masterOptions.dealSegment);
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -208,25 +211,13 @@ function EditDealForm({initialData, id, onSuccess, dealEstClosureOptions, dealSt
 export function EditDealButton({ 
   dealData,
   dealId, 
-  dealEstClosureOptions,
-  dealStageOptions,
-  dealSegmentOptions,
   relLeadId,
-  initialLeadData,
-  importanceOptions,
-  leadProgressionOptions,
-  wealthLevelOptions
+  initialLeadData
 }: { 
   dealData: any;
   dealId: number;
-  dealEstClosureOptions: { value: string; label: string }[];
-  dealStageOptions: { value: string; label: string }[];
-  dealSegmentOptions: { value: string; label: string }[];
   relLeadId?: number;
   initialLeadData?: any;
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -275,14 +266,8 @@ export function EditDealButton({
                 initialData={dealUpdateData}
                 id={dealId}
                 onSuccess={() => setShowEditSheet(false)}
-                dealEstClosureOptions={dealEstClosureOptions}
-                dealStageOptions={dealStageOptions}
-                dealSegmentOptions={dealSegmentOptions}
                 relLeadId={relLeadId}
                 initialLeadData={initialLeadData}
-                importanceOptions={importanceOptions}
-                leadProgressionOptions={leadProgressionOptions}
-                wealthLevelOptions={wealthLevelOptions}
               />
             </div>
           </SheetContent>

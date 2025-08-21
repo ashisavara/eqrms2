@@ -3,6 +3,7 @@
 import { useForm, Controller } from "react-hook-form"; // React Hook Form hooks
 import { Button } from "@/components/ui/button"; // Shadcn UI button
 import { companySnapshotFormSchema, CompanySnapshotFormValues } from "@/types/forms";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 import { zodResolver } from "@hookform/resolvers/zod"; // Bridge between react-hook-form and zod
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields"; // Our reusable field components
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
@@ -11,14 +12,14 @@ import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 type Props = {
   companyId: string;
   defaultValues: CompanySnapshotFormValues; // Initial values to prefill the form
-  coverageOptions: { value: string; label: string }[];
-  qualityOptions: { value: string; label: string }[];
 };
 
-
-
 // 4️⃣ The actual form component
-export function EditCompanyForm({ companyId, defaultValues, coverageOptions, qualityOptions }: Props) {
+export function EditCompanyForm({ companyId, defaultValues }: Props) {
+  // Get options from context (all options available in MasterOptionsContext)
+  const masterOptions = useMasterOptions();
+  const coverageOptions = transformToValueLabel(masterOptions.coverageTags);
+  const qualityOptions = transformToValueLabel(masterOptions.companyQualityTags);
   // Initialize react-hook-form with default values and Zod schema validation
   const { control, handleSubmit, formState: { errors } } = useForm<CompanySnapshotFormValues>({
     defaultValues,

@@ -10,21 +10,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 
 // Internal form component
 function EditFundsForm({ 
   initialData, 
   fund_id,  // Add explicit fund_id prop
-  onSuccess,
-  openSubsOptions,
-  strategyTagOptions
+  onSuccess
 }: { 
   initialData: FundsUpdateValues; 
   fund_id: number;  // Add type for fund_id
   onSuccess?: () => void;
-  openSubsOptions: { value: string; label: string }[];
-  strategyTagOptions: { value: string; label: string }[];
 }) {
+  // Get options from context (all options available in MasterOptionsContext)
+  const masterOptions = useMasterOptions();
+  const openSubsOptions = transformToValueLabel(masterOptions.openForSubscriptionTag);
+  const strategyTagOptions = transformToValueLabel(masterOptions.fundStrategyDefTag);
   const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: FundsUpdateValues = {
@@ -122,13 +123,9 @@ function EditFundsForm({
 
 // Main component that exports the button and handles sheet state
 export function EditFundsButton({ 
-  fundData,
-  openSubsOptions,
-  strategyTagOptions
+  fundData
 }: { 
   fundData: any;
-  openSubsOptions: { value: string; label: string }[];
-  strategyTagOptions: { value: string; label: string }[];
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -174,8 +171,6 @@ export function EditFundsButton({
                 initialData={fundUpdateData}
                 fund_id={fund_id}  // Pass fund_id explicitly
                 onSuccess={() => setShowEditSheet(false)}
-                openSubsOptions={openSubsOptions}
-                strategyTagOptions={strategyTagOptions}
               />
             </div>
           </SheetContent>

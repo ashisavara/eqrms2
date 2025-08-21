@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, Sel
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow, supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 import { Handshake } from "lucide-react";
 
 // Field extraction arrays
@@ -53,25 +54,21 @@ function extractLeadFields(formData: MeetingNoteValues) {
 // Internal form component
 function AddInteractionForm({
   onSuccess, 
-  interactionTypeOptions, 
-  interactionTagOptions, 
-  interactionChannelOptions,
   relLeadId,
-  initialLeadData,
-  importanceOptions,
-  leadProgressionOptions,
-  wealthLevelOptions
+  initialLeadData
 }: {
   onSuccess: () => void,
-  interactionTypeOptions: { value: string; label: string }[],
-  interactionTagOptions: { value: string; label: string }[],
-  interactionChannelOptions: { value: string; label: string }[],
   relLeadId?: number,
-  initialLeadData?: any,
-  importanceOptions: { value: string; label: string }[],
-  leadProgressionOptions: { value: string; label: string }[],
-  wealthLevelOptions: { value: string; label: string }[]
+  initialLeadData?: any
 }) {
+  // Get options from context (all options available in MasterOptionsContext)
+  const masterOptions = useMasterOptions();
+  const importanceOptions = transformToValueLabel(masterOptions.importance);
+  const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
+  const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
+  const interactionTypeOptions = transformToValueLabel(masterOptions.interactionType);
+  const interactionTagOptions = transformToValueLabel(masterOptions.interactionTag);
+  const interactionChannelOptions = transformToValueLabel(masterOptions.interactionChannelTag);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -219,23 +216,11 @@ function AddInteractionForm({
 
 // Main component that exports the button and handles sheet state
 export function AddInteractionButton({ 
-  interactionTypeOptions, 
-  interactionTagOptions, 
-  interactionChannelOptions,
   relLeadId,
-  initialLeadData,
-  importanceOptions,
-  leadProgressionOptions,
-  wealthLevelOptions
+  initialLeadData
 }: { 
-  interactionTypeOptions: { value: string; label: string }[];
-  interactionTagOptions: { value: string; label: string }[];
-  interactionChannelOptions: { value: string; label: string }[];
   relLeadId?: number;
   initialLeadData?: any;
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
 }) {
   const [showAddSheet, setShowAddSheet] = useState(false);
 
@@ -258,14 +243,8 @@ export function AddInteractionButton({
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <AddInteractionForm
                 onSuccess={() => setShowAddSheet(false)}
-                interactionTypeOptions={interactionTypeOptions}
-                interactionTagOptions={interactionTagOptions}
-                interactionChannelOptions={interactionChannelOptions}
                 relLeadId={relLeadId}
                 initialLeadData={initialLeadData}
-                importanceOptions={importanceOptions}
-                leadProgressionOptions={leadProgressionOptions}
-                wealthLevelOptions={wealthLevelOptions}
               />
             </div>
           </SheetContent>

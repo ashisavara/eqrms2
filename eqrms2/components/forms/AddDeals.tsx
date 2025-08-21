@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, SelectInput, ToggleGroupInput, DatePicker
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow, supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 import { CircleDollarSign } from "lucide-react";
 
 // Field extraction arrays
@@ -52,25 +53,21 @@ function extractLeadFields(formData: DealsValues) {
 // Internal form component
 function AddDealForm({
   onSuccess, 
-  dealEstClosureOptions, 
-  dealStageOptions, 
-  dealSegmentOptions,
   relLeadId,
-  initialLeadData,
-  importanceOptions,
-  leadProgressionOptions,
-  wealthLevelOptions
+  initialLeadData
 }: {
   onSuccess: () => void, 
-  dealEstClosureOptions: { value: string; label: string }[], 
-  dealStageOptions: { value: string; label: string }[], 
-  dealSegmentOptions: { value: string; label: string }[],
   relLeadId?: number,
-  initialLeadData?: any,
-  importanceOptions: { value: string; label: string }[],
-  leadProgressionOptions: { value: string; label: string }[],
-  wealthLevelOptions: { value: string; label: string }[]
+  initialLeadData?: any
 }) {
+  // Get options from context (all options available in MasterOptionsContext)
+  const masterOptions = useMasterOptions();
+  const importanceOptions = transformToValueLabel(masterOptions.importance);
+  const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
+  const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
+  const dealEstClosureOptions = transformToValueLabel(masterOptions.dealEstClosure);
+  const dealStageOptions = transformToValueLabel(masterOptions.dealStage);
+  const dealSegmentOptions = transformToValueLabel(masterOptions.dealSegment);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -215,23 +212,11 @@ function AddDealForm({
 
 // Main component that exports the button and handles sheet state
 export function AddDealButton({ 
-  dealEstClosureOptions,
-  dealStageOptions,
-  dealSegmentOptions,
   relLeadId,
-  initialLeadData,
-  importanceOptions,
-  leadProgressionOptions,
-  wealthLevelOptions
+  initialLeadData
 }: { 
-  dealEstClosureOptions: { value: string; label: string }[];
-  dealStageOptions: { value: string; label: string }[];
-  dealSegmentOptions: { value: string; label: string }[];
   relLeadId?: number;
   initialLeadData?: any;
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
 }) {
   const [showAddSheet, setShowAddSheet] = useState(false);
 
@@ -253,14 +238,8 @@ export function AddDealButton({
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <AddDealForm
                 onSuccess={() => setShowAddSheet(false)}
-                dealEstClosureOptions={dealEstClosureOptions}
-                dealStageOptions={dealStageOptions}
-                dealSegmentOptions={dealSegmentOptions}
                 relLeadId={relLeadId}
                 initialLeadData={initialLeadData}
-                importanceOptions={importanceOptions}
-                leadProgressionOptions={leadProgressionOptions}
-                wealthLevelOptions={wealthLevelOptions}
               />
             </div>
           </SheetContent>

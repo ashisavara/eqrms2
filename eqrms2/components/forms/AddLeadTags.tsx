@@ -25,18 +25,6 @@ export function AddLeadTags({
   leadRoleOptions,
   digitalAdOptions,
   lead,
-  importanceOptions,
-  leadProgressionOptions,
-  leadSourceOptions,
-  leadTypeOptions,
-  wealthLevelOptions,
-  primaryRmOptions,
-  dealEstClosureOptions,
-  dealStageOptions,
-  dealSegmentOptions,
-  interactionTypeOptions,
-  interactionTagOptions,
-  interactionChannelOptions,
   referralPartnerOptions
 }: { 
   leadId: number;
@@ -44,20 +32,10 @@ export function AddLeadTags({
   leadRoleOptions: { value: string; label: string }[];
   digitalAdOptions: { value: string; label: string }[];
   lead: LeadsTaggingValues;
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  leadSourceOptions: { value: string; label: string }[];
-  leadTypeOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
-  primaryRmOptions: { value: string; label: string }[];
-  dealEstClosureOptions: { value: string; label: string }[];
-  dealStageOptions: { value: string; label: string }[];
-  dealSegmentOptions: { value: string; label: string }[];
-  interactionTypeOptions: { value: string; label: string }[];
-  interactionTagOptions: { value: string; label: string }[];
-  interactionChannelOptions: { value: string; label: string }[];
   referralPartnerOptions: { value: string; label: string }[];
 }) {
+  // Note: This component no longer needs to get options from context since
+  // the child components (EditLeadsButton, AddDealButton, etc.) now get them directly
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -69,21 +47,15 @@ export function AddLeadTags({
       <DropdownMenuContent align="end" className="w-48">
 
         <DropdownMenuItem>
-          <EditLeadsButton leadData={lead} leadId={leadId} importanceOptions={importanceOptions} 
-          leadProgressionOptions={leadProgressionOptions} leadSourceOptions={leadSourceOptions} 
-          leadTypeOptions={leadTypeOptions} wealthLevelOptions={wealthLevelOptions} primaryRmOptions={primaryRmOptions} referralPartnerOptions={referralPartnerOptions} />
+          <EditLeadsButton leadData={lead} leadId={leadId} referralPartnerOptions={referralPartnerOptions} />
         </DropdownMenuItem>
 
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <AddDealButton dealEstClosureOptions={dealEstClosureOptions} dealStageOptions={dealStageOptions} 
-          dealSegmentOptions={dealSegmentOptions} relLeadId={leadId} initialLeadData={lead}  
-          importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+          <AddDealButton relLeadId={leadId} initialLeadData={lead} />
         </DropdownMenuItem>
  
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <AddInteractionButton interactionTypeOptions={interactionTypeOptions} interactionTagOptions={interactionTagOptions} 
-          interactionChannelOptions={interactionChannelOptions} initialLeadData={lead} 
-          importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} wealthLevelOptions={wealthLevelOptions} />
+          <AddInteractionButton relLeadId={leadId} initialLeadData={lead} />
         </DropdownMenuItem>
 
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>

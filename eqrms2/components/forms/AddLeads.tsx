@@ -11,27 +11,24 @@ import { ResizableTextArea, TextInput, ToggleGroupInput, DatePicker, BooleanTogg
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 
 // Internal form component
 function AddLeadForm({ 
   onSuccess,
-  importanceOptions,
-  leadProgressionOptions,
-  leadSourceOptions,
-  leadTypeOptions,
-  wealthLevelOptions, 
-  primaryRmOptions,
   referralPartnerOptions
 }: { 
   onSuccess?: () => void;
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  leadSourceOptions: { value: string; label: string }[];
-  leadTypeOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
-  primaryRmOptions: { value: string; label: string }[];
   referralPartnerOptions: { value: string; label: string }[];
 }) {
+  // Get options from context (static options)
+  const masterOptions = useMasterOptions();
+  const importanceOptions = transformToValueLabel(masterOptions.importance);
+  const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
+  const leadSourceOptions = transformToValueLabel(masterOptions.leadSource);
+  const leadTypeOptions = transformToValueLabel(masterOptions.leadType);
+  const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
+  const primaryRmOptions = transformToValueLabel(masterOptions.primaryRm);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   
@@ -174,20 +171,8 @@ function AddLeadForm({
 
 // Main component that exports the button and handles sheet state
 export function AddLeadButton({ 
-  importanceOptions,
-  leadProgressionOptions,
-  leadSourceOptions,
-  leadTypeOptions,
-  wealthLevelOptions, 
-  primaryRmOptions,
   referralPartnerOptions
 }: { 
-  importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
-  leadSourceOptions: { value: string; label: string }[];
-  leadTypeOptions: { value: string; label: string }[];
-  wealthLevelOptions: { value: string; label: string }[];
-  primaryRmOptions: { value: string; label: string }[];
   referralPartnerOptions: { value: string; label: string }[];
 }) {
   const [showAddSheet, setShowAddSheet] = useState(false);
@@ -211,12 +196,6 @@ export function AddLeadButton({
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <AddLeadForm
                 onSuccess={() => setShowAddSheet(false)}
-                importanceOptions={importanceOptions}
-                leadProgressionOptions={leadProgressionOptions}
-                leadSourceOptions={leadSourceOptions}
-                leadTypeOptions={leadTypeOptions}
-                wealthLevelOptions={wealthLevelOptions}
-                primaryRmOptions={primaryRmOptions}
                 referralPartnerOptions={referralPartnerOptions}
               />
             </div>
