@@ -7,13 +7,7 @@ import { DealLikelihoodRating, DealEstClosureRating, DealStageRating } from "@/c
 import { LeadsTagging } from "@/types/lead-detail";
 
 export const createColumns = (
-    dealEstClousureOptions: { value: string; label: string }[],
-    dealStageOptions: { value: string; label: string }[],
-    dealSegmentOptions: { value: string; label: string }[],
-    leadsData: LeadsTagging[],
-    importanceOptions: { value: string; label: string }[],
-    leadProgressionOptions: { value: string; label: string }[],
-    wealthLevelOptions: { value: string; label: string }[]
+    leadsData: LeadsTagging[]
 ): ColumnDef<Deals>[] => [
     { 
         accessorKey: "created_at", 
@@ -29,14 +23,8 @@ export const createColumns = (
                 <EditDealButton 
                     dealData={row.original} 
                     dealId={row.original.deal_id} 
-                    dealEstClosureOptions={dealEstClousureOptions} 
-                    dealStageOptions={dealStageOptions} 
-                    dealSegmentOptions={dealSegmentOptions}
                     relLeadId={row.original.rel_lead_id}
                     initialLeadData={currentLeadData}
-                    importanceOptions={importanceOptions}
-                    leadProgressionOptions={leadProgressionOptions}
-                    wealthLevelOptions={wealthLevelOptions}
                 />
             </div>
         },

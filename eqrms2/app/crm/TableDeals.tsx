@@ -9,26 +9,13 @@ import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 
 export default function TableDeals({ 
   data, 
-  //dealLikelihoodOptions = [], 
-  dealEstClousureOptions = [], 
-  dealStageOptions = [], 
-  dealSegmentOptions = [],
-  leadsData = [],
-  importanceOptions = [],
-  leadProgressionOptions = [],
-  wealthLevelOptions = []
+  leadsData = []
 }: { 
   data: Deals[];
-  dealEstClousureOptions?: { value: string; label: string }[];
-  dealStageOptions?: { value: string; label: string }[];
-  dealSegmentOptions?: { value: string; label: string }[];
   leadsData?: LeadsTagging[];
-  importanceOptions?: { value: string; label: string }[];
-  leadProgressionOptions?: { value: string; label: string }[];
-  wealthLevelOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(dealEstClousureOptions, dealStageOptions, dealSegmentOptions, leadsData, importanceOptions, leadProgressionOptions, wealthLevelOptions);
+  const columns = createColumns(leadsData);
   const autoSortedColumns = useAutoSorting(data, columns);
 
   const table = useReactTable({
