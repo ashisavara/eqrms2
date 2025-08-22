@@ -24,7 +24,8 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
         structure_id: initialData?.structure_id || 0,
         advisor_name: initialData?.advisor_name || "",
         pur_amt: initialData?.pur_amt || 0,
-        cur_amt: initialData?.cur_amt || 0
+        cur_amt: initialData?.cur_amt || 0,
+        rms_fund_id: initialData?.rms_fund_id || null
     };
 
 
@@ -144,6 +145,7 @@ export function EditHeldAwayAssetsButton({
     advisor_name: investmentData.advisor_name ?? "",
     pur_amt: investmentData.pur_amt ?? 0,
     cur_amt: investmentData.cur_amt ?? 0,
+    rms_fund_id: investmentData.rms_fund_id ?? null,
   };
 
   return (
