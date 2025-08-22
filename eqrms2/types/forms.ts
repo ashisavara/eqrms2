@@ -425,7 +425,7 @@ export type EditHeldAwayAssetsValues = z.infer<typeof EditHeldAwayAssetsSchema>;
 // EDIT INVETMENT NEW AMT
 // -------------------
 export const EditInvNewAmtSchema = z.object({
-  new_amt: z.coerce.number().nullable(),
+  amt_change: z.coerce.number().nullable(),
   recommendation: z.string().nullable(),
 });
 

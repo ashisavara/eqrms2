@@ -14,6 +14,7 @@ import { calculateAggregations } from "@/lib/table-aggregations";
 import { useMemo } from "react";
 import TableSystematic from "./TableSip";
 import TableStp from "./TableStp";
+import TableInvChange from "./TableInvChange";
 import { PieChart } from "@/components/charts/InvestmentPieCharts";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
@@ -230,7 +231,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
             </div>
           </TabsContent>
           <TabsContent value="recommendations">
-            
+            <TableInvChange data={data} />
           </TabsContent>
         </Tabs>
       </div>

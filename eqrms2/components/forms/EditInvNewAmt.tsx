@@ -6,19 +6,24 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { EditInvNewAmtSchema, EditInvNewAmtValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextInput, ResizableTextArea } from "./FormFields";
+import { TextInput, ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 
 // Internal form component
 function EditInvAmtForm({initialData, id, onSuccess}: {initialData: EditInvNewAmtValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    
+    // Get options from context (static options)
+    const masterOptions = useMasterOptions();
+    const recommendationOptions = transformToValueLabel(masterOptions.invRecommendation);
 
     const cleanedData: EditInvNewAmtValues = {
-        new_amt: initialData?.new_amt || null,
-        recommendation: initialData?.recommendation || null
+        amt_change: initialData?.amt_change ?? 0,
+        recommendation: initialData?.recommendation ?? ""
     };
 
     const { control, handleSubmit} = useForm<EditInvNewAmtValues>({
@@ -32,16 +37,16 @@ function EditInvAmtForm({initialData, id, onSuccess}: {initialData: EditInvNewAm
             await supabaseUpdateRow('investments', 'investment_id', id, data);
             
             if (typeof window !== "undefined") {
-                toast.success("New Amount updated successfully!");
+                toast.success("Investment recommendation updated successfully!");
                 setTimeout(() => {
                     onSuccess?.();
                     router.refresh();
                 }, 1500);
             }
         } catch (error) {
-            console.error('Error updating New Amount:', error);
+            console.error('Error updating investment recommendation:', error);
             if (typeof window !== "undefined") {
-                toast.error("Failed to update New Amount. Please try again.");
+                toast.error("Failed to update investment recommendation. Please try again.");
             }
             setIsLoading(false);
         }
@@ -51,8 +56,8 @@ function EditInvAmtForm({initialData, id, onSuccess}: {initialData: EditInvNewAm
         <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
             
-            <TextInput name="new_amt" label="New Amount" control={control} type="number" />
-            <ResizableTextArea name="recommendation" label="Recommendation" control={control} />
+            <TextInput name="amt_change" label="Change Amount" control={control} type="number" />
+            <ToggleGroupInput name="recommendation" label="Recommendation" control={control} options={recommendationOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
 
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
@@ -79,8 +84,8 @@ export function EditInvAmtButton({
 
   // Convert category data to EditInvNewAmtValues format
   const investmentUpdateData: EditInvNewAmtValues = {
-    new_amt: investmentData.new_amt ?? null,
-    recommendation: investmentData.recommendation ?? null
+    amt_change: investmentData.amt_change ?? 0,
+    recommendation: investmentData.recommendation ?? ""
   };
 
   return (
@@ -97,7 +102,7 @@ export function EditInvAmtButton({
         <Sheet open={true} onOpenChange={() => setShowEditSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Edit Investment Values</SheetTitle>
+              <SheetTitle>Edit Investment Recommendation</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditInvAmtForm

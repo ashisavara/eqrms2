@@ -1,0 +1,135 @@
+import { ColumnDef } from "@tanstack/react-table";  
+import Link from "next/link";
+import { RatingDisplay } from "@/components/conditional-formatting";
+import {Investments} from"@/types/investment-detail";
+import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import { EditInvAmtButton } from "@/components/forms/EditInvNewAmt";
+
+export const columns: ColumnDef<Investments>[] = [
+
+
+    { accessorKey: "fund_name", 
+    header: "Fund Name",
+    size:200,
+    cell: ({row, table}) => {
+        if (isMobileView(table)) {
+            // Mobile view - show as card
+            return (
+                <div className="p-3 border rounded-lg space-y-2">
+                    <div className="font-semibold text-left">
+                        {row.original.slug ? (
+                            <Link href={`/funds/${row.original.slug}`} className="text-blue-600 font-bold">
+                                {row.original.fund_name}
+                            </Link>
+                        ) : (
+                            row.original.fund_name
+                        )}
+                    </div>
+                    <div className="text-sm text-gray-600">{row.original.investor_name}</div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>Rating: <RatingDisplay rating={row.original.fund_rating} /></div>
+                        <div>Purchase: {row.original.pur_amt?.toFixed(1)}</div>
+                        <div>Current: {row.original.cur_amt?.toFixed(1)}</div>
+                        <div>Change: {(() => {
+                            const amtChange = row.original.amt_change ?? 0;
+                            const curAmt = row.original.cur_amt ?? 0;
+                            const recommendation = row.original.recommendation;
+                            return recommendation === 'Exit' ? -curAmt : amtChange;
+                        })().toFixed(1)}</div>
+                        <div className="text-blue-500 font-bold">
+                            New: {(() => {
+                                const curAmt = row.original.cur_amt ?? 0;
+                                const amtChange = row.original.amt_change ?? 0;
+                                const recommendation = row.original.recommendation;
+                                return recommendation === 'Exit' ? 0 : (curAmt + amtChange);
+                            })().toFixed(1)}
+                        </div>
+                        <div>
+                            {row.original.recommendation || ''}
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            // Desktop view - show as normal table cell
+            if (row.original.slug) {
+                return <div className="text-left"><Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link> | <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
+            } else {
+                return <div className="text-left">{row.original.fund_name} | <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
+            }
+        }
+    }
+    },
+    { accessorKey: "fund_rating", header: "Fund Rating", size:40, cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} /> },
+    { accessorKey: "investor_name", header: "Investor", size: 100, filterFn: "arrIncludesSome", cell: ({ getValue }) => {
+        const v = getValue();
+        return v && String(v).length > 15 ? String(v).slice(0, 15) + "…" : v;
+    }},
+    { 
+        accessorKey: "cur_amt", 
+        header: "Cur Amt",
+        size: 50, 
+        aggregationFn: 'sum', // ✅ Enable sum aggregation
+        cell: ({ getValue }) => getValue() == null ? null : <div className="text-gray-800 font-bold"> {Number(getValue()).toFixed(1)}</div>,
+    },
+    { 
+        accessorKey: "amt_change", 
+        header: "Change Amt",
+        size: 50, 
+        aggregationFn: 'sum', // ✅ Enable sum aggregation
+        cell: ({ row }) => {
+            const amtChange = row.original.amt_change ?? 0;
+            const curAmt = row.original.cur_amt ?? 0;
+            const recommendation = row.original.recommendation;
+            
+            // If recommendation is 'Exit', show -cur_amt, otherwise show the database value
+            let displayAmount: number;
+            if (recommendation === 'Exit') {
+                displayAmount = -curAmt;
+            } else {
+                displayAmount = amtChange;
+            }
+            
+            return displayAmount === 0
+                ? null
+                : <div className="text-gray-800 font-bold">{displayAmount.toFixed(1)}</div>;
+        },
+    },
+    { 
+        accessorKey: "new_amt", 
+        header: "New Amount", 
+        size:50, 
+        cell: ({ row }) => {
+            const curAmt = row.original.cur_amt ?? 0;
+            const amtChange = row.original.amt_change ?? 0;
+            const recommendation = row.original.recommendation;
+            
+            // Calculate new amount based on recommendation
+            let newAmt: number;
+            if (recommendation === 'Exit') {
+                newAmt = 0;
+            } else {
+                newAmt = curAmt + amtChange;
+            }
+            
+            return <div className="text-blue-500 font-bold">{newAmt.toFixed(1)}</div>;
+        }
+    },
+    { accessorKey: "recommendation", header: "Recommendation", size:50, cell: ({ getValue }) => {
+        const recommendation = getValue() as string;
+        if (!recommendation) return null;
+        return <div>{recommendation}</div>;
+    }},
+    { accessorKey: "cat_long_name", header: "Category", size:80 },
+    { accessorKey: "fund_rms_name", header: "Fund RMS Name", meta: { isFilterOnly: true } },
+    { accessorKey: "asset_class_name", header: "Asset Class", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome" },
+    { accessorKey: "cat_name", header: "Category", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome", cell: ({ getValue }) => {
+        const v = getValue();
+        return v && String(v).length > 12 ? String(v).slice(0, 12) + "…" : v;
+    }}, 
+    { accessorKey: "structure_name", header: "Structure", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome" },
+    { accessorKey: "advisor_name", header: "Advisor", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome" },
+    { accessorKey: "one_yr", header: "1 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
+    { accessorKey: "three_yr", header: "3 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
+    { accessorKey: "five_yr", header: "5 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
+];
