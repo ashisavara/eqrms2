@@ -129,7 +129,6 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
         <Tabs defaultValue="investments" className="w-full">
           <TabsList className="w-full">
             <TabsTrigger value="investments">Investments</TabsTrigger>
-            <TabsTrigger value="analysis">Analysis</TabsTrigger>
             <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
           </TabsList>
           
@@ -162,35 +161,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                   formatter={(value) => `${value.toFixed(1)}`}
                 />
             </div>
-            <ReactTableWrapper 
-              table={table} 
-              className="text-xs text-center" 
-              filters={[]} 
-              showSearch={true}
-              aggregations={['pur_amt', 'cur_amt', 'gain_loss']}
-              aggregationFormat={{
-                formatter: (value) => value.toFixed(1)
-              }}
-            />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              
-              </div>
-              { sipData.length > 0 && (
-                <div>
-                  <h3 className="mt-6">SIP Details</h3>
-                  <TableSystematic data={sipData} />
-                </div>
-              )}
-              
-              { stpData.length > 0 && (
-                <div>
-                <h3 className="mt-6">STP Details</h3>
-                <TableStp data={stpData} />
-                </div>
-              )}
-          </TabsContent>
-          
-          <TabsContent value="analysis">
+            <ToggleVisibility toggleText="Show Asset Allocation">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <PieChart 
                 table={table} 
@@ -230,6 +201,35 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                 title="Advisor"
               />
             </div>
+          </ToggleVisibility>
+            <ReactTableWrapper 
+              table={table} 
+              className="text-xs text-center" 
+              filters={[]} 
+              showSearch={true}
+              aggregations={['pur_amt', 'cur_amt', 'gain_loss']}
+              aggregationFormat={{
+                formatter: (value) => value.toFixed(1)
+              }}
+            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              </div>
+              { sipData.length > 0 && (
+                <div>
+                  <h3 className="mt-6">SIP Details</h3>
+                  <TableSystematic data={sipData} />
+                </div>
+              )}
+              
+              { stpData.length > 0 && (
+                <div>
+                <h3 className="mt-6">STP Details</h3>
+                <TableStp data={stpData} />
+                </div>
+              )}
+          
+          
           </TabsContent>
           <TabsContent value="recommendations">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
