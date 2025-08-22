@@ -27,27 +27,14 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
         cur_amt: initialData?.cur_amt || 0
     };
 
-    // Debug logs
-    console.log("🔍 EditHeldAway Debug:");
-    console.log("📥 initialData:", initialData);
-    console.log("✨ cleanedData:", cleanedData);
-    console.log("📊 cleanedData types:", {
-        category_id: typeof cleanedData.category_id,
-        structure_id: typeof cleanedData.structure_id
-    });
-    console.log("🎯 Expected values:", {
-        category_id: cleanedData.category_id,
-        structure_id: cleanedData.structure_id
-    });
+
 
     const { control, handleSubmit, watch, setValue} = useForm<HeldAwayAssetsValues>({
         defaultValues: cleanedData,
         resolver: zodResolver(HeldAwayAssetsSchema)
     });
 
-    // Debug: Watch current form values
-    const currentValues = watch();
-    console.log("📋 Current form values:", currentValues);
+
 
     // Watch for category changes to auto-populate asset_class_id
     const selectedCategoryId = watch("category_id");
@@ -97,16 +84,10 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
                   name="structure_id" 
                   label="Structure" 
                   control={control} 
-                  options={(() => {
-                    const structureOptions = STRUCTURE_OPTIONS.map(structure => ({
-                      value: String(structure.structure_id),
-                      label: structure.structure_name
-                    }));
-                    console.log("🏗️ Structure Options:", structureOptions);
-                    console.log("🏗️ First 3 Structure Options:", structureOptions.slice(0, 3));
-                    console.log("🏗️ Looking for structure_id:", cleanedData.structure_id);
-                    return structureOptions;
-                  })()}
+                  options={STRUCTURE_OPTIONS.map(structure => ({
+                    value: String(structure.structure_id),
+                    label: structure.structure_name
+                  }))}
                   valueType="number"
                   toggleGroupClassName="gap-2 flex-wrap"
                   itemClassName="ime-choice-chips"
@@ -117,16 +98,10 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
                   name="category_id" 
                   label="Category" 
                   control={control} 
-                  options={(() => {
-                    const categoryOptions = CATEGORY_OPTIONS.map(cat => ({
-                      value: String(cat.category_id),
-                      label: cat.cat_long_name
-                    }));
-                    console.log("📂 Category Options:", categoryOptions);
-                    console.log("📂 First 3 Category Options:", categoryOptions.slice(0, 3));
-                    console.log("📂 Looking for category_id:", cleanedData.category_id);
-                    return categoryOptions;
-                  })()}
+                  options={CATEGORY_OPTIONS.map(cat => ({
+                    value: String(cat.category_id),
+                    label: cat.cat_long_name
+                  }))}
                   valueType="number"
               />
             </div>
@@ -134,8 +109,8 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
             {/* Structure selection using ToggleGroupInput */}
             
             
-            {/* Asset class field that gets auto-populated */}
-            <NumberInput name="asset_class_id" label="Asset Class ID" control={control} disabled={true} />
+            {/* Hidden asset class field that gets auto-populated */}
+            <input type="hidden" {...control.register("asset_class_id")} />
 
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>

@@ -39,9 +39,21 @@ export const columns: ColumnDef<Investments>[] = [
         } else {
             // Desktop view - show as normal table cell
             if (row.original.slug) {
-                return <div className="text-left"><Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link> | <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
+                return <div className="text-left">
+                    <Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link> | 
+                    {row.original.advisor_name !== "IME Capital" && (
+                      <> <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} /></>
+                    )}
+                    </div>
             } else {
-                return <div className="text-left">{row.original.fund_name} | <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
+                return (
+                  <div className="text-left">
+                    {row.original.fund_name}
+                    {row.original.advisor_name !== "IME Capital" && (
+                      <> <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} /></>
+                    )}
+                  </div>
+                )
             }
         }
     }
