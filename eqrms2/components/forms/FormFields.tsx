@@ -86,7 +86,8 @@ export function NumberInput({
   step = "0.01",
   min,
   max,
-  className
+  className,
+  disabled
 }: { 
   name: string; 
   label: string; 
@@ -96,6 +97,7 @@ export function NumberInput({
   min?: number;
   max?: number;
   className?: string;
+  disabled?: boolean;
 }) {
   return (
     <div>
@@ -119,6 +121,7 @@ export function NumberInput({
                 aria-invalid={hasError}
                 aria-describedby={hasError ? errId : undefined}
                 className={withErrorClass(className || "text-left", hasError)}
+                disabled={disabled}
                 onChange={(e) => {
                   const value = e.target.value;
                   // Convert empty string to null, otherwise parse as number
@@ -311,7 +314,7 @@ export function MultiToggleGroupInput({
 }
 
 // Select option field with search functionality for long lists
-export function SelectInput({ name, label, control, options }: { name: string; label: string; control: Control<any>; options: { value: string; label: string }[] }) {
+export function SelectInput({ name, label, control, options, valueType = "string" }: { name: string; label: string; control: Control<any>; options: { value: string; label: string }[]; valueType?: "string" | "number"; }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -347,7 +350,21 @@ export function SelectInput({ name, label, control, options }: { name: string; l
             const errId = `${name}-error`;
             return (
               <>
-                <select id={name} {...field} className={withErrorClass("form-select w-full p-2 border border-gray-300 rounded-md text-sm", hasError)} aria-invalid={hasError} aria-describedby={hasError ? errId : undefined}>
+                <select 
+                  id={name} 
+                  value={field.value?.toString() || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (valueType === "number") {
+                      field.onChange(value ? parseInt(value) : 0);
+                    } else {
+                      field.onChange(value || "");
+                    }
+                  }}
+                  className={withErrorClass("form-select w-full p-2 border border-gray-300 rounded-md text-sm", hasError)} 
+                  aria-invalid={hasError} 
+                  aria-describedby={hasError ? errId : undefined}
+                >
                   {options.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -385,7 +402,7 @@ export function SelectInput({ name, label, control, options }: { name: string; l
                   >
                     <span className="truncate">
                       {field.value 
-                        ? options.find(opt => opt.value === field.value)?.label || "Select option..."
+                        ? options.find(opt => opt.value === field.value?.toString())?.label || "Select option..."
                         : "Select option..."}
                     </span>
                     <ChevronDown className="h-4 w-4 opacity-50" />
@@ -411,7 +428,11 @@ export function SelectInput({ name, label, control, options }: { name: string; l
                         <DropdownMenuItem
                           key={option.value}
                           onClick={() => {
-                            field.onChange(option.value);
+                            if (valueType === "number") {
+                              field.onChange(option.value ? parseInt(option.value) : 0);
+                            } else {
+                              field.onChange(option.value || "");
+                            }
                             setIsOpen(false);
                           }}
                         >

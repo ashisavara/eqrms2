@@ -60,7 +60,7 @@ export default async function InvestmentsPage() {
   const [rawInvestments, sip, stp] = await Promise.all([
     supabaseListRead({
       table: "view_investments_details",
-      columns: "fund_name, fund_rating, investor_name, pur_amt, cur_amt, gain_loss, abs_ret, cagr, cat_long_name, fund_rms_name, asset_class_name, cat_name, structure_name, slug, one_yr,three_yr,five_yr, advisor_name, investment_id, amt_change, new_amt, recommendation",
+      columns: "fund_name, fund_rating, investor_name, pur_amt, cur_amt, gain_loss, abs_ret, cagr, cat_long_name, fund_rms_name, asset_class_name, cat_name, structure_name, slug, one_yr,three_yr,five_yr, advisor_name, investment_id, amt_change, new_amt, recommendation, asset_class_id, category_id, structure_id",
       filters: [
         (query) => query.eq("group_id", groupId)
       ]

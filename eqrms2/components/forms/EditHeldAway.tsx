@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { HeldAwayAssetsSchema, HeldAwayAssetsValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextInput, NumberInput, ResizableTextArea } from "./FormFields";
+import { TextInput, NumberInput, ResizableTextArea, SelectInput, ToggleGroupInput } from "./FormFields";
+import { CATEGORY_OPTIONS, STRUCTURE_OPTIONS, getAssetClassIdByCategoryId } from "@/lib/categoryConstants";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
@@ -23,14 +24,42 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
         structure_id: initialData?.structure_id || 0,
         advisor_name: initialData?.advisor_name || "",
         pur_amt: initialData?.pur_amt || 0,
-        cur_amt: initialData?.cur_amt || 0,
-        rms_fund_id: initialData?.rms_fund_id || null
+        cur_amt: initialData?.cur_amt || 0
     };
 
-    const { control, handleSubmit} = useForm<HeldAwayAssetsValues>({
+    // Debug logs
+    console.log("🔍 EditHeldAway Debug:");
+    console.log("📥 initialData:", initialData);
+    console.log("✨ cleanedData:", cleanedData);
+    console.log("📊 cleanedData types:", {
+        category_id: typeof cleanedData.category_id,
+        structure_id: typeof cleanedData.structure_id
+    });
+    console.log("🎯 Expected values:", {
+        category_id: cleanedData.category_id,
+        structure_id: cleanedData.structure_id
+    });
+
+    const { control, handleSubmit, watch, setValue} = useForm<HeldAwayAssetsValues>({
         defaultValues: cleanedData,
         resolver: zodResolver(HeldAwayAssetsSchema)
     });
+
+    // Debug: Watch current form values
+    const currentValues = watch();
+    console.log("📋 Current form values:", currentValues);
+
+    // Watch for category changes to auto-populate asset_class_id
+    const selectedCategoryId = watch("category_id");
+    
+    useEffect(() => {
+        if (selectedCategoryId) {
+            const assetClassId = getAssetClassIdByCategoryId(selectedCategoryId);
+            if (assetClassId !== null) {
+                setValue("asset_class_id", assetClassId);
+            }
+        }
+    }, [selectedCategoryId, setValue]);
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
@@ -63,10 +92,50 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
             <NumberInput name="pur_amt" label="Purchase Amount" control={control} />
             <NumberInput name="cur_amt" label="Current Amount" control={control} />
             </div>
-            <NumberInput name="rms_fund_id" label="RMS Fund ID" control={control} />
-            <TextInput name="asset_class_id" label="Asset Class ID" control={control} />
-            <TextInput name="category_id" label="Category ID" control={control} />
-            <TextInput name="structure_id" label="Structure ID" control={control} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ToggleGroupInput 
+                  name="structure_id" 
+                  label="Structure" 
+                  control={control} 
+                  options={(() => {
+                    const structureOptions = STRUCTURE_OPTIONS.map(structure => ({
+                      value: String(structure.structure_id),
+                      label: structure.structure_name
+                    }));
+                    console.log("🏗️ Structure Options:", structureOptions);
+                    console.log("🏗️ First 3 Structure Options:", structureOptions.slice(0, 3));
+                    console.log("🏗️ Looking for structure_id:", cleanedData.structure_id);
+                    return structureOptions;
+                  })()}
+                  valueType="number"
+                  toggleGroupClassName="gap-2 flex-wrap"
+                  itemClassName="ime-choice-chips"
+              />
+              
+              {/* Category selection with automatic asset class lookup */}
+              <SelectInput 
+                  name="category_id" 
+                  label="Category" 
+                  control={control} 
+                  options={(() => {
+                    const categoryOptions = CATEGORY_OPTIONS.map(cat => ({
+                      value: String(cat.category_id),
+                      label: cat.cat_long_name
+                    }));
+                    console.log("📂 Category Options:", categoryOptions);
+                    console.log("📂 First 3 Category Options:", categoryOptions.slice(0, 3));
+                    console.log("📂 Looking for category_id:", cleanedData.category_id);
+                    return categoryOptions;
+                  })()}
+                  valueType="number"
+              />
+            </div>
+            
+            {/* Structure selection using ToggleGroupInput */}
+            
+            
+            {/* Asset class field that gets auto-populated */}
+            <NumberInput name="asset_class_id" label="Asset Class ID" control={control} disabled={true} />
 
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
@@ -100,7 +169,6 @@ export function EditHeldAwayAssetsButton({
     advisor_name: investmentData.advisor_name ?? "",
     pur_amt: investmentData.pur_amt ?? 0,
     cur_amt: investmentData.cur_amt ?? 0,
-    rms_fund_id: investmentData.rms_fund_id ?? null
   };
 
   return (
