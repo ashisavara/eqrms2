@@ -430,3 +430,20 @@ export const EditInvNewAmtSchema = z.object({
 });
 
 export type EditInvNewAmtValues = z.infer<typeof EditInvNewAmtSchema>;
+
+
+// -------------------
+// HELD AWAY ASSETS
+// -------------------
+export const HeldAwayAssetsSchema = z.object({
+  fund_name: z.string(),
+  asset_class_id: z.coerce.number(),
+  category_id: z.coerce.number(),
+  structure_id: z.coerce.number(),
+  advisor_name: z.string(),
+  pur_amt: z.coerce.number(),
+  cur_amt: z.coerce.number(),
+  rms_fund_id: z.coerce.number().nullable(),
+});
+
+export type HeldAwayAssetsValues = z.infer<typeof HeldAwayAssetsSchema>;

@@ -77,6 +77,63 @@ export function TextInput({ name, label, control, placeholder, type, step }: Pro
   );
 }
 
+// Number input field specifically designed for numeric values
+export function NumberInput({ 
+  name, 
+  label, 
+  control, 
+  placeholder,
+  step = "0.01",
+  min,
+  max,
+  className
+}: { 
+  name: string; 
+  label: string; 
+  control: Control<any>; 
+  placeholder?: string;
+  step?: string;
+  min?: number;
+  max?: number;
+  className?: string;
+}) {
+  return (
+    <div>
+      <Label htmlFor={name} className="font-bold">{label}</Label>
+      <Controller 
+        name={name} 
+        control={control} 
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <Input 
+                {...field}
+                id={name} 
+                type="number"
+                step={step}
+                min={min}
+                max={max}
+                placeholder={placeholder || "0.00"}
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errId : undefined}
+                className={withErrorClass(className || "text-left", hasError)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Convert empty string to null, otherwise parse as number
+                  field.onChange(value === "" ? null : parseFloat(value) || 0);
+                }}
+              />
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }} 
+      />
+    </div>
+  );
+}
+
 // Textarea field
 export function TextArea({ name, label, control, placeholder }: Props) {
   return (
