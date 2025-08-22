@@ -10,6 +10,9 @@ import { AssetClass } from "@/types/asset-class-detail";
 import { TableAssetClass } from "@/app/assetclass/TableAssetclass"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+// Force dynamic rendering to prevent static generation issues with AMC data
+export const dynamic = 'force-dynamic';
+
 export default async function FundsPage() {
 
   const [funds, amc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass] = await Promise.all([
