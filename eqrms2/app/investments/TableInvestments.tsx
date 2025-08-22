@@ -17,6 +17,7 @@ import TableStp from "./TableStp";
 import TableInvChange from "./TableInvChange";
 import { PieChart } from "@/components/charts/InvestmentPieCharts";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
+import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -231,6 +232,89 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
             </div>
           </TabsContent>
           <TabsContent value="recommendations">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <AggregateCard 
+                title="Total Change" 
+                value={data.reduce((sum, row) => sum + (row.amt_change || 0), 0)}
+                formatter={(value) => `${value.toFixed(1)}`}
+              />
+              <AggregateCard 
+                title="Total Current Value" 
+                value={data.reduce((sum, row) => sum + (row.cur_amt || 0), 0)}
+                formatter={(value) => `${value.toFixed(1)}`}
+              />
+              <AggregateCard 
+                title="Total New Value" 
+                value={data.reduce((sum, row) => sum + (row.new_amt || 0), 0)}
+                formatter={(value) => `${value.toFixed(1)}`}
+              />
+            </div>
+            
+            {/* Side-by-side comparison charts wrapped in toggle */}
+            <ToggleVisibility toggleText="Show Portfolio Allocation Impact">
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <PieChart 
+                    table={table} 
+                    aggCol="asset_class_name" 
+                    valCol="cur_amt" 
+                    title="Current - Asset Class"
+                  />
+                  <PieChart 
+                    table={table} 
+                    aggCol="asset_class_name" 
+                    valCol="new_amt" 
+                    title="New - Asset Class"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <PieChart 
+                    table={table} 
+                    aggCol="cat_name" 
+                    valCol="cur_amt" 
+                    title="Current - Category"
+                  />
+                  <PieChart 
+                    table={table} 
+                    aggCol="cat_name" 
+                    valCol="new_amt" 
+                    title="New - Category"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <PieChart 
+                    table={table} 
+                    aggCol="structure_name" 
+                    valCol="cur_amt" 
+                    title="Current - Structure"
+                  />
+                  <PieChart 
+                    table={table} 
+                    aggCol="structure_name" 
+                    valCol="new_amt" 
+                    title="New - Structure"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <PieChart 
+                    table={table} 
+                    aggCol="fund_rating" 
+                    valCol="cur_amt" 
+                    title="Current - Rating"
+                  />
+                  <PieChart 
+                    table={table} 
+                    aggCol="fund_rating" 
+                    valCol="new_amt" 
+                    title="New - Rating"
+                  />
+                </div>
+              </div>
+            </ToggleVisibility>
+            
             <TableInvChange data={data} />
           </TabsContent>
         </Tabs>

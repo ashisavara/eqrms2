@@ -30,19 +30,9 @@ export const columns: ColumnDef<Investments>[] = [
                         <div>Rating: <RatingDisplay rating={row.original.fund_rating} /></div>
                         <div>Purchase: {row.original.pur_amt?.toFixed(1)}</div>
                         <div>Current: {row.original.cur_amt?.toFixed(1)}</div>
-                        <div>Change: {(() => {
-                            const amtChange = row.original.amt_change ?? 0;
-                            const curAmt = row.original.cur_amt ?? 0;
-                            const recommendation = row.original.recommendation;
-                            return recommendation === 'Exit' ? -curAmt : amtChange;
-                        })().toFixed(1)}</div>
+                        <div>Change: {(row.original.amt_change ?? 0).toFixed(1)}</div>
                         <div className="text-blue-500 font-bold">
-                            New: {(() => {
-                                const curAmt = row.original.cur_amt ?? 0;
-                                const amtChange = row.original.amt_change ?? 0;
-                                const recommendation = row.original.recommendation;
-                                return recommendation === 'Exit' ? 0 : (curAmt + amtChange);
-                            })().toFixed(1)}
+                            New: {(row.original.new_amt ?? 0).toFixed(1)}
                         </div>
                         <div>
                             {row.original.recommendation || ''}
@@ -77,42 +67,20 @@ export const columns: ColumnDef<Investments>[] = [
         header: "Change Amt",
         size: 50, 
         aggregationFn: 'sum', // ✅ Enable sum aggregation
-        cell: ({ row }) => {
-            const amtChange = row.original.amt_change ?? 0;
-            const curAmt = row.original.cur_amt ?? 0;
-            const recommendation = row.original.recommendation;
-            
-            // If recommendation is 'Exit', show -cur_amt, otherwise show the database value
-            let displayAmount: number;
-            if (recommendation === 'Exit') {
-                displayAmount = -curAmt;
-            } else {
-                displayAmount = amtChange;
-            }
-            
-            return displayAmount === 0
+        cell: ({ getValue }) => {
+            const value = getValue() as number;
+            return value === 0
                 ? null
-                : <div className="text-gray-800 font-bold">{displayAmount.toFixed(1)}</div>;
+                : <div className="text-gray-800 font-bold">{value.toFixed(1)}</div>;
         },
     },
     { 
         accessorKey: "new_amt", 
         header: "New Amount", 
         size:50, 
-        cell: ({ row }) => {
-            const curAmt = row.original.cur_amt ?? 0;
-            const amtChange = row.original.amt_change ?? 0;
-            const recommendation = row.original.recommendation;
-            
-            // Calculate new amount based on recommendation
-            let newAmt: number;
-            if (recommendation === 'Exit') {
-                newAmt = 0;
-            } else {
-                newAmt = curAmt + amtChange;
-            }
-            
-            return <div className="text-blue-500 font-bold">{newAmt.toFixed(1)}</div>;
+        cell: ({ getValue }) => {
+            const value = getValue() as number;
+            return <div className="text-blue-500 font-bold">{value.toFixed(1)}</div>;
         }
     },
     { accessorKey: "recommendation", header: "Recommendation", size:50, cell: ({ getValue }) => {

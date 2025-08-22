@@ -21,5 +21,5 @@ export default function TableInvChange({ data }: { data: Investments[] }) {
     enableSortingRemoval: false,
     });
 
-      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false} aggregations={['amt_change']} />;
+      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false}/>;
     }

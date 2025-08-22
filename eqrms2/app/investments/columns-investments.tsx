@@ -83,6 +83,8 @@ export const columns: ColumnDef<Investments>[] = [
     }}, 
     { accessorKey: "structure_name", header: "Structure", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome" },
     { accessorKey: "advisor_name", header: "Advisor", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome" },
+    { accessorKey: "amt_change", header: "Change Amount", meta: { isFilterOnly: true } }, // Hidden column for pie charts
+    { accessorKey: "new_amt", header: "New Amount", meta: { isFilterOnly: true } }, // Hidden column for pie charts
     { accessorKey: "one_yr", header: "1 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "three_yr", header: "3 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "five_yr", header: "5 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
