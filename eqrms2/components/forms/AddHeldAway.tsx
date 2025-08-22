@@ -28,7 +28,7 @@ type AddHeldAwayFormData = {
 
 // Props for the form
 type AddHeldAwayFormProps = {
-    investorOptions: { value: number; label: string }[];
+    investorOptions: { value: string; label: string }[];
     onSuccess: () => void;
 };
 
@@ -241,7 +241,7 @@ export function AddHeldAwayButton({
     investorOptions,
     children
 }: { 
-    investorOptions: { value: number; label: string }[];
+    investorOptions: { value: string; label: string }[];
     children?: React.ReactNode;
 }) {
     const [showAddSheet, setShowAddSheet] = useState(false);
