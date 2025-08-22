@@ -161,3 +161,28 @@ export async function searchEntities(
     ]
   });
 }
+
+// Enhanced fund search function for form integration
+export async function searchRmsFundsWithDetails(
+  searchTerm: string,
+  limit: number = 50
+): Promise<Array<{
+  fund_id: number;
+  fund_name: string;
+  asset_class_id: number;
+  category_id: number;
+  structure_id: number;
+  slug: string;
+}>> {
+  return await supabaseListRead({
+    table: 'rms_funds',
+    columns: 'fund_id, fund_name, asset_class_id, category_id, structure_id, slug',
+    filters: [
+      (query) => query.ilike('fund_name', `%${searchTerm}%`),
+      (query) => query.not('asset_class_id', 'is', null),
+      (query) => query.not('category_id', 'is', null),
+      (query) => query.not('structure_id', 'is', null),
+      (query) => query.limit(limit)
+    ]
+  });
+}

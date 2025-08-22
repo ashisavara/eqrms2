@@ -111,7 +111,6 @@ export function NumberInput({
           return (
             <>
               <Input 
-                {...field}
                 id={name} 
                 type="number"
                 step={step}
@@ -122,6 +121,7 @@ export function NumberInput({
                 aria-describedby={hasError ? errId : undefined}
                 className={withErrorClass(className || "text-left", hasError)}
                 disabled={disabled}
+                value={field.value == null ? "" : field.value}
                 onChange={(e) => {
                   const value = e.target.value;
                   // Convert empty string to null, otherwise parse as number

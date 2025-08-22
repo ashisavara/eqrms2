@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { TextInput, NumberInput, ResizableTextArea, SelectInput, ToggleGroupInput } from "./FormFields";
+import { FundSearchInput } from "./FundSearchInput";
 import { CATEGORY_OPTIONS, STRUCTURE_OPTIONS, getAssetClassIdByCategoryId } from "@/lib/categoryConstants";
 import { toast, Toaster } from "sonner";
 import { useGroupMandate } from "@/lib/contexts/GroupMandateContext";
@@ -30,10 +32,23 @@ type AddHeldAwayFormProps = {
     onSuccess: () => void;
 };
 
+// Fund details type
+type FundDetails = {
+    fund_id: number;
+    fund_name: string;
+    asset_class_id: number;
+    category_id: number;
+    structure_id: number;
+    slug: string;
+};
+
 // Internal form component
 function AddHeldAwayForm({ investorOptions, onSuccess }: AddHeldAwayFormProps) {
     const [isLoading, setIsLoading] = useState(false);
+    const [entryMode, setEntryMode] = useState<"rms_fund" | "manual">("rms_fund");
+    const [selectedRmsFund, setSelectedRmsFund] = useState<FundDetails | null>(null);
     const { currentGroup } = useGroupMandate();
+    const router = useRouter();
 
     const cleanedData: AddHeldAwayFormData = {
         fund_name: "",
@@ -48,30 +63,71 @@ function AddHeldAwayForm({ investorOptions, onSuccess }: AddHeldAwayFormProps) {
         investor_id: 0
     };
 
-    const { control, handleSubmit, watch, setValue} = useForm<AddHeldAwayFormData>({
-        defaultValues: cleanedData,
+    const { control, handleSubmit, watch, setValue} = useForm<AddHeldAwayFormData & { entry_mode: string }>({
+        defaultValues: {
+            ...cleanedData,
+            entry_mode: "rms_fund"
+        },
     });
 
-    // Watch for category changes to auto-populate asset_class_id
+    // Watch entry mode changes
+    const watchedEntryMode = watch("entry_mode");
+    
+    useEffect(() => {
+        setEntryMode(watchedEntryMode as "rms_fund" | "manual");
+    }, [watchedEntryMode]);
+
+    // Watch for category changes to auto-populate asset_class_id (only in manual mode)
     const selectedCategoryId = watch("category_id");
     
     useEffect(() => {
-        if (selectedCategoryId) {
+        if (entryMode === "manual" && selectedCategoryId) {
             const assetClassId = getAssetClassIdByCategoryId(selectedCategoryId);
             if (assetClassId !== null) {
                 setValue("asset_class_id", assetClassId);
             }
         }
-    }, [selectedCategoryId, setValue]);
+    }, [selectedCategoryId, setValue, entryMode]);
+
+    // Handle RMS fund selection
+    const handleFundSelect = (fund: FundDetails) => {
+        setSelectedRmsFund(fund);
+        setValue("rms_fund_id", fund.fund_id);
+        setValue("fund_name", fund.fund_name);
+        setValue("asset_class_id", fund.asset_class_id);
+        setValue("category_id", fund.category_id);
+        setValue("structure_id", fund.structure_id);
+    };
+
+    // Handle clearing RMS fund selection
+    const handleClearFund = () => {
+        setSelectedRmsFund(null);
+        setValue("rms_fund_id", null);
+        setValue("fund_name", "");
+        // Don't clear other fields to avoid forcing user to reselect
+    };
+
+    // Handle entry mode change via form
+    useEffect(() => {
+        if (entryMode === "manual") {
+            // Clear RMS fund selection but keep other values
+            setValue("rms_fund_id", null);
+            setSelectedRmsFund(null);
+        }
+    }, [entryMode, setValue]);
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await supabaseInsertRow('investments', data);
-            console.log("Submitting held away asset:", data);
+            // Remove UI-only fields before database insert
+            const { entry_mode, ...investmentData } = data;
+            await supabaseInsertRow('investments', investmentData);
+            console.log("Submitting held away asset:", investmentData);
             
             if (typeof window !== "undefined") {
                 toast.success("Held Away Asset added successfully!");
+                // Refresh the page to show the new data
+                router.refresh();
                 setTimeout(() => {
                     onSuccess?.();
                 }, 1500);
@@ -89,6 +145,30 @@ function AddHeldAwayForm({ investorOptions, onSuccess }: AddHeldAwayFormProps) {
         <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
             
+            {/* Entry Mode Toggle */}
+            <ToggleGroupInput 
+                name="entry_mode" 
+                label="Investment Entry Method" 
+                control={control}
+                options={[
+                    { value: "rms_fund", label: "Link to RMS Fund" },
+                    { value: "manual", label: "Manual Entry" }
+                ]}
+                valueType="string"
+                toggleGroupClassName="gap-2 flex-wrap"
+                itemClassName="ime-choice-chips"
+            />
+
+            {/* RMS Fund Search - only show in rms_fund mode */}
+            {entryMode === "rms_fund" && (
+                <FundSearchInput
+                    onFundSelect={handleFundSelect}
+                    selectedFund={selectedRmsFund}
+                    onClear={handleClearFund}
+                    label="Search and Select RMS Fund"
+                />
+            )}
+            
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <TextInput name="fund_name" label="Fund Name" control={control} />
                 <TextInput name="advisor_name" label="Advisor Name" control={control} />
@@ -96,33 +176,36 @@ function AddHeldAwayForm({ investorOptions, onSuccess }: AddHeldAwayFormProps) {
                 <NumberInput name="cur_amt" label="Current Amount" control={control} />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Structure selection using ToggleGroupInput */}
-                <ToggleGroupInput 
-                    name="structure_id" 
-                    label="Structure" 
-                    control={control} 
-                    options={STRUCTURE_OPTIONS.map(structure => ({
-                        value: String(structure.structure_id),
-                        label: structure.structure_name
-                    }))}
-                    valueType="number"
-                    toggleGroupClassName="gap-2 flex-wrap"
-                    itemClassName="ime-choice-chips"
-                />
-                
-                {/* Category selection with automatic asset class lookup */}
-                <SelectInput 
-                    name="category_id" 
-                    label="Category" 
-                    control={control} 
-                    options={CATEGORY_OPTIONS.map(cat => ({
-                        value: String(cat.category_id),
-                        label: cat.cat_long_name
-                    }))}
-                    valueType="number"
-                />
-            </div>
+            {/* Only show structure and category selection in manual mode */}
+            {entryMode === "manual" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Structure selection using ToggleGroupInput */}
+                    <ToggleGroupInput 
+                        name="structure_id" 
+                        label="Structure" 
+                        control={control} 
+                        options={STRUCTURE_OPTIONS.map(structure => ({
+                            value: String(structure.structure_id),
+                            label: structure.structure_name
+                        }))}
+                        valueType="number"
+                        toggleGroupClassName="gap-2 flex-wrap"
+                        itemClassName="ime-choice-chips"
+                    />
+                    
+                    {/* Category selection with automatic asset class lookup */}
+                    <SelectInput 
+                        name="category_id" 
+                        label="Category" 
+                        control={control} 
+                        options={CATEGORY_OPTIONS.map(cat => ({
+                            value: String(cat.category_id),
+                            label: cat.cat_long_name
+                        }))}
+                        valueType="number"
+                    />
+                </div>
+            )}
             
             {/* Investor selection using ToggleGroupInput */}
             <ToggleGroupInput 
