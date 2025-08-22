@@ -18,14 +18,16 @@ import TableInvChange from "./TableInvChange";
 import { PieChart } from "@/components/charts/InvestmentPieCharts";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
+import { AddHeldAwayButton } from "@/components/forms/AddHeldAway";
 
 interface TableInvestmentsProps {
   data: Investments[];
   sipData?: SipDetail[];
   stpData?: StpDetails[];
+  investorOptions: { value: string; label: string }[];
 }
 
-export default function TableInvestments({ data, sipData = [], stpData = [] }: TableInvestmentsProps) {
+export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
   
@@ -161,6 +163,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [] }: T
                   formatter={(value) => `${value.toFixed(1)}`}
                 />
             </div>
+            <AddHeldAwayButton investorOptions={investorOptions}/>
             <ToggleVisibility toggleText="Show Asset Allocation">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <PieChart 

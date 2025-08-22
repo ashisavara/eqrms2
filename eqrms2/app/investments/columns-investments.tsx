@@ -40,7 +40,7 @@ export const columns: ColumnDef<Investments>[] = [
             // Desktop view - show as normal table cell
             if (row.original.slug) {
                 return <div className="text-left">
-                    <Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link> | 
+                    <Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link>  
                     {row.original.advisor_name !== "IME Capital" && (
                       <> <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} /></>
                     )}

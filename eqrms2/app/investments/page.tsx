@@ -57,7 +57,7 @@ export default async function InvestmentsPage() {
     );
   }
   // Fetch investments for the selected group (server-side)
-  const [rawInvestments, sip, stp] = await Promise.all([
+  const [rawInvestments, sip, stp, investor] = await Promise.all([
     supabaseListRead({
       table: "view_investments_details",
       columns: "fund_name, fund_rating, investor_name, pur_amt, cur_amt, gain_loss, abs_ret, cagr, cat_long_name, fund_rms_name, asset_class_name, cat_name, structure_name, slug, one_yr,three_yr,five_yr, advisor_name, investment_id, amt_change, new_amt, recommendation, asset_class_id, category_id, structure_id",
@@ -79,15 +79,26 @@ export default async function InvestmentsPage() {
         (query) => query.eq("group_id", groupId)
       ], 
     }),
+    supabaseListRead({
+      table: "group_investors",
+      columns: "*",
+      filters: [
+        (query) => query.eq("group_id", groupId)
+      ], 
+    }),
   ]);
 
   // Process investment data to update existing fields with calculated values
   const investments = processInvestmentData(rawInvestments);
+  const investorOptions = investor.map(investor => ({
+    value: String(investor.investor_id),
+    label: investor.investor_name as string
+  }));
 
   return (
     <div>
 
-          <TableInvestments data={investments} sipData={sip} stpData={stp} />
+          <TableInvestments data={investments} sipData={sip} stpData={stp} investorOptions={investorOptions} />
 
     </div>
   );
