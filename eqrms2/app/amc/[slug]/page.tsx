@@ -9,6 +9,9 @@ import TableFundScreen from "@/app/funds/TableFundScreen";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import TwoColLayout from "@/components/tables/TwoColLayout";
 
+// Force dynamic rendering to prevent static generation issues with dynamic data
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
