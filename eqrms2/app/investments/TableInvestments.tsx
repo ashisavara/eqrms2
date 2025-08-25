@@ -215,7 +215,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 formatter: (value) => value.toFixed(1)
               }}
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               
               </div>
               { sipData.length > 0 && (
