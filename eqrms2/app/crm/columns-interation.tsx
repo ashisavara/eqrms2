@@ -47,5 +47,8 @@ export const createColumns = (
             </div>
     }},
     { accessorKey: "meeting_summary", header: "Summary", size:800, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
+    {accessorKey: "interaction_tag", header: "Tag", meta: { isFilterOnly: true },filterFn: "arrIncludesSome",},
+    {accessorKey: "interaction_channel", header: "Channel", meta: { isFilterOnly: true },filterFn: "arrIncludesSome",},
+    {accessorKey: "answered", header: "Answered", meta: { isFilterOnly: true },filterFn: "arrIncludesSome",},
     
 ];
