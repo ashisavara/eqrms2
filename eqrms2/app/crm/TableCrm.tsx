@@ -11,6 +11,7 @@ import { AggregateCard } from "@/components/ui/aggregate-card";
 import { CountPieChart } from "@/components/charts/CountPieCharts";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { useMemo } from "react";
+import { calculateCustomAggregations } from "@/lib/table-aggregations";
 
 export default function TableCrm({ 
   data, 
@@ -125,11 +126,53 @@ export default function TableCrm({
       return Array.isArray(filterValue) ? filterValue : [];
     };
 
-    // ✅ Calculate aggregations for cards (count-based for CRM) - using filtered data
-    const filteredRows = table.getFilteredRowModel().rows;
-    const totalLeads = filteredRows.length;
-    const hotLeads = filteredRows.filter(row => row.getValue('importance') === 'High').length;
-    const overdueFollowups = filteredRows.filter(row => (Number(row.getValue('days_followup')) || 0) < 0).length;
+    // ✅ Calculate aggregations using the enhanced function
+    const aggregations = useMemo(() => {
+      return calculateCustomAggregations(table, [
+        {
+          key: 'totalLeads',
+          type: 'count'
+        },
+        {
+          key: 'hotLeads',
+          type: 'conditionalCount',
+          condition: (row) => {
+            const importance = row.getValue('importance');
+            return importance === '3) High' || importance === '4) Urgent';
+          }
+        },
+        {
+          key: 'overdueFollowups',
+          type: 'conditionalCount',
+          condition: (row) => {
+            const daysFollowup = Number(row.getValue('days_followup')) || 0;
+            return daysFollowup < 0;
+          }
+        },
+        {
+          key: 'advancedLeads',
+          type: 'conditionalCount',
+          condition: (row) => {
+            const progress = row.getValue('lead_progression');
+            return progress === '5) Documenation' || progress === '4) Deal Indicated' || progress === '3) Inv Consultation';
+          }
+        },
+        {
+          key: 'newLeads',
+          type: 'conditionalCount',
+          condition: (row) => {
+            const createdAtValue = row.getValue('created_at');
+            if (!createdAtValue) return false;
+            const createdAt = new Date(createdAtValue).getTime();
+            const now = Date.now();
+            const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+            return now - createdAt <= THIRTY_DAYS_MS;
+          }
+        },
+      ]);
+    }, [table, table.getFilteredRowModel().rows.length]);
+    
+    const { totalLeads, hotLeads, overdueFollowups, advancedLeads, newLeads } = aggregations;
     
     return (
       <div className="space-y-4">
@@ -151,66 +194,21 @@ export default function TableCrm({
         </div>
 
         {/* ✅ Aggregate Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <AggregateCard 
-            title="Total Leads" 
-            value={totalLeads}
-            formatter={(value) => `${value}`}
-          />
-          <AggregateCard 
-            title="High Priority Leads" 
-            value={hotLeads}
-            formatter={(value) => `${value}`}
-            className="border-orange-200"
-          />
-          <AggregateCard 
-            title="Overdue Follow-ups" 
-            value={overdueFollowups}
-            formatter={(value) => `${value}`}
-            className={overdueFollowups > 0 ? "border-red-200" : "border-green-200"}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <AggregateCard title="Total Leads" value={totalLeads} formatter={(value) => `${value}`} />
+          <AggregateCard title="Overdue Follow-ups" value={overdueFollowups} formatter={(value) => `${value}`} className={overdueFollowups > 0 ? "border-red-200" : "border-green-200"}/>
+          <AggregateCard title="High Priority Leads" value={hotLeads} formatter={(value) => `${value}`} className="border-orange-200" />
+          <AggregateCard title="Advanced Leads" value={advancedLeads} formatter={(value) => `${value}`} className="border-blue-200" />
+          <AggregateCard title="New Leads" value={newLeads} formatter={(value) => `${value}`} className="border-green-200" />
         </div>
 
         {/* ✅ Pie Charts in Toggle Visibility */}
         <ToggleVisibility toggleText="Show Lead Analysis">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            <CountPieChart 
-              table={table} 
-              aggCol="importance" 
-              title="Lead Priority"
-              countLabel="leads"
-            />
-            <CountPieChart 
-              table={table} 
-              aggCol="lead_progression" 
-              title="Lead Stage"
-              countLabel="leads"
-            />
-            <CountPieChart 
-              table={table} 
-              aggCol="wealth_level" 
-              title="Wealth Level"
-              countLabel="leads"
-            />
-            <CountPieChart 
-              table={table} 
-              aggCol="lead_source" 
-              title="Lead Source"
-              countLabel="leads"
-            />
-            <CountPieChart 
-              table={table} 
-              aggCol="lead_type" 
-              title="Lead Type"
-              countLabel="leads"
-            />
-            <CountPieChart 
-              table={table} 
-              aggCol="rm_name" 
-              title="Relationship Manager"
-              maxItems={8}
-              countLabel="leads"
-            />
+            <CountPieChart table={table} aggCol="importance" title="Lead Priority" countLabel="leads" />
+            <CountPieChart table={table} aggCol="lead_progression" title="Lead Stage" countLabel="leads" />
+            <CountPieChart table={table} aggCol="wealth_level" title="Wealth Level" countLabel="leads" />
+            <CountPieChart table={table} aggCol="lead_source" title="Lead Source" countLabel="leads" />
           </div>
         </ToggleVisibility>
 

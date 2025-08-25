@@ -13,6 +13,7 @@ import { CountPieChart } from "@/components/charts/CountPieCharts";
 import { PieChart } from "@/components/charts/InvestmentPieCharts";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { useMemo } from "react";
+import { calculateCustomAggregations } from "@/lib/table-aggregations";
 
 export default function TableDeals({ 
   data, 
@@ -96,10 +97,41 @@ export default function TableDeals({
       return Array.isArray(filterValue) ? filterValue : [];
     };
 
-    // ✅ Calculate aggregations for cards (value and count-based for deals) - using filtered data
-    const filteredRows = table.getFilteredRowModel().rows;
-    const totalDeals = filteredRows.length;
-    const totalAUM = filteredRows.reduce((sum, row) => sum + (Number(row.getValue('total_deal_aum')) || 0), 0);
+    // ✅ Calculate aggregations using the enhanced function
+    const aggregations = useMemo(() => {
+      return calculateCustomAggregations(table, [
+        {
+          key: 'totalDeals',
+          type: 'count'
+        },
+        {
+          key: 'aum100Percent',
+          type: 'conditionalSum',
+          column: 'total_deal_aum',
+          condition: (row) => Number(row.getValue('deal_likelihood')) === 1
+        },
+        {
+          key: 'aum80Percent',
+          type: 'conditionalSum',
+          column: 'total_deal_aum',
+          condition: (row) => Number(row.getValue('deal_likelihood')) === 0.8
+        },
+        {
+          key: 'aumThisMonth',
+          type: 'conditionalSum',
+          column: 'total_deal_aum',
+          condition: (row) => row.getValue('est_closure') === 'Current Month'
+        },
+        {
+          key: 'aumNextMonth',
+          type: 'conditionalSum',
+          column: 'total_deal_aum',
+          condition: (row) => row.getValue('est_closure') === 'Next Month'
+        }
+      ]);
+    }, [table, table.getFilteredRowModel().rows.length]);
+    
+    const { totalDeals, aum100Percent, aum80Percent, aumThisMonth, aumNextMonth } = aggregations;
     
     return (
       <div className="space-y-4">
@@ -121,17 +153,35 @@ export default function TableDeals({
         </div>
 
         {/* ✅ Aggregate Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <AggregateCard 
             title="Total Deals" 
             value={totalDeals}
             formatter={(value) => `${value}`}
           />
           <AggregateCard 
-            title="Total AUM" 
-            value={totalAUM}
+            title="100% AUM" 
+            value={aum100Percent}
+            formatter={(value) => `${value.toFixed(1)} Cr`}
+            className="border-green-200"
+          />
+          <AggregateCard 
+            title="80% AUM" 
+            value={aum80Percent}
             formatter={(value) => `${value.toFixed(1)} Cr`}
             className="border-blue-200"
+          />
+          <AggregateCard 
+            title="This Month" 
+            value={aumThisMonth}
+            formatter={(value) => `${value.toFixed(1)} Cr`}
+            className="border-orange-200"
+          />
+          <AggregateCard 
+            title="Next Month" 
+            value={aumNextMonth}
+            formatter={(value) => `${value.toFixed(1)} Cr`}
+            className="border-purple-200"
           />
         </div>
 
@@ -140,30 +190,6 @@ export default function TableDeals({
           <div className="space-y-6">
             {/* Count-based charts */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <CountPieChart 
-                table={table} 
-                aggCol="deal_likelihood" 
-                title="Deal Likelihood"
-                countLabel="deals"
-              />
-              <CountPieChart 
-                table={table} 
-                aggCol="deal_stage" 
-                title="Deal Stage"
-                countLabel="deals"
-              />
-              <CountPieChart 
-                table={table} 
-                aggCol="deal_segment" 
-                title="Deal Segment"
-                countLabel="deals"
-              />
-              <CountPieChart 
-                table={table} 
-                aggCol="est_closure" 
-                title="Est. Closure Timeline"
-                countLabel="deals"
-              />
             
             {/* Value-based charts for AUM */}
               <PieChart 
@@ -175,6 +201,18 @@ export default function TableDeals({
               <PieChart 
                 table={table} 
                 aggCol="deal_stage" 
+                valCol="total_deal_aum" 
+                title="AUM by Stage"
+              />
+              <PieChart 
+                table={table} 
+                aggCol="est_closure" 
+                valCol="total_deal_aum" 
+                title="AUM by Stage"
+              />
+              <PieChart 
+                table={table} 
+                aggCol="deal_segment" 
                 valCol="total_deal_aum" 
                 title="AUM by Stage"
               />

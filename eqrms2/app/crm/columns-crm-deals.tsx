@@ -39,7 +39,7 @@ export const createColumns = (
     { accessorKey: "total_deal_aum", header: "AUM", size:100,
         cell: ({ getValue }) => getValue() == null ? null : <p className="font-bold">{getValue() as number}</p>,
     },
-    { accessorKey: "est_closure", header: "Est. Closure", size:130,
+    { accessorKey: "est_closure", header: "Est. Closure", size:150,
         cell: ({ getValue }) => getValue() == null ? null : <DealEstClosureRating rating={getValue() as string}>{getValue() as string}</DealEstClosureRating>,
     },
     { accessorKey: "deal_likelihood", header: "Likelihood", size:80, 

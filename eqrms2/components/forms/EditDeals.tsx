@@ -82,10 +82,10 @@ function EditDealForm({initialData, id, onSuccess, relLeadId, initialLeadData}:
         
         // Lead fields (pre-populated from current lead data)
         followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
-        importance: initialLeadData?.importance ?? null,
-        lead_progression: initialLeadData?.lead_progression ?? null,
-        wealth_level: initialLeadData?.wealth_level ?? null,
-        lead_summary: initialLeadData?.lead_summary ?? null,
+        importance: initialLeadData?.importance || "",
+        lead_progression: initialLeadData?.lead_progression || "",
+        wealth_level: initialLeadData?.wealth_level || "",
+        lead_summary: initialLeadData?.lead_summary || "",
     };
 
     const { control, handleSubmit} = useForm<DealsValues>({
@@ -228,7 +228,7 @@ export function EditDealButton({
   // Convert deal data to DealsValues format
   const dealUpdateData: DealsValues = {
     // Deal fields (from existing deal data)
-    rel_lead_id: dealData.rel_lead_id ?? null,
+    rel_lead_id: dealData.rel_lead_id ?? 0,
     deal_name: dealData.deal_name ?? "",
     est_closure: dealData.est_closure ?? "",
     deal_likelihood: dealData.deal_likelihood ?? 0,
@@ -239,10 +239,10 @@ export function EditDealButton({
     
     // Lead fields (will be pre-populated in the form)
     followup_date: null,
-    importance: null,
-    lead_progression: null,
-    wealth_level: null,
-    lead_summary: null,
+    importance: "",
+    lead_progression: "",
+    wealth_level: "",
+    lead_summary: "",
   };
 
   return (

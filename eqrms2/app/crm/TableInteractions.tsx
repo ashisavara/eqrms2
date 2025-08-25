@@ -12,6 +12,7 @@ import { AggregateCard } from "@/components/ui/aggregate-card";
 import { CountPieChart } from "@/components/charts/CountPieCharts";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { useMemo } from "react";
+import { calculateCustomAggregations } from "@/lib/table-aggregations";
 
 export default function TableInteractions({ 
   data, 
@@ -94,16 +95,41 @@ export default function TableInteractions({
       return Array.isArray(filterValue) ? filterValue : [];
     };
 
-    // ✅ Calculate aggregations for cards (count-based for interactions) - using filtered data
-    const filteredRows = table.getFilteredRowModel().rows;
-    const totalInteractions = filteredRows.length;
-    const answeredInteractions = filteredRows.filter(row => row.getValue('answered') === true).length;
-    const thisWeekInteractions = filteredRows.filter(row => {
-      const createdAt = new Date(row.getValue('created_at') as string);
-      const oneWeekAgo = new Date();
-      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-      return createdAt >= oneWeekAgo;
-    }).length;
+    // ✅ Calculate aggregations using the enhanced function
+    const aggregations = useMemo(() => {
+      return calculateCustomAggregations(table, [
+        {
+          key: 'totalConnects',
+          type: 'count'
+        },
+        {
+          key: 'totalMeetings',
+          type: 'conditionalCount',
+          condition: (row) => {
+            const meeting = row.getValue('interaction_type');
+            return meeting === 'Meeting';
+          }
+        },
+        {
+          key: 'totalInteractions',
+          type: 'conditionalCount',
+          condition: (row) => {
+            const interaction = row.getValue('interaction_type');
+            return interaction === 'Interaction';
+          }
+        },
+        {
+          key: 'totalFollowUps',
+          type: 'conditionalCount',
+          condition: (row) => {
+            const interaction = row.getValue('interaction_type');
+            return interaction === 'Follow up';
+          }
+        },
+      ]);
+    }, [table, table.getFilteredRowModel().rows.length]);
+    
+    const { totalConnects, totalMeetings, totalInteractions, totalFollowUps } = aggregations;
     
     return (
       <div className="space-y-4">
@@ -125,21 +151,27 @@ export default function TableInteractions({
         </div>
 
         {/* ✅ Aggregate Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <AggregateCard 
-            title="Total Interactions" 
-            value={totalInteractions}
+            title="Connects" 
+            value={totalConnects}
             formatter={(value) => `${value}`}
           />
           <AggregateCard 
-            title="Answered Calls" 
-            value={answeredInteractions}
+            title="Meetings" 
+            value={totalMeetings}
             formatter={(value) => `${value}`}
             className="border-green-200"
           />
           <AggregateCard 
-            title="This Week" 
-            value={thisWeekInteractions}
+            title="Interactions" 
+            value={totalInteractions}
+            formatter={(value) => `${value}`}
+            className="border-blue-200"
+          />
+          <AggregateCard 
+            title="Followups" 
+            value={totalFollowUps}
             formatter={(value) => `${value}`}
             className="border-blue-200"
           />
@@ -164,19 +196,6 @@ export default function TableInteractions({
               table={table} 
               aggCol="interaction_tag" 
               title="Interaction Tags"
-              countLabel="interactions"
-            />
-            <CountPieChart 
-              table={table} 
-              aggCol="rm_name" 
-              title="Created By (RM)"
-              countLabel="interactions"
-              maxItems={8}
-            />
-            <CountPieChart 
-              table={table} 
-              aggCol="answered" 
-              title="Call Status"
               countLabel="interactions"
             />
           </div>

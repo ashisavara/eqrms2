@@ -125,4 +125,10 @@ export const createColumns = (
         meta: { isFilterOnly: true },
         filterFn: "arrIncludesSome",
     },
+    {
+        accessorKey: "created_at",
+        header: "Created at",
+        meta: { isFilterOnly: true },
+        filterFn: "arrIncludesSome",
+    },
 ]
