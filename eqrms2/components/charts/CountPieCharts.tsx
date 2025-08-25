@@ -16,8 +16,13 @@ const CHART_COLORS = {
 };
 
 interface CountPieChartProps<TData> {
-  table: TanStackTable<TData>;
-  aggCol: string;          // Aggregation column (e.g., 'importance', 'lead_progression')
+  // Existing table-based approach (for client-side tables)
+  table?: TanStackTable<TData>;
+  aggCol?: string;          // Aggregation column (e.g., 'importance', 'lead_progression')
+  
+  // NEW: Direct data approach (for server-side aggregations)
+  data?: Array<{ name: string; value: number }>;
+  
   title: string;           // Chart title
   description?: string;    // Chart description
   maxItems?: number;       // Limit number of items (default: no limit)
@@ -28,31 +33,50 @@ interface CountPieChartProps<TData> {
 export function CountPieChart<TData>({ 
   table, 
   aggCol, 
+  data, // NEW: Direct data prop
   title, 
   description, 
   maxItems,
   countLabel = 'items'
 }: CountPieChartProps<TData>) {
   const chartData = useMemo(() => {
-    const rows = table.getFilteredRowModel().rows;
-    const counts: Record<string, number> = {};
-    
-    rows.forEach(row => {
-      const aggValue = String(row.getValue(aggCol) || 'Unknown');
-      counts[aggValue] = (counts[aggValue] || 0) + 1; // Count instead of sum
-    });
-    
-    let result = Object.entries(counts)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value);
-    
-    // Apply maxItems limit if specified
-    if (maxItems && result.length > maxItems) {
-      result = result.slice(0, maxItems);
+    // ✅ Use direct data if provided (server-side aggregations)
+    if (data) {
+      let result = [...data].sort((a, b) => b.value - a.value);
+      
+      // Apply maxItems limit if specified
+      if (maxItems && result.length > maxItems) {
+        result = result.slice(0, maxItems);
+      }
+      
+      return result;
     }
     
-    return result;
-  }, [table.getFilteredRowModel().rows, aggCol, maxItems]);
+    // ✅ Fall back to table-based approach (client-side aggregations)
+    if (table && aggCol) {
+      const rows = table.getFilteredRowModel().rows;
+      const counts: Record<string, number> = {};
+      
+      rows.forEach(row => {
+        const aggValue = String(row.getValue(aggCol) || 'Unknown');
+        counts[aggValue] = (counts[aggValue] || 0) + 1; // Count instead of sum
+      });
+      
+      let result = Object.entries(counts)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value);
+      
+      // Apply maxItems limit if specified
+      if (maxItems && result.length > maxItems) {
+        result = result.slice(0, maxItems);
+      }
+      
+      return result;
+    }
+    
+    // ✅ Return empty array if neither data nor table+aggCol provided
+    return [];
+  }, [data, table, aggCol, maxItems]);
 
   const chartConfig = useMemo(() => {
     const config: Record<string, { label: string; color: string }> = {};

@@ -18,9 +18,10 @@ interface LeadsTableProps {data: LeadsTagging[];
   };
   filterConfig: Record<string, any>;
   searchColumns: string[];
+  aggregations?: any; // ✨ NEW: Aggregation data from SQL function
 }
 
-export default function LeadsTable({ data, pagination, filterOptions, filterConfig, searchColumns }: LeadsTableProps) {
+export default function LeadsTable({ data, pagination, filterOptions, filterConfig, searchColumns, aggregations }: LeadsTableProps) {
   const config: ServerTablePageConfig<LeadsTagging> = { basePath: '/crm/all',
     
   tableStateConfig: { filterKeys: [
@@ -125,8 +126,47 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
 
     emptyMessage: 'no leads found with current filters .. ',sourceTable: 'view_leads_tagcrm ',  
     filterConfig: filterConfig,
-    tableClassName: "divide-y divide-gray-200" // Adds spacing between rows
+    tableClassName: "divide-y divide-gray-200", // Adds spacing between rows
+    
+    // ✨ NEW: Aggregations Configuration (replicates TableCrm.tsx functionality)
+    aggregations: {
+      enabled: true,
+      sqlFunction: 'get_crm_aggregations',
+      
+      // 🔢 Aggregation Cards (same as TableCrm.tsx)
+      cards: [
+        { key: 'totalLeads', title: 'Total Leads' },
+        { key: 'overdueFollowups', title: 'Overdue Follow-ups', className: 'border-red-200' },
+        { key: 'hotLeads', title: 'High Priority Leads', className: 'border-orange-200' },
+        { key: 'advancedLeads', title: 'Advanced Leads', className: 'border-blue-200' },
+        { key: 'newLeads', title: 'New Leads', className: 'border-green-200' }
+      ],
+      
+      // 📊 Pie Charts (same as TableCrm.tsx)
+      pieCharts: [
+        { 
+          key: 'importanceDistribution', 
+          title: 'Lead Priority',
+          countLabel: 'leads'
+        },
+        { 
+          key: 'leadProgressionDistribution', 
+          title: 'Lead Stage',
+          countLabel: 'leads'
+        },
+        { 
+          key: 'wealthLevelDistribution', 
+          title: 'Wealth Level',
+          countLabel: 'leads'
+        },
+        { 
+          key: 'leadSourceDistribution', 
+          title: 'Lead Source',
+          countLabel: 'leads'
+        }
+      ]
+    }
   };
 
-  return <ServerTablePage config={config} data={data} pagination={pagination} />;
+  return <ServerTablePage config={config} data={data} pagination={pagination} aggregations={aggregations} />;
 }

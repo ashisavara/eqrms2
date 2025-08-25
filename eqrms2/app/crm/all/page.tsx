@@ -1,5 +1,6 @@
 import { serverSideQuery, getMultipleFilterOptions } from "@/lib/supabase/serverSideQueryHelper";
 import { LeadsTagging } from "@/types/lead-detail";
+import { createClient } from "@/lib/supabase/server";
 import LeadsTable from "./TableCrmAll";
 
 interface PageProps {
@@ -56,6 +57,9 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const { filters, pagination, sorting, search } = parseSearchParams(params);
   
+  // ✨ NEW: Create Supabase client for aggregations
+  const supabase = await createClient();
+  
 
 
   // STEP 3: Configure filter data sources
@@ -70,8 +74,8 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
         rm_name: { table: 'view_leads_tagcrm', valueCol: 'rm_name', labelCol: 'rm_name' },
     };
 
-    // STEP 4: Fetch data and filter options in parallel (for performance)
-  const [filterOptions, tableData] = await Promise.all([
+    // STEP 4: Fetch data, filter options, and aggregations in parallel (for performance)
+  const [filterOptions, tableData, aggregationResult] = await Promise.all([
     // Fetch all filter dropdown options
     getMultipleFilterOptions([
         'importance',
@@ -81,7 +85,7 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
         'wealth_level',
         'rm_name',
     ], filterConfig),
-        // Fetch the actual table data with server-side filtering/sorting/pagination
+    // Fetch the actual table data with server-side filtering/sorting/pagination
     serverSideQuery<LeadsTagging>({
       table: "view_leads_tagcrm",
       columns: "lead_name,days_followup,days_since_last_contact,importance,wealth_level,lead_progression,lead_summary,lead_source,lead_type,rm_name,lead_id",
@@ -91,10 +95,27 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
       pagination,
       sorting,
       staticFilters: [] // Add any always-applied filters here (e.g., status='active')
+    }),
+    // ✨ NEW: Fetch aggregations for all filtered data (not just current page)
+    supabase.rpc('get_crm_aggregations', {
+      p_importance: filters.importance || null,
+      p_lead_progression: filters.lead_progression || null,
+      p_lead_source: filters.lead_source || null,
+      p_lead_type: filters.lead_type || null,
+      p_wealth_level: filters.wealth_level || null,
+      p_rm_name: filters.rm_name || null,
+      p_search: search || null
     })
   ]);
 
 
+
+  // ✅ Handle aggregation errors gracefully
+  const aggregations = aggregationResult.error ? null : aggregationResult.data;
+  
+  if (aggregationResult.error) {
+    console.error('Aggregation fetch failed:', aggregationResult.error);
+  }
 
   return (
     <LeadsTable     
@@ -123,6 +144,7 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
         'lead_type',
         'lead_progression'
         ]}
+      aggregations={aggregations} // ✨ NEW: Pass aggregation data
     />
   );
 }
