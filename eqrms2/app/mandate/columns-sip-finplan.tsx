@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SipDetail } from "@/types/sip-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditSipGoalsButton } from "@/components/forms/EditSipGoals";
+import SimpleTable from "@/components/tables/singleRowTable";
 
 export const columns: ColumnDef<SipDetail>[] = [
     { 
@@ -14,16 +15,12 @@ export const columns: ColumnDef<SipDetail>[] = [
                 return (
                     <div className="p-3 border rounded-lg space-y-2">
                         <div className="font-semibold text-left">
-                            {row.original.sip_fund_name}
+                            {row.original.sip_fund_name} - {row.original.goal_name}
                         </div>
-                        <div className="text-sm text-gray-600">
-                            Goal: {row.original.goal_name}
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div>Amount: {row.original.sip_amount}</div>
-                            <div>Months Left: {row.original.months_left}</div>
-                            <div>Future Value: {(row.original.sip_fv as number)?.toFixed(0) || ""}</div>
-                        </div>
+                        <SimpleTable 
+                            headers={[{ label: "Amount" }, { label: "Months Left" }, { label: "Future Value" }]}
+                            body={[{ value: row.original.sip_amount }, { value: row.original.months_left }, { value: (row.original.sip_fv as number)?.toFixed(0) || "" }]}
+                        />
                     </div>
                 );
             } else {

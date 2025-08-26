@@ -4,6 +4,7 @@ import { RatingDisplay } from "@/components/conditional-formatting";
 import {Investments} from"@/types/investment-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditInvAmtButton } from "@/components/forms/EditInvNewAmt";
+import SimpleTable from "@/components/tables/singleRowTable";
 
 export const columns: ColumnDef<Investments>[] = [
 
@@ -16,28 +17,21 @@ export const columns: ColumnDef<Investments>[] = [
             // Mobile view - show as card
             return (
                 <div className="p-3 border rounded-lg space-y-2">
-                    <div className="font-semibold text-left">
+                    <div className="font-semibold text-left text-base">
                         {row.original.slug ? (
                             <Link href={`/funds/${row.original.slug}`} className="text-blue-600 font-bold">
                                 {row.original.fund_name}
                             </Link>
                         ) : (
                             row.original.fund_name
-                        )}
+                        )} 
+                        <span className="text-gray-600 text-xs font-normal">     |  {row.original.investor_name}</span>
                     </div>
-                    <div className="text-sm text-gray-600">{row.original.investor_name}</div>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>Rating: <RatingDisplay rating={row.original.fund_rating} /></div>
-                        <div>Purchase: {row.original.pur_amt?.toFixed(1)}</div>
-                        <div>Current: {row.original.cur_amt?.toFixed(1)}</div>
-                        <div>Change: {(row.original.amt_change ?? 0).toFixed(1)}</div>
-                        <div className="text-blue-500 font-bold">
-                            New: {(row.original.new_amt ?? 0).toFixed(1)}
-                        </div>
-                        <div>
-                            {row.original.recommendation || ''}
-                        </div>
-                    </div>
+                    <p className="text-xs text-left text-gray-600">{row.original.recommendation || ''}</p>
+                    <SimpleTable 
+                        headers={[{ label: "Rating" }, { label: "CurVal" }, { label: "Change" }, { label: "NewVal" }]}
+                        body={[{ value: <RatingDisplay rating={row.original.fund_rating} /> }, { value: row.original.cur_amt?.toFixed(1)}, { value: row.original.amt_change?.toFixed(1) }, { value: row.original.new_amt?.toFixed(1) }]}
+                    />
                 </div>
             );
         } else {

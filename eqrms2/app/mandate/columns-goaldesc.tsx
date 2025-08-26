@@ -14,22 +14,7 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
             if (isMobileView(table)) {
                 // Mobile view - show as card
                 return (
-                    <div className="p-3 border rounded-lg space-y-2">
-                        <div className="font-semibold text-left">
-                            {row.original.goal_name}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                            Achieved: {(row.original.goal_ach as number)?.toFixed(0) || ""}%
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div>Years to Goal: {(row.original.yrs_to_goal as number)?.toFixed(1) || ""}</div>
-                            <div>FV Goal: {row.original.fv_goals}</div>
-                            <div>FV Investment: {(row.original.fv_inv as number)?.toFixed(0) || ""}</div>
-                            <div>Pending Amount: {(row.original.pending_amt as number)?.toFixed(0) || ""}</div>
-                            <div>Lumpsum Required: {(row.original.lumpsum_req as number)?.toFixed(0) || ""}</div>
-                            <div>SIP Required: {(row.original.sip_req as number)?.toFixed(0) || ""}</div>
-                            <div>Goal Description: {row.original.goal_description}</div>
-                        </div>
+                    <div>
                     </div>
                 );
             } else {

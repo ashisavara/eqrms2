@@ -235,7 +235,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
           
           </TabsContent>
           <TabsContent value="recommendations">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Change" 
                 value={data.reduce((sum, row) => sum + (row.amt_change || 0), 0)}

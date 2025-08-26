@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Investments } from "@/types/investment-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditInvGoalsButton } from "@/components/forms/EditInvGoals";
+import SimpleTable from "@/components/tables/singleRowTable";
 
 export const columns: ColumnDef<Investments>[] = [
     { 
@@ -14,16 +15,12 @@ export const columns: ColumnDef<Investments>[] = [
                 return (
                     <div className="p-3 border rounded-lg space-y-2">
                         <div className="font-semibold text-left">
-                            {row.original.fund_name}
+                            {row.original.fund_name} - {row.original.goal_name}
                         </div>
-                        <div className="text-sm text-gray-600">
-                            Goal: {row.original.goal_name}
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div>Asset Class: {row.original.asset_class_name}</div>
-                            <div>Current Value: {(row.original.cur_amt as number)?.toFixed(0) || ""}</div>
-                            <div>Future Value: {(row.original.fv_inv as number)?.toFixed(0) || ""}</div>
-                        </div>
+                        <SimpleTable 
+                            headers={[{ label: "Asset Class" }, { label: "Current Value" }, { label: "Future Value" }]}
+                            body={[{ value: row.original.asset_class_name }, { value: (row.original.cur_amt as number)?.toFixed(0) || "" }, { value: (row.original.fv_inv as number)?.toFixed(0) || "" }]}
+                        />
                     </div>
                 );
             } else {

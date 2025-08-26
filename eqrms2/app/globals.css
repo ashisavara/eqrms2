@@ -47,7 +47,7 @@
   }
 
   div.border-box {
-    @apply border-2 border-gray-200 rounded-md my-8 p-2 text-sm;
+    @apply border-2 border-gray-200 rounded-md my-2 p-2 text-sm;
   }
 
   div.mobile-card {

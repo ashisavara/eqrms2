@@ -110,12 +110,12 @@ export default async function MandatePage() {
           <Tabs defaultValue="mandate" className="w-full">
             <TabsList className="w-full">
               <TabsTrigger value="mandate">Mandate</TabsTrigger>
-              <TabsTrigger value="favourites">Recommended Funds</TabsTrigger>
-              <TabsTrigger value="finplan">Financial Plan</TabsTrigger>
+              <TabsTrigger value="favourites">Funds</TabsTrigger>
+              <TabsTrigger value="finplan">Fin Plan</TabsTrigger>
             </TabsList>
             <TabsContent value="mandate">
               <EditMandateButton mandateData={invMandate} mandateId={mandate} />
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <div className="border-box">
                           <p className="font-bold">Risk Profile</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.rp_override || ""}</ReactMarkdown>
@@ -171,8 +171,10 @@ export default async function MandatePage() {
                   <div>
                       <h3 className="mt-4">Trailing Performance</h3>
                       <TableCategories data={catPerformance} columnType="summary"/>
-                      <h3 className="mt-4">Annual Performance</h3>
-                      <TableCategories data={catPerformance} columnType="annual"/>
+                      <div className="hidden md:block">
+                        <h3 className="mt-4">Annual Performance</h3>
+                        <TableCategories data={catPerformance} columnType="annual"/>
+                      </div>
                   </div>
             </TabsContent>
             <TabsContent value="favourites">

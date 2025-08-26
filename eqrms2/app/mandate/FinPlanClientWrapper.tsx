@@ -85,8 +85,9 @@ export default function FinPlanClientWrapper({
       <div>
         <h3>Financial Goals</h3>
         <TableFinPlan data={filteredFinGoals} />
-        <div className="mt-6"></div>
-        <TableGoalDesc data={filteredFinGoals} />
+        <div className="mt-6 hidden md:block">
+          <TableGoalDesc data={filteredFinGoals} />
+        </div>
       </div>
 
       {/* Investment FinPlan Table */}

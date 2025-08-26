@@ -42,7 +42,7 @@ export default function TableFundScreen({ data }: { data: RmsFundsScreener[] }) 
         { column: "asset_class_name", title: "Asset Class", placeholder: "Asset Class" },
         { column: "category_name", title: "Category", placeholder: "Category" },
         { column: "amc_name", title: "AMC", placeholder: "AMC" },
-        { column: "estate_duty_exposure", title: "Estate Duty Exposure", placeholder: "Estate Duty Exposure" },
+        { column: "estate_duty_exposure", title: "Estate Duty", placeholder: "Estate Duty" },
         { column: "us_investors", title: "US Investors", placeholder: "US Investors" }
       ];
     

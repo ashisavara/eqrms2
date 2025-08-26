@@ -4,6 +4,7 @@ import { RatingDisplay } from "@/components/conditional-formatting";
 import {Investments} from"@/types/investment-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditHeldAwayAssetsButton } from "@/components/forms/EditHeldAway";
+import SimpleTable from "@/components/tables/singleRowTable";
 
 export const columns: ColumnDef<Investments>[] = [
 
@@ -16,7 +17,7 @@ export const columns: ColumnDef<Investments>[] = [
             // Mobile view - show as card
             return (
                 <div className="mobile-card">
-                    <div className="font-semibold text-left">
+                    <div className="font-semibold text-left text-base">
                         {row.original.slug ? (
                             <Link href={`/funds/${row.original.slug}`} className="text-blue-600 font-bold">
                                 {row.original.fund_name}
@@ -24,16 +25,12 @@ export const columns: ColumnDef<Investments>[] = [
                         ) : (
                             row.original.fund_name
                         )}
+                           <span className="text-gray-600 text-sm font-normal">    {row.original.investor_name}</span>
                     </div>
-                    <div className="text-sm text-gray-600">{row.original.investor_name}</div>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>Rating: <RatingDisplay rating={row.original.fund_rating} /></div>
-                        <div>Purchase: {row.original.pur_amt?.toFixed(1)}</div>
-                        <div>Current: {row.original.cur_amt?.toFixed(1)}</div>
-                        <div className={row.original.gain_loss >= 0 ? 'text-green-600' : 'text-red-600'}>
-                            Gain/Loss: {row.original.gain_loss?.toFixed(1)}
-                        </div>
-                    </div>
+                    <SimpleTable 
+                        headers={[{ label: "Rating" }, { label: "PurVal" }, { label: "CurVal" }, { label: "Gain/loss" }]}
+                        body={[{ value: <RatingDisplay rating={row.original.fund_rating} /> }, { value: row.original.pur_amt?.toFixed(1)}, { value: row.original.cur_amt?.toFixed(1) }, { value: row.original.gain_loss?.toFixed(1) }]}
+                    />
                 </div>
             );
         } else {
