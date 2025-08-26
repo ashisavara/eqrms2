@@ -15,16 +15,7 @@ export const annualColumns: ColumnDef<Category>[] = [
 
       if (isMobileView(table)) {
         return (
-          <div className="mobile-card">
-            <div className="text-left">
-              <Link href={`/categories/${categorySlug}`} className="text-blue-600 font-bold hover:underline">
-                {categoryName}
-              </Link>
-              <SimpleTable 
-                headers={[{ label: "2025" }, { label: "2024" }, { label: "2023" }, { label: "2022" }, { label : "2021"} ]}
-                body={[{ value: <ComGrowthNumberRating rating={Number(row.original.cy_1.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.cy_2.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.cy_3.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.cy_4.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.cy_5.toFixed(1))} /> }]}
-              />
-            </div>
+          <div>
           </div>
         );
       }

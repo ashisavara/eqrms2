@@ -77,8 +77,8 @@ export function ChangeGroup() {
         <Button variant="outline" className="text-sm">
           <Users className="h-4 w-4 mr-2" />
           {currentGroup && currentMandate 
-            ? `${currentGroup.name} | ${currentMandate.name}`
-            : "Select Group & Mandate"
+            ? `${currentMandate.name}`
+            : "Select Mandate"
           }
         </Button>
       </SheetTrigger>

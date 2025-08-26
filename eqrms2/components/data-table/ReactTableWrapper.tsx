@@ -220,10 +220,10 @@ export function ReactTableWrapper<TData>({
         </div>
       )}
 
-      <div className={`w-full overflow-auto rounded-md border ${className}`}>
+      <div className={`w-full overflow-auto rounded-md md:border ${className}`}>
         <table className="min-w-full">
           {/* ✅ Table Header */}
-          <thead className="bg-muted">
+          <thead className="bg-muted hidden md:table-header-group">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="border-b">
                 {headerGroup.headers.map((header) => {
@@ -283,7 +283,7 @@ export function ReactTableWrapper<TData>({
               table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="border-b hover:bg-muted/50 transition-colors"
+                  className="md:border-b hover:bg-muted/50 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => {
                     // Hide cells for filter-only columns

@@ -15,7 +15,7 @@ export const columns: ColumnDef<Investments>[] = [
         if (isMobileView(table)) {
             // Mobile view - show as card
             return (
-                <div className="p-3 border rounded-lg space-y-2">
+                <div className="mobile-card">
                     <div className="font-semibold text-left">
                         {row.original.slug ? (
                             <Link href={`/funds/${row.original.slug}`} className="text-blue-600 font-bold">

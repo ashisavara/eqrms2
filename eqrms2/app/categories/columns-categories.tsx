@@ -31,14 +31,30 @@ export const columns: ColumnDef<Category>[] = [
         return (
           <div className="mobile-card">
             <div className="flex flex-row justify-between">
-              <Link href={`/categories/${row.original.slug}`} className="text-blue-600 font-bold hover:underline text-sm">{row.original.cat_name}</Link>
-              <FavouriteHeart entityType="categories" entityId={row.original.category_id} size="sm" />
+              <Link href={`/categories/${row.original.slug}`} className="text-blue-600 font-bold hover:underline text-base">{row.original.cat_name}</Link>
+              <FavouriteHeart entityType="categories" entityId={row.original.category_id} size="md" />
             </div>
-            <div className="text-left text-xs text-gray-600">{row.original.cat_summary}</div>
+            <div className="text-left text-sm text-gray-600">{row.original.cat_summary}</div>
             <SimpleTable 
               headers={[{ label: "1yr" }, { label: "3yr" }, { label: "5yr" }]}
-              body={[{ value: <ComGrowthNumberRating rating={Number(row.original.one_yr.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.three_yr.toFixed(1))} /> }, { value: <ComGrowthNumberRating rating={Number(row.original.five_yr.toFixed(1))} /> }]}
+              body={[
+                { value: row.original.one_yr ? <ComGrowthNumberRating rating={Number(row.original.one_yr.toFixed(1))} /> : null }, 
+                { value: row.original.three_yr ? <ComGrowthNumberRating rating={Number(row.original.three_yr.toFixed(1))} /> : null }, 
+                { value: row.original.five_yr ? <ComGrowthNumberRating rating={Number(row.original.five_yr.toFixed(1))} /> : null }
+              ]}
             />
+            <div className="pt-4">
+            <SimpleTable 
+                headers={[{ label: "2025" }, { label: "2024" }, { label: "2023" }, { label: "2022" }, { label : "2021"} ]}
+                body={[
+                  { value: row.original.cy_1 ? <ComGrowthNumberRating rating={Number(row.original.cy_1.toFixed(1))} /> : null }, 
+                  { value: row.original.cy_2 ? <ComGrowthNumberRating rating={Number(row.original.cy_2.toFixed(1))} /> : null }, 
+                  { value: row.original.cy_3 ? <ComGrowthNumberRating rating={Number(row.original.cy_3.toFixed(1))} /> : null }, 
+                  { value: row.original.cy_4 ? <ComGrowthNumberRating rating={Number(row.original.cy_4.toFixed(1))} /> : null }, 
+                  { value: row.original.cy_5 ? <ComGrowthNumberRating rating={Number(row.original.cy_5.toFixed(1))} /> : null }
+                ]}
+              />
+              </div>
           </div>
         );
       } else {
