@@ -80,7 +80,8 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "amc_name",
     header: "AMC Name",
-    meta: { isFilterOnly: true }
+    filterFn: "arrIncludesSome",
+    meta: { isFilterOnly: true },
   },
   {
     accessorKey: "amc_rating",
@@ -92,16 +93,19 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
     accessorKey: "asset_class_name",
     header: "Asset Class",
     meta: { isFilterOnly: true },
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "structure_name",
     header: "Structure",
     size: 100,
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "category_name",
     header: "Category",
     meta: { isFilterOnly: true },
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "cat_long_name",
@@ -116,11 +120,13 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
     accessorKey: "estate_duty_exposure",
     header: "Estate Duty Exposure",
     meta: { isFilterOnly: true },
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "us_investors",
     header: "US Investors",
     meta: { isFilterOnly: true },
+    filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "one_yr",
