@@ -2,30 +2,31 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
 
 export default function OtpTestPage() {
   const [phone, setPhone] = useState('')
   const [otp, setOtp] = useState('')
-  const [deviceId, setDeviceId] = useState('')
-  const [devOtp, setDevOtp] = useState<string>()
   const [status, setStatus] = useState('')
-  const [debugInfo, setDebugInfo] = useState('')
   const [whatsappStatus, setWhatsappStatus] = useState<string>('')
-  const [userInfo, setUserInfo] = useState<string>('')
+  const [otpSent, setOtpSent] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   
   const supabase = createClient()
 
   useEffect(() => {
-    // Debug info to confirm the page is loading
-    setDebugInfo(`Page loaded at: ${new Date().toISOString()}`)
-    
     // Check if we can access Supabase
     const checkSupabase = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
-        setDebugInfo(prev => `${prev}\nSupabase accessible. User: ${user ? 'Logged in' : 'Not logged in'}`)
+        if (user) {
+          setStatus(`Already logged in as: ${user.email}`)
+        }
       } catch (error) {
-        setDebugInfo(prev => `${prev}\nSupabase error: ${error}`)
+        console.error('Supabase connection error:', error)
       }
     }
     
@@ -38,14 +39,16 @@ export default function OtpTestPage() {
       return
     }
 
+    setIsLoading(true)
     setStatus('Sending OTP...')
     setWhatsappStatus('')
+    setOtp('') // Clear any previous OTP
     
     try {
       const res = await fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number: phone, device_id: deviceId }),
+        body: JSON.stringify({ phone_number: phone }),
       })
       
       const json = await res.json()
@@ -55,17 +58,19 @@ export default function OtpTestPage() {
         return
       }
 
-      setStatus('OTP sent! Check your WhatsApp (or see DEV OTP below)')
-      setDevOtp(json.dev_otp)
+      setStatus('OTP sent! Check your WhatsApp')
+      setOtpSent(true) // Show OTP input section
       
       // Display WhatsApp delivery status
       if (json.whatsapp_sent) {
-        setWhatsappStatus(`✅ WhatsApp sent successfully! Message ID: ${json.whatsapp_message_id}`)
+        setWhatsappStatus(`✅ WhatsApp sent successfully!`)
       } else {
         setWhatsappStatus(`❌ WhatsApp delivery failed: ${json.whatsapp_error || 'Unknown error'}`)
       }
     } catch (error) {
       setStatus(`Error: ${error}`)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -75,13 +80,14 @@ export default function OtpTestPage() {
       return
     }
 
+    setIsLoading(true)
     setStatus('Verifying OTP...')
     
     try {
       const res = await fetch('/api/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number: phone, otp_code: otp, device_id: deviceId }),
+        body: JSON.stringify({ phone_number: phone, otp_code: otp }),
       })
       
       const json = await res.json()
@@ -100,92 +106,111 @@ export default function OtpTestPage() {
         return
       }
 
-      // Show success with user info
+      // Show success and redirect to investments
       const userType = json.is_existing_user ? 'Existing user' : 'New user'
       const actionInfo = json.user_created ? ' (user created)' : ' (existing user logged in)'
-      setStatus(`Signed in! ${userType}${actionInfo} - user_id: ${data.session?.user?.id}`)
+      setStatus(`Signed in! ${userType}${actionInfo} - Redirecting...`)
       
-      // Update debug info with user details
-      setUserInfo(`User Type: ${userType}\nLogin Email: ${json.login_email}\nUser Created: ${json.user_created ? 'Yes' : 'No'}`)
+      // Reset OTP sent state
+      setOtpSent(false)
+      
+      // Redirect to investments page after successful login
+      setTimeout(() => {
+        window.location.href = '/investments'
+      }, 1500)
+      
     } catch (error) {
       setStatus(`Error: ${error}`)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const logout = async () => {
-    await supabase.auth.signOut()
-    setStatus('Signed out')
-    setDevOtp(undefined)
-    setOtp('')
-    setUserInfo('')
-  }
-
   return (
-    <div className="max-w-md mx-auto p-6 space-y-4">
-      <h1 className="text-2xl font-semibold">OTP Test Login</h1>
-      
-      {/* Debug info */}
-      <div className="text-xs bg-gray-100 p-2 rounded">
-        <div className="font-semibold">Debug Info:</div>
-        <pre className="whitespace-pre-wrap">{debugInfo}</pre>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold text-gray-900">
+            OTP Login
+          </CardTitle>
+          <p className="text-sm text-gray-600">
+            Enter your phone number to receive a login code via WhatsApp
+          </p>
+        </CardHeader>
+        
+        <CardContent className="space-y-6">
+          {/* Phone Number Section */}
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone Number</Label>
+            <Input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="+91XXXXXXXXXX"
+              className="w-full"
+            />
+            <Button 
+              onClick={sendOtp} 
+              className="w-full"
+              disabled={!phone.trim() || isLoading}
+            >
+              {isLoading ? 'Sending...' : 'Send OTP'}
+            </Button>
+          </div>
 
-      {/* User Info */}
-      {userInfo && (
-        <div className="text-xs bg-blue-100 p-2 rounded">
-          <div className="font-semibold">User Info:</div>
-          <pre className="whitespace-pre-wrap">{userInfo}</pre>
-        </div>
-      )}
+          {/* WhatsApp Status */}
+          {whatsappStatus && (
+            <div className="p-3 rounded-lg border bg-blue-50 border-blue-200">
+              <div className="text-sm text-blue-800 font-medium">WhatsApp Status:</div>
+              <div className="text-blue-900">{whatsappStatus}</div>
+            </div>
+          )}
 
-      <label className="block text-sm">Phone (E.164 recommended, eg. +91XXXXXXXXXX)</label>
-      <input 
-        className="border rounded w-full p-2" 
-        value={phone} 
-        onChange={(e) => setPhone(e.target.value)} 
-        placeholder="+91..." 
-      />
+          {/* OTP Section - Only show after OTP is sent */}
+          {otpSent && (
+            <div className="space-y-2">
+              <Label htmlFor="otp">Enter OTP</Label>
+              <Input
+                id="otp"
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                placeholder="Enter OTP from WhatsApp"
+                className="w-full"
+                maxLength={6}
+              />
+              <div className="flex gap-2">
+                <Button 
+                  onClick={verifyOtp} 
+                  className="flex-1"
+                  disabled={!otp.trim() || isLoading}
+                >
+                  {isLoading ? 'Verifying...' : 'Verify & Sign In'}
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setOtpSent(false)
+                    setOtp('')
+                    setStatus('')
+                    setWhatsappStatus('')
+                  }}
+                >
+                  Change Phone
+                </Button>
+              </div>
+            </div>
+          )}
 
-      <label className="block text-sm mt-2">Device ID (optional)</label>
-      <input 
-        className="border rounded w-full p-2" 
-        value={deviceId} 
-        onChange={(e) => setDeviceId(e.target.value)} 
-      />
-
-      <button className="border rounded px-4 py-2 mt-2" onClick={sendOtp}>
-        Send OTP
-      </button>
-
-      {devOtp && (
-        <div className="mt-4 p-3 border rounded">
-          <div className="text-sm opacity-70">DEV OTP (remove in prod):</div>
-          <div className="text-xl font-mono">{devOtp}</div>
-        </div>
-      )}
-
-      {whatsappStatus && (
-        <div className="mt-4 p-3 border rounded">
-          <div className="text-sm opacity-70">WhatsApp Status:</div>
-          <div className="text-lg font-mono">{whatsappStatus}</div>
-        </div>
-      )}
-
-      <label className="block text-sm mt-4">Enter OTP</label>
-      <input 
-        className="border rounded w-full p-2" 
-        value={otp} 
-        onChange={(e) => setOtp(e.target.value)} 
-      />
-      <button className="border rounded px-4 py-2 mt-2" onClick={verifyOtp}>
-        Verify & Sign In
-      </button>
-
-      <div className="mt-4 text-sm">{status}</div>
-
-      <button className="border rounded px-4 py-2 mt-6" onClick={logout}>
-        Logout
-      </button>
+          {/* Status Messages */}
+          {status && (
+            <div className="p-3 rounded-lg border bg-gray-50 border-gray-200">
+              <div className="text-sm text-gray-700">{status}</div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

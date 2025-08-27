@@ -7,10 +7,12 @@ import { SelectInput } from "./FormFields";
 import { useForm } from "react-hook-form";
 import { useGroupMandate, type Group, type Mandate } from "@/lib/contexts/GroupMandateContext";
 import { Badge } from "@/components/ui/badge";
-import { Users, Target, Loader2 } from "lucide-react";
+import { Users, Target, Loader2, LogOut } from "lucide-react";
+import { createClient } from '@/lib/supabase/client';
 
 export function ChangeGroup() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const supabase = createClient();
   const {
     currentGroup,
     currentMandate,
@@ -18,6 +20,7 @@ export function ChangeGroup() {
     availableMandates,
     isLoadingGroups,
     isLoadingMandates,
+    isAuthenticated,
     setCurrentGroup,
     setGroupAndMandate,
     loadAvailableGroups,
@@ -65,11 +68,23 @@ export function ChangeGroup() {
     }
   };
 
+  // Handle logout
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    // Redirect to OTP login page after logout
+    window.location.href = '/auth/otp-login';
+  };
+
   // Prepare options for dropdown
   const groupOptions = availableGroups.map(group => ({
     value: group.id.toString(),
     label: group.name,
   }));
+
+  // Don't render if user is not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -83,27 +98,36 @@ export function ChangeGroup() {
         </Button>
       </SheetTrigger>
       
-      <SheetContent className="w-[400px] sm:w-[540px]">
+      <SheetContent className="w-[400px] sm:w-[540px] p-5">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5" />
-            Change Group & Investment Mandate
-          </SheetTitle>
+          <div className="flex items-center justify-between">
+            <SheetTitle className="flex items-center gap-2">
+              <Target className="h-5 w-5" />
+              Choose Mandate
+            </SheetTitle>
+            
+          </div>
         </SheetHeader>
         
         <div className="space-y-6 mt-6">
+          <div className="flex items-center justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+            </div>
           {/* Current Selection Display */}
           {currentGroup && currentMandate && (
             <div className="bg-muted p-4 rounded-lg">
-              <h3 className="font-semibold text-sm mb-2">Current Selection:</h3>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="secondary">
                   <Users className="h-3 w-3 mr-1" />
-                  {currentGroup.name}
-                </Badge>
-                <Badge variant="secondary">
-                  <Target className="h-3 w-3 mr-1" />
-                  {currentMandate.name}
+                  {currentGroup.name} - {currentMandate.name}
                 </Badge>
               </div>
             </div>
@@ -111,7 +135,7 @@ export function ChangeGroup() {
 
           {/* Group Selection */}
           <div className="space-y-3">
-            <h3 className="font-semibold">1. Select Group</h3>
+            <h4 className="font-semibold">Change Mandate</h4>
             {isLoadingGroups ? (
               <div className="flex items-center justify-center p-4">
                 <Loader2 className="h-6 w-6 animate-spin" />
@@ -134,7 +158,6 @@ export function ChangeGroup() {
           {/* Mandate Selection */}
           {currentGroup && (
             <div className="space-y-3">
-              <h3 className="font-semibold">2. Select Investment Mandate</h3>
               {isLoadingMandates ? (
                 <div className="flex items-center justify-center p-4">
                   <Loader2 className="h-6 w-6 animate-spin" />

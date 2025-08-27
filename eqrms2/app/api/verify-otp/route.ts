@@ -52,43 +52,31 @@ export async function POST(req: NextRequest) {
     await supabaseAdmin.from('otp_requests').update({ used: true }).eq('id', rec.id)
 
     // Check if ANY user already has this phone number in their metadata
-    console.log(`[OTP] Looking for existing user with phone: ${phone_number}`)
-    
-    // Use SQL function to find existing users by phone number
     let usersWithPhone = null
     let phoneQueryError = null
     
     try {
-      console.log('[OTP] Calling SQL function find_user_by_phone...')
-      
       // Call our custom SQL function to find user by phone number
       const { data: functionResult, error: functionError } = await supabaseAdmin
         .rpc('find_user_by_phone', { search_phone: phone_number })
       
       if (functionError) {
-        console.log('[OTP] SQL function call failed:', functionError)
+        console.error('[OTP] SQL function call failed:', functionError)
         phoneQueryError = functionError
       } else if (functionResult && functionResult.length > 0) {
         const userData = functionResult[0]
-        console.log(`[OTP] SQL function found user:`, userData)
         
         if (userData.found) {
-          console.log(`[OTP] Found existing user with phone ${phone_number}: ${userData.user_email}`)
-          
           usersWithPhone = [{
             id: userData.user_id,
             email: userData.user_email,
             metadata: { phone_number: userData.phone_number }
           }]
-        } else {
-          console.log(`[OTP] SQL function returned user but found=false`)
         }
-      } else {
-        console.log('[OTP] No users found with this phone number via SQL function')
       }
       
     } catch (e) {
-      console.log('[OTP] Error calling SQL function:', e)
+      console.error('[OTP] Error calling SQL function:', e)
       phoneQueryError = e
     }
 
@@ -98,12 +86,6 @@ export async function POST(req: NextRequest) {
     if (!phoneQueryError && usersWithPhone && usersWithPhone.length > 0) {
       isExistingUser = true
       existingUserEmail = usersWithPhone[0].email
-      console.log(`[OTP] Found existing user with phone ${phone_number}: ${existingUserEmail}`)
-      console.log(`[OTP] User metadata:`, usersWithPhone[0].metadata)
-    } else {
-      console.log(`[OTP] No existing user found with phone ${phone_number}`)
-      console.log(`[OTP] Query error:`, phoneQueryError)
-      console.log(`[OTP] Users found:`, usersWithPhone?.length || 0)
     }
 
     // Determine which email to use for login
@@ -117,7 +99,6 @@ export async function POST(req: NextRequest) {
         login_via: 'whatsapp_otp',
         default_role: 'guest',
       }
-      console.log(`[OTP] Creating new user with phone ${phone_number}`)
     }
 
     // Always use magic link system for login (new or existing users)
@@ -130,7 +111,7 @@ export async function POST(req: NextRequest) {
     } as any)
 
     if (linkErr || !linkData) {
-      console.error(linkErr)
+      console.error('[OTP] Failed to generate login link:', linkErr)
       return NextResponse.json({ error: 'Failed to generate login link' }, { status: 500 })
     }
 
@@ -139,6 +120,7 @@ export async function POST(req: NextRequest) {
     const action_link = (linkData as any)?.action_link || null
 
     if (!token_hash) {
+      console.error('[OTP] Missing token hash from generateLink response:', linkData)
       return NextResponse.json({ error: 'Missing token hash from Supabase' }, { status: 500 })
     }
 

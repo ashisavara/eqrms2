@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateActions";
 import { loadMandateFavourites, toggleFavouriteServer } from "@/lib/actions/favouriteActions";
 import { EntityType, FavouritesData } from "@/types/favourites-detail";
+import { createClient } from '@/lib/supabase/client';
 
 // Constants
 const STORAGE_KEY = 'ime_group_mandate_selected';
@@ -149,6 +150,9 @@ export type GroupMandateContextType = {
   // Favourites
   favourites: FavouritesData;
   
+  // Auth state
+  isAuthenticated: boolean;
+  
   // Actions
   setCurrentGroup: (group: Group | null) => void;
   setCurrentMandate: (mandate: Mandate | null) => void;
@@ -180,6 +184,9 @@ export function useGroupMandate() {
 
 // Provider component
 export function GroupMandateProvider({ children }: { children: ReactNode }) {
+  // Supabase client for auth state
+  const supabase = createClient();
+  
   // State
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const [currentMandate, setCurrentMandate] = useState<Mandate | null>(null);
@@ -187,6 +194,11 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   const [availableMandates, setAvailableMandates] = useState<Mandate[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState(false);
   const [isLoadingMandates, setIsLoadingMandates] = useState(false);
+  
+  // Auth state tracking
+  const [hasHadUser, setHasHadUser] = useState(false);
+  const [lastAuthCheck, setLastAuthCheck] = useState<number>(Date.now());
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   // Favourites state
   const [favourites, setFavourites] = useState<FavouritesData>({
@@ -197,19 +209,79 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   });
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false);
 
-  // Restore saved selection from localStorage on mount
+  // Initial auth state check
   useEffect(() => {
-    const savedSelection = loadFromStorage();
-    if (savedSelection) {
-      setCurrentGroup(savedSelection.group);
-      setCurrentMandate(savedSelection.mandate);
-      console.log('Restored saved selection:', savedSelection);
+    const checkInitialAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setIsAuthenticated(true);
+        setHasHadUser(true);
+        setLastAuthCheck(Date.now());
+      }
+    };
+    checkInitialAuth();
+  }, [supabase.auth]);
+
+  // Auth state listener with conservative clearing
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      const user = session?.user;
+      const now = Date.now();
       
-      // Load favourites for the restored mandate
-      const savedFavourites = loadFromFavouritesStorage(savedSelection.mandate.id);
-      setFavourites(savedFavourites);
-    }
-  }, []);
+      if (user) {
+        // User is authenticated
+        console.log('Auth state: User authenticated');
+        setIsAuthenticated(true);
+        setHasHadUser(true);
+        setLastAuthCheck(now);
+        
+        // Only restore selections if we don't already have them
+        if (!currentGroup && !currentMandate) {
+          const savedSelection = loadFromStorage();
+          if (savedSelection) {
+            setCurrentGroup(savedSelection.group);
+            setCurrentMandate(savedSelection.mandate);
+            console.log('Restored saved selection:', savedSelection);
+            
+            // Load favourites for the restored mandate
+            const savedFavourites = loadFromFavouritesStorage(savedSelection.mandate.id);
+            setFavourites(savedFavourites);
+          }
+        }
+      } else {
+        console.log('Auth state: User not authenticated');
+        // User is not authenticated
+        setIsAuthenticated(false);
+        
+        if (hasHadUser) {
+          // User was previously authenticated, now logged out
+          // Check if this is a real logout vs network issue (10-minute timeout)
+          const timeSinceLastAuth = now - lastAuthCheck;
+          const TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
+          
+          if (timeSinceLastAuth > TIMEOUT_MS) {
+            // Real logout - clear everything
+            console.log('Real logout detected, clearing selections');
+            clearStorage();
+            setCurrentGroup(null);
+            setCurrentMandate(null);
+            setFavourites({
+              categories: [],
+              funds: [],
+              asset_class: [],
+              structure: []
+            });
+            setHasHadUser(false);
+          } else {
+            // Network issue - keep selections temporarily
+            console.log('Network issue detected, keeping selections temporarily');
+          }
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth, hasHadUser, lastAuthCheck, currentGroup, currentMandate]);
 
   // Tab synchronization - listen for favourites changes in other tabs
   useEffect(() => {
@@ -434,6 +506,9 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     
     // Favourites
     favourites,
+    
+    // Auth state
+    isAuthenticated,
     
     // Actions
     setCurrentGroup: handleSetCurrentGroup,
