@@ -14,6 +14,7 @@ import { SearchIcon } from "lucide-react";
 
 export function ChangeGroup() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [activelySelectedGroup, setActivelySelectedGroup] = useState<Group | null>(null);
   const {
     currentGroup,
     currentMandate,
@@ -57,9 +58,11 @@ export function ChangeGroup() {
       const group = availableGroups.find(g => g.id === groupId);
       if (group && group.id !== currentGroup?.id) {
         setCurrentGroup(group);
+        setActivelySelectedGroup(group); // Track actively selected group
       }
     } else if (currentGroup !== null) {
       setCurrentGroup(null);
+      setActivelySelectedGroup(null); // Clear actively selected group
     }
   }, [selectedGroupId, availableGroups]); // Removed currentGroup and setCurrentGroup from deps
 
@@ -178,9 +181,10 @@ export function ChangeGroup() {
             )}
           </div>
 
-          {/* Mandate Selection */}
-          {currentGroup && (
+          {/* Mandate Selection - Only show after group is actively selected from dropdown */}
+          {activelySelectedGroup && (
             <div className="space-y-3">
+              <h4 className="font-semibold">Available Mandates for {activelySelectedGroup.name}</h4>
               {isLoadingMandates ? (
                 <div className="flex items-center justify-center p-4">
                   <Loader2 className="h-6 w-6 animate-spin" />
@@ -211,10 +215,10 @@ export function ChangeGroup() {
           )}
 
           {/* Instructions */}
-          {!currentGroup && availableGroups.length > 0 && (
+          {!activelySelectedGroup && availableGroups.length > 0 && (
             <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
               <p className="text-sm text-blue-800">
-                👆 Please select a group first to see available investment mandates.
+                👆 Please select a group from the dropdown above to see available investment mandates.
               </p>
             </div>
           )}

@@ -21,7 +21,10 @@ export async function loadUserGroups() {
   try {
     const groups = await supabaseListRead<DbGroup>({
       table: "client_group",
-      columns: "group_id, group_name"
+      columns: "group_id, group_name", 
+      filters: [
+        (query) => query.order('group_name', { ascending: true })
+      ]
     });
 
     return groups.map(group => ({
