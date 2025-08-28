@@ -2,10 +2,17 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { normalizePhone } from '@/lib/phone'
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Create Supabase client function to avoid module-level initialization
+function createSupabaseAdmin() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing required Supabase environment variables')
+  }
+  
+  return createClient(supabaseUrl, supabaseKey)
+}
 
 const DEFAULT_COUNTRY_CODE = process.env.DEFAULT_COUNTRY_CODE || '+91'
 const LOGIN_ALIAS_DOMAIN = process.env.LOGIN_ALIAS_DOMAIN || 'wa-login.local'
@@ -28,6 +35,9 @@ export async function POST(req: NextRequest) {
     if (!phone_number || !otp_code) {
       return NextResponse.json({ error: 'Missing phone or OTP' }, { status: 400 })
     }
+
+    // Create Supabase admin client
+    const supabaseAdmin = createSupabaseAdmin()
 
     // Find a valid OTP (not used, not expired)
     const { data: matches, error: findErr } = await supabaseAdmin

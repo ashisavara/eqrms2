@@ -3,10 +3,17 @@ import { createClient } from '@supabase/supabase-js'
 import { randomInt } from 'crypto'
 import { normalizePhone } from '@/lib/phone'
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Create Supabase client function to avoid module-level initialization
+function createSupabaseAdmin() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing required Supabase environment variables')
+  }
+  
+  return createClient(supabaseUrl, supabaseKey)
+}
 
 const OTP_EXPIRY_MINUTES = parseInt(process.env.OTP_EXPIRY_MINUTES || '10', 10)
 const OTP_LENGTH = parseInt(process.env.OTP_LENGTH || '4', 10)
@@ -15,10 +22,6 @@ const DEV_ECHO_OTP = (process.env.EXPOSE_OTP_IN_RESPONSE || 'false') === 'true'
 const DEFAULT_COUNTRY_CODE = process.env.DEFAULT_COUNTRY_CODE || '+91'
 
 // AI Sensy configuration
-const AI_SENSY_API_KEY = process.env.AI_SENSY_API_KEY
-if (!AI_SENSY_API_KEY) {
-  throw new Error('AI_SENSY_API_KEY environment variable is required')
-}
 const AI_SENSY_API_URL = 'https://backend.aisensy.com/campaign/t1/api/v2'
 const AI_SENSY_CAMPAIGN_NAME = 'RMS OTP Login'
 const AI_SENSY_USER_NAME = 'IME Capital Pvt Ltd.'
@@ -26,11 +29,17 @@ const AI_SENSY_USER_NAME = 'IME Capital Pvt Ltd.'
 // Function to send OTP via AI Sensy WhatsApp API
 async function sendWhatsAppOTP(phoneNumber: string, otpCode: string, deviceId?: string) {
   try {
+    // Check for required API key
+    const apiKey = process.env.AI_SENSY_API_KEY
+    if (!apiKey) {
+      throw new Error('AI_SENSY_API_KEY environment variable is required')
+    }
+    
     // Remove + from phone number for AI Sensy (they expect just the digits)
     const destination = phoneNumber.replace('+', '')
     
     const payload = {
-      apiKey: AI_SENSY_API_KEY,
+      apiKey: apiKey,
       campaignName: AI_SENSY_CAMPAIGN_NAME,
       destination: destination,
       userName: AI_SENSY_USER_NAME,
@@ -109,6 +118,7 @@ export async function POST(req: NextRequest) {
     const ip_address = req.headers.get('x-forwarded-for') || 'unknown'
 
     // Rate limit per phone_number
+    const supabaseAdmin = createSupabaseAdmin()
     const { count } = await supabaseAdmin
       .from('otp_requests')
       .select('*', { count: 'exact', head: true })
