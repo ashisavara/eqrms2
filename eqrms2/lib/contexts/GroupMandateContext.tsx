@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateActions";
 import { loadMandateFavourites, toggleFavouriteServer } from "@/lib/actions/favouriteActions";
 import { EntityType, FavouritesData } from "@/types/favourites-detail";
-import { checkInitialAuthAction, getCurrentUserAction } from './groupMandateServerActions';
+import { checkInitialAuthAction, getCurrentUserAction, getUserDefaultGroupMandate } from './groupMandateServerActions';
 
 // Constants
 const STORAGE_KEY = 'ime_group_mandate_selected';
@@ -157,6 +157,7 @@ export type GroupMandateContextType = {
   setCurrentGroup: (group: Group | null) => void;
   setCurrentMandate: (mandate: Mandate | null) => void;
   setGroupAndMandate: (group: Group, mandate: Mandate) => void;
+  setDefaultGroupMandate: () => Promise<{ success: boolean; group?: Group; mandate?: Mandate; error?: any }>;
   loadAvailableGroups: () => Promise<void>;
   loadMandatesForGroup: (groupId: number) => Promise<void>;
   
@@ -206,7 +207,7 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   });
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false);
 
-  // Initial auth state check
+  // Initial auth state check - ONLY verify authentication, don't set group/mandate
   useEffect(() => {
     const checkInitialAuth = async () => {
       const { user, isAuthenticated, error } = await checkInitialAuthAction();
@@ -214,13 +215,14 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(true);
         setHasHadUser(true);
         setLastAuthCheck(Date.now());
+        console.log('🔄 Initial auth: User authenticated, keeping existing group/mandate selection');
       }
       if (error) {
         console.warn('Initial auth check error:', error);
       }
     };
     checkInitialAuth();
-  }, []);
+  }, []); // Remove dependencies to prevent loops
 
   // Simple 5-minute interval auth checking (much simpler than event-based)
   useEffect(() => {
@@ -236,19 +238,9 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
           setHasHadUser(true);
           setLastAuthCheck(Date.now());
           
-          // Only restore selections if we don't already have them
-          if (!currentGroup && !currentMandate) {
-            const savedSelection = loadFromStorage();
-            if (savedSelection) {
-              setCurrentGroup(savedSelection.group);
-              setCurrentMandate(savedSelection.mandate);
-              console.log('🔄 Restored saved selection:', savedSelection);
-              
-              // Load favourites for the restored mandate
-              const savedFavourites = loadFromFavouritesStorage(savedSelection.mandate.id);
-              setFavourites(savedFavourites);
-            }
-          }
+          // 5-minute auth check: Only verify authentication, don't change group/mandate
+          // The group/mandate should only be set on initial login, not on every auth check
+          console.log('🔄 Auth check: User authenticated, keeping current group/mandate selection');
         } else {
           console.log('❌ Auth state: User not authenticated');
           // User is not authenticated
@@ -315,6 +307,35 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [currentMandate?.id]);
+
+  // Set default group/mandate from database (called from OTP login success)
+  const setDefaultGroupMandate = useCallback(async () => {
+    try {
+      console.log('🔄 Setting default group/mandate from database...');
+      const { group, mandate, error } = await getUserDefaultGroupMandate();
+      
+      if (group && mandate && !error) {
+        setCurrentGroup(group);
+        setCurrentMandate(mandate);
+        console.log('🔄 Set default group/mandate from database:', { group, mandate });
+        
+        // Save to localStorage for future use
+        saveToStorage(group, mandate);
+        
+        // Load favourites for the new mandate
+        const newFavourites = loadFromFavouritesStorage(mandate.id);
+        setFavourites(newFavourites);
+        
+        return { success: true, group, mandate };
+      } else {
+        console.warn('Failed to fetch default group/mandate:', error);
+        return { success: false, error };
+      }
+    } catch (error) {
+      console.error('Error setting default group/mandate:', error);
+      return { success: false, error };
+    }
+  }, []);
 
   // Actions - memoized to prevent infinite re-renders
   const setGroupAndMandate = useCallback((group: Group, mandate: Mandate) => {
@@ -524,6 +545,7 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     setCurrentGroup: handleSetCurrentGroup,
     setCurrentMandate,
     setGroupAndMandate,
+    setDefaultGroupMandate, // New function to set defaults from database
     loadAvailableGroups,
     loadMandatesForGroup,
     

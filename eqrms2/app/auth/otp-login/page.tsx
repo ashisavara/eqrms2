@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from './otpServerActions'
+import { useGroupMandate } from '@/lib/contexts/GroupMandateContext'
 
 export default function OtpTestPage() {
   const [phone, setPhone] = useState('')
@@ -15,6 +16,9 @@ export default function OtpTestPage() {
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
+  
+  // Get the setDefaultGroupMandate function from context
+  const { setDefaultGroupMandate } = useGroupMandate()
 
   useEffect(() => {
     // Check if we can access Supabase
@@ -138,10 +142,24 @@ export default function OtpTestPage() {
         return
       }
 
+      // Set default group/mandate from database on successful login
+      setStatus('Setting up your default group and mandate...')
+      try {
+        const result = await setDefaultGroupMandate()
+        
+        if (result.success) {
+          console.log('✅ Default group/mandate set successfully:', result.group, result.mandate)
+        } else {
+          console.warn('⚠️ Failed to set default group/mandate:', result.error)
+        }
+      } catch (error) {
+        console.error('❌ Error setting default group/mandate:', error)
+      }
+
       // Show success and redirect to investments
       const userType = json.is_existing_user ? 'Existing user' : 'New user'
       const actionInfo = json.user_created ? ' (user created)' : ' (existing user logged in)'
-      setStatus(`Signed in! ${userType}${actionInfo} - Redirecting...`)
+      setStatus(`Signed in! ${userType}${actionInfo} - Setting up defaults...`)
       
       // Reset OTP sent state
       setOtpSent(false)
@@ -149,7 +167,7 @@ export default function OtpTestPage() {
       // Redirect to investments page after successful login
       setTimeout(() => {
         window.location.href = '/investments'
-      }, 1500)
+      }, 2000) // Back to 2 second delay
       
     } catch (error) {
       setStatus(`Error: ${error}`)
