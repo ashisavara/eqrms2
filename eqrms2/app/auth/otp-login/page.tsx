@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { getUserServerAction, verifyOtpServerAction } from './otpServerActions'
+import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from './otpServerActions'
 
 export default function OtpTestPage() {
   const [phone, setPhone] = useState('')
@@ -14,17 +14,16 @@ export default function OtpTestPage() {
   const [whatsappStatus, setWhatsappStatus] = useState<string>('')
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [currentUser, setCurrentUser] = useState<any>(null)
 
   useEffect(() => {
     // Check if we can access Supabase
     const checkSupabase = async () => {
       try {
-        const { user, error } = await getUserServerAction()
+        const { user } = await getUserServerAction()
         if (user) {
+          setCurrentUser(user)
           setStatus(`Already logged in as: ${user.email}`)
-        }
-        if (error) {
-          console.error('Supabase connection error:', error)
         }
       } catch (error) {
         console.error('Supabase connection error:', error)
@@ -72,6 +71,38 @@ export default function OtpTestPage() {
       setStatus(`Error: ${error}`)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      // Call server action to logout from Supabase
+      const result = await logoutServerAction()
+      
+      if (result.error) {
+        console.error('Logout error:', result.error)
+        // Still clear local state even if server logout fails
+      }
+      
+      // Clear local state
+      setCurrentUser(null)
+      setStatus('')
+      setWhatsappStatus('')
+      setOtpSent(false)
+      setPhone('')
+      setOtp('')
+      
+      // Redirect to refresh the page
+      window.location.href = '/auth/otp-login'
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Still clear local state even if there's an error
+      setCurrentUser(null)
+      setStatus('')
+      setWhatsappStatus('')
+      setOtpSent(false)
+      setPhone('')
+      setOtp('')
     }
   }
 
@@ -135,73 +166,97 @@ export default function OtpTestPage() {
             OTP Login
           </CardTitle>
           <p className="text-sm text-gray-600">
-            Enter your phone number to receive a login code via WhatsApp
+            {currentUser 
+              ? 'You are already logged in' 
+              : 'Enter your phone number to receive a login code via WhatsApp'
+            }
           </p>
         </CardHeader>
         
         <CardContent className="space-y-6">
-          {/* Phone Number Section */}
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
-            <Input
-              id="phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+91XXXXXXXXXX"
-              className="w-full"
-            />
-            <Button 
-              onClick={sendOtp} 
-              className="w-full"
-              disabled={!phone.trim() || isLoading}
-            >
-              {isLoading ? 'Sending...' : 'Send OTP'}
-            </Button>
-          </div>
-
-          {/* WhatsApp Status */}
-          {whatsappStatus && (
-            <div className="p-3 rounded-lg border bg-blue-50 border-blue-200">
-              <div className="text-sm text-blue-800 font-medium">WhatsApp Status:</div>
-              <div className="text-blue-900">{whatsappStatus}</div>
-            </div>
-          )}
-
-          {/* OTP Section - Only show after OTP is sent */}
-          {otpSent && (
-            <div className="space-y-2">
-              <Label htmlFor="otp">Enter OTP</Label>
-              <Input
-                id="otp"
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="Enter OTP from WhatsApp"
+          {currentUser ? (
+            /* Logged In State - Show Logout Button */
+            <div className="space-y-4">
+              <div className="p-3 rounded-lg border bg-green-50 border-green-200">
+                <div className="text-sm text-green-800 font-medium">Logged In:</div>
+                <div className="text-green-900">{currentUser.email}</div>
+              </div>
+              
+              <Button 
+                onClick={handleLogout} 
+                variant="outline"
                 className="w-full"
-                maxLength={6}
-              />
-              <div className="flex gap-2">
+              >
+                Logout
+              </Button>
+            </div>
+          ) : (
+            /* Logged Out State - Show OTP Form */
+            <>
+              {/* Phone Number Section */}
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+91XXXXXXXXXX"
+                  className="w-full"
+                />
                 <Button 
-                  onClick={verifyOtp} 
-                  className="flex-1"
-                  disabled={!otp.trim() || isLoading}
+                  onClick={sendOtp} 
+                  className="w-full"
+                  disabled={!phone.trim() || isLoading}
                 >
-                  {isLoading ? 'Verifying...' : 'Verify & Sign In'}
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => {
-                    setOtpSent(false)
-                    setOtp('')
-                    setStatus('')
-                    setWhatsappStatus('')
-                  }}
-                >
-                  Change Phone
+                  {isLoading ? 'Sending...' : 'Send OTP'}
                 </Button>
               </div>
-            </div>
+
+              {/* WhatsApp Status */}
+              {whatsappStatus && (
+                <div className="p-3 rounded-lg border bg-blue-50 border-blue-200">
+                  <div className="text-sm text-blue-800 font-medium">WhatsApp Status:</div>
+                  <div className="text-blue-900">{whatsappStatus}</div>
+                </div>
+              )}
+
+              {/* OTP Section - Only show after OTP is sent */}
+              {otpSent && (
+                <div className="space-y-2">
+                  <Label htmlFor="otp">Enter OTP</Label>
+                  <Input
+                    id="otp"
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="Enter OTP from WhatsApp"
+                    className="w-full"
+                    maxLength={6}
+                  />
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={verifyOtp} 
+                      className="flex-1"
+                      disabled={!otp.trim() || isLoading}
+                    >
+                      {isLoading ? 'Verifying...' : 'Verify & Sign In'}
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        setOtpSent(false)
+                        setOtp('')
+                        setStatus('')
+                        setWhatsappStatus('')
+                      }}
+                    >
+                      Change Phone
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
           {/* Status Messages */}

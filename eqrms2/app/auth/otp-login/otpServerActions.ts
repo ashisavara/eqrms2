@@ -8,14 +8,11 @@ export async function getUserServerAction() {
     const supabase = await createClient()
     const { data: { user }, error } = await supabase.auth.getUser()
     
-    if (error) {
-      return { error: error.message, user: null }
-    }
-    
-    return { user, error: null }
+    // Return user if found, null if not (no error logging for logged out users)
+    return { user: user || null, error: null }
   } catch (error) {
-    console.error('Get user error:', error)
-    return { error: 'Failed to get user', user: null }
+    // Silent fail - just return no user
+    return { user: null, error: null }
   }
 }
 
@@ -36,5 +33,22 @@ export async function verifyOtpServerAction(tokenHash: string) {
   } catch (error) {
     console.error('Verify OTP error:', error)
     return { error: 'Failed to verify OTP', data: null }
+  }
+}
+
+// Server action for logging out (replaces supabase.auth.signOut)
+export async function logoutServerAction() {
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signOut()
+    
+    if (error) {
+      return { error: error.message }
+    }
+    
+    return { success: true }
+  } catch (error) {
+    console.error('Logout error:', error)
+    return { error: 'Failed to logout' }
   }
 }
