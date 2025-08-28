@@ -52,3 +52,20 @@ export async function logoutServerAction() {
     return { error: 'Failed to logout' }
   }
 }
+
+// Server action for logging out from ChangeGroup component
+export async function logoutFromChangeGroupAction() {
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signOut()
+    
+    if (error) {
+      return { error: error.message }
+    }
+    
+    return { success: true }
+  } catch (error) {
+    console.error('Logout error:', error)
+    return { error: 'Failed to logout' }
+  }
+}

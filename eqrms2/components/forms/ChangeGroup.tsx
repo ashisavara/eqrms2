@@ -8,13 +8,12 @@ import { useForm } from "react-hook-form";
 import { useGroupMandate, type Group, type Mandate } from "@/lib/contexts/GroupMandateContext";
 import { Badge } from "@/components/ui/badge";
 import { Users, Target, Loader2, LogOut } from "lucide-react";
-import { createClient } from '@/lib/supabase/client';
+import { logoutFromChangeGroupAction } from '@/app/auth/otp-login/otpServerActions';
 import { SearchButton } from "@/components/forms/SearchButton";
 import { SearchIcon } from "lucide-react";
 
 export function ChangeGroup() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const supabase = createClient();
   const {
     currentGroup,
     currentMandate,
@@ -28,8 +27,7 @@ export function ChangeGroup() {
     loadAvailableGroups,
   } = useGroupMandate();
 
-  // Debug logging to see what's in context
-  console.log('🔄 ChangeGroup: Context values:', { currentGroup, currentMandate, isAuthenticated });
+
 
   // Form control for group selection
   const { control, watch, setValue } = useForm({
@@ -75,9 +73,21 @@ export function ChangeGroup() {
 
   // Handle logout
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    // Redirect to OTP login page after logout
-    window.location.href = '/auth/otp-login';
+    try {
+      const result = await logoutFromChangeGroupAction();
+      
+      if (result.error) {
+        console.error('Logout error:', result.error);
+        // Still redirect even if server logout fails
+      }
+      
+      // Redirect to OTP login page after logout
+      window.location.href = '/auth/otp-login';
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still redirect even if there's an error
+      window.location.href = '/auth/otp-login';
+    }
   };
 
   // Prepare options for dropdown
@@ -88,11 +98,8 @@ export function ChangeGroup() {
 
   // Don't render if user is not authenticated
   if (!isAuthenticated) {
-    console.log('🔄 ChangeGroup: User not authenticated, not rendering');
     return null;
   }
-
-  console.log('🔄 ChangeGroup: Rendering with group:', currentGroup?.name, 'mandate:', currentMandate?.name);
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
