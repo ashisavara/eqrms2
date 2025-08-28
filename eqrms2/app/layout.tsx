@@ -29,6 +29,8 @@ import {
   FileTextIcon,
   SearchIcon,
   LogOutIcon,
+  ListCheckIcon,
+  DollarSignIcon
 } from "lucide-react";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -70,16 +72,11 @@ export default function RootLayout({
                   </SidebarHeader>
                   <SidebarContent>
                     <SidebarMenu>
-                      <SidebarMenuItem href="/investments" icon={<WalletIcon />}>Investments</SidebarMenuItem>
-                      <SidebarMenuItem href="/mandate" icon={<TargetIcon />}>Mandate</SidebarMenuItem>
-                      <SidebarMenuItem href="/funds" icon={<FolderIcon />}>RMS</SidebarMenuItem>
+                      <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
+                      <SidebarMenuItem href="/mandate" icon={<ListCheckIcon />}>Mandate</SidebarMenuItem>
+                      <SidebarMenuItem href="/funds" icon={<SearchIcon />}>RMS</SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarContent>
-                  <SidebarFooter>
-                    <SidebarMenu>
-                      <SidebarMenuItem href="/protected" icon={<LogOutIcon />}>Logout</SidebarMenuItem>
-                    </SidebarMenu>
-                  </SidebarFooter>
                 </Sidebar>
                 <MainContent>
                   <div className="pt-2 pl-5 pr-5 pb-2 bg-gray-100">

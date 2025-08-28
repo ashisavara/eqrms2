@@ -47,8 +47,8 @@ export function Sidebar({ children }: SidebarProps) {
   
   return (
     <div 
-      className={`bg-gray-50 border-r border-gray-200 transition-all duration-300 ease-in-out ${
-        isOpen ? 'w-64' : 'w-0 md:w-16'
+      className={`fixed left-0 top-0 h-screen bg-gray-50 border-r border-gray-200 transition-all duration-300 ease-in-out z-40 ${
+        isOpen ? 'w-40' : 'w-0 md:w-12'
       } ${!isOpen ? 'overflow-hidden' : ''}`}
     >
       <div className="h-full flex flex-col">
@@ -94,7 +94,9 @@ export function SidebarHeader({ children }: SidebarHeaderProps) {
   const { isOpen } = useSidebar();
   
   return (
-    <div className="p-4 border-b border-gray-200">
+    <div className={`border-b border-gray-200 transition-all duration-300 ${
+      isOpen ? 'p-4' : 'p-1 md:p-0'
+    }`}>
       <div className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden md:block'}`}>
         {children}
       </div>
@@ -139,7 +141,7 @@ export function SidebarMenuItem({ children, href, icon }: SidebarMenuItemProps) 
     return (
       <a
         href={href}
-        className={`flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors ${
+        className={`flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-800 hover:text-white transition-colors ${
           isOpen ? 'justify-start gap-3' : 'justify-center'
         }`}
       >
@@ -158,7 +160,7 @@ export function SidebarMenuItem({ children, href, icon }: SidebarMenuItemProps) 
   }
   
   return (
-    <div className={`flex items-center px-3 py-2 ${isOpen ? 'justify-start gap-3' : 'justify-center'}`}>
+    <div className={`flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-800 hover:text-white transition-colors ${isOpen ? 'justify-start gap-3' : 'justify-center'}`}>
       {icon && (
         <span className="flex-shrink-0">
           {React.cloneElement(icon as React.ReactElement<any>, { 
@@ -178,8 +180,12 @@ interface MainContentProps {
 }
 
 export function MainContent({ children }: MainContentProps) {
+  const { isOpen } = useSidebar();
+  
   return (
-    <div className="flex-1 flex flex-col min-w-0">
+    <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${
+      isOpen ? 'ml-40' : 'ml-0 md:ml-12'
+    }`}>
       {children}
     </div>
   );
