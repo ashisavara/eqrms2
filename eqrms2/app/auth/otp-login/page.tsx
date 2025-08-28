@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
+import { getUserServerAction, verifyOtpServerAction } from './otpServerActions'
 
 export default function OtpTestPage() {
   const [phone, setPhone] = useState('')
@@ -14,16 +14,17 @@ export default function OtpTestPage() {
   const [whatsappStatus, setWhatsappStatus] = useState<string>('')
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  
-  const supabase = createClient()
 
   useEffect(() => {
     // Check if we can access Supabase
     const checkSupabase = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
+        const { user, error } = await getUserServerAction()
         if (user) {
           setStatus(`Already logged in as: ${user.email}`)
+        }
+        if (error) {
+          console.error('Supabase connection error:', error)
         }
       } catch (error) {
         console.error('Supabase connection error:', error)
@@ -31,7 +32,7 @@ export default function OtpTestPage() {
     }
     
     checkSupabase()
-  }, [supabase])
+  }, [])
 
   const sendOtp = async () => {
     if (!phone) {
@@ -99,10 +100,10 @@ export default function OtpTestPage() {
 
       // Create a real Supabase session using token_hash from admin.generateLink (email magic link flow)
       const tokenHash = json.token_hash as string
-      const { data, error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'email' })
+      const { data, error } = await verifyOtpServerAction(tokenHash)
       
       if (error) {
-        setStatus(`verifyOtp failed: ${error.message}`)
+        setStatus(`verifyOtp failed: ${error}`)
         return
       }
 
