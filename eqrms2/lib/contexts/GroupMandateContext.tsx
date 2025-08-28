@@ -207,7 +207,7 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   });
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false);
 
-  // Initial auth state check - ONLY verify authentication, don't set group/mandate
+  // Initial auth state check - verify authentication AND restore saved group/mandate
   useEffect(() => {
     const checkInitialAuth = async () => {
       const { user, isAuthenticated, error } = await checkInitialAuthAction();
@@ -215,7 +215,25 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(true);
         setHasHadUser(true);
         setLastAuthCheck(Date.now());
-        console.log('🔄 Initial auth: User authenticated, keeping existing group/mandate selection');
+        console.log('🔄 Initial auth: User authenticated, checking for saved group/mandate');
+        
+        // Load saved group/mandate from localStorage if none currently set
+        if (!currentGroup && !currentMandate) {
+          const saved = loadFromStorage();
+          if (saved) {
+            console.log('🔄 Initial auth: Restoring saved group/mandate from localStorage:', saved);
+            setCurrentGroup(saved.group);
+            setCurrentMandate(saved.mandate);
+            
+            // Load favourites for the restored mandate
+            const newFavourites = loadFromFavouritesStorage(saved.mandate.id);
+            setFavourites(newFavourites);
+          } else {
+            console.log('🔄 Initial auth: No saved group/mandate found in localStorage');
+          }
+        } else {
+          console.log('🔄 Initial auth: Group/mandate already set, keeping current selection');
+        }
       }
       if (error) {
         console.warn('Initial auth check error:', error);

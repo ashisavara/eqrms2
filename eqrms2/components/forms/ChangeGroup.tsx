@@ -28,6 +28,9 @@ export function ChangeGroup() {
     loadAvailableGroups,
   } = useGroupMandate();
 
+  // Debug logging to see what's in context
+  console.log('🔄 ChangeGroup: Context values:', { currentGroup, currentMandate, isAuthenticated });
+
   // Form control for group selection
   const { control, watch, setValue } = useForm({
     defaultValues: {
@@ -85,8 +88,11 @@ export function ChangeGroup() {
 
   // Don't render if user is not authenticated
   if (!isAuthenticated) {
+    console.log('🔄 ChangeGroup: User not authenticated, not rendering');
     return null;
   }
+
+  console.log('🔄 ChangeGroup: Rendering with group:', currentGroup?.name, 'mandate:', currentMandate?.name);
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
