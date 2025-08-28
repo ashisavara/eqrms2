@@ -23,7 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 
 // Tiny shared error utilities
 function FormErrorMessage({ error, id, className = "mt-1 text-xs text-red-600 bg-red-100 p-2 rounded-md" }: { error?: { message?: string }; id?: string; className?: string }) {
@@ -317,6 +317,7 @@ export function MultiToggleGroupInput({
 export function SelectInput({ name, label, control, options, valueType = "string" }: { name: string; label: string; control: Control<any>; options: { value: string; label: string }[]; valueType?: "string" | "number"; }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Filter options based on search term
   const filteredOptions = useMemo(() => {
@@ -413,12 +414,28 @@ export function SelectInput({ name, label, control, options, valueType = "string
                     <div className="relative">
                       <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
+                        ref={searchInputRef}
                         placeholder={`Search ${label.toLowerCase()}...`}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-8 h-8"
                         autoFocus
+                        onKeyDown={(e) => {
+                          // Prevent arrow keys from changing focus to options
+                          if (['ArrowUp', 'ArrowDown', 'Enter'].includes(e.key)) {
+                            e.preventDefault();
+                          }
+                        }}
+                        onBlur={() => {
+                          // Refocus the search input if dropdown is still open
+                          if (isOpen) {
+                            setTimeout(() => searchInputRef.current?.focus(), 0);
+                          }
+                        }}
                       />
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1 text-center">
+                      Type to search, then click to select
                     </div>
                   </div>
                   <DropdownMenuSeparator />

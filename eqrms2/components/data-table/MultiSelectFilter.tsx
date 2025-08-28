@@ -13,7 +13,7 @@
  * whatever options are passed to it and reports changes back to the parent.
  */
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { ChevronDown, X, Search } from "lucide-react";
 import {
   DropdownMenu,
@@ -44,6 +44,7 @@ export function MultiSelectFilter({
 }: MultiSelectFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Filter options based on search term
   const filteredOptions = useMemo(() => {
@@ -110,11 +111,24 @@ export function MultiSelectFilter({
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
+                  ref={searchInputRef}
                   placeholder={`Search ${title.toLowerCase()}...`}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-8 h-8"
                   autoFocus
+                  onKeyDown={(e) => {
+                    // Prevent arrow keys from changing focus to options
+                    if (['ArrowUp', 'ArrowDown', 'Enter'].includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onBlur={() => {
+                    // Refocus the search input if dropdown is still open
+                    if (isOpen) {
+                      setTimeout(() => searchInputRef.current?.focus(), 0);
+                    }
+                  }}
                 />
               </div>
             </div>
