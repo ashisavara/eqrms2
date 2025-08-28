@@ -163,24 +163,14 @@ export default function OtpTestPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-gray-900">
-            OTP Login
+            WhatsApp OTP Login
           </CardTitle>
-          <p className="text-sm text-gray-600">
-            {currentUser 
-              ? 'You are already logged in' 
-              : 'Enter your phone number to receive a login code via WhatsApp'
-            }
-          </p>
         </CardHeader>
         
         <CardContent className="space-y-6">
           {currentUser ? (
             /* Logged In State - Show Logout Button */
             <div className="space-y-4">
-              <div className="p-3 rounded-lg border bg-green-50 border-green-200">
-                <div className="text-sm text-green-800 font-medium">Logged In:</div>
-                <div className="text-green-900">{currentUser.email}</div>
-              </div>
               
               <Button 
                 onClick={handleLogout} 
@@ -204,22 +194,17 @@ export default function OtpTestPage() {
                   placeholder="+91XXXXXXXXXX"
                   className="w-full"
                 />
-                <Button 
-                  onClick={sendOtp} 
-                  className="w-full"
-                  disabled={!phone.trim() || isLoading}
-                >
-                  {isLoading ? 'Sending...' : 'Send OTP'}
-                </Button>
+                {/* Only show Send OTP button if OTP hasn't been sent yet */}
+                {!otpSent && (
+                  <Button 
+                    onClick={sendOtp} 
+                    className="w-full"
+                    disabled={!phone.trim() || isLoading}
+                  >
+                    {isLoading ? 'Sending...' : 'Send OTP'}
+                  </Button>
+                )}
               </div>
-
-              {/* WhatsApp Status */}
-              {whatsappStatus && (
-                <div className="p-3 rounded-lg border bg-blue-50 border-blue-200">
-                  <div className="text-sm text-blue-800 font-medium">WhatsApp Status:</div>
-                  <div className="text-blue-900">{whatsappStatus}</div>
-                </div>
-              )}
 
               {/* OTP Section - Only show after OTP is sent */}
               {otpSent && (
@@ -240,7 +225,7 @@ export default function OtpTestPage() {
                       className="flex-1"
                       disabled={!otp.trim() || isLoading}
                     >
-                      {isLoading ? 'Verifying...' : 'Verify & Sign In'}
+                      {isLoading ? 'Verifying...' : 'Sign In'}
                     </Button>
                     <Button 
                       variant="outline"
@@ -261,10 +246,17 @@ export default function OtpTestPage() {
 
           {/* Status Messages */}
           {status && (
-            <div className="p-3 rounded-lg border bg-gray-50 border-gray-200">
-              <div className="text-sm text-gray-700">{status}</div>
+            <div className="p-3 rounded-lg border bg-orange-50 border-orange-200">
+              <div className="text-sm text-orange-700">{status}</div>
             </div>
           )}
+
+          {/* WhatsApp Status */}
+          {whatsappStatus && (
+                <div className="p-3 rounded-lg border bg-green-50 border-green-200">
+                  <div className="text-green-900 text-sm">{whatsappStatus}</div>
+                </div>
+              )}
         </CardContent>
       </Card>
     </div>
