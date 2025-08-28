@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateActions";
 import { loadMandateFavourites, toggleFavouriteServer } from "@/lib/actions/favouriteActions";
 import { EntityType, FavouritesData } from "@/types/favourites-detail";
-import { createClient } from '@/lib/supabase/client';
+import { checkInitialAuthAction, getCurrentUserAction } from './groupMandateServerActions';
 
 // Constants
 const STORAGE_KEY = 'ime_group_mandate_selected';
@@ -184,9 +184,6 @@ export function useGroupMandate() {
 
 // Provider component
 export function GroupMandateProvider({ children }: { children: ReactNode }) {
-  // Supabase client for auth state
-  const supabase = createClient();
-  
   // State
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const [currentMandate, setCurrentMandate] = useState<Mandate | null>(null);
@@ -212,76 +209,89 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   // Initial auth state check
   useEffect(() => {
     const checkInitialAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
+      const { user, isAuthenticated, error } = await checkInitialAuthAction();
+      if (isAuthenticated && user) {
         setIsAuthenticated(true);
         setHasHadUser(true);
         setLastAuthCheck(Date.now());
       }
+      if (error) {
+        console.warn('Initial auth check error:', error);
+      }
     };
     checkInitialAuth();
-  }, [supabase.auth]);
+  }, []);
 
-  // Auth state listener with conservative clearing
+  // Simple 5-minute interval auth checking (much simpler than event-based)
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      const user = session?.user;
-      const now = Date.now();
-      
-      if (user) {
-        // User is authenticated
-        console.log('Auth state: User authenticated');
-        setIsAuthenticated(true);
-        setHasHadUser(true);
-        setLastAuthCheck(now);
+    const checkAuthState = async () => {
+      try {
+        console.log('🔄 Starting auth check...');
+        const { user, error } = await getCurrentUserAction();
         
-        // Only restore selections if we don't already have them
-        if (!currentGroup && !currentMandate) {
-          const savedSelection = loadFromStorage();
-          if (savedSelection) {
-            setCurrentGroup(savedSelection.group);
-            setCurrentMandate(savedSelection.mandate);
-            console.log('Restored saved selection:', savedSelection);
-            
-            // Load favourites for the restored mandate
-            const savedFavourites = loadFromFavouritesStorage(savedSelection.mandate.id);
-            setFavourites(savedFavourites);
-          }
-        }
-      } else {
-        console.log('Auth state: User not authenticated');
-        // User is not authenticated
-        setIsAuthenticated(false);
-        
-        if (hasHadUser) {
-          // User was previously authenticated, now logged out
-          // Check if this is a real logout vs network issue (10-minute timeout)
-          const timeSinceLastAuth = now - lastAuthCheck;
-          const TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
+        if (user && !error) {
+          // User is authenticated
+          console.log('✅ Auth state: User authenticated');
+          setIsAuthenticated(true);
+          setHasHadUser(true);
+          setLastAuthCheck(Date.now());
           
-          if (timeSinceLastAuth > TIMEOUT_MS) {
-            // Real logout - clear everything
-            console.log('Real logout detected, clearing selections');
-            clearStorage();
-            setCurrentGroup(null);
-            setCurrentMandate(null);
-            setFavourites({
-              categories: [],
-              funds: [],
-              asset_class: [],
-              structure: []
-            });
-            setHasHadUser(false);
-          } else {
-            // Network issue - keep selections temporarily
-            console.log('Network issue detected, keeping selections temporarily');
+          // Only restore selections if we don't already have them
+          if (!currentGroup && !currentMandate) {
+            const savedSelection = loadFromStorage();
+            if (savedSelection) {
+              setCurrentGroup(savedSelection.group);
+              setCurrentMandate(savedSelection.mandate);
+              console.log('🔄 Restored saved selection:', savedSelection);
+              
+              // Load favourites for the restored mandate
+              const savedFavourites = loadFromFavouritesStorage(savedSelection.mandate.id);
+              setFavourites(savedFavourites);
+            }
+          }
+        } else {
+          console.log('❌ Auth state: User not authenticated');
+          // User is not authenticated
+          setIsAuthenticated(false);
+          
+          if (hasHadUser) {
+            // User was previously authenticated, now logged out
+            // Check if this is a real logout vs network issue (10-minute timeout)
+            const timeSinceLastAuth = Date.now() - lastAuthCheck;
+            const TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
+            
+            if (timeSinceLastAuth > TIMEOUT_MS) {
+              // Real logout - clear everything
+              console.log('🚪 Real logout detected, clearing selections');
+              clearStorage();
+              setCurrentGroup(null);
+              setCurrentMandate(null);
+              setFavourites({
+                categories: [],
+                funds: [],
+                asset_class: [],
+                structure: []
+              });
+              setHasHadUser(false);
+            } else {
+              // Network issue - keep selections temporarily
+              console.log('🌐 Network issue detected, keeping selections temporarily');
+            }
           }
         }
+      } catch (error) {
+        console.error('❌ Auth check error:', error);
       }
-    });
+    };
 
-    return () => subscription.unsubscribe();
-  }, [supabase.auth, hasHadUser, lastAuthCheck, currentGroup, currentMandate]);
+    // Initial check
+    checkAuthState();
+    
+    // Set up 5-minute interval
+    const interval = setInterval(checkAuthState, 5 * 60 * 1000); // 5 minutes
+    
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array - no state dependencies that cause loops
 
   // Tab synchronization - listen for favourites changes in other tabs
   useEffect(() => {
