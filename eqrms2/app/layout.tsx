@@ -73,12 +73,6 @@ export default function RootLayout({
                       <SidebarMenuItem href="/investments" icon={<WalletIcon />}>Investments</SidebarMenuItem>
                       <SidebarMenuItem href="/mandate" icon={<TargetIcon />}>Mandate</SidebarMenuItem>
                       <SidebarMenuItem href="/funds" icon={<FolderIcon />}>RMS</SidebarMenuItem>
-                      <p className="text-sm font-semibold">Internal</p>
-                      <SidebarMenuItem href="/companies" icon={<TrendingUpIcon />}>Val Screen</SidebarMenuItem>
-                      <SidebarMenuItem href="/crm" icon={<UsersIcon />}>CRM</SidebarMenuItem>
-                      <SidebarMenuItem href="/funds/all" icon={<ArchiveIcon />}>All Funds</SidebarMenuItem>
-                      <SidebarMenuItem href="/funds/changelog" icon={<FileTextIcon />}>ChangeLog</SidebarMenuItem>
-                      <SidebarMenuItem icon={<SearchIcon />}><SearchButton /></SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarContent>
                   <SidebarFooter>

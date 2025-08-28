@@ -9,6 +9,8 @@ import { useGroupMandate, type Group, type Mandate } from "@/lib/contexts/GroupM
 import { Badge } from "@/components/ui/badge";
 import { Users, Target, Loader2, LogOut } from "lucide-react";
 import { createClient } from '@/lib/supabase/client';
+import { SearchButton } from "@/components/forms/SearchButton";
+import { SearchIcon } from "lucide-react";
 
 export function ChangeGroup() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -121,6 +123,14 @@ export function ChangeGroup() {
               Logout
             </Button>
             </div>
+            <div className='text-sm'>
+              <SearchButton />
+              <a href="/crm" className='blue-hyperlink'> CRM</a> | 
+              <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | 
+              <a href="/companies" className='blue-hyperlink'> Val Screen</a> | 
+              <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a>
+            </div>
+
           {/* Current Selection Display */}
           {currentGroup && currentMandate && (
             <div className="bg-muted p-4 rounded-lg">

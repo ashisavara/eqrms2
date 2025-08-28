@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { ToggleGroupInput, TextInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
-import { Search } from "lucide-react";
+import { Search as SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { searchEntities } from "@/lib/supabase/serverQueryHelper";
 
@@ -136,7 +136,7 @@ export function SearchButton() {
         onClick={() => setShowSearchSheet(true)}
         className="hover:bg-transparent"
       >
-        <Search className="hidden h-5 w-5 pl-1" /> Search
+        <SearchIcon className="h-5 w-5" /> 
       </Button>
 
       {/* Search Sheet */}
