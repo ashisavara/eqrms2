@@ -10,11 +10,15 @@ import { Badge } from "@/components/ui/badge";
 import { Users, Target, Loader2, LogOut } from "lucide-react";
 import { logoutFromChangeGroupAction } from '@/app/auth/otp-login/otpServerActions';
 import { SearchButton } from "@/components/forms/SearchButton";
-import { SearchIcon } from "lucide-react";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
+
 
 export function ChangeGroup() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [activelySelectedGroup, setActivelySelectedGroup] = useState<Group | null>(null);
+  const [userRoles, setUserRoles] = useState<any>(null);
   const {
     currentGroup,
     currentMandate,
@@ -28,7 +32,21 @@ export function ChangeGroup() {
     loadAvailableGroups,
   } = useGroupMandate();
 
-
+  // Load user roles when component mounts
+  useEffect(() => {
+    const loadUserRoles = async () => {
+      try {
+        const roles = await getUserRoles();
+        setUserRoles(roles);
+      } catch (error) {
+        console.error('Error loading user roles:', error);
+      }
+    };
+    
+    if (isAuthenticated) {
+      loadUserRoles();
+    }
+  }, [isAuthenticated]);
 
   // Form control for group selection
   const { control, watch, setValue } = useForm({
@@ -143,7 +161,7 @@ export function ChangeGroup() {
               <SearchButton />
               <a href="/crm" className='blue-hyperlink'> CRM</a> | 
               <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | 
-              <a href="/companies" className='blue-hyperlink'> Val Screen</a> | 
+              {userRoles && can(userRoles, 'research', 'view_detailed') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
               <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a>
             </div>
 
