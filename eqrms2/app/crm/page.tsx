@@ -7,8 +7,18 @@ import TableDeals from "./TableDeals";
 import { InteractionDetail } from "@/types/interaction-detail";
 import { Deals } from "@/types/deals";
 import { AddLeadButton } from "@/components/forms/AddLeads";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 export default async function CrmPage() {
+    const userRoles = await getUserRoles();
+  
+    // Check permission first
+    if (!can(userRoles, 'crm', 'view_leads')) {
+      redirect('/uservalidation'); // or wherever you want to send them
+    }
+
 
     const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions] = await Promise.all([
         supabaseListRead<LeadsTagging>({

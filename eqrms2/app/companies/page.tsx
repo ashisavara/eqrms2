@@ -14,8 +14,8 @@ export default async function CompaniesPage() {
   const userRoles = await getUserRoles();
   
   // Check permission first
-  if (!can(userRoles, 'research', 'view_detailed')) {
-    redirect('/protected'); // or wherever you want to send them
+  if (!can(userRoles, 'eqrms', 'view_companies')) {
+    redirect('/uservalidation'); // or wherever you want to send them
   }
 
   const [companies, sectors] = await Promise.all([

@@ -157,13 +157,15 @@ export function ChangeGroup() {
               Logout
             </Button>
             </div>
+            <div>{ userRoles }</div>
+            {can(userRoles, 'internal', 'view') && (
             <div className='text-sm'>
               <SearchButton />
-              <a href="/crm" className='blue-hyperlink'> CRM</a> | 
-              <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | 
-              {userRoles && can(userRoles, 'research', 'view_detailed') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
-              <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a>
-            </div>
+              {can(userRoles, 'crm', 'view_leads') && (<> <a href="/crm" className='blue-hyperlink'> CRM</a> | </>)}
+              {can(userRoles, 'rms', 'view_all_funds') && (<> <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | </>)}
+              {can(userRoles, 'eqrms', 'view_companies') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
+              {can(userRoles, 'rms', 'view_changelog') && (<> <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a> | </>)}
+            </div>)}
 
           {/* Current Selection Display */}
           {currentGroup && currentMandate && (

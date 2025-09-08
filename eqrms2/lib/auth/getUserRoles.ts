@@ -6,25 +6,25 @@ import { createClient } from "@/lib/supabase/server";
 /**
  * Extract user roles from JWT token (server-side only)
  * Uses React cache to ensure only 1 fetch per request
- * Returns empty array if no user (supports guest users)
+ * Returns guest role if no user or user role (supports guest users)
  */
 export const getUserRoles = cache(async (): Promise<string[]> => {
   try {
     const supabase = await createClient();
     const { data: { session }, error } = await supabase.auth.getSession();
 
-    // Return empty array if no session or error (guest user)
+    // Return guest role if no session or error
     if (error || !session?.access_token) {
-      return [];
+      return ['guest'];
     }
 
     // Decode JWT payload to extract user_roles
     const payload = JSON.parse(atob(session.access_token.split('.')[1]));
-    return payload.user_roles || [];
+    return payload.user_roles || ['guest'];
     
   } catch (error) {
     console.error('Error extracting user roles:', error);
-    return []; // Return empty array instead of throwing
+    return ['guest']; // Return guest role instead of throwing
   }
 });
 

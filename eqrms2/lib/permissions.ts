@@ -5,84 +5,70 @@ import { getUserRoles } from './auth/getUserRoles';
  * Now includes progressive permission levels for public/private content
  */
 export const PERMISSION_GROUPS = {
-  // Core RMS functionality (leads, companies, deals)
   rms: {
-    view_basic: ['guest', 'client', 'rm', 'research', 'admin', 'super_admin'], // Public info
-    view_detailed: ['client', 'rm', 'research', 'admin', 'super_admin'],       // Logged in users
-    edit: ['rm', 'admin', 'super_admin'], 
-    delete: ['admin', 'super_admin'],
-    create: ['rm', 'admin', 'super_admin']
+    view_basic: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'trial_ended', 'guest'],
+    view_detailed: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'trial_ended'],
+    view_due_diligence: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
+    view_all_funds: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
+    view_changelog: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
+    edit_rms: ['admin', 'super_admin', 'research']
   },
-  
-  // Research reports and analysis
-  research: {
-    view_basic: ['guest', 'research', 'admin', 'super_admin'],     // Public summaries
-    view_detailed: ['research', 'admin', 'super_admin'],          // Full reports
-    edit: ['research', 'admin', 'super_admin'],
-    delete: ['admin', 'super_admin'],
-    create: ['research', 'admin', 'super_admin']
+
+  investments: {
+    view_investments: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'lead'],
+    add_edit_held_away: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    add_edit_financial_goals: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    add_edit_goal_inv_linking: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    add_edit_goal_sip_linking: ['admin', 'super_admin', 'inv_desk', 'rm']
   },
-  
-  // Fund management and tracking
-  funds: {
-    view_basic: ['guest', 'client', 'wealth', 'rm', 'research', 'admin', 'super_admin'], // Public fund info
-    view_detailed: ['client', 'wealth', 'rm', 'research', 'admin', 'super_admin'],       // Performance data
-    edit: ['wealth', 'rm', 'admin', 'super_admin'],
-    delete: ['admin', 'super_admin'],
-    create: ['wealth', 'admin', 'super_admin']
+
+  mandate: {
+    view_mandate: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'lead'],
+    edit_mandate: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    favouriting: ['admin', 'super_admin', 'inv_desk', 'rm']
   },
-  
-  // Client portal and wealth management  
-  client_portal: {
-    view_basic: ['guest', 'client', 'wealth', 'admin', 'super_admin'],   // Public info
-    view_detailed: ['client', 'wealth', 'admin', 'super_admin'],         // Private client data
-    edit: ['wealth', 'admin', 'super_admin'],
-    delete: ['admin', 'super_admin'],
-    create: ['wealth', 'admin', 'super_admin']
+
+  crm: {
+    view_leads: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    view_interactions: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    view_deals: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    edit_leads: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    edit_interactions: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    edit_deals: ['admin', 'super_admin', 'inv_desk', 'rm']
   },
-  
-  // Analytics, reports, and valuation screens
-  analytics: {
-    view_basic: ['guest', 'rm', 'research', 'wealth', 'admin', 'super_admin'], // Public charts
-    view_detailed: ['rm', 'research', 'wealth', 'admin', 'super_admin'],       // Internal analytics
-    edit: ['research', 'admin', 'super_admin'],
-    delete: ['admin', 'super_admin'],
-    create: ['research', 'admin', 'super_admin']
+
+  group_mandate_selector: {
+    change_group: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    change_mandate: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    add_group: ['admin', 'super_admin', 'inv_desk', 'rm'],
+    add_mandate: ['admin', 'super_admin', 'inv_desk', 'rm']
   },
-  
-  // System administration and user management (fully protected)
-  admin: {
-    view: ['admin', 'super_admin'],    // No guest access
-    edit: ['admin', 'super_admin'],
-    delete: ['super_admin'],
-    create: ['admin', 'super_admin']
+
+  eqrms: {
+    view_companies: ['admin', 'super_admin', 'research'],
+    edit_companies: ['admin', 'super_admin', 'research'],
   },
-  
-  // System-level operations (fully protected)
-  system: {
-    view: ['super_admin'],    // No guest access
-    edit: ['super_admin'],
-    delete: ['super_admin'],
-    create: ['super_admin']
+
+  internal: {
+    view: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
   }
 };
+
 
 /**
  * Check if user has permission for a specific action on a business area
  * Now supports guest users (empty roles array)
  */
-export function can(userRoles: string[], group: keyof typeof PERMISSION_GROUPS, action: string): boolean {
+export function can(userRoles: string[] | null, group: keyof typeof PERMISSION_GROUPS, action: string): boolean {
   const groupPermissions = PERMISSION_GROUPS[group];
   if (!groupPermissions) return false;
   
-  const allowedRoles = groupPermissions[action as keyof typeof groupPermissions] || [];
+  const allowedRoles = (groupPermissions[action as keyof typeof groupPermissions] as string[]) || [];
   
-  // Handle guest users (empty roles array)
-  if (userRoles.length === 0) {
-    return allowedRoles.includes('guest');
-  }
+  // Handle null/undefined userRoles by treating as guest
+  const roles = userRoles || ['guest'];
   
-  return userRoles.some(role => allowedRoles.includes(role));
+  return roles.some(role => allowedRoles.includes(role));
 }
 
 /**
