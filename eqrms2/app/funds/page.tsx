@@ -9,11 +9,20 @@ import { Category } from "@/types/category-detail";
 import { AssetClass } from "@/types/asset-class-detail";
 import { TableAssetClass } from "@/app/assetclass/TableAssetclass"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
 
 export default async function FundsPage() {
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'rms', 'view_detailed')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
 
   const [funds, amc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({

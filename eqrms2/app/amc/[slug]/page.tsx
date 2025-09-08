@@ -8,6 +8,9 @@ import { RmsFundsScreener } from "@/types/funds-detail";
 import TableFundScreen from "@/app/funds/TableFundScreen";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import TwoColLayout from "@/components/tables/TwoColLayout";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 // Force dynamic rendering to prevent static generation issues with dynamic data
 export const dynamic = 'force-dynamic';
@@ -18,6 +21,13 @@ interface PageProps {
 
 export default async function AmcPage({ params }: PageProps) {
   const { slug } = await params;
+
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'rms', 'view_detailed')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
 
   // Fetch AMC and fund data in parallel
   const [AMC, funds] = await Promise.all([

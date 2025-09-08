@@ -1,9 +1,9 @@
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { getCurrentGroupId } from "@/lib/auth/serverGroupMandate";
 import TableInvestments  from "./TableInvestments";
-import TableSystematic from "./TableSip";
-import TableStp from "./TableStp";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 // Function to process raw investment data and update existing fields with calculated values
 function processInvestmentData(rawData: any[]): any[] {
@@ -42,6 +42,14 @@ function processInvestmentData(rawData: any[]): any[] {
 
 
 export default async function InvestmentsPage() {
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'eqrms', 'view_investments')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
+
+
   // Get current group ID from cookies (server-side)
   const groupId = await getCurrentGroupId();
   

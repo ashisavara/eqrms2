@@ -1,6 +1,9 @@
 import { serverSideQuery, getMultipleFilterOptions } from "@/lib/supabase/serverSideQueryHelper";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import FundsTableClient from "./FundsTableClient";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 // ================================================================
 // 🎯 SERVER-SIDE TABLE TEMPLATE WITH ITERATIVE FILTERING
@@ -79,6 +82,12 @@ function parseSearchParams(params: { [key: string]: string | string[] | undefine
  */
 export default async function AllFundsPage({ searchParams }: PageProps) {
   //  STEP 2: Parse incoming URL parameters
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'rms', 'view_all_funds')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
   const params = await searchParams;
   const { filters, pagination, sorting, search } = parseSearchParams(params);
 

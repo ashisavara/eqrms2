@@ -1,8 +1,19 @@
 import { TableRmsChangeLog } from "./TableChangelog";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { RmsChangelog } from "@/types/rms-changelog-detail";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 export default async function CompaniesPage() {
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'rms', 'view_changelog')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
+
+
   // Fetch data server-side
   const changeLog = await supabaseListRead<RmsChangelog>({
     table: "view_rms_change_log",

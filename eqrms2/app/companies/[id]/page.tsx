@@ -12,6 +12,7 @@ import { CompanyQrtNotesValues } from "@/types/forms";
 import { RatingDisplay,CompQualityRating, NumberRating, ComGrowthNumberRating, CoverageRating } from "@/components/conditional-formatting";
 import { getUserRoles } from "@/lib/auth/getUserRoles";
 import { can } from "@/lib/permissions";
+import { redirect } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,10 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
   
   // Get user roles for permission checking
   const userRoles = await getUserRoles();
+  // Check permission first
+  if (!can(userRoles, 'eqrms', 'view_companies')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
   
   // Consolidate all Supabase calls into a single Promise.all for better performance
   const [qtrOptions, resultRatingOptions, qtrNotes, company] = await Promise.all([

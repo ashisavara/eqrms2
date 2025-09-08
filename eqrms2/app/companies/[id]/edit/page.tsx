@@ -5,6 +5,9 @@ import { EditCompanyForm } from "@/components/forms/EditCompanyForm"; // this is
 import { CompanySnapshotFormValues } from "@/types/forms"; // optional: type of the form values
 import { notFound } from "next/navigation";
 import { fetchOptions } from "@/lib/supabase/serverQueryHelper";
+import { getUserRoles } from "@/lib/auth/getUserRoles";
+import { can } from "@/lib/permissions";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{ id: string }>; // Changed to Promise
@@ -12,6 +15,13 @@ type Props = {
 
 export default async function EditCompanyPage({ params }: Props) {
   const { id } = await params;
+
+  // Get user roles for permission checking
+  const userRoles = await getUserRoles();
+  // Check permission first
+  if (!can(userRoles, 'eqrms', 'edit_companies')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
   
   const companyData = await supabaseSingleRead<CompanySnapshotFormValues>({
     table: "eq_rms_company",

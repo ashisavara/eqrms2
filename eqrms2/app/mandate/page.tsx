@@ -12,8 +12,18 @@ import { RmsFundsScreener } from "@/types/funds-detail";
 import FinPlanClientWrapper from "./FinPlanClientWrapper";
 import { GoalOptionsProvider } from "@/lib/contexts/GoalOptionsContext";
 import { EditMandateButton } from "@/components/forms/EditMandate";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 export default async function MandatePage() {
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'mandate', 'view_mandate')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
+
     const groupId = await getCurrentGroupId();
     const mandate = await getCurrentMandateId();
 

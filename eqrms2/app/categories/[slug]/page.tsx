@@ -6,6 +6,9 @@ import TableFundBasic from "@/app/funds/TableFundBasic";
 import { EditCatButton } from "@/components/forms/EditCategory";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { TableCategories } from "@/app/categories/TableCategories";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -13,6 +16,13 @@ interface PageProps {
 
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'rms', 'view_detailed')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
+
   const [category, funds] = await Promise.all([
     supabaseSingleRead<Category>({
     table: "rms_category",

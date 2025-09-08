@@ -4,6 +4,9 @@ import { Category } from "@/types/category-detail";
 import { TableCategories } from "@/app/categories/TableCategories";
 import { EditAssetClassButton } from "@/components/forms/EditAssetClass";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 interface PageProps {
     params: Promise<{slug:string}>;
@@ -12,6 +15,14 @@ interface PageProps {
 
 export default async function AssetClassPage({params}: PageProps) {
     const {slug} = await params;
+
+    const userRoles = await getUserRoles();
+  
+    // Check permission first
+    if (!can(userRoles, 'rms', 'view_detailed')) {
+        redirect('/uservalidation'); // or wherever you want to send them
+    }
+
     const [assetClass, catTrailing, catAnnual] = await Promise.all([
         supabaseSingleRead<AssetClass>({
             table: "rms_asset_class",

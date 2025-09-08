@@ -9,6 +9,7 @@ import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,10 @@ export default async function FundPage({ params }: PageProps) {
   
   // Get user roles for permission checking
   const userRoles = await getUserRoles();
+  // Check permission first
+  if (!can(userRoles, 'rms', 'view_detailed')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
 
   // Fetch fund data
   const fund = await supabaseSingleRead<RmsFundAmc>({
@@ -53,7 +58,7 @@ export default async function FundPage({ params }: PageProps) {
             <div> {fund.category_name} |  </div>
             <div> AUM: {fund.fund_aum} cr |  </div>
             <div> Open for Subscription: {fund.open_for_subscription}  | </div>
-            {can(userRoles, 'research', 'edit') ? 
+            {can(userRoles, 'rms', 'edit_rms') ? 
               <div>
                 <span>Edit: </span>
                 <EditFundsButton 
