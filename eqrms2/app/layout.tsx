@@ -5,9 +5,11 @@ import "./globals.css";
 import { SearchButton } from "@/components/forms/SearchButton";
 import { GroupMandateProvider } from "@/lib/contexts/GroupMandateContext";
 import { MasterOptionsProvider } from "@/lib/contexts/MasterOptionsContext";
-import { ChangeGroup } from "@/components/forms/ChangeGroup";
 import { ContextDisplay } from "@/components/forms/ContextDisplay";
 import { Toaster } from "sonner";
+import { logoutFromChangeGroupAction } from '@/app/auth/otp-login/otpServerActions';
+import { LogoutHandler } from "@/components/ui/logout-handler";
+import { ChangeGroupHandler } from "@/components/ui/change-group-handler";
 import {
   SidebarProvider,
   Sidebar,
@@ -76,6 +78,12 @@ export default function RootLayout({
                       <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
                       <SidebarMenuItem href="/mandate" icon={<ListCheckIcon />}>Mandate</SidebarMenuItem>
                       <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>RMS</SidebarMenuItem>
+                      <SidebarMenuItem icon={<TargetIcon />}>
+                        <ChangeGroupHandler />
+                      </SidebarMenuItem>
+                      <SidebarMenuItem icon={<LogOutIcon />}>
+                        <LogoutHandler />
+                      </SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarContent>
                 </Sidebar>
@@ -86,7 +94,6 @@ export default function RootLayout({
                       <div className="flex items-center gap-2">
                          <SidebarTrigger /> 
                       </div>
-                      <ChangeGroup />
                     </div>
                   </div>
                   <div className="px-2 py-4 md:px-10">{children}</div>
