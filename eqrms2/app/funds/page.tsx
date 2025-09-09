@@ -121,6 +121,7 @@ export default async function FundsPage() {
 
   return (
     <div>
+      <div className="pageHeadingBox"><h1>IME RMS</h1></div>
         <Tabs defaultValue="funds" className="w-full mx-auto mt-6 text-sm">
             <TabsList className="w-full">
                 <TabsTrigger value="funds">Funds</TabsTrigger>

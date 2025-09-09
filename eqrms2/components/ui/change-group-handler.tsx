@@ -9,6 +9,7 @@ import { SelectInput } from "@/components/forms/FormFields";
 import { useForm } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { Users, Target, Loader2 } from "lucide-react";
+import { SearchButton } from '../forms/SearchButton';
 
 export function ChangeGroupHandler() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -143,6 +144,17 @@ export function ChangeGroupHandler() {
                   </div>
                 </div>
               )}
+
+            <div>{ userRoles }</div>
+            {can(userRoles, 'internal', 'view') && (
+            <div className='text-sm'>
+              <SearchButton />
+              {can(userRoles, 'crm', 'view_leads') && (<> <a href="/crm" className='blue-hyperlink'> CRM</a> | </>)}
+              {can(userRoles, 'rms', 'view_all_funds') && (<> <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | </>)}
+              {can(userRoles, 'eqrms', 'view_companies') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
+              {can(userRoles, 'rms', 'view_changelog') && (<> <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a> | </>)}
+            </div>)}
+
 
               {/* Internal Users: Group Selection + Conditional Mandate Selection */}
               {can(userRoles, 'internal', 'view') && (
