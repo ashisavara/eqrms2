@@ -158,7 +158,7 @@ export function EditFinGoalsButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer"
       >
         {children || 'Edit Goal'}
       </span>

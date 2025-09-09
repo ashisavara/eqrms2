@@ -15,10 +15,17 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 
 // Internal form component
-function EditInvGoalsForm({initialData, id, onSuccess}: {initialData: LinkInvToGoalsValues | null, id: number, onSuccess: () => void}) {
+function EditInvGoalsForm({initialData, id, onSuccess, fundName}: {initialData: LinkInvToGoalsValues | null, id: number, onSuccess: () => void, fundName?: string}) {
     const [isLoading, setIsLoading] = useState(false);
+    const [canEdit, setCanEdit] = useState(false);
     const router = useRouter();
     const { goalOptions } = useGoalOptions();
+
+    useEffect(() => {
+        getUserRoles().then(userRoles => {
+            setCanEdit(can(userRoles, 'investments', 'add_edit_goal_inv_linking'));
+        });
+    }, []);
 
     const cleanedData: LinkInvToGoalsValues = {
         goal_id: initialData?.goal_id || 0,
@@ -53,13 +60,35 @@ function EditInvGoalsForm({initialData, id, onSuccess}: {initialData: LinkInvToG
     return (
         <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-            <ToggleGroupInput name="goal_id" label="Link Goal" control={control} options={goalOptions} valueType="number" itemClassName="ime-choice-chips" />
+            
+            {canEdit ? (
+                <div>
+                <label className="text-sm font-bold text-gray-700">Fund</label>
+                <p className="text-sm text-gray-900 mt-1">{fundName || 'Unknown Fund'}</p>
+                <ToggleGroupInput name="goal_id" label="Link Goal" control={control} options={goalOptions} valueType="number" itemClassName="ime-choice-chips" />
+                </div>
+            ) : (
+                <div className="space-y-3">
+                    <div>
+                        <label className="text-sm font-bold text-gray-700">Fund</label>
+                        <p className="text-sm text-gray-900 mt-1">{fundName || 'Unknown Fund'}</p>
+                    </div>
+                    <div>
+                        <label className="text-sm font-bold text-gray-700">Linked Goal</label>
+                        <p className="text-sm text-gray-900 mt-1">
+                            {goalOptions.find(option => Number(option.value) === cleanedData.goal_id)?.label || 'No goal selected'}
+                        </p>
+                    </div>
+                </div>
+            )}
         
-            <div className="flex justify-end">
-                <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Saving...' : 'Save'}
-                </Button>
-            </div>
+            {canEdit && (
+                <div className="flex justify-end">
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Saving...' : 'Save'}
+                    </Button>
+                </div>
+            )}
         </form>
     );
 }
@@ -75,13 +104,6 @@ export function EditInvGoalsButton({
   children?: React.ReactNode;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
-  const [canEdit, setCanEdit] = useState(false);
-
-  useEffect(() => {
-    getUserRoles().then(userRoles => {
-      setCanEdit(can(userRoles, 'investments', 'add_goal_inv_linking'));
-    });
-  }, []);
 
   if (!investment_id) {
     console.error('Investments data is missing investment id:', investmentsData);
@@ -94,31 +116,26 @@ export function EditInvGoalsButton({
 
   return (
     <>
-      {canEdit ? (
-        <span 
-          onClick={() => setShowEditSheet(true)}
-          className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
-        >
-          {children || 'Link'}
-        </span>
-      ) : (
-        <span className="text-gray-600">
-          {children || 'Link'}
-        </span>
-      )}
+      <span 
+        onClick={() => setShowEditSheet(true)}
+        className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer"
+      >
+        {children || 'Link'}
+      </span>
 
       {/* Edit Sheet */}
       {showEditSheet && (
         <Sheet open={true} onOpenChange={() => setShowEditSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Link Investment Goal</SheetTitle>
+              <SheetTitle>Link Investment to Goal</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditInvGoalsForm
                 initialData={invUpdateData}
                 id={investment_id}
                 onSuccess={() => setShowEditSheet(false)}
+                fundName={investmentsData.fund_name}
               />
             </div>
           </SheetContent>
