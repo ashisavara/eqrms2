@@ -1,3 +1,5 @@
+// list provider .. goes to supabase to get the list of options
+
 "use server";
 
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";

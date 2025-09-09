@@ -1,3 +1,6 @@
+// Server actions for group & mandate selection
+// Database fetchers
+
 'use server'
 
 import { createClient } from '@/lib/supabase/server'

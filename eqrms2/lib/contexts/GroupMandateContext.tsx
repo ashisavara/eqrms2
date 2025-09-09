@@ -1,3 +1,9 @@
+// Main File for dealing with group & mandate selection, saving them to cookies and local storage
+// user groupMandateServerActions to check initial auth state, get current user, get user default group & mandate
+// user groupMandateActions to load user groups, load group mandates
+// user favouriteActions to load favourite data, toggle favourite
+// user serverGroupMandate to get current group & mandate from cookies
+
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';

@@ -1,3 +1,5 @@
+// Reads group and mandate ids from cookies .. these cookies are saved in the file contexts, GroupMandateContext
+
 "use server";
 
 import { cookies } from 'next/headers';
