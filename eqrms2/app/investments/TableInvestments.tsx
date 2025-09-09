@@ -19,15 +19,18 @@ import { PieChart } from "@/components/charts/InvestmentPieCharts";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { AddHeldAwayButton } from "@/components/forms/AddHeldAway";
+import { CirclePlusIcon } from "lucide-react";
+import { can } from '@/lib/permissions';
 
 interface TableInvestmentsProps {
   data: Investments[];
   sipData?: SipDetail[];
   stpData?: StpDetails[];
   investorOptions: { value: string; label: string }[];
+  userRoles: string[];
 }
 
-export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions }: TableInvestmentsProps) {
+export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
   
@@ -163,8 +166,9 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                   formatter={(value) => `${value.toFixed(1)}`}
                 />
             </div>
-            <AddHeldAwayButton investorOptions={investorOptions}/>
-            <ToggleVisibility toggleText="Show Asset Allocation">
+            <div className="flex">
+            <div className="mt-2"><ToggleVisibility toggleText="Show Allocation">
+              
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <PieChart 
                 table={table} 
@@ -205,6 +209,11 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
               />
             </div>
           </ToggleVisibility>
+          </div>
+          {can(userRoles, 'investments', 'add_edit_held_away') && (
+            <AddHeldAwayButton investorOptions={investorOptions}><CirclePlusIcon className="w-6 h-6 m-4" /></AddHeldAwayButton>
+          )}
+          </div>
             <ReactTableWrapper 
               table={table} 
               className="text-xs text-center" 
@@ -254,7 +263,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             </div>
             
             {/* Side-by-side comparison charts wrapped in toggle */}
-            <ToggleVisibility toggleText="Show Portfolio Allocation Impact">
+            <ToggleVisibility toggleText="Allocation Impact">
               <div className="space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <PieChart 

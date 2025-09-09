@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useGoalOptions } from "@/lib/contexts/GoalOptionsContext";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
 
 // Internal form component
 function EditInvGoalsForm({initialData, id, onSuccess}: {initialData: LinkInvToGoalsValues | null, id: number, onSuccess: () => void}) {
@@ -73,6 +75,13 @@ export function EditInvGoalsButton({
   children?: React.ReactNode;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
+
+  useEffect(() => {
+    getUserRoles().then(userRoles => {
+      setCanEdit(can(userRoles, 'investments', 'add_goal_inv_linking'));
+    });
+  }, []);
 
   if (!investment_id) {
     console.error('Investments data is missing investment id:', investmentsData);
@@ -85,12 +94,18 @@ export function EditInvGoalsButton({
 
   return (
     <>
-      <span 
-        onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
-      >
-        {children || 'Link'}
-      </span>
+      {canEdit ? (
+        <span 
+          onClick={() => setShowEditSheet(true)}
+          className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        >
+          {children || 'Link'}
+        </span>
+      ) : (
+        <span className="text-gray-600">
+          {children || 'Link'}
+        </span>
+      )}
 
       {/* Edit Sheet */}
       {showEditSheet && (

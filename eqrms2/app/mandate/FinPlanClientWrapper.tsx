@@ -11,17 +11,20 @@ import TableInvFinPlan from "./TableInvFinPlan";
 import TableSipFinPlan from "./TableSipFinPlan";
 import TableGoalDesc from "./TableGoalDesc";
 import { AddFinGoalsButton } from "@/components/forms/AddFinGoals";
+import { can } from '@/lib/permissions';
 
 interface FinPlanClientWrapperProps {
   finGoalsData: FinGoalsDetail[];
   investmentFinPlanData: Investments[];
   sipFinGoalsData: SipDetail[];
+  userRoles: string[];
 }
 
 export default function FinPlanClientWrapper({ 
   finGoalsData, 
   investmentFinPlanData, 
-  sipFinGoalsData
+  sipFinGoalsData,
+  userRoles
 }: FinPlanClientWrapperProps) {
   
   // State for selected goals filter
@@ -78,7 +81,8 @@ export default function FinPlanClientWrapper({
             placeholder="Filter by Goals..."
           />
         </div>
-        <AddFinGoalsButton />
+        { can(userRoles, 'investments', 'add_edit_financial_goals') && (
+        <AddFinGoalsButton />)}
       </div>
 
       {/* Financial Goals Table */}

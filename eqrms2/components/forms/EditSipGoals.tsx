@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,21 @@ import { ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useGoalOptions } from "@/lib/contexts/GoalOptionsContext";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
 
 // Internal form component
 function EditSipGoalsForm({initialData, id, onSuccess}: {initialData: LinkSipToGoalsValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
+    const [canEdit, setCanEdit] = useState(false);
     const router = useRouter();
     const { goalOptions } = useGoalOptions();
+
+    useEffect(() => {
+        getUserRoles().then(userRoles => {
+            setCanEdit(can(userRoles, 'investments', 'add_edit_financial_goals'));
+        });
+    }, []);
 
     const cleanedData: LinkSipToGoalsValues = {
         goal_id: initialData?.goal_id || 0,
@@ -53,11 +62,13 @@ function EditSipGoalsForm({initialData, id, onSuccess}: {initialData: LinkSipToG
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
             <ToggleGroupInput name="goal_id" label="Link Goal" control={control} options={goalOptions} valueType="number" itemClassName="ime-choice-chips" />
         
-            <div className="flex justify-end">
-                <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Saving...' : 'Save'}
-                </Button>
-            </div>
+            {canEdit && (
+                <div className="flex justify-end">
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Saving...' : 'Save'}
+                    </Button>
+                </div>
+            )}
         </form>
     );
 }

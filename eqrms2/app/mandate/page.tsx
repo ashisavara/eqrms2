@@ -124,7 +124,8 @@ export default async function MandatePage() {
               <TabsTrigger value="finplan">Fin Plan</TabsTrigger>
             </TabsList>
             <TabsContent value="mandate">
-              <EditMandateButton mandateData={invMandate} mandateId={mandate} />
+              { can(userRoles, 'mandate', 'edit_mandate') && (
+              <EditMandateButton mandateData={invMandate} mandateId={mandate} />)}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <div className="border-box">
                           <p className="font-bold">Risk Profile</p>
@@ -192,7 +193,12 @@ export default async function MandatePage() {
                   
             </TabsContent>
             <TabsContent value="finplan">
-              <FinPlanClientWrapper finGoalsData={finGoals} investmentFinPlanData={investmentFinPlan} sipFinGoalsData={sipFinGoals} />
+              <FinPlanClientWrapper 
+                finGoalsData={finGoals} 
+                investmentFinPlanData={investmentFinPlan} 
+                sipFinGoalsData={sipFinGoals}
+                userRoles={userRoles}
+              />
             </TabsContent>
           </Tabs>
 

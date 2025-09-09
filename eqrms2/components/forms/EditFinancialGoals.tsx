@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
@@ -10,11 +10,20 @@ import { TextInput, DatePicker, TextArea, ResizableTextArea } from "./FormFields
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
 
 // Internal form component
 function EditFinGoalsForm({initialData, id, onSuccess}: {initialData: FinGoalsValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
+    const [canEdit, setCanEdit] = useState(false);
     const router = useRouter();
+
+    useEffect(() => {
+        getUserRoles().then(userRoles => {
+            setCanEdit(can(userRoles, 'investments', 'add_edit_financial_goals'));
+        });
+    }, []);
 
     const cleanedData: FinGoalsValues = {
         goal_name: initialData?.goal_name || "",
@@ -29,6 +38,51 @@ function EditFinGoalsForm({initialData, id, onSuccess}: {initialData: FinGoalsVa
         defaultValues: cleanedData,
         resolver: zodResolver(FinGoalsSchema)
     });
+
+    // Read-only data display for users without edit permission
+    if (!canEdit) {
+        return (
+            <div className="w-full p-4 space-y-4">
+                <div className="grid grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div>
+                        <label className="text-sm font-bold text-gray-700">Goal Name</label>
+                        <p className="text-sm text-gray-900 mt-1">{cleanedData.goal_name}</p>
+                    </div>
+                    <div>
+                        <label className="text-sm font-bold text-gray-700">Future Value Goals</label>
+                        <p className="text-sm text-gray-900 mt-1">{cleanedData.fv_goals}</p>
+                    </div>
+                    <div>
+                        <label className="text-sm font-bold text-gray-700">Goal Date</label>
+                        <p className="text-sm text-gray-900 mt-1">
+                            {(() => {
+                                try {
+                                    const date = cleanedData.goal_date instanceof Date 
+                                        ? cleanedData.goal_date 
+                                        : new Date(cleanedData.goal_date);
+                                    return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleDateString();
+                                } catch {
+                                    return 'Invalid Date';
+                                }
+                            })()}
+                        </p>
+                    </div>
+                    <div>
+                        <label className="text-sm font-bold text-gray-700">Expected Returns</label>
+                        <p className="text-sm text-gray-900 mt-1">{cleanedData.exp_returns}</p>
+                    </div>
+                    <div>
+                        <label className="text-sm font-bold text-gray-700">Inflation Rate</label>
+                        <p className="text-sm text-gray-900 mt-1">{cleanedData.inflation_rate}</p>
+                    </div>
+                </div>
+                <div>
+                    <label className="text-sm font-bold text-gray-700">Goal Description</label>
+                    <p className="text-sm text-gray-900 mt-1">{cleanedData.goal_description}</p>
+                </div>
+            </div>
+        );
+    }
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
@@ -114,7 +168,7 @@ export function EditFinGoalsButton({
         <Sheet open={true} onOpenChange={() => setShowEditSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Edit Asset Class Details</SheetTitle>
+              <SheetTitle>Financial Goal Details</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditFinGoalsForm

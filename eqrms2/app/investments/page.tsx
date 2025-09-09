@@ -45,7 +45,7 @@ export default async function InvestmentsPage() {
   const userRoles = await getUserRoles();
   
   // Check permission first
-  if (!can(userRoles, 'eqrms', 'view_investments')) {
+  if (!can(userRoles, 'investments', 'view_investments')) {
     redirect('/uservalidation'); // or wherever you want to send them
   }
 
@@ -106,7 +106,7 @@ export default async function InvestmentsPage() {
   return (
     <div>
 
-          <TableInvestments data={investments} sipData={sip} stpData={stp} investorOptions={investorOptions} />
+          <TableInvestments data={investments} sipData={sip} stpData={stp} investorOptions={investorOptions} userRoles={userRoles} />
 
     </div>
   );
