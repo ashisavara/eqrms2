@@ -70,9 +70,9 @@ export default function RootLayout({
               <GroupMandateProvider>
               <SidebarProvider>
                 <Sidebar>
-                  <SidebarHeader>
-                    <h2 className="text-lg font-semibold">IME RMS</h2>
-                  </SidebarHeader>
+                  <div className="border-b border-gray-200 p-2 flex items-center justify-center">
+                    <SidebarTrigger />
+                  </div>
                   <SidebarContent>
                     <SidebarMenu>
                       <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
@@ -88,14 +88,6 @@ export default function RootLayout({
                   </SidebarContent>
                 </Sidebar>
                 <MainContent>
-                  <div className="pt-2 pl-5 pr-5 pb-2 bg-gray-100">
-                    {/* Top Navigation Bar */}
-                    <div className="flex items-center justify-between pb-2">
-                      <div className="flex items-center gap-2">
-                         <SidebarTrigger /> 
-                      </div>
-                    </div>
-                  </div>
                   <div className="px-2 py-4 md:px-10">{children}</div>
                 </MainContent>
                 <Toaster />
