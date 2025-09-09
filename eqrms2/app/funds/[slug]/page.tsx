@@ -81,10 +81,10 @@ export default async function FundPage({ params }: PageProps) {
       <div>
         <Tabs defaultValue="rating_snapshot" className="w-full mx-auto mt-6 text-sm">
           <TabsList className="w-full">
-            <TabsTrigger value="rating_snapshot">Rating Snapshot</TabsTrigger>
-            <TabsTrigger value="rating_rationale">Rating Rationale</TabsTrigger>
+            <TabsTrigger value="rating_snapshot">Snapshot</TabsTrigger>
+            <TabsTrigger value="rating_rationale">Rationale</TabsTrigger>
             <TabsTrigger value="investment_team">Team</TabsTrigger>
-            <TabsTrigger value="fund_details">Fund Details</TabsTrigger>
+            <TabsTrigger value="fund_details">Details</TabsTrigger>
           </TabsList>
           <TabsContent value="rating_snapshot">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">

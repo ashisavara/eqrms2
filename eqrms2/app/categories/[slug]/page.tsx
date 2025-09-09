@@ -59,7 +59,9 @@ export default async function CategoryPage({ params }: PageProps) {
                 />
             </div>
             <p className="text-sm">{category.cat_description}</p>
-            <EditCatButton categoryData={category} categoryId={category.category_id} />
+            {(can(userRoles, 'rms', 'edit_rms')) && (
+                <EditCatButton categoryData={category} categoryId={category.category_id} />
+            )}
         </div>
             <div className="text-sm">
                 <h3 className="text-base font-bold text-center">Trailing Returns</h3>

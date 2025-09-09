@@ -55,18 +55,19 @@ export default async function AmcPage({ params }: PageProps) {
     <div>
         <div className="pageHeadingBox">
           <h1>{AMC.amc_name}</h1>
-          <EditAMCButton 
-              amcData={AMC} 
-              amcId={AMC.id}
-              />
+          {(can(userRoles, 'rms', 'edit_rms')) && (
+          <>
+              <EditAMCButton amcData={AMC} amcId={AMC.id} />
               <EditAmcDueDilButton amcData={AMC} amcId={AMC.id} />
+          </>
+          )}
         </div>
 
       <div>
           <Tabs defaultValue="rating_snapshot" className="ime-tabs">
           <TabsList className="w-full">
-                <TabsTrigger value="rating_snapshot">Rating Snapshot</TabsTrigger>
-                <TabsTrigger value="rating_rationale">Rating Rationale</TabsTrigger>
+                <TabsTrigger value="rating_snapshot">Snapshot</TabsTrigger>
+                <TabsTrigger value="rating_rationale">Rationale</TabsTrigger>
                 <TabsTrigger value="funds">Funds</TabsTrigger>
           </TabsList>
               <TabsContent value="rating_snapshot">

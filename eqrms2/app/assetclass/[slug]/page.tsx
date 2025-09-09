@@ -54,7 +54,9 @@ export default async function AssetClassPage({params}: PageProps) {
                 </div>
                 <p className="font-bold">{assetClass.asset_class_summary}</p>
                 <p className="text-sm">{assetClass.asset_class_desc}</p>
-                <EditAssetClassButton assetClassData={assetClass} assetClassId={assetClass.asset_class_id} />
+                {(can(userRoles, 'rms', 'edit_rms')) && (
+                    <EditAssetClassButton assetClassData={assetClass} assetClassId={assetClass.asset_class_id} />
+                )}
             </div>
             <div className="border-box">
                 <h3> Trailing Returns</h3>
