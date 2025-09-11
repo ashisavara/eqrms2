@@ -34,6 +34,12 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
   
+  // Filter data to only show investments with changes (for TableInvChange)
+  const changedInvestments = useMemo(() => 
+    data.filter(item => item.amt_change && item.amt_change !== 0), 
+    [data]
+  );
+  
   const autoSortedColumns = useAutoSorting(data, responsiveColumns);
 
   const table = useReactTable({
@@ -138,7 +144,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
           </TabsList>
           
           <TabsContent value="investments">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Purchase" 
                 value={aggregations.pur_amt || 0}
@@ -244,7 +250,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
           
           </TabsContent>
           <TabsContent value="recommendations">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Change" 
                 value={data.reduce((sum, row) => sum + (row.amt_change || 0), 0)}
@@ -327,7 +333,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
               </div>
             </ToggleVisibility>
             
-            <TableInvChange data={data} />
+            <TableInvChange data={changedInvestments} />
           </TabsContent>
         </Tabs>
       </div>

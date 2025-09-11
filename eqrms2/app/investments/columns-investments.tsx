@@ -83,7 +83,10 @@ export const columns: ColumnDef<Investments>[] = [
     },
     { accessorKey: "abs_ret", header: "Abs Ret (%)", size:50, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "cagr", header: "CAGR (%)", size:50, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
-    { accessorKey: "cat_long_name", header: "Category", size:80 },
+    { accessorKey: "cat_long_name", header: "Category", size:100, cell: ({ getValue }) => {
+        const v = getValue();
+        return v && String(v).length > 20 ? String(v).slice(0, 20) + "…" : v;
+    }},
     { accessorKey: "fund_rms_name", header: "Fund RMS Name", meta: { isFilterOnly: true } },
     { accessorKey: "asset_class_name", header: "Asset Class", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome" },
     { accessorKey: "cat_name", header: "Category", meta: { isFilterOnly: true }, filterFn: "arrIncludesSome", cell: ({ getValue }) => {
