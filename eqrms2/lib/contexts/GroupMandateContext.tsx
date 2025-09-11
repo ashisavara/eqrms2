@@ -11,7 +11,8 @@ import { toast } from "sonner";
 import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateActions";
 import { loadMandateFavourites, toggleFavouriteServer } from "@/lib/actions/favouriteActions";
 import { EntityType, FavouritesData } from "@/types/favourites-detail";
-import { checkInitialAuthAction, getCurrentUserAction, getUserDefaultGroupMandate } from './groupMandateServerActions';
+import { checkInitialAuthAction, getCurrentUserAction } from './groupMandateServerActions';
+import { getJWTGroupMandate } from "@/lib/auth/getUserRoles";
 
 // Constants
 const STORAGE_KEY = 'ime_group_mandate_selected';
@@ -332,31 +333,33 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [currentMandate?.id]);
 
-  // Set default group/mandate from database (called from OTP login success)
+  // Set default group/mandate from JWT (called from OTP login success)
   const setDefaultGroupMandate = useCallback(async () => {
     try {
-      console.log('🔄 Setting default group/mandate from database...');
-      const { group, mandate, error } = await getUserDefaultGroupMandate();
+      console.log('🔄 Setting default group/mandate from JWT...');
       
-      if (group && mandate && !error) {
-        setCurrentGroup(group);
-        setCurrentMandate(mandate);
-        console.log('🔄 Set default group/mandate from database:', { group, mandate });
+      // Extract group/mandate from JWT using server action
+      const { groupInfo, mandateInfo } = await getJWTGroupMandate();
+
+      if (groupInfo && mandateInfo) {
+        setCurrentGroup(groupInfo);
+        setCurrentMandate(mandateInfo);
+        console.log('✅ Set default group/mandate from JWT:', { group: groupInfo, mandate: mandateInfo });
         
         // Save to localStorage for future use
-        saveToStorage(group, mandate);
+        saveToStorage(groupInfo, mandateInfo);
         
         // Load favourites for the new mandate
-        const newFavourites = loadFromFavouritesStorage(mandate.id);
+        const newFavourites = loadFromFavouritesStorage(mandateInfo.id);
         setFavourites(newFavourites);
         
-        return { success: true, group, mandate };
+        return { success: true, group: groupInfo, mandate: mandateInfo };
       } else {
-        console.warn('Failed to fetch default group/mandate:', error);
-        return { success: false, error };
+        console.log('ℹ️ No group/mandate in JWT - keeping as null (normal for new users)');
+        return { success: true, group: undefined, mandate: undefined };
       }
     } catch (error) {
-      console.error('Error setting default group/mandate:', error);
+      console.error('❌ Error setting default group/mandate from JWT:', error);
       return { success: false, error };
     }
   }, []);

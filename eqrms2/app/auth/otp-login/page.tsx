@@ -143,7 +143,7 @@ export default function OtpTestPage() {
       }
 
       // Set default group/mandate from database on successful login
-      setStatus('Setting up your default group and mandate...')
+      setStatus('Logging in...')
       try {
         const result = await setDefaultGroupMandate()
         
@@ -167,7 +167,7 @@ export default function OtpTestPage() {
       // Redirect to investments page after successful login
       setTimeout(() => {
         window.location.href = '/investments'
-      }, 2000) // Back to 2 second delay
+      }, 500) // Back to 0.5 second delay
       
     } catch (error) {
       setStatus(`Error: ${error}`)
