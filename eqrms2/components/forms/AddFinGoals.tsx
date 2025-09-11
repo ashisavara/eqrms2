@@ -101,7 +101,7 @@ export function AddFinGoalsButton({
     <>
       <span 
         onClick={() => setShowAddSheet(true)}
-        className="text-green-500 hover:text-green-700 underline cursor-pointer"
+        className="blue-hyperlink mt-2"
       >
         {children || '+ Add Goal'}
       </span>

@@ -273,7 +273,7 @@ export function EditHeldAwayAssetsButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Edit  
+        | Edit  
       </span>
 
       {/* Edit Sheet */}

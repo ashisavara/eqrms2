@@ -159,7 +159,7 @@ export default function OtpTestPage() {
       // Show success and redirect to investments
       const userType = json.is_existing_user ? 'Existing user' : 'New user'
       const actionInfo = json.user_created ? ' (user created)' : ' (existing user logged in)'
-      setStatus(`Signed in! ${userType}${actionInfo} - Setting up defaults...`)
+      setStatus(`Signed in! ${userType} - Loading...`)
       
       // Reset OTP sent state
       setOtpSent(false)
@@ -167,7 +167,7 @@ export default function OtpTestPage() {
       // Redirect to investments page after successful login
       setTimeout(() => {
         window.location.href = '/investments'
-      }, 500) // Back to 0.5 second delay
+      }, 100) // Back to 0.5 second delay
       
     } catch (error) {
       setStatus(`Error: ${error}`)
