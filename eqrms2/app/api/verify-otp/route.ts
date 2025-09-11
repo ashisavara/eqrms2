@@ -101,9 +101,6 @@ export async function POST(req: NextRequest) {
     // Determine which email to use for login
     const loginEmail = isExistingUser ? existingUserEmail : aliasEmailFromPhone(phone_number, LOGIN_ALIAS_DOMAIN)
 
-    // TEMPORARILY DISABLED: User creation for new users
-    // TODO: Re-enable this in the future for automatic user creation
-    /*
     // Prepare metadata - only for new users
     let metadata = null
     if (!isExistingUser) {
@@ -120,24 +117,6 @@ export async function POST(req: NextRequest) {
       email: loginEmail,
       options: {
         data: metadata, // null for existing users, metadata object for new users
-      },
-    } as any)
-    */
-
-    // For now, only allow existing users to login
-    if (!isExistingUser) {
-      return NextResponse.json({ 
-        error: 'User does not exist. Please WhatsApp +91 8088770050 if you would like a free trial.',
-        user_not_found: true
-      }, { status: 404 })
-    }
-
-    // Generate magic link only for existing users
-    const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'magiclink',
-      email: loginEmail,
-      options: {
-        data: null, // No additional metadata for existing users
       },
     } as any)
 
@@ -160,8 +139,8 @@ export async function POST(req: NextRequest) {
       token_hash, 
       action_link, 
       login_email: loginEmail,
-      is_existing_user: true, // Always true now since we only allow existing users
-      user_created: false // Always false since we don't create users anymore
+      is_existing_user: isExistingUser,
+      user_created: !isExistingUser // True if we created a new user, false for existing users
     })
   } catch (e) {
     console.error(e)
