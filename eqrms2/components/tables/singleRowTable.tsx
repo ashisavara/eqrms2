@@ -36,7 +36,7 @@ const SimpleTable: React.FC<SimpleTableProps> = ({ headers, body }) => {
   return (
     <table className="w-full table-fixed">
       <thead>
-        <tr className="bg-gray-100 text-gray-600 text-sm">
+        <tr className="bg-gray-100 text-gray-500 text-xs">
           {headers.map((header, index) => (
             <th key={index} className={`p-1 ${header.className || ''}`}>
               {header.label}

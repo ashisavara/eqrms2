@@ -17,7 +17,7 @@ export const columns: ColumnDef<Investments>[] = [
             // Mobile view - show as card
             return (
                 <div className="mobile-card">
-                    <div className="font-semibold text-left text-base">
+                    <div className="font-semibold text-left text-sm">
                         {row.original.slug ? (
                             <Link href={`/funds/${row.original.slug}`} className="text-blue-600 font-bold">
                                 {row.original.fund_name}
@@ -25,7 +25,7 @@ export const columns: ColumnDef<Investments>[] = [
                         ) : (
                             row.original.fund_name
                         )}
-                           <span className="text-gray-600 text-sm font-normal">    {row.original.investor_name}</span>
+                           <span className="text-gray-600 text-xs pl-2 font-normal">    {row.original.investor_name}</span>
                     </div>
                     <SimpleTable 
                         headers={[{ label: "Rating" }, { label: "PurVal" }, { label: "CurVal" }, { label: "Gain/loss" }]}

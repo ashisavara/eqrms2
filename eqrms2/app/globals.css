@@ -51,7 +51,7 @@
   }
 
   div.mobile-card {
-    @apply p-3 border-2 border-gray-300 rounded-lg space-y-3 my-2 py-4;
+    @apply p-2 border border-gray-300 rounded-lg space-y-2 py-2;
   }
 
 }

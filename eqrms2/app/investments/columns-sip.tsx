@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { SipDetail } from "@/types/sip-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import SimpleTable from "@/components/tables/singleRowTable";
 
 export const columns: ColumnDef<SipDetail>[] = [
     { 
@@ -15,11 +16,10 @@ export const columns: ColumnDef<SipDetail>[] = [
                         <div className="font-semibold text-left">
                             {row.original.sip_fund_name}
                         </div>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div>Amount: {row.original.sip_amount}</div>
-                            <div>Installment Date: {row.original.installment_date}</div>
-                            <div>Months Left: {row.original.months_left}</div>
-                        </div>
+                    <SimpleTable 
+                        headers={[{ label: "Amount" }, { label: "Installment Date" }, { label: "Months Left" }]}
+                        body={[{ value: row.original.sip_amount }, { value: row.original.installment_date }, { value: row.original.months_left }]}
+                    />
                     </div>
                 );
             } else {
