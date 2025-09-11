@@ -90,7 +90,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             <div>
               <SimpleTable
               headers={[{ label: "Coverage"},{ label: "Sector"},{ label: "Industry"},{ label: "Sector Stance"},{ label: "Edit"}]}
-              body={[{ value: <CoverageRating rating={company.coverage}/>},{ value: company.sector_name},{ value: company.industry },{ value: company.sector_name},{ value: can(userRoles, 'research', 'edit') ? <Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link> : <span className="text-gray-400">-</span> }]}
+              body={[{ value: <CoverageRating rating={company.coverage}/>},{ value: company.sector_name},{ value: company.industry },{ value: company.sector_name},{ value: can(userRoles, 'eqrms', 'edit_companies') ? <Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link> : <span className="text-gray-400">-</span> }]}
               />
             </div>
           </div>
