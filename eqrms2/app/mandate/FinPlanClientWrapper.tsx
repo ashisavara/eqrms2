@@ -68,7 +68,7 @@ export default function FinPlanClientWrapper({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold pt-4">Financial Planning</h3>
+      <h3 className="text-lg font-bold pt-2">Financial Planning</h3>
       
       {/* Top-level Goal filter */}
       <div className="flex flex-wrap gap-4">

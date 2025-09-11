@@ -342,3 +342,47 @@ export function DealStageRating({ rating, children }: { rating: string; children
     </div>
   );
 }
+
+/**
+ * Goal Achievement Rating - maps percentage values to 1-5 rating scale
+ * 1: below 25%, 2: below 50%, 3: below 75%, 4: below 100%, 5: 100% and above
+ */
+export function GoalAchievementRating({ percentage }: { percentage: number }) {
+  const getNumericRating = (percent: number): number => {
+    if (percent >= 100) return 5;
+    if (percent >= 75) return 4;
+    if (percent >= 50) return 3;
+    if (percent >= 25) return 2;
+    return 1; // below 25%
+  };
+
+  const numericRating = getNumericRating(percentage);
+  
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {percentage?.toFixed(0) || ""}
+    </div>
+  );
+}
+
+/**
+ * Years to Goal Rating - maps years to 1-5 rating scale
+ * 1: less than 1 year, 2: less than 3 years, 3: less than 5 years, 4: less than 7 years, 5: 7+ years
+ */
+export function YearsToGoalRating({ years }: { years: number }) {
+  const getNumericRating = (yrs: number): number => {
+    if (yrs >= 7) return 5;  // Dark green (7+ years)
+    if (yrs >= 5) return 4;   // Light green (5-6.9 years)
+    if (yrs >= 3) return 3;   // Orange (3-4.9 years)
+    if (yrs >= 1) return 2;   // Light red (1-2.9 years)
+    return 1; // Dark red (less than 1 year)
+  };
+
+  const numericRating = getNumericRating(years);
+  
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {years?.toFixed(1) || ""}
+    </div>
+  );
+}

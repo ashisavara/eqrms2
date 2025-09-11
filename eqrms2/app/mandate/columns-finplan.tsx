@@ -5,6 +5,7 @@ import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditFinGoalsButton } from "@/components/forms/EditFinancialGoals";
 import { PencilIcon } from "lucide-react";
 import SimpleTable from "@/components/tables/singleRowTable";
+import { GoalAchievementRating, YearsToGoalRating } from "@/components/conditional-formatting";
 
 export const columns: ColumnDef<FinGoalsDetail>[] = [
     { 
@@ -21,7 +22,7 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
                         <p className="text-xs text-gray-600 text-left">{row.original.goal_description}</p>
                         <SimpleTable 
                             headers={[{ label: "Achieved" }, { label: "FV Goal" }, { label: "Yrs Goal" }]}
-                            body={[{ value: (row.original.goal_ach as number)?.toFixed(0) || "" }, { value: row.original.fv_goals}, { value: (row.original.yrs_to_goal as number)?.toFixed(1) || "" }]}
+                            body={[{ value: <GoalAchievementRating percentage={row.original.goal_ach as number} /> }, { value: row.original.fv_goals}, { value: <YearsToGoalRating years={row.original.yrs_to_goal as number} /> }]}
                         />
                         <SimpleTable 
                             headers={[{ label: "FV Inv" }, { label: "Pending" }, { label: "Lumpsum" }, { label: "SIP" }]}
@@ -43,18 +44,18 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
             }
         }
     },
-    { accessorKey: "goal_ach", header: "Achieved", cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
+    { accessorKey: "goal_ach", header: "Achieved", cell: ({ getValue }) => <GoalAchievementRating percentage={getValue() as number} /> },
     { 
         accessorKey: "yrs_to_goal", 
         header: "Yrs to Goal", 
         size:80,
-        cell: ({ getValue }) => (getValue() as number)?.toFixed(1) || "" 
+        cell: ({ getValue }) => <YearsToGoalRating years={getValue() as number} />
     },
     { accessorKey: "pv_goal", header: "PV Goal", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "fv_goals", header: "FV Goal", size:80},
+    { accessorKey: "fv_goals", header: "FV Goal", size:80, cell: ({ getValue }) => <span className="font-bold">{getValue() as number}</span>},
     { accessorKey: "pv_inv", header: "PV Inv", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "fv_inv", header: "FV Inv", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
-    { accessorKey: "pending_amt", header: "Pending Amt", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
+    { accessorKey: "fv_inv", header: "FV Inv", size:80, cell: ({ getValue }) => <span className="font-bold">{(getValue() as number)?.toFixed(0) || ""}</span> },
+    { accessorKey: "pending_amt", header: "Pending Amt", size:80, cell: ({ getValue }) => <span className="font-bold">{(getValue() as number)?.toFixed(0) || ""}</span> },
     { accessorKey: "lumpsum_req", header: "Lumpsum Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
     { accessorKey: "sip_req", header: "SIP Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" }
 ];
