@@ -69,11 +69,20 @@ export default function RootLayout({
             <MasterOptionsProvider>
               <GroupMandateProvider>
               <SidebarProvider>
+                {/* Mobile-only top navigation bar - full width overlay */}
+                <div className="md:hidden bg-white border-b border-gray-200 p-2 flex items-center justify-between fixed top-0 left-0 right-0 z-50">
+                  <SidebarTrigger />
+                  <div className="font-semibold text-gray-900">Investment Mandate</div>
+                  <div className="w-6"></div> {/* Spacer for centering */}
+                </div>
+                
                 <Sidebar>
-                  <div className="border-b border-gray-200 p-2 flex items-center justify-center">
+                  <div className="hidden md:flex border-b border-gray-200 p-2 items-center justify-center">
                     <SidebarTrigger />
                   </div>
                   <SidebarContent>
+                    {/* Add top padding on mobile to account for fixed header */}
+                    <div className="md:hidden h-12"></div>
                     <SidebarMenu>
                       <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
                       <SidebarMenuItem href="/mandate" icon={<ListCheckIcon />}>Mandate</SidebarMenuItem>
@@ -88,7 +97,7 @@ export default function RootLayout({
                   </SidebarContent>
                 </Sidebar>
                 <MainContent>
-                  <div className="px-2 py-4 md:px-10">{children}</div>
+                  <div className="px-2 pt-16 pb-4 md:px-10 md:py-4">{children}</div>
                 </MainContent>
                 <Toaster />
               </SidebarProvider>
