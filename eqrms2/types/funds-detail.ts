@@ -60,6 +60,11 @@ export type RmsFundAmc = {
   category_long_name: string | null;
   asset_class_name: string | null;
   structure_name: string | null;
+  
+  amc_slug: string | null;
+  structure_slug: string | null;
+  asset_class_slug: string | null;
+  category_slug: string | null;
   };
 
 

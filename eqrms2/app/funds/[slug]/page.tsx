@@ -1,7 +1,7 @@
 import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, fetchOptions } from "@/lib/supabase/serverQueryHelper";
 import { RmsFundAmc } from "@/types/funds-detail";
-import { RatingDisplay } from "@/components/conditional-formatting";
+import { RatingDisplay, RatingContainer } from "@/components/conditional-formatting";
 import { EditFundsButton } from "@/components/forms/EditFunds";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,6 +10,7 @@ import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,10 +53,10 @@ export default async function FundPage({ params }: PageProps) {
           />
         </div>
         <div className="flex flex-wrap gap-2 justify-center mt-2">
-            <div className="whitespace-nowrap"> {fund.amc_name} |  </div>
-            <div className="whitespace-nowrap"> {fund.structure_name} -  </div>
-            <div className="whitespace-nowrap"> {fund.asset_class_name} -  </div>
-            <div className="whitespace-nowrap"> {fund.category_name} |  </div>
+            <Link href={`/amc/${fund.amc_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.amc_name} |  </Link>
+            <Link href={`/structure/${fund.structure_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.structure_name} -  </Link>
+            <Link href={`/assetclass/${fund.asset_class_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.asset_class_name} -  </Link>
+            <Link href={`/categories/${fund.category_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.category_name} |  </Link>
             <div className="whitespace-nowrap"> AUM: {fund.fund_aum} cr |  </div>
             <div className="whitespace-nowrap"> Open: {fund.open_for_subscription}  | </div>
             {can(userRoles, 'rms', 'edit_rms') ? 
@@ -88,74 +89,76 @@ export default async function FundPage({ params }: PageProps) {
           </TabsList>
           <TabsContent value="rating_snapshot">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <div className="border-2 border-gray-300 rounded-md m-2 p-2 text-sm">
+                <div className="text-sm">
                   <h3 className="text-center font-bold mb-2">How we rate the fund</h3>
                   <SimpleTable 
                   headers = {[{label:"Fund"},{label:"Strategy"},{label:"Performance"}]}
                   body = {[{value:<RatingDisplay rating={fund.fund_rating} />},{value:<RatingDisplay rating={fund.fund_strategy_rating} />},{value:<RatingDisplay rating={fund.fund_performance_rating} />} ]}
                   />
+                  <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
                   <div className="w-full mt-2 text-sm">
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Recommendation</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.recommendation_tag}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_rating ?? 0}>{fund.recommendation_tag}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Definition</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_tag}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_strategy_rating ?? 0}>{fund.strategy_tag}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">5yr Performance</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.perf_tag_5yr}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_performance_rating ?? 0}>{fund.perf_tag_5yr}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">LT Performance</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.perf_tag_consistent}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_performance_rating ?? 0}>{fund.perf_tag_consistent}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Desc</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_name}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_strategy_rating ?? 0}>{fund.strategy_name}</RatingContainer></div>
                       </div>
                   </div>
                 </div>
-                <div className="border-2 border-gray-300 rounded-md m-2 p-2 text-sm">
+                <div className="text-sm">
                   <h3 className="text-center font-bold mb-2"> How we rate the AMC</h3>
                   <SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[{value:<RatingDisplay rating={fund.amc_rating} />},{value:<RatingDisplay rating={fund.amc_team_rating} />},{value:<RatingDisplay rating={fund.amc_philosophy_rating} />}]}
                   />
+                  <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
                   <div className="w-full mt-2 text-sm">
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.amc_pedigree}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_rating ?? 0}>{fund.amc_pedigree}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Team Pedigree</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.team_pedigree}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.team_pedigree}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">FM Churn Risk</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.inv_team_risk}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.inv_team_risk}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Maturity</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.amc_maturity}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_rating ?? 0}>{fund.amc_maturity}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Philosphy Name</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.inv_phil_name}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_philosophy_rating ?? 0}>{fund.inv_phil_name}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Inv Philosophy</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.inv_philosophy_followed}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_philosophy_rating ?? 0}>{fund.inv_philosophy_followed}</RatingContainer></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Investment Team</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0">{fund.core_amc_team}</div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.core_amc_team}</RatingContainer></div>
                       </div>
                   </div>
                 </div>
             </div>
-          <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
+          <div className="text-base">
             <h3 className="ime-basic-h3"> Fund Trailing Performance </h3>
             {fund.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.trailing_perf_html }} />}
             <h3 className="ime-basic-h3"> Fund Annual Performance </h3>
@@ -165,7 +168,7 @@ export default async function FundPage({ params }: PageProps) {
           </div>
           </TabsContent>
           <TabsContent value="rating_rationale">
-            <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-sm">
+            <div className="text-sm">
                   <h3 className="ime-basic-h3"> Rationale behind our fund rating</h3>
                   <div className="flex flex-col md:flex-row mb-4">
                       <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
@@ -184,7 +187,7 @@ export default async function FundPage({ params }: PageProps) {
                       <div className="w-full md:flex-1 md:min-w-0">{fund.oth_salient_points}</div>
                   </div>
           </div>
-          <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-sm">
+          <div className="text-sm">
                   <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
                   <div className="flex flex-col md:flex-row mb-4">
                       <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
@@ -209,13 +212,13 @@ export default async function FundPage({ params }: PageProps) {
             </div>
           </TabsContent>
           <TabsContent value="investment_team">
-            <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
+            <div className="text-base">
               <h3 className="ime-basic-h3"> Investment Team </h3>
               {fund.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: fund.amc_fm_html }} />}
             </div>
           </TabsContent>
           <TabsContent value="fund_details">
-            <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-base">
+            <div className="text-base">
               <h3 className="ime-basic-h3"> Fee Structure </h3>
               {fund.fee_structure_html && <div dangerouslySetInnerHTML={{ __html: fund.fee_structure_html }} />}
             </div>

@@ -63,16 +63,16 @@ export default async function CategoryPage({ params }: PageProps) {
                 <EditCatButton categoryData={category} categoryId={category.category_id} />
             )}
         </div>
-            <div className="text-sm">
-                <h3 className="text-base font-bold text-center">Trailing Returns</h3>
+            <div className="text-sm mt-6">
+                <h3 className="text-base font-bold text-center mb-6">Trailing Returns</h3>
                 <TableCategories data={[category]} columnType="summary"/>
             </div>
-            <div className="text-sm">  
-                <h3 className="text-base font-bold text-center">Annual Returns</h3>
+            <div className="text-sm mt-6">  
+                <h3 className="text-base font-bold text-center mb-6">Annual Returns</h3>
                 <TableCategories data={[category]} columnType="annual"/>
             </div>
-            <div className="text-sm">
-                <h3 className="text-base font-bold text-center">Recommended Funds</h3>
+            <div className="text-sm mt-6">
+                <h3 className="text-base font-bold text-center mb-6">Recommended Funds</h3>
                 <TableFundBasic data={funds}/>
             </div>
     </div>

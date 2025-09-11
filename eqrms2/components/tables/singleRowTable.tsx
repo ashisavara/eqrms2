@@ -34,11 +34,11 @@ type SimpleTableProps = {
 
 const SimpleTable: React.FC<SimpleTableProps> = ({ headers, body }) => {
   return (
-    <table className="w-full border border-gray-300 table-fixed">
+    <table className="w-full table-fixed">
       <thead>
-        <tr className="bg-gray-100 text-gray-800">
+        <tr className="bg-gray-100 text-gray-600 text-sm">
           {headers.map((header, index) => (
-            <th key={index} className={`p-2 ${header.className || ''}`}>
+            <th key={index} className={`p-1 ${header.className || ''}`}>
               {header.label}
             </th>
           ))}

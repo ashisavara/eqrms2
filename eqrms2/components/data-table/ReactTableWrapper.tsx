@@ -181,7 +181,7 @@ export function ReactTableWrapper<TData>({
     <div className="space-y-4 flex flex-wrap">
       {/* ✅ Search Input */}
       {showSearch && (
-        <div className="flex items-center flex-wrap pt-4">
+        <div className="flex items-center flex-wrap pt-4 pr-2">
           <Input
             placeholder={searchPlaceholder}
             value={(table.getState().globalFilter as string) ?? ""}
@@ -207,7 +207,7 @@ export function ReactTableWrapper<TData>({
       {filters.length > 0 && (
         <div className="flex flex-wrap gap-4">
           {filters.map((filter) => (
-            <div key={filter.column} className=" pl-3 min-w-[180px]">
+            <div key={filter.column} className=" pl-0 min-w-[120px]">
               <MultiSelectFilter
                 title={filter.title}
                 options={filterOptions[filter.column] || []}

@@ -1,7 +1,7 @@
 import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, fetchOptions, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { AMC } from "@/types/amc-detail";
-import { RatingDisplay } from "@/components/conditional-formatting";
+import { RatingDisplay, RatingContainer } from "@/components/conditional-formatting";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 import { RmsFundsScreener } from "@/types/funds-detail";
@@ -71,7 +71,9 @@ export default async function AmcPage({ params }: PageProps) {
                 <TabsTrigger value="funds">Funds</TabsTrigger>
           </TabsList>
               <TabsContent value="rating_snapshot">
-                  <div className="border-box"><SimpleTable 
+                  <div className="text-sm">
+                  <h3 className="ime-basic-h3"> IME AMC rating</h3>
+                  <SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[
                     {value: <RatingDisplay rating={AMC?.amc_rating ?? null} />},
@@ -79,33 +81,70 @@ export default async function AmcPage({ params }: PageProps) {
                     {value: <RatingDisplay rating={AMC?.amc_philosophy_rating ?? null} />}
                   ]}
                   />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400">
+                    
                     <div>
-                      <TwoColLayout label="AMC Pedigree">{AMC.amc_pedigree}</TwoColLayout>
-                      <TwoColLayout label="Team Pedigree">{AMC.team_pedigree}</TwoColLayout>
-                      <TwoColLayout label="FM Churn Risk">{AMC.inv_team_risk}</TwoColLayout>
-                      <TwoColLayout label="AMC Maturity">{AMC.amc_maturity}</TwoColLayout>
+                      <div className="flex flex-col md:flex-row mb-2">
+                        <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
+                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_rating ?? 0}>{AMC.amc_pedigree}</RatingContainer></div>
+                      </div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                        <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">Team Pedigree</span></div>
+                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_team_rating ?? 0}>{AMC.team_pedigree}</RatingContainer></div>
+                      </div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                        <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">FM Churn Risk</span></div>
+                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_team_rating ?? 0}>{AMC.inv_team_risk}</RatingContainer></div>
+                      </div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                        <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Maturity</span></div>
+                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_rating ?? 0}>{AMC.amc_maturity}</RatingContainer></div>
+                      </div>
                     </div>
                     <div>
-                      <TwoColLayout label="Philosphy Name">{AMC.inv_phil_name}</TwoColLayout>
-                      <TwoColLayout label="Inv Philosophy">{AMC.inv_philosophy_followed}</TwoColLayout>
-                      <TwoColLayout label="Investment Team">{AMC.core_amc_team}</TwoColLayout>
+                      <div className="flex flex-col md:flex-row mb-2">
+                        <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">Philosphy Name</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_philosophy_rating ?? 0}>{AMC.inv_phil_name}</RatingContainer></div>
+                      </div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                        <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">Inv Philosophy</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_philosophy_rating ?? 0}>{AMC.inv_philosophy_followed}</RatingContainer></div>
+                      </div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                        <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">Investment Team</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_team_rating ?? 0}>{AMC.core_amc_team}</RatingContainer></div>
+                      </div>
                     </div>
                   </div>
                   </div>
-                  <div className="border-box">
+                  <div>
                     <h3> Investment Team </h3>
                     {AMC.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: AMC.amc_fm_html }} />}
                   </div>
               </TabsContent>
               <TabsContent value="rating_rationale">
-                <div className="border-box flex-col gap-y-5">
-                  <TwoColLayout label="View on AMC" containerClassName="mb-4">{AMC.amc_view}</TwoColLayout>
-                  <TwoColLayout label="AMC Pedigree" containerClassName="mb-4">{AMC.amc_pedigree_desc}</TwoColLayout>
-                  <TwoColLayout label="AMC Team" containerClassName="mb-4">{AMC.team_pedigree_desc}</TwoColLayout>
-                  <TwoColLayout label="AMC's Philosophy" containerClassName="mb-4">{AMC.inv_phil_desc}</TwoColLayout>
-                  <TwoColLayout label="Other Salient Points" containerClassName="mb-4">{AMC.salient_points}</TwoColLayout>
+                <div className="flex-col gap-y-5 text-sm">
+                  <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
+                  <div className="flex flex-col md:flex-row mb-4">
+                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
+                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.amc_view}</div>
+                  </div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
+                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.amc_pedigree_desc}</div>
+                  </div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Team</span></div>
+                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.team_pedigree_desc}</div>
+                  </div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
+                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.inv_phil_desc}</div>
+                  </div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
+                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.salient_points}</div>
+                  </div>
                 </div>
               </TabsContent>
               <TabsContent value="funds">

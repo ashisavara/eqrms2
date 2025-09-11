@@ -59,6 +59,8 @@ export function CompQualityRating({ rating }: { rating: string }) {
   );
 }
 
+
+
 export function CoverageRating({ rating }: { rating: string }) {
   const getNumericRating = (textRating: string): number => {
     const ratingMap: Record<string, number> = {'Focus': 5,'Detail': 4,'Basic': 3,'Brief': 2,'Exclude': 1}; 

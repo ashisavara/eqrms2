@@ -136,7 +136,7 @@ export default async function FundsPage() {
                   <TableAmcScreen data={amc}/>
                 </TabsContent>
                 <TabsContent value="india">
-                    <Tabs defaultValue="Asset Class" className="w-full mx-auto mt-6">
+                    <Tabs defaultValue="Asset Class" className="w-full mx-auto mt-2">
                         <TabsList className="w-full">
                             <TabsTrigger value="Asset Class">Asset Class</TabsTrigger>
                             <TabsTrigger value="Equity">Equity</TabsTrigger>
@@ -151,7 +151,7 @@ export default async function FundsPage() {
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Eqcategory} columnType="summary"/>
                             <div className="hidden md:block">
-                              <h3 className="ime-table-heading"> Annual Returns </h3>
+                              <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Eqcategory} columnType="annual"/>
                             </div>
                         </TabsContent>  
@@ -159,7 +159,7 @@ export default async function FundsPage() {
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Debtcategory} columnType="summary"/>
                             <div className="hidden md:block">
-                              <h3 className="ime-table-heading"> Annual Returns </h3>
+                              <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Debtcategory} columnType="annual"/>
                             </div>
                         </TabsContent>
@@ -167,7 +167,7 @@ export default async function FundsPage() {
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Hybridcategory} columnType="summary"/>
                             <div className="hidden md:block">
-                              <h3 className="ime-table-heading"> Annual Returns </h3>
+                              <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Hybridcategory} columnType="annual"/>
                             </div>
                         </TabsContent>
@@ -175,14 +175,14 @@ export default async function FundsPage() {
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Altcategory} columnType="summary"/>
                             <div className="hidden md:block">
-                              <h3 className="ime-table-heading"> Annual Returns </h3>
+                              <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Altcategory} columnType="annual"/>
                             </div>
                         </TabsContent>
                     </Tabs>
                 </TabsContent>  
                 <TabsContent value="global">
-                    <Tabs defaultValue="Global-Assets" className="w-full mx-auto mt-6">
+                    <Tabs defaultValue="Global-Assets" className="w-full mx-auto mt-2">
                         <TabsList className="w-full">
                           <TabsTrigger value="Global-Assets">Global Assets</TabsTrigger>
                             <TabsTrigger value="Global-Equity">Global-Equity</TabsTrigger>
@@ -195,21 +195,21 @@ export default async function FundsPage() {
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={GlobalEqcategory} columnType="summary"/>
                             <div className="hidden md:block">
-                              <h3 className="ime-table-heading"> Annual Returns </h3>
+                              <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={GlobalEqcategory} columnType="annual"/>
                             </div>
                         </TabsContent>
                         <TabsContent value="Global-Others">
-                            <h3 className="text-base font-bold text-center text-gray-500 p-5">Global Debt</h3>
+                            <h3 className="text-base font-bold text-center text-gray-500 p-2">Global Debt</h3>
                             <TableCategories data={GlobalDebtcategory} columnType="summary"/>
                             <div className="hidden md:block">
-                              <h3 className="ime-table-heading"> Annual Returns </h3>
+                              <h3 className="mt-6"> Annual Returns </h3>
                               <TableCategories data={GlobalDebtcategory} columnType="annual"/>
                             </div>
-                            <h3 className="text-base font-bold text-center text-gray-500 p-5">Global Alternatives</h3>
+                            <h3 className="text-base font-bold text-center text-gray-500 p-2 mt-6">Global Alternatives</h3>
                             <TableCategories data={GlobalAltcategory} columnType="summary"/>
                             <div className="hidden md:block">
-                              <h3 className="ime-table-heading"> Annual Returns </h3>
+                              <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={GlobalAltcategory} columnType="annual"/>
                             </div>
                         </TabsContent>
