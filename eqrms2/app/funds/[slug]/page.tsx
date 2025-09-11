@@ -51,15 +51,15 @@ export default async function FundPage({ params }: PageProps) {
             size="lg"
           />
         </div>
-        <div className="flex flex-row gap-2 justify-center">
-            <div> {fund.amc_name} |  </div>
-            <div> {fund.structure_name} -  </div>
-            <div> {fund.asset_class_name} -  </div>
-            <div> {fund.category_name} |  </div>
-            <div> AUM: {fund.fund_aum} cr |  </div>
-            <div> Open for Subscription: {fund.open_for_subscription}  | </div>
+        <div className="flex flex-wrap gap-2 justify-center mt-2">
+            <div className="whitespace-nowrap"> {fund.amc_name} |  </div>
+            <div className="whitespace-nowrap"> {fund.structure_name} -  </div>
+            <div className="whitespace-nowrap"> {fund.asset_class_name} -  </div>
+            <div className="whitespace-nowrap"> {fund.category_name} |  </div>
+            <div className="whitespace-nowrap"> AUM: {fund.fund_aum} cr |  </div>
+            <div className="whitespace-nowrap"> Open: {fund.open_for_subscription}  | </div>
             {can(userRoles, 'rms', 'edit_rms') ? 
-              <div>
+              <div className="whitespace-nowrap">
                 <span>Edit: </span>
                 <EditFundsButton 
                 fundData={fund} 
@@ -95,25 +95,25 @@ export default async function FundPage({ params }: PageProps) {
                   body = {[{value:<RatingDisplay rating={fund.fund_rating} />},{value:<RatingDisplay rating={fund.fund_strategy_rating} />},{value:<RatingDisplay rating={fund.fund_performance_rating} />} ]}
                   />
                   <div className="w-full mt-2 text-sm">
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Recommendation</span></div>
-                          <div className="flex-1 min-w-0">{fund.recommendation_tag}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Recommendation</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.recommendation_tag}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Strategy Definition</span></div>
-                          <div className="flex-1 min-w-0">{fund.strategy_tag}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Definition</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_tag}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">5yr Performance</span></div>
-                          <div className="flex-1 min-w-0">{fund.perf_tag_5yr}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">5yr Performance</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.perf_tag_5yr}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">LT Performance</span></div>
-                          <div className="flex-1 min-w-0">{fund.perf_tag_consistent}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">LT Performance</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.perf_tag_consistent}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Strategy Desc</span></div>
-                          <div className="flex-1 min-w-0">{fund.strategy_name}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Desc</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_name}</div>
                       </div>
                   </div>
                 </div>
@@ -124,33 +124,33 @@ export default async function FundPage({ params }: PageProps) {
                   body = {[{value:<RatingDisplay rating={fund.amc_rating} />},{value:<RatingDisplay rating={fund.amc_team_rating} />},{value:<RatingDisplay rating={fund.amc_philosophy_rating} />}]}
                   />
                   <div className="w-full mt-2 text-sm">
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
-                          <div className="flex-1 min-w-0">{fund.amc_pedigree}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.amc_pedigree}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Team Pedigree</span></div>
-                          <div className="flex-1 min-w-0">{fund.team_pedigree}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Team Pedigree</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.team_pedigree}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">FM Churn Risk</span></div>
-                          <div className="flex-1 min-w-0">{fund.inv_team_risk}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">FM Churn Risk</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.inv_team_risk}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">AMC Maturity</span></div>
-                          <div className="flex-1 min-w-0">{fund.amc_maturity}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Maturity</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.amc_maturity}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Philosphy Name</span></div>
-                          <div className="flex-1 min-w-0">{fund.inv_phil_name}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Philosphy Name</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.inv_phil_name}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Inv Philosophy</span></div>
-                          <div className="flex-1 min-w-0">{fund.inv_philosophy_followed}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Inv Philosophy</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.inv_philosophy_followed}</div>
                       </div>
-                      <div className="flex mb-2">
-                          <div className="w-45 min-w-[180px] flex-shrink-0"><span className="font-bold">Investment Team</span></div>
-                          <div className="flex-1 min-w-0">{fund.core_amc_team}</div>
+                      <div className="flex flex-col md:flex-row mb-2">
+                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Investment Team</span></div>
+                          <div className="w-full md:flex-1 md:min-w-0">{fund.core_amc_team}</div>
                       </div>
                   </div>
                 </div>
@@ -161,50 +161,50 @@ export default async function FundPage({ params }: PageProps) {
             <h3 className="ime-basic-h3"> Fund Annual Performance </h3>
             {fund.ann_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.ann_perf_html }} />}
             <h3 className="ime-basic-h3"> Portfolio Composition </h3>
-            {fund.port_comp_html && <div dangerouslySetInnerHTML={{ __html: fund.port_comp_html }} />}
+            {fund.port_comp_html && <div className="text-sm"><div dangerouslySetInnerHTML={{ __html: fund.port_comp_html }} /></div>}
           </div>
           </TabsContent>
           <TabsContent value="rating_rationale">
             <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-sm">
                   <h3 className="ime-basic-h3"> Rationale behind our fund rating</h3>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
-                      <div className="flex-1 min-w-0">{fund.investment_view}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.investment_view}</div>
                   </div>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Fund's Strategy</span></div>
-                      <div className="flex-1 min-w-0">{fund.strategy_view}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund's Strategy</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_view}</div>
                   </div>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Performance</span></div>
-                      <div className="flex-1 min-w-0">{fund.performance_view}{fund.additional_performance_view}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Performance</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.performance_view}{fund.additional_performance_view}</div>
                   </div>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
-                      <div className="flex-1 min-w-0">{fund.oth_salient_points}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.oth_salient_points}</div>
                   </div>
           </div>
           <div className="border-2 border-gray-300 rounded-md m-4 p-2 text-sm">
                   <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">View on AMC</span></div>
-                      <div className="flex-1 min-w-0">{fund.amc_view}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.amc_view}</div>
                   </div>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">AMC's Pedigree</span></div>
-                      <div className="flex-1 min-w-0">{fund.amc_pedigree_desc}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Pedigree</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.amc_pedigree_desc}</div>
                   </div>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">AMC's Team</span></div>
-                      <div className="flex-1 min-w-0">{fund.team_pedigree_desc}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Team</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.team_pedigree_desc}</div>
                   </div>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
-                      <div className="flex-1 min-w-0">{fund.inv_phil_desc}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.inv_phil_desc}</div>
                   </div>
-                  <div className="flex mb-4">
-                      <div className="w-45 min-w-[200px] flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
-                      <div className="flex-1 min-w-0">{fund.salient_points}</div>
+                  <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
+                      <div className="w-full md:flex-1 md:min-w-0">{fund.salient_points}</div>
                   </div>
             </div>
           </TabsContent>
