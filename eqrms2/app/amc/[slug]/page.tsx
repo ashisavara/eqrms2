@@ -81,7 +81,7 @@ export default async function AmcPage({ params }: PageProps) {
                     {value: <RatingDisplay rating={AMC?.amc_philosophy_rating ?? null} />}
                   ]}
                   />
-                  <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400">
+                  <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-200">
                     
                     <div>
                       <div className="flex flex-col md:flex-row mb-2">
@@ -117,7 +117,7 @@ export default async function AmcPage({ params }: PageProps) {
                     </div>
                   </div>
                   </div>
-                  <div>
+                  <div className="mt-6">
                     <h3> Investment Team </h3>
                     {AMC.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: AMC.amc_fm_html }} />}
                   </div>

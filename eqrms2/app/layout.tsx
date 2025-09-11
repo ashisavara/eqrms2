@@ -10,6 +10,8 @@ import { Toaster } from "sonner";
 import { logoutFromChangeGroupAction } from '@/app/auth/otp-login/otpServerActions';
 import { LogoutHandler } from "@/components/ui/logout-handler";
 import { ChangeGroupHandler } from "@/components/ui/change-group-handler";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
 import {
   SidebarProvider,
   Sidebar,
@@ -52,11 +54,14 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Get user roles for conditional rendering
+  const userRoles = await getUserRoles();
+  const canViewInternal = can(userRoles, 'internal', 'view');
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`} suppressHydrationWarning>
@@ -87,9 +92,11 @@ export default function RootLayout({
                       <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
                       <SidebarMenuItem href="/mandate" icon={<ListCheckIcon />}>Mandate</SidebarMenuItem>
                       <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>RMS</SidebarMenuItem>
-                      <SidebarMenuItem icon={<TargetIcon />}>
-                        <ChangeGroupHandler />
-                      </SidebarMenuItem>
+                      {canViewInternal && (
+                        <SidebarMenuItem icon={<TargetIcon />}>
+                          <ChangeGroupHandler />
+                        </SidebarMenuItem>
+                      )}
                       <SidebarMenuItem icon={<LogOutIcon />}>
                         <LogoutHandler />
                       </SidebarMenuItem>

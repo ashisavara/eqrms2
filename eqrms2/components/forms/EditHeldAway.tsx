@@ -12,6 +12,8 @@ import { CATEGORY_OPTIONS, STRUCTURE_OPTIONS, getAssetClassIdByCategoryId } from
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
 
 // Fund details type
 type FundDetails = {
@@ -229,9 +231,28 @@ export function EditHeldAwayAssetsButton({
   investmentId: number;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getUserRoles().then(userRoles => {
+      setCanEdit(can(userRoles, 'investments', 'add_edit_held_away'));
+      setIsLoading(false);
+    });
+  }, []);
 
   if (!investmentId) {
     console.error('Investments data is missing investment_id:', investmentData);
+  }
+
+  // Don't render if loading or if user doesn't have permission
+  if (isLoading || !canEdit) {
+    return null;
+  }
+
+  // Don't render for IME Capital advisor
+  if (investmentData.advisor_name === "IME Capital") {
+    return null;
   }
 
   // Convert category data to HeldAwayAssetsValues format

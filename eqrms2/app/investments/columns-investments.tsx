@@ -38,17 +38,13 @@ export const columns: ColumnDef<Investments>[] = [
             if (row.original.slug) {
                 return <div className="text-left">
                     <Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link>  
-                    {row.original.advisor_name !== "IME Capital" && (
-                      <> <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} /></>
-                    )}
+                    <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />
                     </div>
             } else {
                 return (
                   <div className="text-left">
                     {row.original.fund_name}
-                    {row.original.advisor_name !== "IME Capital" && (
-                      <> <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} /></>
-                    )}
+                    <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />
                   </div>
                 )
             }

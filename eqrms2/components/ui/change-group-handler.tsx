@@ -55,19 +55,12 @@ export function ChangeGroupHandler() {
 
   const selectedGroupId = watch("selectedGroupId");
 
-  // Load groups when sheet opens (only for internal users)
+  // Load groups when sheet opens (component only renders for internal users)
   useEffect(() => {
-    if (isSheetOpen && availableGroups.length === 0 && can(userRoles, 'internal', 'view')) {
+    if (isSheetOpen && availableGroups.length === 0) {
       loadAvailableGroups();
     }
-  }, [isSheetOpen, availableGroups.length, loadAvailableGroups, userRoles]);
-
-  // Load mandates for external users when sheet opens
-  useEffect(() => {
-    if (isSheetOpen && !can(userRoles, 'internal', 'view') && currentGroup && availableMandates.length === 0) {
-      loadMandatesForGroup(currentGroup.id);
-    }
-  }, [isSheetOpen, userRoles, currentGroup, availableMandates.length, loadMandatesForGroup]);
+  }, [isSheetOpen, availableGroups.length, loadAvailableGroups]);
 
   // Update form when current group changes
   useEffect(() => {
@@ -108,11 +101,6 @@ export function ChangeGroupHandler() {
     return null;
   }
 
-  // For external users with only 1 mandate, don't show the component
-  if (!can(userRoles, 'internal', 'view') && availableMandates.length <= 1) {
-    return null;
-  }
-
   return (
     <>
       <button onClick={() => setIsSheetOpen(true)} className="w-full text-left">
@@ -145,116 +133,76 @@ export function ChangeGroupHandler() {
                 </div>
               )}
 
-            <div>{ userRoles }</div>
-            {can(userRoles, 'internal', 'view') && (
             <div className='text-sm'>
               <SearchButton />
               {can(userRoles, 'crm', 'view_leads') && (<> <a href="/crm" className='blue-hyperlink'> CRM</a> | </>)}
               {can(userRoles, 'rms', 'view_all_funds') && (<> <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | </>)}
               {can(userRoles, 'eqrms', 'view_companies') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
               {can(userRoles, 'rms', 'view_changelog') && (<> <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a> | </>)}
-            </div>)}
+            </div>
 
-
-              {/* Internal Users: Group Selection + Conditional Mandate Selection */}
-              {can(userRoles, 'internal', 'view') && (
-                <>
-                  {/* Group Selection */}
-                  <div className="space-y-3">
-                    <h4 className="font-semibold">Change Mandate</h4>
-                    {isLoadingGroups ? (
-                      <div className="flex items-center justify-center p-4">
-                        <Loader2 className="h-6 w-6 animate-spin" />
-                        <span className="ml-2">Loading groups...</span>
-                      </div>
-                    ) : availableGroups.length === 0 ? (
-                      <div className="text-center p-4 text-muted-foreground">
-                        No Groups Associated
-                      </div>
-                    ) : (
-                      <SelectInput
-                        name="selectedGroupId"
-                        label="Group"
-                        control={control}
-                        options={groupOptions}
-                      />
-                    )}
-                  </div>
-
-                  {/* Mandate Selection - Only show after group is actively selected from dropdown */}
-                  {activelySelectedGroup && (
-                    <div className="space-y-3">
-                      <h4 className="font-semibold">Available Mandates for {activelySelectedGroup.name}</h4>
-                      {isLoadingMandates ? (
-                        <div className="flex items-center justify-center p-4">
-                          <Loader2 className="h-6 w-6 animate-spin" />
-                          <span className="ml-2">Loading mandates...</span>
-                        </div>
-                      ) : availableMandates.length === 0 ? (
-                        <div className="text-center p-4 text-muted-foreground">
-                          No mandates available for this group
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          {availableMandates.map((mandate) => (
-                            <button
-                              key={mandate.id}
-                              className="w-full justify-start text-left h-auto p-3 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
-                              onClick={() => handleMandateClick(mandate)}
-                            >
-                              <div className="flex items-center gap-2">
-                                <Target className="h-4 w-4" />
-                                <span>{mandate.name}</span>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Instructions for Internal Users */}
-                  {!activelySelectedGroup && availableGroups.length > 0 && (
-                    <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
-                      <p className="text-sm text-blue-800">
-                        👆 Please select a group from the dropdown above to see available investment mandates.
-                      </p>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* External Users: Direct Mandate Selection */}
-              {!can(userRoles, 'internal', 'view') && (
-                <div className="space-y-3">
-                  <h4 className="font-semibold">Available Mandates</h4>
-                  {isLoadingMandates ? (
-                    <div className="flex items-center justify-center p-4">
-                      <Loader2 className="h-6 w-6 animate-spin" />
-                      <span className="ml-2">Loading mandates...</span>
-                    </div>
-                  ) : availableMandates.length === 0 ? (
-                    <div className="text-center p-4 text-muted-foreground">
-                      No mandates available
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {availableMandates.map((mandate) => (
-                        <button
-                          key={mandate.id}
-                          className="w-full justify-start text-left h-auto p-3 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
-                          onClick={() => handleMandateClick(mandate)}
-                        >
-                          <div className="flex items-center gap-2">
-                            <Target className="h-4 w-4" />
-                            <span>{mandate.name}</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
+            {/* Group Selection */}
+            <div className="space-y-3">
+              <h4 className="font-semibold">Change Mandate</h4>
+              {isLoadingGroups ? (
+                <div className="flex items-center justify-center p-4">
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                  <span className="ml-2">Loading groups...</span>
                 </div>
+              ) : availableGroups.length === 0 ? (
+                <div className="text-center p-4 text-muted-foreground">
+                  No Groups Associated
+                </div>
+              ) : (
+                <SelectInput
+                  name="selectedGroupId"
+                  label="Group"
+                  control={control}
+                  options={groupOptions}
+                />
               )}
+            </div>
+
+            {/* Mandate Selection - Only show after group is actively selected from dropdown */}
+            {activelySelectedGroup && (
+              <div className="space-y-3">
+                <h4 className="font-semibold">Available Mandates for {activelySelectedGroup.name}</h4>
+                {isLoadingMandates ? (
+                  <div className="flex items-center justify-center p-4">
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                    <span className="ml-2">Loading mandates...</span>
+                  </div>
+                ) : availableMandates.length === 0 ? (
+                  <div className="text-center p-4 text-muted-foreground">
+                    No mandates available for this group
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {availableMandates.map((mandate) => (
+                      <button
+                        key={mandate.id}
+                        className="w-full justify-start text-left h-auto p-3 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                        onClick={() => handleMandateClick(mandate)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Target className="h-4 w-4" />
+                          <span>{mandate.name}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Instructions for Internal Users */}
+            {!activelySelectedGroup && availableGroups.length > 0 && (
+              <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  👆 Please select a group from the dropdown above to see available investment mandates.
+                </p>
+              </div>
+            )}
             </div>
           </SheetContent>
         </Sheet>
