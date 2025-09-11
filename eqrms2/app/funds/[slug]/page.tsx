@@ -96,7 +96,7 @@ export default async function FundPage({ params }: PageProps) {
                   body = {[{value:<RatingDisplay rating={fund.fund_rating} />},{value:<RatingDisplay rating={fund.fund_strategy_rating} />},{value:<RatingDisplay rating={fund.fund_performance_rating} />} ]}
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
-                  <div className="w-full mt-2 text-sm">
+                  <div className="w-full mt-2 text-xs">
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Recommendation</span></div>
                           <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_rating ?? 0}>{fund.recommendation_tag}</RatingContainer></div>
@@ -126,7 +126,7 @@ export default async function FundPage({ params }: PageProps) {
                   body = {[{value:<RatingDisplay rating={fund.amc_rating} />},{value:<RatingDisplay rating={fund.amc_team_rating} />},{value:<RatingDisplay rating={fund.amc_philosophy_rating} />}]}
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
-                  <div className="w-full mt-2 text-sm">
+                  <div className="w-full mt-2 text-xs">
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
                           <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_rating ?? 0}>{fund.amc_pedigree}</RatingContainer></div>
@@ -159,11 +159,11 @@ export default async function FundPage({ params }: PageProps) {
                 </div>
             </div>
           <div className="text-base">
-            <h3 className="ime-basic-h3"> Fund Trailing Performance </h3>
+            <h3 className="ime-basic-h3 mt-6"> Fund Trailing Performance </h3>
             {fund.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.trailing_perf_html }} />}
-            <h3 className="ime-basic-h3"> Fund Annual Performance </h3>
+            <h3 className="ime-basic-h3 mt-6"> Fund Annual Performance </h3>
             {fund.ann_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.ann_perf_html }} />}
-            <h3 className="ime-basic-h3"> Portfolio Composition </h3>
+            <h3 className="ime-basic-h mt-63"> Portfolio Composition </h3>
             {fund.port_comp_html && <div className="text-sm"><div dangerouslySetInnerHTML={{ __html: fund.port_comp_html }} /></div>}
           </div>
           </TabsContent>
@@ -187,7 +187,7 @@ export default async function FundPage({ params }: PageProps) {
                       <div className="w-full md:flex-1 md:min-w-0">{fund.oth_salient_points}</div>
                   </div>
           </div>
-          <div className="text-sm">
+          <div className="text-sm mt-6">
                   <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
                   <div className="flex flex-col md:flex-row mb-4">
                       <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>

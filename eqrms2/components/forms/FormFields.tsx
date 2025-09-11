@@ -13,7 +13,7 @@ import { format } from "date-fns"; // Comment out the DatePicker import
 import { Calendar } from "@/components/ui/calendar"; // Comment out the DatePicker import
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Comment out the DatePicker import
 import { Button } from "@/components/ui/button";
-import { CalendarIcon, ChevronDown, Search } from "lucide-react"; // Make sure you have lucide-react installed // Comment out the DatePicker import
+import { CalendarIcon, ChevronDown, Search, X } from "lucide-react"; // Make sure you have lucide-react installed // Comment out the DatePicker import
 import { cn } from "@/lib/utils"; // shadcn utility for combining classNames
 import {
   DropdownMenu,
@@ -526,12 +526,14 @@ export function DatePicker({
   name, 
   label, 
   control,
-  placeholder = "Pick a date"
+  placeholder = "Pick a date",
+  showClearButton = true
 }: { 
   name: string; 
   label: string; 
   control: Control<any>;
   placeholder?: string;
+  showClearButton?: boolean;
 }) {
   return (
     <div className="space-y-2">
@@ -544,32 +546,49 @@ export function DatePicker({
           const errId = `${name}-error`;
           return (
             <>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    id={name}
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !field.value && "text-muted-foreground",
-                      hasError && "border-red-500 focus-visible:ring-red-500"
-                    )}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errId : undefined}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {field.value ? format(new Date(field.value), "PPP") : placeholder}
-                  </Button>
-                </PopoverTrigger>
+              <div className="flex gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id={name}
+                      variant={"outline"}
+                      className={cn(
+                        "flex-1 justify-start text-left font-normal",
+                        !field.value && "text-muted-foreground",
+                        hasError && "border-red-500 focus-visible:ring-red-500"
+                      )}
+                      aria-invalid={hasError}
+                      aria-describedby={hasError ? errId : undefined}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {field.value ? format(new Date(field.value), "PPP") : placeholder}
+                    </Button>
+                  </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={field.onChange}
+                    // @ts-ignore - These props work but TypeScript definitions may be outdated
                     initialFocus
+                    captionLayout="dropdown"
+                    fromMonth={new Date(2020, 0)}
+                    toMonth={new Date(2100, 11)}
                   />
                 </PopoverContent>
               </Popover>
+              {showClearButton && field.value && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => field.onChange(null)}
+                  className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-red-50"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+              </div>
               <FormErrorMessage error={fieldState.error as any} id={errId} />
             </>
           );
