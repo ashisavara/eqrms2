@@ -72,7 +72,7 @@ export default async function CrmPage() {
                         <TabsTrigger value="deals">Deals</TabsTrigger>
                 </TabsList>
                     <TabsContent value="crm">
-                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} />
+                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} /> | <a href="/crm/mis" className="blue-hyperlink">MIS</a>
                         <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} 
                         wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} 
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 
