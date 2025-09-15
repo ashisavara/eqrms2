@@ -4,10 +4,14 @@
   "description": "Proprietary Fund Research Database",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay"],
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "orientation": "any",
   "scope": "/",
+  "categories": ["finance", "business", "productivity"],
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
