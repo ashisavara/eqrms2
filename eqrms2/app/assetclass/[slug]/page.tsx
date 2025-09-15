@@ -62,7 +62,7 @@ export default async function AssetClassPage({params}: PageProps) {
                 <h3> Trailing Returns</h3>
                 <TableCategories data={catTrailing}/>
             </div>
-            <div className="border-box">
+            <div className="border-box hidden md:block">
                 <h3> Annual Returns</h3>
                 <TableCategories data={catAnnual} columnType="annual"/>
             </div>

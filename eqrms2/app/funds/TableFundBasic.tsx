@@ -7,10 +7,13 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { columns } from "./columns-fundscreen";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
+import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
 export default function TableFundScreen({ data }: { data: RmsFundsScreener[] }) {
 
-    const autoSortedColumns = useAutoSorting(data, columns);
+  const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
+  const autoSortedColumns = useAutoSorting(data, responsiveColumns);
+
 
   const table = useReactTable({
     data,

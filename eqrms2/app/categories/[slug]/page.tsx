@@ -67,7 +67,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <h3 className="text-base font-bold text-center mb-6">Trailing Returns</h3>
                 <TableCategories data={[category]} columnType="summary"/>
             </div>
-            <div className="text-sm mt-6">  
+            <div className="text-sm mt-6 hidden md:block">  
                 <h3 className="text-base font-bold text-center mb-6">Annual Returns</h3>
                 <TableCategories data={[category]} columnType="annual"/>
             </div>
