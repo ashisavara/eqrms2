@@ -159,7 +159,7 @@ export function PWAInstallButton() {
       </button>
 
       <Sheet open={showInstructions} onOpenChange={setShowInstructions}>
-        <SheetContent side="bottom" className="h-auto max-h-[80vh]">
+        <SheetContent side="bottom" className="h-[70vh] max-h-[600px] min-h-[400px]">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2">
               {deviceType === 'ios' ? <TabletIcon className="w-5 h-5" /> : <SmartphoneIcon className="w-5 h-5" />}
@@ -169,7 +169,7 @@ export function PWAInstallButton() {
               Follow these steps to install IME RMS as an app on your device:
             </SheetDescription>
           </SheetHeader>
-          <div className="space-y-4 px-4 py-4">
+          <div className="space-y-4 px-4 py-4 flex-1 overflow-y-auto">
             {instructions.steps.map((step, index) => (
               <div key={index} className="flex items-start gap-3">
                 <div className="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs font-medium text-gray-600">
@@ -181,7 +181,7 @@ export function PWAInstallButton() {
               </div>
             ))}
           </div>
-          <div className="flex justify-center px-4 pb-6 pt-2">
+          <div className="flex justify-center px-4 pb-6 pt-2 border-t bg-white">
             <Button onClick={() => setShowInstructions(false)} className="w-full">
               Got it
             </Button>
