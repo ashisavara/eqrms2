@@ -10,6 +10,8 @@ import { Toaster } from "sonner";
 import { logoutFromChangeGroupAction } from '@/app/auth/otp-login/otpServerActions';
 import { LogoutHandler } from "@/components/ui/logout-handler";
 import { ChangeGroupHandler } from "@/components/ui/change-group-handler";
+import { PWAInstallButton } from "@/components/ui/pwa-install-button";
+import { PWARegister } from "@/components/ui/pwa-register";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import {
@@ -46,6 +48,20 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "IME RMS",
   description: "Proprietary Fund Research Database",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "IME RMS",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "apple-mobile-web-app-title": "IME RMS",
+  },
 };
 
 const geistSans = Geist({
@@ -64,6 +80,11 @@ export default async function RootLayout({
   const canViewInternal = can(userRoles, 'internal', 'view');
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body className={`${geistSans.className} antialiased`} suppressHydrationWarning>
           <ThemeProvider
             attribute="class"
@@ -97,6 +118,7 @@ export default async function RootLayout({
                           <ChangeGroupHandler />
                         </SidebarMenuItem>
                       )}
+                      <PWAInstallButton />
                       <SidebarMenuItem icon={<LogOutIcon />}>
                         <LogoutHandler />
                       </SidebarMenuItem>
@@ -107,6 +129,7 @@ export default async function RootLayout({
                   <div className="px-4 pt-16 pb-4 md:px-6 md:py-4">{children}</div>
                 </MainContent>
                 <Toaster />
+                <PWARegister />
               </SidebarProvider>
               </GroupMandateProvider>
             </MasterOptionsProvider>
