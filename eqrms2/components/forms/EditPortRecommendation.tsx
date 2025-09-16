@@ -66,7 +66,7 @@ export function EditPortRecoButton({
   portRecoData,
   mandateId
 }: { 
-  portRecoData: string | null;
+  portRecoData: string | null | undefined;
   mandateId: number | null;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);

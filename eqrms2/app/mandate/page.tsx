@@ -127,12 +127,12 @@ export default async function MandatePage() {
             <TabsContent value="mandate">
               { can(userRoles, 'mandate', 'edit_mandate') && (
               <EditMandateButton mandateData={invMandate} mandateId={mandate} />)}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      <div className="border-box">
+                  <div className="flex flex-col md:flex-row gap-2">
+                      <div className="border-box md:w-[400px] md:flex-shrink-0 bg-green-50">
                           <p className="font-bold">Risk Profile</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.rp_override || ""}</ReactMarkdown>
                       </div>
-                      <div className="border-box">
+                      <div className="border-box md:flex-1">
                           <p className="font-bold">One Line Objective</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.one_line_objective || ""}</ReactMarkdown>
                       </div>
@@ -145,10 +145,6 @@ export default async function MandatePage() {
                       <div className="border-box">
                           <p className="font-bold">Other Mandate Details</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.other_mandate_details || ""}</ReactMarkdown>
-                      </div>
-                      <div className="border-box">
-                          <p className="font-bold">Portfolio Reallocation Thoughts</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.portfolio_reallocation_thoughts || ""}</ReactMarkdown>
                       </div>
                   </div>
                   <div className="border-box">
