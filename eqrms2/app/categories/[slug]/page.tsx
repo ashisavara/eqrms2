@@ -9,6 +9,7 @@ import { TableCategories } from "@/app/categories/TableCategories";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -64,16 +65,18 @@ export default async function CategoryPage({ params }: PageProps) {
             )}
         </div>
             <div className="text-sm mt-6">
-                <h3 className="text-base font-bold text-center mb-6">Trailing Returns</h3>
+                <h3>Trailing Returns</h3>
+                <PerformanceFootnote additionalText="Category returns are average returns for all funds in category." />
                 <TableCategories data={[category]} columnType="summary"/>
             </div>
             <div className="text-sm mt-6 hidden md:block">  
-                <h3 className="text-base font-bold text-center mb-6">Annual Returns</h3>
+                <h3>Annual Returns</h3>
                 <TableCategories data={[category]} columnType="annual"/>
             </div>
             <div className="text-sm mt-6">
-                <h3 className="text-base font-bold text-center mb-6">Recommended Funds</h3>
+                <h3>Recommended Funds</h3>
                 <TableFundBasic data={funds}/>
+                <PerformanceFootnote additionalText="In recommended funds on the category page, we only show our 4 & 5-star rated funds, to focus on top recommendations & avoid overwhelming investors with too many options. You can use the category filter on the funds page in RMS, to see a larger list including 3-star rated funds. For 2-star and below funds, please connect with your IME Dedicated Private Banker." />
             </div>
     </div>
   );

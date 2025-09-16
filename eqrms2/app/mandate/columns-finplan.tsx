@@ -44,7 +44,7 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
             }
         }
     },
-    { accessorKey: "goal_ach", header: "Achieved", cell: ({ getValue }) => <GoalAchievementRating percentage={getValue() as number} /> },
+    { accessorKey: "goal_ach", header: "Achieved (%)", cell: ({ getValue }) => <GoalAchievementRating percentage={getValue() as number} /> },
     { 
         accessorKey: "yrs_to_goal", 
         header: "Yrs to Goal", 

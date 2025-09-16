@@ -34,7 +34,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
   
-  // Filter data to only show investments with changes (for TableInvChange)
+  // Filter data to only show investments with changes (for TableInvChange) ... we have stopped using this since needed access to be able to change amount on fund
   const changedInvestments = useMemo(() => 
     data.filter(item => item.amt_change && item.amt_change !== 0), 
     [data]
@@ -230,6 +230,9 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 formatter: (value) => value.toFixed(1)
               }}
             />
+            <p className="helper-text"><span className="font-bold">Note:</span> All values in Rs. lakhs | Abs Ret & CAGR (absolute returns & annualised returns) are in % |<span className="font-bold"> Last Updates:</span> Daily (MF, IME PMS, Kristal), Monthly (PMS & AIF - last updated 31-Aug), Held-Away (when last given by investor). 
+              <br/>1yr, 3yr, 5yr returns (%) are the funds reported annualised returns, that are not impacted by the timing of your entry/exit and therefore better for comparisons.
+               </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               
               </div>
@@ -332,8 +335,8 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 </div>
               </div>
             </ToggleVisibility>
-            
-            <TableInvChange data={changedInvestments} />
+            <p className="helper-text"><span className="font-bold">Note: </span> You can sort on the Change Amt column by clicking on it, to see the key changes being recommended</p>
+            <TableInvChange data={data} />
           </TabsContent>
         </Tabs>
       </div>

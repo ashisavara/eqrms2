@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
@@ -132,6 +133,7 @@ export default async function FundsPage() {
           </TabsList>
                 <TabsContent value="funds">
                     <TableFundScreen data={funds} />
+                    <PerformanceFootnote />
                 </TabsContent>
                 <TabsContent value="amc">
                   <TableAmcScreen data={amc}/>
@@ -151,6 +153,7 @@ export default async function FundsPage() {
                         <TabsContent value="Equity">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Eqcategory} columnType="summary"/>
+                            <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Eqcategory} columnType="annual"/>
@@ -159,6 +162,7 @@ export default async function FundsPage() {
                         <TabsContent value="Debt">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Debtcategory} columnType="summary"/>
+                            <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Debtcategory} columnType="annual"/>
@@ -167,6 +171,7 @@ export default async function FundsPage() {
                         <TabsContent value="Hybrid">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Hybridcategory} columnType="summary"/>
+                            <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Hybridcategory} columnType="annual"/>
@@ -175,6 +180,7 @@ export default async function FundsPage() {
                         <TabsContent value="Alternatives">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Altcategory} columnType="summary"/>
+                            <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={Altcategory} columnType="annual"/>
@@ -195,6 +201,7 @@ export default async function FundsPage() {
                         <TabsContent value="Global-Equity">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={GlobalEqcategory} columnType="summary"/>
+                            <PerformanceFootnote additionalText=". Global fund performance is in USD or in the funds currency" />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={GlobalEqcategory} columnType="annual"/>
@@ -203,14 +210,14 @@ export default async function FundsPage() {
                         <TabsContent value="Global-Others">
                             <h3 className="text-base font-bold text-center text-gray-500 p-2">Global Debt</h3>
                             <TableCategories data={GlobalDebtcategory} columnType="summary"/>
-                            <div className="hidden md:block">
-                              <h3 className="mt-6"> Annual Returns </h3>
+                            <PerformanceFootnote additionalText=". Global fund performance is in USD or in the funds currency" />
+                            <div className="hidden md:block mt-6">
                               <TableCategories data={GlobalDebtcategory} columnType="annual"/>
                             </div>
                             <h3 className="text-base font-bold text-center text-gray-500 p-2 mt-6">Global Alternatives</h3>
                             <TableCategories data={GlobalAltcategory} columnType="summary"/>
-                            <div className="hidden md:block">
-                              <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
+                            <PerformanceFootnote />
+                            <div className="hidden md:block mt-6">
                               <TableCategories data={GlobalAltcategory} columnType="annual"/>
                             </div>
                         </TabsContent>

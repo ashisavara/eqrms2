@@ -158,12 +158,12 @@ export default async function FundPage({ params }: PageProps) {
                   </div>
                 </div>
             </div>
-          <div className="text-base">
-            <h3 className="ime-basic-h3 mt-6"> Fund Trailing Performance </h3>
+          <div className="text-base seperator-line">
+            <h3 className="ime-basic-h3 mt-4"> Trailing Performance </h3>
             {fund.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.trailing_perf_html }} />}
-            <h3 className="ime-basic-h3 mt-6"> Fund Annual Performance </h3>
+            <h3 className="ime-basic-h3 mt-6"> Annual Performance </h3>
             {fund.ann_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.ann_perf_html }} />}
-            <h3 className="ime-basic-h mt-63"> Portfolio Composition </h3>
+            <h3 className="ime-basic-h mt-6"> Portfolio Composition </h3>
             {fund.port_comp_html && <div className="text-sm"><div dangerouslySetInnerHTML={{ __html: fund.port_comp_html }} /></div>}
           </div>
           </TabsContent>

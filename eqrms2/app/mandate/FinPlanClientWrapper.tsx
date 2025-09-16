@@ -89,6 +89,11 @@ export default function FinPlanClientWrapper({
       <div>
         <h3>Financial Goals</h3>
         <TableFinPlan data={filteredFinGoals} />
+        <p className="helper-text"><span className="font-bold">Note: </span> <br/> - All values in Rs. lakh - apart from SIP (Rs.), Achieved (%), Yrs to goal (years) | PV (Present Value), FV (Future Value) | 
+        <br/>- FV Goal, FV Inv & Pending Amt represent the goal cost, value of investments and the shortfall as on the goal date. Lumpsum Req & SIP Req are the amounts required to meet this shortfall. |
+        <br/>- Key Assumptions - FV Inv (LT category returns), PV Goal (inflation), Lumpsum Req & SIP Req (rate of return chosen to fund the goal)
+        <br/>- Shortfalls in near-term goals can lead to exaggerated SIP Req due to a lack of time to fund the goals. These are best funded via lumpsums.  
+        </p>
         <div className="mt-6 hidden md:block">
           <TableGoalDesc data={filteredFinGoals} />
         </div>

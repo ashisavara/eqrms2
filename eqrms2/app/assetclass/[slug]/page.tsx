@@ -7,6 +7,7 @@ import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 
 interface PageProps {
     params: Promise<{slug:string}>;
@@ -58,11 +59,12 @@ export default async function AssetClassPage({params}: PageProps) {
                     <EditAssetClassButton assetClassData={assetClass} assetClassId={assetClass.asset_class_id} />
                 )}
             </div>
-            <div className="border-box">
+            <div>
                 <h3> Trailing Returns</h3>
                 <TableCategories data={catTrailing}/>
+                <PerformanceFootnote additionalText="Category returns are average returns for all funds in category." />
             </div>
-            <div className="border-box hidden md:block">
+            <div className="hidden md:block md:mt-6">
                 <h3> Annual Returns</h3>
                 <TableCategories data={catAnnual} columnType="annual"/>
             </div>
