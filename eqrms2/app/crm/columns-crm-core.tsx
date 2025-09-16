@@ -36,7 +36,7 @@ export const createColumns = (
         cell: ({ row }) => {
             return <div className="text-left">
                 <Link href={`/crm/${row.original.lead_id}`} className="blue-hyperlink">{row.original.lead_name} </Link> 
-                <ToggleVisibility toggleText="Edit">
+                <ToggleVisibility toggleText="Edit" className="text-xs text-green-700 hover:underline hover:font-bold">
                     <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} referralPartnerOptions={referralPartnerOptions} />
                     <AddDealButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
                     <AddInteractionButton relLeadId={row.original.lead_id} initialLeadData={row.original} />

@@ -9,14 +9,15 @@ import React, { useState } from 'react';
 type ToggleVisibilityProps = {
   toggleText: string;
   children: React.ReactNode;
+  className?: string;
 };
 
-const ToggleVisibility: React.FC<ToggleVisibilityProps> = ({ toggleText, children }) => {
+const ToggleVisibility: React.FC<ToggleVisibilityProps> = ({ toggleText, children, className }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
     <div>
-      <button onClick={() => setIsVisible(!isVisible)} className="text-sm my-2 bg-blue-50 p-1 border boder-blue-800 rounded-md text-blue-800 hover:underline hover:bg-blue-800 hover:text-blue-50">
+      <button onClick={() => setIsVisible(!isVisible)} className={className || "text-sm my-2 bg-blue-50 p-1 border boder-blue-800 rounded-md text-blue-800 hover:underline hover:bg-blue-800 hover:text-blue-50"}>
         {toggleText}
       </button>
       {isVisible && (

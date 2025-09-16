@@ -121,14 +121,13 @@ export default async function MandatePage() {
           <Tabs defaultValue="mandate" className="w-full">
             <TabsList className="w-full">
               <TabsTrigger value="mandate">Mandate</TabsTrigger>
-              <TabsTrigger value="favourites">Funds</TabsTrigger>
               <TabsTrigger value="finplan">Fin Plan</TabsTrigger>
             </TabsList>
             <TabsContent value="mandate">
               { can(userRoles, 'mandate', 'edit_mandate') && (
               <EditMandateButton mandateData={invMandate} mandateId={mandate} />)}
                   <div className="flex flex-col md:flex-row gap-2">
-                      <div className="border-box md:w-[400px] md:flex-shrink-0 bg-green-50">
+                      <div className="border-box md:w-[250px] bg-green-50">
                           <p className="font-bold">Risk Profile</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.rp_override || ""}</ReactMarkdown>
                       </div>
@@ -185,10 +184,7 @@ export default async function MandatePage() {
                       </div>
                   </div>
             </TabsContent>
-            <TabsContent value="favourites">
-              <TableFundScreen data={favFunds}/>
-                  
-            </TabsContent>
+            
             <TabsContent value="finplan">
               <FinPlanClientWrapper 
                 finGoalsData={finGoals} 

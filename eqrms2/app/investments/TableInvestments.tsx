@@ -24,6 +24,8 @@ import { can } from '@/lib/permissions';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { EditPortRecoButton } from "@/components/forms/EditPortRecommendation";
+import TableFundScreen from "@/app/funds/TableFundScreen";
+import { RmsFundsScreener } from "@/types/funds-detail";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -33,9 +35,10 @@ interface TableInvestmentsProps {
   userRoles: string[];
   portfolioReallocationThoughts?: string;
   mandateId: number | null;
+  favFunds?: RmsFundsScreener[];
 }
 
-export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, mandateId }: TableInvestmentsProps) {
+export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, mandateId, favFunds = [] }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
   
@@ -146,6 +149,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
           <TabsList className="w-full">
             <TabsTrigger value="investments">Investments</TabsTrigger>
             <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+            <TabsTrigger value="shortlist">Shortlisted</TabsTrigger>
           </TabsList>
           
           <TabsContent value="investments">
@@ -348,6 +352,9 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             )}
             <p className="helper-text"><span className="font-bold">Note: </span> You can sort on the Change Amt column by clicking on it, to see the key changes being recommended</p>
             <TableInvChange data={data} />
+          </TabsContent>
+          <TabsContent value="shortlist">
+            <TableFundScreen data={favFunds}/>
           </TabsContent>
         </Tabs>
       </div>

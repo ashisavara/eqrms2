@@ -12,6 +12,7 @@ import TableSipFinPlan from "./TableSipFinPlan";
 import TableGoalDesc from "./TableGoalDesc";
 import { AddFinGoalsButton } from "@/components/forms/AddFinGoals";
 import { can } from '@/lib/permissions';
+import { AggregateCard } from "@/components/ui/aggregate-card";
 
 interface FinPlanClientWrapperProps {
   finGoalsData: FinGoalsDetail[];
@@ -88,6 +89,21 @@ export default function FinPlanClientWrapper({
       {/* Financial Goals Table */}
       <div>
         <h3>Financial Goals</h3>
+        
+        {/* Aggregate Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <AggregateCard 
+            title="Total Lumpsum Req" 
+            value={filteredFinGoals.reduce((sum, goal) => sum + (goal.lumpsum_req || 0), 0)}
+            formatter={(value) => `${value.toFixed(1)}`}
+          />
+          <AggregateCard 
+            title="Total SIP Req" 
+            value={filteredFinGoals.reduce((sum, goal) => sum + (goal.sip_req || 0), 0)}
+            formatter={(value) => `${value.toFixed(1)}`}
+          />
+        </div>
+        
         <TableFinPlan data={filteredFinGoals} />
         <p className="helper-text"><span className="font-bold">Note: </span> <br/> - All values in Rs. lakh - apart from SIP (Rs.), Achieved (%), Yrs to goal (years) | PV (Present Value), FV (Future Value) | 
         <br/>- FV Goal, FV Inv & Pending Amt represent the goal cost, value of investments and the shortfall as on the goal date. Lumpsum Req & SIP Req are the amounts required to meet this shortfall. |
