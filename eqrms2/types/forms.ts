@@ -397,11 +397,19 @@ export const EditMandateSchema = z.object({
   inv_plan: z.string(),
   other_mandate_details: z.string(),
   one_line_objective: z.string(),
-  portfolio_reallocation_thoughts: z.string(),
   rp_override: z.string(),
 });
 
 export type EditMandateValues = z.infer<typeof EditMandateSchema>;
+
+// -------------------
+// EDIT PORTFOLIO RECOMMENDATION
+// -------------------
+export const EditPortRecoSchema = z.object({
+  portfolio_reallocation_thoughts: z.string(),
+})
+
+export type EditPortRecoValues = z.infer<typeof EditPortRecoSchema>;
 
 // -------------------
 // EDIT HELD AWAY ASSETS

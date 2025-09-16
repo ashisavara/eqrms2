@@ -21,6 +21,9 @@ import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { AddHeldAwayButton } from "@/components/forms/AddHeldAway";
 import { CirclePlusIcon } from "lucide-react";
 import { can } from '@/lib/permissions';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { EditPortRecoButton } from "@/components/forms/EditPortRecommendation";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -28,9 +31,11 @@ interface TableInvestmentsProps {
   stpData?: StpDetails[];
   investorOptions: { value: string; label: string }[];
   userRoles: string[];
+  portfolioReallocationThoughts?: string;
+  mandateId: number | null;
 }
 
-export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles }: TableInvestmentsProps) {
+export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, mandateId }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
   
@@ -335,6 +340,12 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 </div>
               </div>
             </ToggleVisibility>
+            <EditPortRecoButton portRecoData={portfolioReallocationThoughts} mandateId={mandateId} />
+            {portfolioReallocationThoughts && (
+              <div className="bg-gray-100 rounded-md p-4 text-sm">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{portfolioReallocationThoughts}</ReactMarkdown>
+              </div>
+            )}
             <p className="helper-text"><span className="font-bold">Note: </span> You can sort on the Change Amt column by clicking on it, to see the key changes being recommended</p>
             <TableInvChange data={data} />
           </TabsContent>

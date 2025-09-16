@@ -23,7 +23,6 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
         inv_plan: initialData?.inv_plan || "",
         other_mandate_details: initialData?.other_mandate_details || "",
         one_line_objective: initialData?.one_line_objective || "",
-        portfolio_reallocation_thoughts: initialData?.portfolio_reallocation_thoughts || "",
         rp_override: initialData?.rp_override || ""
     };
 
@@ -69,7 +68,7 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
             <ResizableTextArea name="inv_plan" label="Investment Plan" control={control} />
             <ResizableTextArea name="other_mandate_details" label="Other Mandate Details" control={control} />
             
-            <ResizableTextArea name="portfolio_reallocation_thoughts" label="Portfolio Reallocation Thoughts" control={control} />
+            
             
 
             <div className="flex justify-end">
@@ -101,7 +100,6 @@ export function EditMandateButton({
     inv_plan: mandateData.inv_plan ?? "",
     other_mandate_details: mandateData.other_mandate_details ?? "",
     one_line_objective: mandateData.one_line_objective ?? "",
-    portfolio_reallocation_thoughts: mandateData.portfolio_reallocation_thoughts ?? "",
     rp_override: mandateData.rp_override ?? ""
   };
 
