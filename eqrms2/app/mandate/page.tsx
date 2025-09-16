@@ -15,6 +15,8 @@ import { EditMandateButton } from "@/components/forms/EditMandate";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import { InteractionDetail } from "@/types/interaction-detail";
+import TableShowMeetingNotes from "@/app/crm/TableShowMeetingNotes";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -39,7 +41,7 @@ export default async function MandatePage() {
     );
   }
 
-  const [invMandate, favStructure, favAssetClass, favCategory, catPerformance, favFunds, finGoals, investmentFinPlan, sipFinGoals] = await Promise.all([ 
+  const [invMandate, favStructure, favAssetClass, favCategory, catPerformance, finGoals, investmentFinPlan, sipFinGoals, meetingNotes] = await Promise.all([ 
     supabaseSingleRead<MandateDetail>({
         table: "investment_mandate",
         columns: "*",
@@ -75,13 +77,6 @@ export default async function MandatePage() {
             (query) => query.eq("im_id", mandate)
         ],
     }),
-    supabaseListRead<RmsFundsScreener>({
-        table: "view_im_fav_funds",
-        columns: "*",
-        filters: [
-            (query) => query.eq("im_id", mandate)
-        ],
-    }),
     supabaseListRead({
         table: "fin_goals",
         columns: "*",
@@ -102,7 +97,16 @@ export default async function MandatePage() {
         filters: [
           (query) => query.eq("group_id", groupId)
         ], 
-      })
+      }),
+        supabaseListRead<InteractionDetail>({
+          table:"view_crm_meeting_notes",
+          columns: "*",
+          filters: [
+            (query) => query.eq("show_to_client",true),
+            (query) => query.eq("rel_group_id", groupId)
+          ]
+
+        })
   ])
 
   if (!invMandate) {
@@ -122,6 +126,7 @@ export default async function MandatePage() {
             <TabsList className="w-full">
               <TabsTrigger value="mandate">Mandate</TabsTrigger>
               <TabsTrigger value="finplan">Fin Plan</TabsTrigger>
+              <TabsTrigger value="meetingnotes">Meeting Notes</TabsTrigger>
             </TabsList>
             <TabsContent value="mandate">
               { can(userRoles, 'mandate', 'edit_mandate') && (
@@ -192,6 +197,9 @@ export default async function MandatePage() {
                 sipFinGoalsData={sipFinGoals}
                 userRoles={userRoles}
               />
+            </TabsContent>
+            <TabsContent value="meetingnotes">
+              <TableShowMeetingNotes data={meetingNotes} />
             </TabsContent>
           </Tabs>
 
