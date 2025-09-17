@@ -17,6 +17,7 @@ import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import { InteractionDetail } from "@/types/interaction-detail";
 import TableShowMeetingNotes from "@/app/crm/TableShowMeetingNotes";
+import { LeadsTagging } from "@/types/lead-detail";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -41,7 +42,7 @@ export default async function MandatePage() {
     );
   }
 
-  const [invMandate, favStructure, favAssetClass, favCategory, catPerformance, finGoals, investmentFinPlan, sipFinGoals, meetingNotes] = await Promise.all([ 
+  const [invMandate, favStructure, favAssetClass, favCategory, catPerformance, finGoals, investmentFinPlan, sipFinGoals, meetingNotes, leadsData] = await Promise.all([ 
     supabaseSingleRead<MandateDetail>({
         table: "investment_mandate",
         columns: "*",
@@ -105,7 +106,13 @@ export default async function MandatePage() {
             (query) => query.eq("show_to_client",true),
             (query) => query.eq("rel_group_id", groupId)
           ]
-
+        }),
+        supabaseListRead<LeadsTagging>({
+          table: "view_leads_tagcrm",
+          columns: "lead_id, lead_name, rel_group_id",
+          filters: [
+            (query) => query.eq("rel_group_id", groupId)
+          ]
         })
   ])
 
@@ -199,6 +206,27 @@ export default async function MandatePage() {
               />
             </TabsContent>
             <TabsContent value="meetingnotes">
+            {can(userRoles, 'crm', 'view_leads') && ( 
+              <div>
+                {leadsData.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {leadsData.map((lead, idx) => (
+                      <span key={lead.lead_id}>
+                        <a 
+                          href={`/crm/${lead.lead_id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="blue-hyperlink text-sm"
+                        >
+                          {lead.lead_name}
+                        </a>
+                        {idx < leadsData.length - 1 && " | "}
+                      </span>
+                    ))}
+                  </div>  
+                )}
+              </div>
+              )}
               <TableShowMeetingNotes data={meetingNotes} />
             </TabsContent>
           </Tabs>

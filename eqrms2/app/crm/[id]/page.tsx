@@ -94,7 +94,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
             table:"view_acl_group",
             columns: "*",
             filters: [
-                (query) => query.eq('rel_lead_id', id)
+                (query) => query.eq('lead_id', id)
             ]
         })
     ]);
