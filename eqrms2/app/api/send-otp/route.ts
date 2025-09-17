@@ -35,8 +35,8 @@ async function sendWhatsAppOTP(phoneNumber: string, otpCode: string, deviceId?: 
       throw new Error('AI_SENSY_API_KEY environment variable is required')
     }
     
-    // Remove + from phone number for AI Sensy (they expect just the digits)
-    const destination = phoneNumber.replace('+', '')
+    // Test: Send phone number with + prefix to see if AI Sensy handles it correctly
+    const destination = phoneNumber
     
     const payload = {
       apiKey: apiKey,

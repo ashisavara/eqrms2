@@ -20,6 +20,13 @@ export default function OtpTestPage() {
   // Get the setDefaultGroupMandate function from context
   const { setDefaultGroupMandate } = useGroupMandate()
 
+  // E.164 phone number validation
+  const isValidE164 = (phone: string): boolean => {
+    // E.164 format: + followed by 10-15 digits total
+    const e164Regex = /^\+[1-9]\d{9,14}$/
+    return e164Regex.test(phone.trim())
+  }
+
   useEffect(() => {
     // Check if we can access Supabase
     const checkSupabase = async () => {
@@ -203,7 +210,7 @@ export default function OtpTestPage() {
             <>
               {/* Phone Number Section */}
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">Phone Number (with country code)</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -217,7 +224,7 @@ export default function OtpTestPage() {
                   <Button 
                     onClick={sendOtp} 
                     className="w-full"
-                    disabled={!phone.trim() || isLoading}
+                    disabled={!isValidE164(phone) || isLoading}
                   >
                     {isLoading ? 'Sending...' : 'Send OTP'}
                   </Button>
