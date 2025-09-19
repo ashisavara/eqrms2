@@ -355,6 +355,14 @@ export const MASTER_OPTIONS = {
     "Balanced",
     "Conservative",
     "Very Conservative"
+  ],
+
+  // User Role Options
+  userRoles: [
+    { id: 6, name: "client" },
+    { id: 7, name: "lead" },
+    { id: 8, name: "trial_ended" },
+    { id: 9, name: "ban" }
   ]
 } as const;
 

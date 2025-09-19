@@ -5,7 +5,8 @@ import { createClient } from '@/lib/supabase/server';
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { UnlinkedLoginsTableClient } from './UnlinkedLoginsTableClient';
-import { LoginProfile } from './types';
+import { ProfilesWithoutRolesTableClient } from './ProfilesWithoutRolesTableClient';
+import { LoginProfile, LoginProfileWithoutRoles } from './types';
 
 // Link Login to Lead functionality
 
@@ -39,6 +40,41 @@ async function UnlinkedLoginsData() {
   }
 }
 
+// Server component to fetch login profiles without roles
+async function ProfilesWithoutRolesData() {
+  try {
+    // Use the v_login_profile_with_roles view and filter for empty user_roles arrays
+    const allProfiles = await supabaseListRead<LoginProfileWithoutRoles>({
+      table: 'v_login_profile_with_roles',
+      columns: 'uuid, phone_number, lead_name, created_at, user_roles',
+      filters: []
+    });
+
+    // Filter for profiles with empty user_roles arrays
+    const profilesWithoutRoles = allProfiles.filter(profile => 
+      !profile.user_roles || profile.user_roles.length === 0
+    );
+
+    return <ProfilesWithoutRolesTableClient data={profilesWithoutRoles || []} />;
+  } catch (error) {
+    
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-600">Error loading profiles without roles</p>
+        <p className="text-sm text-gray-600 mt-1">
+          {error instanceof Error ? error.message : 'Unknown error occurred'}
+        </p>
+        <details className="mt-4 text-xs text-left">
+          <summary className="cursor-pointer text-gray-500">Technical Details</summary>
+          <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-auto">
+            {error instanceof Error ? error.stack : JSON.stringify(error, null, 2)}
+          </pre>
+        </details>
+      </div>
+    );
+  }
+}
+
 export default async function LinkLoginLeadPage() {
   const userRoles = await getUserRoles();
   
@@ -56,18 +92,35 @@ export default async function LinkLoginLeadPage() {
         </p>
       </div>
 
-      <Suspense 
-        fallback={
-          <div className="flex items-center justify-center py-8">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-              <p className="text-sm text-gray-600">Loading unlinked login profiles...</p>
+      <div className="space-y-8">
+        {/* Unlinked Login Profiles Table */}
+        <Suspense 
+          fallback={
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                <p className="text-sm text-gray-600">Loading unlinked login profiles...</p>
+              </div>
             </div>
-          </div>
-        }
-      >
-        <UnlinkedLoginsData />
-      </Suspense>
+          }
+        >
+          <UnlinkedLoginsData />
+        </Suspense>
+
+        {/* Login Profiles Without Roles Table */}
+        <Suspense 
+          fallback={
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                <p className="text-sm text-gray-600">Loading profiles without roles...</p>
+              </div>
+            </div>
+          }
+        >
+          <ProfilesWithoutRolesData />
+        </Suspense>
+      </div>
     </div>
   );
 }

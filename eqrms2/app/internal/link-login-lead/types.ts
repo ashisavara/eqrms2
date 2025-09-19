@@ -8,6 +8,14 @@ export interface LoginProfile {
   lead_id?: number | null;
 }
 
+export interface LoginProfileWithoutRoles {
+  uuid: string;
+  phone_number: string;
+  lead_name?: string | null;
+  created_at: string;
+  user_roles: any[]; // Empty array when no roles
+}
+
 export interface SearchLeadResult {
   lead_id: number;
   lead_name: string;
