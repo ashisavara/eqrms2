@@ -155,6 +155,7 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">CRM Lead Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Group ID</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Group Name</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">RM Name</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -217,6 +218,9 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-600">
                   {profile.group_name || '-'}
+                </td>
+                <td className="px-4 py-3 text-sm text-gray-600">
+                  {profile.rm_name || '-'}
                 </td>
               </tr>
             ))}

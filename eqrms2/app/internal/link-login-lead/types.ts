@@ -30,6 +30,7 @@ export interface LoginProfileWithRoles {
   crm_lead_name?: string | null;
   group_id?: number | null;
   group_name?: string | null;
+  rm_name?: string | null;
 }
 
 export interface SearchLoginProfilesRequest {
