@@ -6,6 +6,7 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { UnlinkedLoginsTableClient } from './UnlinkedLoginsTableClient';
 import { ProfilesWithoutRolesTableClient } from './ProfilesWithoutRolesTableClient';
+import { SearchLoginProfilesClient } from './SearchLoginProfilesClient';
 import { LoginProfile, LoginProfileWithoutRoles } from './types';
 
 // Link Login to Lead functionality
@@ -93,6 +94,9 @@ export default async function LinkLoginLeadPage() {
       </div>
 
       <div className="space-y-8">
+        {/* Search Login Profiles */}
+        <SearchLoginProfilesClient />
+
         {/* Unlinked Login Profiles Table */}
         <Suspense 
           fallback={

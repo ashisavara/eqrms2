@@ -16,6 +16,28 @@ export interface LoginProfileWithoutRoles {
   user_roles: any[]; // Empty array when no roles
 }
 
+export interface UserRole {
+  role_id: number;
+  role_name: string;
+}
+
+export interface LoginProfileWithRoles {
+  uuid: string;
+  phone_number: string;
+  lead_name?: string | null;
+  user_roles: UserRole[]; // Array of role objects
+  lead_id?: number | null;
+  crm_lead_name?: string | null;
+  group_id?: number | null;
+  group_name?: string | null;
+}
+
+export interface SearchLoginProfilesRequest {
+  searchTerm: string;
+  searchType: 'phone' | 'name';
+  limit?: number;
+}
+
 export interface SearchLeadResult {
   lead_id: number;
   lead_name: string;

@@ -78,6 +78,30 @@ export async function supabaseInsertRow<T>(
   }
 }
 
+// Delete rows from Supabase (server-side)
+export async function supabaseDeleteRow<T>(
+  table: string,
+  matchKey: string,
+  matchValue: string | number,
+  additionalFilters?: T
+): Promise<void> {
+  const supabase = await createClient(); // from ./server
+  let query = supabase.from(table).delete().eq(matchKey, matchValue);
+  
+  if (additionalFilters) {
+    Object.entries(additionalFilters).forEach(([key, value]) => {
+      query = query.eq(key, value);
+    });
+  }
+
+  const { error } = await query;
+
+  if (error) {
+    console.error("Supabase error:", error);
+    throw error;
+  }
+}
+
 // Utility function to fetch and map options for select, radio, or checkbox inputs
 // Example usage:
 //   const options = await fetchOptions<string, string>("eq_rms_quarters", "quarter", "quarter");
