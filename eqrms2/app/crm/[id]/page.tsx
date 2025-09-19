@@ -24,11 +24,12 @@ import { AclLeadsDetail } from "@/types/acl-leads-detail";
 import { AclGroupDetail } from "@/types/acl-group-detail";
 import { AddAclLeadButton } from "@/components/forms/AddAclLeads";
 import { AddAclGroupButton } from "@/components/forms/AddAclGroup";
+import { LoginProfileWithRoles } from "@/app/internal/link-login-lead/types";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions, rmOptions, aclLead, aclGroup] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions, rmOptions, aclLead, aclGroup, loginProfile] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -93,6 +94,13 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         supabaseListRead<AclGroupDetail>({
             table:"view_acl_group",
             columns: "*",
+            filters: [
+                (query) => query.eq('lead_id', id)
+            ]
+        }),
+        supabaseSingleRead<LoginProfileWithRoles>({
+            table: "v_login_profile_with_roles",
+            columns: "phone_number, user_roles",
             filters: [
                 (query) => query.eq('lead_id', id)
             ]
@@ -198,6 +206,23 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             <span className="font-bold">Client Group:</span> {lead.group_name || <AddClientGroup leadId={lead.lead_id}/>} | 
                             <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span>
                             {lead.referral_partner ? <span className="font-bold">Referral Partner: {lead.referral_partner} </span> :""}
+                        </p>
+                        <p>
+                            <span className="font-bold">Login Profile:</span> 
+                            {loginProfile ? (
+                                <span>
+                                    {loginProfile.phone_number} | <span className="font-bold">Role:</span>    
+                                    <span className="text-blue-500">
+                                        {loginProfile.user_roles && loginProfile.user_roles.length > 0 
+                                            ? loginProfile.user_roles.map(role => role.role_name).join(', ')
+                                            : 'No roles'
+                                        }
+                                    </span>
+                                </span>
+                            ) : (
+                                <span className="text-red-600">No Linked Login</span>
+                            )}
+                            
                         </p>
                         <p className="text-sm italic">{lead.lead_summary}</p>
                     </div>

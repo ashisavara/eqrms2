@@ -47,8 +47,7 @@ function AddLeadForm({
     linkedin_url: "",
     phone_validated: false,
     email_validated: false,
-    country_code: "",
-    phone_number: "",
+    phone_e164: "",
     email_1: "",
     email_2: "",
     email_3: "",
@@ -83,8 +82,7 @@ function AddLeadForm({
         first_name: data.first_name,
         last_name: data.last_name,
         linkedin_url: data.linkedin_url,
-        country_code: data.country_code,
-        phone_number: data.phone_number,
+        phone_e164: data.phone_e164,
         email_1: data.email_1,
         email_2: data.email_2,
         email_3: data.email_3,
@@ -148,10 +146,9 @@ function AddLeadForm({
         <TextInput name="last_name" label="Last Name" control={control} placeholder="Enter last name" />
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 gap-3">
         <BooleanToggleInput name="phone_validated" label="Phone Validated" control={control} />
-        <TextInput name="country_code" label="Country Code" control={control} placeholder="+1" />
-        <TextInput name="phone_number" label="Phone Number" control={control} placeholder="Enter phone number" />
+        <TextInput name="phone_e164" label="Phone Number" control={control} placeholder="+91xxxxxxxxxx with country code" />
         <TextInput name="linkedin_url" label="LinkedIn URL" control={control} placeholder="LinkedIn profile URL" />
       </div>
       

@@ -50,8 +50,7 @@ function EditLeadsForm({
     linkedin_url: initialData.linkedin_url ?? "",
     phone_validated: initialData.phone_validated ?? false,
     email_validated: initialData.email_validated ?? false,
-    country_code: initialData.country_code ?? "",
-    phone_number: initialData.phone_number ?? "",
+    phone_e164: initialData.phone_e164 ?? "",
     email_1: initialData.email_1 ?? "",
     email_2: initialData.email_2 ?? "",
     email_3: initialData.email_3 ?? "",
@@ -89,8 +88,7 @@ function EditLeadsForm({
         first_name: data.first_name,
         last_name: data.last_name,
         linkedin_url: data.linkedin_url,
-        country_code: data.country_code,
-        phone_number: data.phone_number,
+        phone_e164: data.phone_e164,
         email_1: data.email_1,
         email_2: data.email_2,
         email_3: data.email_3,
@@ -159,8 +157,7 @@ function EditLeadsForm({
 
       <div className="grid grid-cols-4 gap-4">
         <BooleanToggleInput name="phone_validated" label="Phone Validated" control={control} />
-        <TextInput name="country_code" label="Country Code" control={control} placeholder="+1" />
-        <TextInput name="phone_number" label="Phone Number" control={control} placeholder="Enter phone number" />
+        <TextInput name="phone_e164" label="Phone Number" control={control} placeholder="+919xxxx (with country code) " />
         <TextInput name="linkedin_url" label="LinkedIn URL" control={control} placeholder="LinkedIn profile URL" />
       </div>
       
@@ -214,8 +211,7 @@ export function EditLeadsButton({
     linkedin_url: leadData.linkedin_url ?? "",
     phone_validated: leadData.phone_validated ?? false,
     email_validated: leadData.email_validated ?? false,
-    country_code: leadData.country_code ?? "",
-    phone_number: leadData.phone_number ?? "",
+    phone_e164: leadData.phone_e164 ?? "",
     email_1: leadData.email_1 ?? "",
     email_2: leadData.email_2 ?? "",
     email_3: leadData.email_3 ?? "",
