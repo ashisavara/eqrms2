@@ -4,9 +4,14 @@ import { RatingDisplay } from "@/components/conditional-formatting";
 import {Investments} from"@/types/investment-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditHeldAwayAssetsButton } from "@/components/forms/EditHeldAway";
+import { DeleteInvestmentButton } from "@/components/forms/DeleteInvestmentButton";
 import SimpleTable from "@/components/tables/singleRowTable";
+import { can } from '@/lib/permissions';
 
-export const columns: ColumnDef<Investments>[] = [
+export const createColumns = (userRoles: string[]): ColumnDef<Investments>[] => {
+  const canEditInvestments = can(userRoles, 'investments', 'add_edit_held_away');
+
+  return [
 
 
     { accessorKey: "fund_name", 
@@ -36,15 +41,17 @@ export const columns: ColumnDef<Investments>[] = [
         } else {
             // Desktop view - show as normal table cell
             if (row.original.slug) {
-                return <div className="text-left">
+                return <div className="text-left flex items-center">
                     <Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link>  
-                    <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />
+                    {canEditInvestments && <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />}
+                    <DeleteInvestmentButton investmentId={row.original.investment_id} advisorName={row.original.advisor_name} />
                     </div>
             } else {
                 return (
-                  <div className="text-left">
+                  <div className="text-left flex items-center">
                     {row.original.fund_name}
-                    <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />
+                    {canEditInvestments && <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />}
+                    <DeleteInvestmentButton investmentId={row.original.investment_id} advisorName={row.original.advisor_name} />
                   </div>
                 )
             }
@@ -96,4 +103,8 @@ export const columns: ColumnDef<Investments>[] = [
     { accessorKey: "one_yr", header: "1 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "three_yr", header: "3 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "five_yr", header: "5 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
-];
+  ];
+};
+
+// Export the default columns for backward compatibility (without permissions)
+export const columns = createColumns([]);

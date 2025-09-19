@@ -3,7 +3,7 @@
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { MultiSelectFilter } from "@/components/data-table/MultiSelectFilter";
-import { columns } from "./columns-investments";
+import { createColumns } from "./columns-investments";
 import { Investments } from "@/types/investment-detail";
 import { SipDetail } from "@/types/sip-detail";
 import { StpDetails } from "@/types/stp-detail";
@@ -40,7 +40,7 @@ interface TableInvestmentsProps {
 
 export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, mandateId, favFunds = [] }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
-  const { responsiveColumns } = useResponsiveColumns(columns, 'fund_name');
+  const { responsiveColumns } = useResponsiveColumns(createColumns(userRoles), 'fund_name');
   
   // Filter data to only show investments with changes (for TableInvChange) ... we have stopped using this since needed access to be able to change amount on fund
   const changedInvestments = useMemo(() => 

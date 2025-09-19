@@ -366,6 +366,7 @@ export function SelectInput({ name, label, control, options, valueType = "string
                   aria-invalid={hasError} 
                   aria-describedby={hasError ? errId : undefined}
                 >
+                  <option value="">Select option...</option>
                   {options.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -440,6 +441,14 @@ export function SelectInput({ name, label, control, options, valueType = "string
                   </div>
                   <DropdownMenuSeparator />
                   <div className="max-h-48 overflow-y-auto">
+                    <DropdownMenuItem
+                      onClick={() => {
+                        field.onChange("");
+                        setIsOpen(false);
+                      }}
+                    >
+                      Select option...
+                    </DropdownMenuItem>
                     {filteredOptions.length > 0 ? (
                       filteredOptions.map((option) => (
                         <DropdownMenuItem

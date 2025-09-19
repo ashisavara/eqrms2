@@ -169,7 +169,7 @@ function EditDealForm({initialData, id, onSuccess, relLeadId, initialLeadData}:
                 
                 <div className="grid grid-cols-3 gap-4">
                     <TextInput name="deal_name" label="Deal Name" control={control} />
-                    <TextInput name="total_deal_aum" label="Total Deal AUM" control={control} />
+                    <TextInput name="total_deal_aum" label="Deal AUM (Rs.cr)" control={control} />
                     <ToggleGroupInput name="deal_likelihood" label="Deal Likelihood" control={control} options={likelihoodOptions} className="ime-choice-chips" />          
                 </div>
 

@@ -36,7 +36,7 @@ export const createColumns = (
                 </div>
         }
     },
-    { accessorKey: "total_deal_aum", header: "AUM", size:100,
+    { accessorKey: "total_deal_aum", header: "AUM (cr)", size:100,
         cell: ({ getValue }) => getValue() == null ? null : <p className="font-bold">{getValue() as number}</p>,
     },
     { accessorKey: "est_closure", header: "Est. Closure", size:150,

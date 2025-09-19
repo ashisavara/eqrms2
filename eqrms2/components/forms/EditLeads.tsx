@@ -61,7 +61,7 @@ function EditLeadsForm({
     subs_whatsapp: initialData.subs_whatsapp ?? false,
     subs_imecapital: initialData.subs_imecapital ?? false,
     subs_imepms: initialData.subs_imepms ?? false,
-    referral_partner: initialData.referral_partner ?? "",
+    referral_partner: initialData.referral_partner ?? null,
   };
 
   const { control, handleSubmit, formState: { errors } } = useForm<LeadsTaggingValues>({
@@ -101,7 +101,7 @@ function EditLeadsForm({
         subs_whatsapp: data.subs_whatsapp,
         subs_imecapital: data.subs_imecapital,
         subs_imepms: data.subs_imepms,
-        referral_partner: data.referral_partner,
+        referral_partner: data.referral_partner || null,
       };
       
       await supabaseUpdateRow('leads_tagging', 'lead_id', id, processedData);
@@ -222,7 +222,7 @@ export function EditLeadsButton({
     subs_whatsapp: leadData.subs_whatsapp ?? false,
     subs_imecapital: leadData.subs_imecapital ?? false,
     subs_imepms: leadData.subs_imepms ?? false,
-    referral_partner: leadData.referral_partner ?? "",
+    referral_partner: leadData.referral_partner ?? null,
   };
 
   return (

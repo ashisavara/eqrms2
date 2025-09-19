@@ -58,7 +58,7 @@ function AddLeadForm({
     subs_whatsapp: false,
     subs_imecapital: false,
     subs_imepms: false,
-    referral_partner: ""
+    referral_partner: null
   };
 
   const { control, handleSubmit, formState: { errors } } = useForm<LeadsTaggingValues>({
@@ -91,7 +91,7 @@ function AddLeadForm({
         primary_rm: data.primary_rm,
         phone_validated: data.phone_validated,
         email_validated: data.email_validated,
-        referral_partner: data.referral_partner
+        referral_partner: data.referral_partner || null
       };
       
       await supabaseInsertRow('leads_tagging', processedData);
