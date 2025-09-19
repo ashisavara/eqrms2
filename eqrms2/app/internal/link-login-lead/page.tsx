@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 import { supabaseListRead } from '@/lib/supabase/serverQueryHelper';
 import { createClient } from '@/lib/supabase/server';
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
 import { UnlinkedLoginsTableClient } from './UnlinkedLoginsTableClient';
 import { LoginProfile } from './types';
 
@@ -9,8 +12,6 @@ import { LoginProfile } from './types';
 // Server component to fetch unlinked login profiles
 async function UnlinkedLoginsData() {
   try {
-    console.log('Attempting to fetch unlinked login profiles...');
-    
     // Use the v_unlinked_logins view with correct column names
     const unlinkedLogins = await supabaseListRead<LoginProfile>({
       table: 'v_unlinked_logins',
@@ -18,14 +19,8 @@ async function UnlinkedLoginsData() {
       filters: []
     });
 
-    console.log('Successfully fetched unlinked logins:', unlinkedLogins?.length || 0, 'records');
     return <UnlinkedLoginsTableClient data={unlinkedLogins || []} />;
   } catch (error) {
-    console.error('Detailed error fetching unlinked logins:', {
-      error,
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
-    });
     
     return (
       <div className="text-center py-8">
@@ -44,7 +39,14 @@ async function UnlinkedLoginsData() {
   }
 }
 
-export default function LinkLoginLeadPage() {
+export default async function LinkLoginLeadPage() {
+  const userRoles = await getUserRoles();
+  
+  // Check permission first
+  if (!can(userRoles, 'internal', 'link_login_lead')) {
+    redirect('/uservalidation'); // or wherever you want to send them
+  }
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-6">

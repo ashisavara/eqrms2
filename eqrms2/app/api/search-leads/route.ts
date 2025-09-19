@@ -38,7 +38,7 @@ async function performIlikeSearch(supabase: any, phone: string, name: string, li
     
     if (!strategyError && strategyData && strategyData.length > 0) {
       // Map results to match RPC format
-      return strategyData.map(item => ({
+      return strategyData.map((item: any) => ({
         ...item,
         name_score: null, // No similarity scoring in ILIKE
         phone_exact: item.phone_e164 === phone
