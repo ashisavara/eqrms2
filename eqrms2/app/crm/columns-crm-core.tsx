@@ -5,11 +5,7 @@ import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSour
 import { EditLeadsButton } from "@/components/forms/EditLeads";
 import { AddDealButton } from "@/components/forms/AddDeals";
 import { AddInteractionButton } from "@/components/forms/AddInteractions";
-import { AddCustomTag } from "@/components/forms/AddCustomTag";
-import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
-import { LeadsTaggingValues } from "@/types/forms";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
-import { AddLeadRole } from "@/components/forms/AddLeadRole";
 
 export const createColumns = (
     importanceOptions: { value: string; label: string }[],
@@ -40,18 +36,6 @@ export const createColumns = (
                     <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} referralPartnerOptions={referralPartnerOptions} />
                     <AddDealButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
                     <AddInteractionButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
-                    <AddCustomTag 
-                        leadId={row.original.lead_id} 
-                        customTagOptions={customTagOptions} 
-                    />
-                    <AddLeadRole 
-                    leadId={row.original.lead_id} 
-                    leadRoleOptions={leadRoleOptions} 
-                    />
-                    <AddDigitalAd 
-                    leadId={row.original.lead_id} 
-                    digitalAdOptions={digitalAdOptions} 
-                    />
                 </ToggleVisibility>
                 </div>
         }
