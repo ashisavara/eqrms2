@@ -51,7 +51,7 @@ async function performIlikeSearch(supabase: any, phone: string, name: string, li
 
 export async function POST(req: NextRequest) {
   try {
-    const { phone, name, limit = 10 } = await req.json();
+    const { phone, name, limit = 20 } = await req.json();
 
     console.log('Search API called with:', { phone, name, limit });
 

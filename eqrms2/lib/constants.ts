@@ -6,24 +6,25 @@ export const MASTER_OPTIONS = {
     "0) Unknown",
     "0) Database", 
     "1) Digital Ads",
+    "1) LinkedIn",
     "2) IME Academy",
     "3) Client Referral",
     "3) Partner Referral",
     "2) IME Website",
     "4) Ashi Contacts",
     "4) RM Contacts",
-    "1) LinkedIn"
   ],
   
   importance: [
-    "0) Nil",
-    "1) Low",
-    "2) Medium", 
-    "3) High",
     "4) Urgent",
-    "0) Avoid",
+    "3) High",
+    "2) Medium",
+    "2) Not Set",
     "1) Reassign",
-    "2) Not Set"
+    "1) DB Nuture", 
+    "1) Low",
+    "0) Nil",
+    "0) Avoid"
   ],
   
   leadProgression: [

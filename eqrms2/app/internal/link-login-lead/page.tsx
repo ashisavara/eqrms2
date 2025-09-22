@@ -88,8 +88,10 @@ export default async function LinkLoginLeadPage() {
     <div className="container mx-auto py-8 px-4">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Link Login to Lead</h1>
-        <p className="text-gray-600 mt-2">
-          Manage unlinked login profiles and connect them to existing leads in the system.
+        <p className="helper-text">
+          TYPES: (a) LOGIN PROFILE: a number that allows used to login (b) ROLES: every login needs to be associated to a particular role. This determines access control (c) CRM: Whether they already exist in CRM (d) CLIENT GROUP: groups investments, mandates, risk-profiling 
+          FUNCTIONALITY TO WORK: LOGIN PROFILE needs to be linked to a role (otherwise will be guest with limited capabilities) and linked to a group (to see investments, mandates etc)
+          VIEWS BELOW: (a) Search Login Profile - can search for specific person (b) Unlinked Login Profile - login created but not linked in the CRM (b) Unlinked Login Profile - new leads that are not linked to someone in CRM (c) Login profiles without roles - people who have no roles
         </p>
       </div>
 
