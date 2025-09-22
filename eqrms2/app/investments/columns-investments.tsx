@@ -58,7 +58,7 @@ export const createColumns = (userRoles: string[]): ColumnDef<Investments>[] => 
         }
     }
     },
-    { accessorKey: "fund_rating", header: "Fund Rating", size:40, cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} /> },
+    { accessorKey: "fund_rating", header: "Fund Rating", size:40, filterFn: "arrIncludesSome", cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} /> },
     { accessorKey: "investor_name", header: "Investor", size: 100, filterFn: "arrIncludesSome", cell: ({ getValue }) => {
         const v = getValue();
         return v && String(v).length > 15 ? String(v).slice(0, 15) + "…" : v;

@@ -43,7 +43,7 @@ export default function TableDeals({
         // Custom filter function for multi-select
         arrIncludesSome: (row, columnId, value) => {
           const cellValue = row.getValue(columnId);
-          return value.includes(cellValue);
+          return value.includes(String(cellValue));
         },
       },
       initialState: {

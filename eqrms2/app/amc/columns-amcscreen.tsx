@@ -52,6 +52,7 @@ export const columns: ColumnDef<AMC>[] = [
     accessorKey: "amc_rating",
     header: "AMC",
     size: 100,
+    filterFn: "arrIncludesSome",
     cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
   },
   {

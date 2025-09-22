@@ -23,7 +23,7 @@ export default async function CrmPage() {
     const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions] = await Promise.all([
         supabaseListRead<LeadsTagging>({
             table:"view_leads_tagcrm", 
-            columns:"lead_id, lead_name, days_followup, days_since_last_contact, importance, wealth_level, lead_progression, lead_summary, lead_source, lead_type, rm_name, last_contact_date, followup_date, country_code, phone_number",
+            columns:"*",
             filters: [
                 (query) => query.neq('importance', '0) Avoid'),
             ]

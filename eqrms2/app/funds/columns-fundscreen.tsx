@@ -68,6 +68,7 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
   {
     accessorKey: "fund_rating",
     header: "Fund",
+    filterFn: "arrIncludesSome",
     size: 100,
     cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
   },

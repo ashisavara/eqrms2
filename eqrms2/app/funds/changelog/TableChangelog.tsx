@@ -25,10 +25,10 @@ export function TableRmsChangeLog({ data }: TableChangeLogProps) {
     globalFilterFn: 'includesString', // Global filter function
     filterFns: {
       // Custom filter function for multi-select
-      arrIncludesSome: (row, columnId, value) => {
-        const cellValue = row.getValue(columnId);
-        return value.includes(cellValue);
-      },
+        arrIncludesSome: (row, columnId, value) => {
+          const cellValue = row.getValue(columnId);
+          return value.includes(String(cellValue));
+        },
     },
     initialState: {
       pagination: {

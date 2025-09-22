@@ -258,7 +258,9 @@ export const MASTER_OPTIONS = {
     "Not Recommended Fund",
     "Not Recommended AMC",
     "Tax Inefficient",
-    "Not in Mandate"
+    "Not in Mandate",
+    "Increase",
+    "New Fund"
   ],
   
   coverageTags: [
