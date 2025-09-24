@@ -74,6 +74,11 @@ export default async function FundPage({ params }: PageProps) {
                     <EditAmcDueDilButton amcData={fund} amcId={fund.amc_id} />
                   </>
                 )}
+              {can(userRoles,'rms','view_all_funds') && (
+                <>
+                  <a href={fund.mkt_material_link ?? ""} target="_blank" className="blue-hyperlink"> Presentations</a>
+                </>
+              )}
             </div>
             :
             null

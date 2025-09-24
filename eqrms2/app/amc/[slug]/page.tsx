@@ -61,6 +61,11 @@ export default async function AmcPage({ params }: PageProps) {
               <EditAmcDueDilButton amcData={AMC} amcId={AMC.id} />
           </>
           )}
+          {(can(userRoles,'rms','view_all_funds')) && (
+            <>
+            <a href={AMC.mkt_material_link} target="_blank" className="blue-hyperlink"> Presentations</a>
+            </>
+          )}
         </div>
 
       <div>

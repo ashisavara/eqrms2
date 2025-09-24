@@ -64,5 +64,6 @@ export type AMC = {
     disclosure_doc_last_check: Date,
     mkt_mat_last_check: Date,
     amc_diligence_last_check: Date,
-    amc_fm_html: string
+    amc_fm_html: string,
+    mkt_material_link: string
 };

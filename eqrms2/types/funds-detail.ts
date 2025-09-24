@@ -65,6 +65,7 @@ export type RmsFundAmc = {
   structure_slug: string | null;
   asset_class_slug: string | null;
   category_slug: string | null;
+  mkt_material_link: string | null;
   };
 
 
