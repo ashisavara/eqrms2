@@ -454,3 +454,24 @@ export const HeldAwayAssetsSchema = z.object({
 });
 
 export type HeldAwayAssetsValues = z.infer<typeof HeldAwayAssetsSchema>;
+
+
+// -------------------
+// TICKETING
+// -------------------
+export const TicketsSchema = z.object({
+  ticket_name: z.string(),
+  ticket_description: z.string().nullable(),
+  created_by: z.string(),
+  status: z.string(),
+  status_desc: z.string(),
+  assignee: z.string().nullable(),
+  importance: z.string().nullable(),
+  ticket_segment: z.coerce.number(),
+  ticket_summary: z.string(),
+});
+
+export type TicketsValues = z.infer<typeof TicketsSchema>;
+
+
+

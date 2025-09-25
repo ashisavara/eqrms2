@@ -288,19 +288,11 @@ export const MASTER_OPTIONS = {
   ],
 
   // Operations & Support
-  issueUrgency: [
+  ticketUrgency: [
     "Urgent",
     "High",
     "Medium",
     "Low"
-  ],
-  
-  ticketSegment: [
-    "OPS - Portfolio Statement",
-    "OPS - KYC",
-    "INVDESK - Portfolio Upload",
-    "INVDESK - Portfolio Analysis",
-    "INVDESK - Query"
   ],
   
   ticketStatus: [
