@@ -12,4 +12,5 @@ export type Ticket = {
     assignee_name: string;
     importance: string;
     ticket_segment: number;
+    segment_name: string;
 };

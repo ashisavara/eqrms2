@@ -37,7 +37,7 @@ export default function TableTickets({ data }: { data: Ticket[] }) {
         { column: "creator_name", title: "Created By", placeholder: "Created By" },
         { column: "assignee_name", title: "Assignee", placeholder: "Assignee" },
         { column: "importance", title: "Importance", placeholder: "Importance" },
-        { column: "ticket_segment", title: "Segment", placeholder: "Segment" },
+        { column: "segment_name", title: "Segment", placeholder: "Segment" },
       ];
     
       return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
