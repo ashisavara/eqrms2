@@ -30,7 +30,7 @@ export type CompanySnapshotFormValues = z.infer<typeof companySnapshotFormSchema
 // Defining the zodSchema for companyQrtNotes
 export const CompanyQrtNotesSchema = z.object({
   qtr: z.string(), // Adjust if qtr is a different type
-  company_id: z.number(),
+  company_id: z.coerce.number(),
   result_rating: z.string(), // Adjust if result_rating is a different type
   positive:z.string().nullable(),
   negative:z.string().nullable(),
@@ -51,9 +51,9 @@ export type CompanyQrtNotesValues = z.infer<typeof CompanyQrtNotesSchema>;
 
 // Defining the zodSchema for funds update
 export const fundsUpdateSchema = z.object({
-  fund_rating: z.number().nullable(),
-  fund_performance_rating: z.number().nullable(),
-  fund_strategy_rating: z.number().nullable(),
+  fund_rating: z.coerce.number().nullable(),
+  fund_performance_rating: z.coerce.number().nullable(),
+  fund_strategy_rating: z.coerce.number().nullable(),
   open_for_subscription: z.string().nullable(),
   recommendation_tag: z.string().nullable(),
   strategy_tag: z.string().nullable(),
@@ -72,11 +72,11 @@ export type FundsUpdateValues = z.infer<typeof fundsUpdateSchema>;
 
 // Defining the zodSchema for amc update
 export const amcUpdateSchema = z.object({
-  amc_rating: z.number().nullable(),
-  amc_pedigree_rating: z.number().nullable(),
-  amc_team_rating: z.number().nullable(),
-  amc_philosophy_rating: z.number().nullable(),
-  amc_size_rating: z.number().nullable(),
+  amc_rating: z.coerce.number().nullable(),
+  amc_pedigree_rating: z.coerce.number().nullable(),
+  amc_team_rating: z.coerce.number().nullable(),
+  amc_philosophy_rating: z.coerce.number().nullable(),
+  amc_size_rating: z.coerce.number().nullable(),
   amc_pedigree: z.string().nullable(),
   team_pedigree: z.string().nullable(),
   inv_team_risk: z.string().nullable(),
@@ -98,7 +98,7 @@ export type AmcUpdateValues = z.infer<typeof amcUpdateSchema>;
 // -----------------------
 
 export const amcDueDiligenceSchema = z.object({
-  amc_incorporation_dd: z.number().nullable(),
+  amc_incorporation_dd: z.coerce.number().nullable(),
   pms_license_number_dd: z.string().nullable(),
   shareholding_structure_dd: z.string().nullable(),
   team_changes_amc: z.string().nullable(),
@@ -118,20 +118,20 @@ export const amcDueDiligenceSchema = z.object({
   strategy_adherance_amc: z.string().nullable(),
   active_schemes_mkt_mat: z.string().nullable(),
   nav_chart_amc: z.string().nullable(),
-  cy_returns_amc: z.number().nullable(),
-  rolling_returns_mkt_mat: z.number().nullable(),
+  cy_returns_amc: z.coerce.number().nullable(),
+  rolling_returns_mkt_mat: z.coerce.number().nullable(),
   drawdown_history_amc: z.string().nullable(),
   portfolio_composition_mkt_mat: z.string().nullable(),
   qty_mktcap_composition_amc: z.string().nullable(),
-  portfolio_turnover_amc: z.number().nullable(),
+  portfolio_turnover_amc: z.coerce.number().nullable(),
   section_allocation_amc: z.string().nullable(),
   historic_calls_amc: z.string().nullable(),
   black_swan_events_amc: z.string().nullable(),
-  firm_aum_sebi: z.number().nullable(),
-  strategy_aum_clients_sebi: z.number().nullable(),
+  firm_aum_sebi: z.coerce.number().nullable(),
+  strategy_aum_clients_sebi: z.coerce.number().nullable(),
   capacity_contraints_amc: z.string().nullable(),
-  fee_mkt_mat: z.number().nullable(),
-  commission_mkt_mat: z.number().nullable(),
+  fee_mkt_mat: z.coerce.number().nullable(),
+  commission_mkt_mat: z.coerce.number().nullable(),
   inv_comm_amc: z.string().nullable(),
   disclosure_doc_mkt_mat: z.string().nullable(),
   webinars_amc: z.string().nullable(),
@@ -206,8 +206,8 @@ export type SectorValues = z.infer<typeof sectorSchema>;
 
 export const LeadsTaggingSchema = z.object({
   lead_name: z.string().nullable(),
-  last_contact_date: z.date().nullable(),
-  followup_date: z.date().nullable(),
+  last_contact_date: z.coerce.date().nullable(),
+  followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
   lead_progression: z.string().nullable(),
   lead_source: z.string().nullable(),
@@ -239,8 +239,8 @@ export type LeadsTaggingValues = z.infer<typeof LeadsTaggingSchema>;
 // -----------------------
 
 export const LeadsTagShortSchema = z.object({
-  last_contact_date: z.date().nullable(),
-  followup_date: z.date().nullable(),
+  last_contact_date: z.coerce.date().nullable(),
+  followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
   lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
@@ -265,7 +265,7 @@ export const MeetingNoteSchema = z.object({
   show_to_client: z.boolean(),
 
   //lead fields
-  followup_date: z.date().nullable(),
+  followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
   lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
@@ -280,7 +280,7 @@ export type MeetingNoteValues = z.infer<typeof MeetingNoteSchema>;
 // -----------------------
 export const DealsSchema = z.object({
   //deal fields
-  rel_lead_id: z.number().nullable(),
+  rel_lead_id: z.coerce.number().nullable(),
   deal_name: z.string().nullable(),
   est_closure: z.string().nullable(),
   deal_likelihood: z.coerce.number().nullable(),
@@ -290,7 +290,7 @@ export const DealsSchema = z.object({
   deal_summary: z.string().nullable(),
 
   //lead fields
-  followup_date: z.date().nullable(),
+  followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
   lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
