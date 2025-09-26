@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { z } from "zod";
 
 // -----------------------
@@ -472,6 +473,28 @@ export const TicketsSchema = z.object({
 });
 
 export type TicketsValues = z.infer<typeof TicketsSchema>;
+
+
+// -------------------
+// AC ONBOARDING
+// -------------------
+export const AcOnboardSchema = z.object({
+  onboarding_title: z.string(),
+  onboarding_type: z.coerce.number(),
+  rel_group_id: z.coerce.number(),
+  status_client: z.string(),
+  status_internal: z.string(),
+  get_customer_info: z.boolean(),
+  ops_check_info: z.boolean(),
+  forms_filled: z.boolean(),
+  sent_for_sig: z.boolean(),
+  form_recieved: z.boolean(),
+  form_processing: z.boolean(),
+  account_opened: z.boolean(),
+  funding_done: z.boolean(),
+});
+
+export type AcOnboardValues = z.infer<typeof AcOnboardSchema>;
 
 
 
