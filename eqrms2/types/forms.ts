@@ -113,7 +113,7 @@ export const amcDueDiligenceSchema = z.object({
   portfolio_construction_mkt_mat: z.string().nullable(),
   risk_management_mkt_mat: z.string().nullable(),
   cash_management_mkt_mat: z.string().nullable(),
-  derivatives_mkt_mat: z.boolean().nullable(),
+  derivatives_mkt_mat: z.coerce.boolean().nullable(),
   inv_process_mkt_mat: z.string().nullable(),
   strategy_adherance_amc: z.string().nullable(),
   active_schemes_mkt_mat: z.string().nullable(),
@@ -136,7 +136,7 @@ export const amcDueDiligenceSchema = z.object({
   disclosure_doc_mkt_mat: z.string().nullable(),
   webinars_amc: z.string().nullable(),
   custory_broker_mkt_mat: z.string().nullable(),
-  mailing_list_amc: z.boolean().nullable(),
+  mailing_list_amc: z.coerce.boolean().nullable(),
   disclosure_doc_last_check: z.coerce.date().nullable(),
   mkt_mat_last_check: z.coerce.date().nullable(),
   amc_diligence_last_check: z.coerce.date().nullable()
@@ -174,7 +174,7 @@ export type CategoryValues = z.infer<typeof categorySchema>;
 
 export const changelogSchema = z.object({
   change_desc: z.string().nullable(),
-  team_discussed: z.boolean().nullable()
+  team_discussed: z.coerce.boolean().nullable()
 });
 
 export type ChangelogValues = z.infer<typeof changelogSchema>;
@@ -216,8 +216,8 @@ export const LeadsTaggingSchema = z.object({
   first_name: z.string().nullable(),
   last_name: z.string().nullable(),
   linkedin_url: z.string().nullable(),
-  phone_validated: z.boolean().nullable(),
-  email_validated: z.boolean().nullable(),
+  phone_validated: z.coerce.boolean().nullable(),
+  email_validated: z.coerce.boolean().nullable(),
   phone_e164: z.string().nullable(),
   email_1: z.string().nullable(),
   email_2: z.string().nullable(),
@@ -225,10 +225,10 @@ export const LeadsTaggingSchema = z.object({
   lead_summary: z.string().nullable(),
   lead_background: z.string().nullable(),
   primary_rm: z.string().nullable(),
-  subs_email: z.boolean().nullable(),
-  subs_whatsapp: z.boolean().nullable(),
-  subs_imecapital: z.boolean().nullable(),
-  subs_imepms: z.boolean().nullable(),
+  subs_email: z.coerce.boolean().nullable(),
+  subs_whatsapp: z.coerce.boolean().nullable(),
+  subs_imecapital: z.coerce.boolean().nullable(),
+  subs_imepms: z.coerce.boolean().nullable(),
   referral_partner: z.string().nullable(),
 });
 
@@ -262,7 +262,7 @@ export const MeetingNoteSchema = z.object({
   meeting_name: z.string(),
   meeting_notes: z.string(),
   meeting_summary: z.string(),
-  show_to_client: z.boolean(),
+  show_to_client: z.coerce.boolean(),
 
   //lead fields
   followup_date: z.coerce.date().nullable(),
@@ -484,14 +484,14 @@ export const AcOnboardSchema = z.object({
   rel_group_id: z.coerce.number(),
   status_client: z.string(),
   status_internal: z.string(),
-  get_customer_info: z.boolean(),
-  ops_check_info: z.boolean(),
-  forms_filled: z.boolean(),
-  sent_for_sig: z.boolean(),
-  form_recieved: z.boolean(),
-  form_processing: z.boolean(),
-  account_opened: z.boolean(),
-  funding_done: z.boolean(),
+  get_customer_info: z.coerce.boolean(),
+  ops_check_info: z.coerce.boolean(),
+  forms_filled: z.coerce.boolean(),
+  sent_for_sig: z.coerce.boolean(),
+  form_recieved: z.coerce.boolean(),
+  form_processing: z.coerce.boolean(),
+  account_opened: z.coerce.boolean(),
+  funding_done: z.coerce.boolean(),
 });
 
 export type AcOnboardValues = z.infer<typeof AcOnboardSchema>;
