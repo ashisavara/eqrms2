@@ -242,7 +242,7 @@ export const MASTER_OPTIONS = {
   ],
   
   fundPerformanceAsOf: [
-    "Performance as of: 31-Jul-25 (returns >1yr are annualised returns)"
+    "Performance as of: 31-Aug-25 (returns >1yr are annualised returns)"
   ],
   
   openForSubscriptionTag: [
