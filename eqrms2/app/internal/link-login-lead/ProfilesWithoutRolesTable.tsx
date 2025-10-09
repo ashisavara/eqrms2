@@ -42,6 +42,7 @@ export function ProfilesWithoutRolesTable({ data, onRefresh }: ProfilesWithoutRo
             <tr>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Phone Number</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Lead Name</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">RM Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Created At</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Status</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Actions</th>
@@ -58,6 +59,7 @@ export function ProfilesWithoutRolesTable({ data, onRefresh }: ProfilesWithoutRo
               data.map((profile) => (
                 <tr key={profile.uuid} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-sm">{profile.phone_number}</td>
+                  <td className="px-4 py-3 text-sm">{profile.rm_name}</td>
                   <td className="px-4 py-3 text-sm">
                     {profile.lead_name || (
                       <span className="text-gray-400 italic">Not set</span>

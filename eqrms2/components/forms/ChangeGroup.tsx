@@ -148,7 +148,7 @@ export function ChangeGroup() {
         </Button>
       </SheetTrigger>
       
-      <SheetContent className="w-[400px] sm:w-[540px] p-5">
+      <SheetContent className="w-[500px] sm:w-[540px] p-5">
         <SheetHeader>
           <div className="flex items-center justify-between">
             <SheetTitle className="flex items-center gap-2">
@@ -173,13 +173,15 @@ export function ChangeGroup() {
             </div>
             <div>{ userRoles }</div>
             {can(userRoles, 'internal', 'view') && (
-            <div className='text-sm'>
+            <div className='text-sm whitespace-nowrap'>
               <SearchButton />
               {can(userRoles, 'crm', 'view_leads') && (<> <a href="/crm" className='blue-hyperlink'> CRM</a> | </>)}
               {can(userRoles, 'rms', 'view_all_funds') && (<> <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | </>)}
               {can(userRoles, 'eqrms', 'view_companies') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
               {can(userRoles, 'rms', 'view_changelog') && (<> <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a> | </>)}
-              {can(userRoles, 'internal', 'link_login_lead') && (<> <a href="/internal/link-login-lead" className='blue-hyperlink'> Link Login to Lead</a> | </>)}
+              
+              {can(userRoles, 'rms', 'view_changelog') && (<> <a href="/internal/link-login-lead" className='blue-hyperlink'> Link Login to Lead</a> | </>)}
+              {can(userRoles, 'internal', 'view') && (<> <a href="/tickets" className='blue-hyperlink'> Tickets</a> | </>)}
             </div>)}
 
           {/* Current Selection Display */}

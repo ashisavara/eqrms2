@@ -6,12 +6,14 @@ export interface LoginProfile {
   lead_name?: string | null;
   created_at: string;
   lead_id?: number | null;
+  rm_name?: string | null;
 }
 
 export interface LoginProfileWithoutRoles {
   uuid: string;
   phone_number: string;
   lead_name?: string | null;
+  rm_name?: string | null;
   created_at: string;
   user_roles: any[]; // Empty array when no roles
 }
