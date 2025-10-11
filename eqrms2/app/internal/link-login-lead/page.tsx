@@ -17,7 +17,7 @@ async function UnlinkedLoginsData() {
     // Use the v_unlinked_logins view with correct column names
     const unlinkedLogins = await supabaseListRead<LoginProfile>({
       table: 'v_unlinked_logins',
-      columns: 'uuid, phone_number, lead_name, created_at',
+      columns: 'uuid, phone_number, lead_name, created_at,affiliate_name',
       filters: []
     });
 

@@ -190,6 +190,7 @@ export function UnlinkedLoginsTable({ data, onRefresh }: UnlinkedLoginsTableProp
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Lead Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">RM Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Created At</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Affiliate</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Actions</th>
             </tr>
           </thead>
@@ -238,6 +239,7 @@ export function UnlinkedLoginsTable({ data, onRefresh }: UnlinkedLoginsTableProp
                   <td className="px-4 py-3 text-sm text-gray-600">
                     {formatDate(loginProfile.created_at)}
                   </td>
+                  <td className="px-4 py-3 text-sm">{loginProfile.affiliate_name}</td>
                   <td className="px-4 py-3 text-sm">
                     <Button
                       size="sm"
