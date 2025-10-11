@@ -70,9 +70,10 @@ export default async function CrmPage() {
                         <TabsTrigger value="crm">CRM</TabsTrigger>
                         <TabsTrigger value="interactions">Interactions</TabsTrigger>
                         <TabsTrigger value="deals">Deals</TabsTrigger>
+                        <TabsTrigger value="mis">MIS</TabsTrigger>
                 </TabsList>
                     <TabsContent value="crm">
-                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} /> | <a href="/crm/mis" className="blue-hyperlink">MIS</a>
+                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} /> 
                         <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} 
                         wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} 
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 
@@ -86,6 +87,21 @@ export default async function CrmPage() {
                     <TabsContent value="deals">
                         <TableDeals data={deals} leadsData={leads} />
                     </TabsContent>  
+                    <TabsContent value="mis">
+                    <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
+                        <iframe
+                        src="https://lookerstudio.google.com/embed/reporting/06d20b80-9641-44e2-9984-90931464ef87/page/p_9bighco3cd"
+                        title="Looker Studio Report"
+                        className="w-full h-full"
+                        frameBorder="0"
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                        style={{ border: 0 }}
+                        />
+                    </div>
+                    </TabsContent>
             </Tabs>
             
         </div>
