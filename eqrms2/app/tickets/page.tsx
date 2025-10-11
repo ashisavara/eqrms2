@@ -3,21 +3,54 @@ import { Ticket } from "@/types/tickets-detail";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { AddTicketButton } from "@/components/forms/AddTicket";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AddAcOnboardButton } from "@/components/forms/AddAcOnboard";
+import TableAccOnboard from "./TableAccOnboard";
+import { AccountOnboarding } from "@/types/account-onboard-detail";
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 
 export default async function TicketsPage() {
   const userRoles = await getUserRoles();
-  const tickets = await supabaseListRead<Ticket>({
+  // Check permission first
+  if (!can(userRoles, 'internal', 'view')) {
+    redirect('/404'); // or wherever you want to send them
+  }
+
+  const [tickets,ongoing] = await Promise.all([
+    supabaseListRead<Ticket>({
     table: "v_tickets",
     columns: "*",
-  });
+    filters: [
+      (query) => query.neq('status', 'Closed'),
+    ],
+  }),
+  supabaseListRead<AccountOnboarding>({
+    table: "v_account_onboard",
+    columns: "*",
+    filters: [
+      (query) => query.neq('funding_done', 'TRUE'),
+    ],
+  }),
+  ])
 
   return (
     <div>
         <div className="pageHeadingBox"><h1>Ticketing</h1></div>
-        <AddTicketButton/>
-      <TableTickets data={tickets} />
+        <Tabs defaultValue="tickets" className="w-full mx-auto mt-6 text-sm">
+          <TabsList className="w-full">
+            <TabsTrigger value="tickets">Tickets</TabsTrigger>
+            <TabsTrigger value="accountonboard">Account Onboarding</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tickets">
+            <AddTicketButton/>
+            <TableTickets data={tickets} />
+          </TabsContent>
+          <TabsContent value="accountonboard">
+            <AddAcOnboardButton />
+            <TableAccOnboard data={ongoing} />
+          </TabsContent>
+        </Tabs>
     </div>
   );
 }

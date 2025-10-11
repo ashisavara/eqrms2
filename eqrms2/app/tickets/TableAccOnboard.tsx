@@ -43,7 +43,6 @@ export default function TableAccOnboard({ data }: { data: AccountOnboarding[] })
         { column: "form_recieved", title: "Form Recvd", placeholder: "Form Recvd" },
         { column: "form_processing", title: "Form Process", placeholder: "Form Process" },
         { column: "account_opened", title: "AC Open", placeholder: "AC Open" },
-        { column: "funding_done", title: "Funded", placeholder: "Funded" },
       ];
     
       return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;

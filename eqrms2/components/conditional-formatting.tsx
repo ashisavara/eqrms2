@@ -386,3 +386,28 @@ export function YearsToGoalRating({ years }: { years: number }) {
     </div>
   );
 }
+
+
+/**
+ * Text-based rating container for Ticketing Importance stage
+ */
+export function ImportanceRating({ rating, children }: { rating: string; children: React.ReactNode }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Urgent': 1,
+      'High': 2,
+      'Medium': 3,
+      'Low': 4,
+    };
+    
+    return ratingMap[textRating] || 3;
+  };
+
+  const numericRating = getNumericRating(rating);
+  
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {children}
+    </div>
+  );
+}
