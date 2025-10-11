@@ -139,8 +139,9 @@ export function ChangeGroupHandler() {
               {can(userRoles, 'rms', 'view_all_funds') && (<> <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | </>)}
               {can(userRoles, 'eqrms', 'view_companies') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
               {can(userRoles, 'rms', 'view_changelog') && (<> <a href="/funds/changelog" className='blue-hyperlink'> ChangeLog</a> | </>)}
-              {can(userRoles, 'internal', 'link_login_lead') && (<> <a href="/internal/link-login-lead" className='blue-hyperlink'> Link Login to Lead</a> | </>)}
               {can(userRoles, 'internal', 'view') && (<> <a href="/tickets" className='blue-hyperlink'> Tickets</a> | </>)}
+              {can(userRoles, 'internal', 'view') && (<> <a href="/internal/documents" className='blue-hyperlink'> Documents</a> | </>)}
+              {can(userRoles, 'internal', 'link_login_lead') && (<> <a href="/internal/link-login-lead" className='blue-hyperlink'> Link Login to Lead</a> | </>)}
             </div>
 
             {/* Group Selection */}
