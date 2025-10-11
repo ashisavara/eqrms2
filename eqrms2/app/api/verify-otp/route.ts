@@ -36,6 +36,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing phone or OTP' }, { status: 400 })
     }
 
+    // Check for affiliate cookie data
+    const affCookie = req.cookies.get('aff_rf')
+    let affiliateData = null
+    if (affCookie) {
+      try {
+        affiliateData = JSON.parse(affCookie.value)
+      } catch (e) {
+        console.warn('[OTP] Failed to parse affiliate cookie:', e)
+      }
+    }
+
     // Create Supabase admin client
     const supabaseAdmin = createSupabaseAdmin()
 
@@ -102,12 +113,22 @@ export async function POST(req: NextRequest) {
     const loginEmail = isExistingUser ? existingUserEmail : aliasEmailFromPhone(phone_number, LOGIN_ALIAS_DOMAIN)
 
     // Prepare metadata - only for new users
-    let metadata = null
+    let metadata: any = null
     if (!isExistingUser) {
       metadata = {
         phone_number,
         login_via: 'whatsapp_otp',
         default_role: 'guest',
+      }
+      
+      // Add affiliate data if available
+      if (affiliateData) {
+        metadata.affiliate_rf = affiliateData.rf
+        if (affiliateData.utm_source) metadata.utm_source = affiliateData.utm_source
+        if (affiliateData.utm_medium) metadata.utm_medium = affiliateData.utm_medium
+        if (affiliateData.utm_campaign) metadata.utm_campaign = affiliateData.utm_campaign
+        if (affiliateData.utm_term) metadata.utm_term = affiliateData.utm_term
+        if (affiliateData.utm_content) metadata.utm_content = affiliateData.utm_content
       }
     }
 
