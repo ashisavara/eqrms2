@@ -40,7 +40,9 @@ export default async function TicketsPage() {
         <Tabs defaultValue="tickets" className="w-full mx-auto mt-6 text-sm">
           <TabsList className="w-full">
             <TabsTrigger value="tickets">Tickets</TabsTrigger>
-            <TabsTrigger value="accountonboard">Account Onboarding</TabsTrigger>
+            <TabsTrigger value="accountonboard">Ac Onboarding</TabsTrigger>
+            <TabsTrigger value="appbugs">App Bugs</TabsTrigger>
+            <TabsTrigger value="content">Content Pipeline</TabsTrigger>
           </TabsList>
           <TabsContent value="tickets">
             <AddTicketButton/>
@@ -50,7 +52,28 @@ export default async function TicketsPage() {
             <AddAcOnboardButton />
             <TableAccOnboard data={ongoing} />
           </TabsContent>
+          <TabsContent value="appbugs">
+            <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
+                <iframe 
+                src="https://coda.io/embed/s248BHCxNm/_su6BtulV?viewMode=embedplay&hideSections=true" 
+                style={{ width:1800, height:1000, maxWidth: '100%' }} 
+                allow="fullscreen"
+                />
+            </div>
+          </TabsContent>
+          <TabsContent value="content">
+            <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
+                <iframe 
+                src="https://coda.io/embed/s248BHCxNm/_suL6Fxu3?viewMode=embedplay&hideSections=true" 
+                style={{ width:1800, height:1000, maxWidth: '100%' }} 
+                allow="fullscreen"
+                />
+            </div>
+
+          </TabsContent>
+
         </Tabs>
     </div>
   );
 }
+
