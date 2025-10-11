@@ -23,7 +23,7 @@ import Link from "next/link";
 interface FundsTableClientProps {
   data: RmsFundsScreener[];
   pagination: { currentPage: number; totalPages: number; hasNextPage: boolean; hasPreviousPage: boolean; pageSize: number; totalCount: number; };
-  filterOptions: { fund_rating: any[]; amc_name: any[]; structure_name: any[]; category_name: any[]; estate_duty_exposure: any[]; us_investors: any[]; };
+  filterOptions: { fund_rating: any[]; amc_name: any[]; asset_class_name: any[]; structure_name: any[]; category_name: any[]; estate_duty_exposure: any[]; us_investors: any[]; };
   filterConfig: Record<string, any>;
   searchColumns: string[];
 }
@@ -35,12 +35,13 @@ export default function FundsTableClient({ data, pagination, filterOptions, filt
     // 🏠 TABLE IDENTITY
     basePath: '/funds/all',
     
-    tableStateConfig: { filterKeys: ['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'], defaultSort: { column: 'fund_rating', direction: 'desc' }, defaultPageSize: 50 },
+    tableStateConfig: { filterKeys: ['fund_rating', 'amc_name', 'asset_class_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'], defaultSort: { column: 'fund_rating', direction: 'desc' }, defaultPageSize: 50 },
     
     filterConfigs: [
       { key: 'fund_rating', title: 'Fund Rating', placeholder: 'Rating...', options: filterOptions.fund_rating },
       { key: 'amc_name', title: 'AMC', placeholder: 'AMC...', options: filterOptions.amc_name },
       { key: 'structure_name', title: 'Structure', placeholder: 'Structure...', options: filterOptions.structure_name },
+      { key: 'asset_class_name', title: 'Asset Class', placeholder: 'AssetClass...', options: filterOptions.asset_class_name},
       { key: 'category_name', title: 'Category', placeholder: 'Category...', options: filterOptions.category_name },
       { key: 'estate_duty_exposure', title: 'Estate Duty', placeholder: 'Estate Duty...', options: filterOptions.estate_duty_exposure },
       { key: 'us_investors', title: 'US Investors', placeholder: 'US Investors...', options: filterOptions.us_investors }

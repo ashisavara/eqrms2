@@ -54,7 +54,7 @@ export default async function FundPage({ params }: PageProps) {
         </div>
         <div className="flex flex-wrap gap-2 justify-center mt-2 text-sm">
             <Link href={`/amc/${fund.amc_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.amc_name} |  </Link>
-            <Link href={`/structure/${fund.structure_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.structure_name} -  </Link>
+             {fund.structure_name} -  
             <Link href={`/assetclass/${fund.asset_class_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.asset_class_name} -  </Link>
             <Link href={`/categories/${fund.category_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.category_name} |  </Link>
             <div className="whitespace-nowrap"> AUM: {fund.fund_aum} cr |  </div>

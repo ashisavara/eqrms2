@@ -35,7 +35,7 @@ interface PageProps {
  */
 function parseSearchParams(params: { [key: string]: string | string[] | undefined }) {
   // 🔍 FILTERS: Define which URL parameters should be treated as filters
-  const filterKeys = ['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'];
+  const filterKeys = ['fund_rating', 'amc_name', 'asset_class_name','structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'];
   
   // Parse filters from URL parameters
   const filters: Record<string, any> = {};
@@ -99,6 +99,7 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
     
     // Standard filters: fetch options from dedicated master tables
     amc_name: { table: 'rms_amc', valueCol: 'amc_name', labelCol: 'amc_name' },
+    asset_class_name: { table: 'rms_asset_class', valueCol: 'asset_class_name', labelCol: 'asset_class_name' },
     structure_name: { table: 'rms_structure', valueCol: 'structure_name', labelCol: 'structure_name' },
     category_name: { table: 'rms_category', valueCol: 'cat_name', labelCol: 'cat_name' },
     
@@ -110,7 +111,7 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
   // STEP 4: Fetch data and filter options in parallel (for performance)
   const [filterOptions, tableData] = await Promise.all([
     // Fetch all filter dropdown options
-    getMultipleFilterOptions(['fund_rating', 'amc_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'], filterConfig),
+    getMultipleFilterOptions(['fund_rating', 'amc_name', 'asset_class_name', 'structure_name', 'category_name', 'estate_duty_exposure', 'us_investors'], filterConfig),
     
     // Fetch the actual table data with server-side filtering/sorting/pagination
     serverSideQuery<RmsFundsScreener>({
@@ -142,6 +143,7 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
       filterOptions={filterOptions as {
         fund_rating: any[];
         amc_name: any[];
+        asset_class_name: any[];
         structure_name: any[];
         category_name: any[];
         estate_duty_exposure: any[];
