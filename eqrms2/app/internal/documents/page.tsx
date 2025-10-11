@@ -22,7 +22,7 @@ export default async function Page() {
         <TabsContent value="documentation">
             <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
                 <iframe 
-                src="https://coda.io/embed/s248BHCxNm/_suA_SeFp?viewMode=embedplay&hideSections=true" 
+                src="https://coda.io/embed/Bnen8d1pZ1/_suA_SeFp?viewMode=embedplay&hideSections=true" 
                 style={{ width:1800, height:1000, maxWidth: '100%' }} 
                 allow="fullscreen"
                 />
