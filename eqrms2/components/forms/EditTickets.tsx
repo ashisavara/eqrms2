@@ -36,8 +36,8 @@ function EditTicketForm({
         created_by: initialData?.created_by || "",
         status: initialData?.status || "",
         status_desc: initialData?.status_desc || "",
-        assignee: initialData?.assignee || null,
-        importance: initialData?.importance || null,
+        assignee: initialData?.assignee || "",
+        importance: initialData?.importance || "",
         ticket_segment: initialData?.ticket_segment || 0,
     };
 
