@@ -32,8 +32,8 @@ function AddTicketForm({
         created_by: "",
         status: "",
         status_desc: "",
-        assignee: null,
-        importance: null,
+        assignee: "",
+        importance: "",
         ticket_segment: 0,
     };
 
