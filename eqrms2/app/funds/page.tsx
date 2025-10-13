@@ -201,7 +201,6 @@ export default async function FundsPage() {
                         <TabsContent value="Global-Equity">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={GlobalEqcategory} columnType="summary"/>
-                            <PerformanceFootnote additionalText=". Global fund performance is in USD or in the funds currency" />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={GlobalEqcategory} columnType="annual"/>
@@ -210,7 +209,6 @@ export default async function FundsPage() {
                         <TabsContent value="Global-Others">
                             <h3 className="text-base font-bold text-center text-gray-500 p-2">Global Debt</h3>
                             <TableCategories data={GlobalDebtcategory} columnType="summary"/>
-                            <PerformanceFootnote additionalText=". Global fund performance is in USD or in the funds currency" />
                             <div className="hidden md:block mt-6">
                               <TableCategories data={GlobalDebtcategory} columnType="annual"/>
                             </div>

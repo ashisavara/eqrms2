@@ -76,7 +76,7 @@ export default async function CategoryPage({ params }: PageProps) {
             <div className="text-sm mt-6">
                 <h3>Recommended Funds</h3>
                 <TableFundBasic data={funds}/>
-                <PerformanceFootnote additionalText="In recommended funds on the category page, we only show our 4 & 5-star rated funds, to focus on top recommendations & avoid overwhelming investors with too many options. You can use the category filter on the funds page in RMS, to see a larger list including 3-star rated funds. For 2-star and below funds, please connect with your IME Dedicated Private Banker." />
+                <PerformanceFootnote additionalText="| In recommended funds on the category page, we only show our 4 & 5-star rated funds, to focus on top recommendations & avoid overwhelming investors with too many options. You can use the category filter on the funds page in RMS, to see a larger list including 3-star rated funds. For 2-star and below funds, please connect with your IME Dedicated Private Banker." />
             </div>
     </div>
   );

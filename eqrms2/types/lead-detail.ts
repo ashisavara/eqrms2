@@ -39,4 +39,5 @@ export type LeadsTagging = {
     digital_campaign?: string;
     custom_tag?: string;
     referral_partner?: string;
+    phone_e164?: string;
 };

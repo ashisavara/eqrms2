@@ -466,8 +466,8 @@ export const TicketsSchema = z.object({
   created_by: z.string(),
   status: z.string(),
   status_desc: z.string(),
-  assignee: z.string().nullable(),
-  importance: z.string().nullable(),
+  assignee: z.string(),
+  importance: z.string(),
   ticket_segment: z.coerce.number(),
   ticket_summary: z.string(),
 });
