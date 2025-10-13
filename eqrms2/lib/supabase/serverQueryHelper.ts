@@ -2,6 +2,58 @@
 
 import { createClient } from "./server"; // Make sure this is your server-side client
 
+// Get current user from JWT token (server-side)
+export async function getCurrentUser(): Promise<{ id: string; email?: string } | null> {
+  try {
+    const supabase = await createClient();
+    const { data: { session }, error } = await supabase.auth.getSession();
+    
+    if (error || !session?.access_token) {
+      return null;
+    }
+    
+    // Decode JWT payload to extract user information
+    const payload = JSON.parse(atob(session.access_token.split('.')[1]));
+    return {
+      id: payload.sub, // 'sub' field contains the user UUID
+      email: payload.email
+    };
+  } catch (error) {
+    console.error('Error extracting user from JWT:', error);
+    return null;
+  }
+}
+
+// Server action to get CRM lead data for current user
+export async function getCrmLeadDataForCurrentUser() {
+  try {
+    const currentUser = await getCurrentUser();
+    
+    if (!currentUser) {
+      return { success: false, error: 'No current user' };
+    }
+    
+    const result = await supabaseSingleRead({
+      table: "v_login_profile_with_roles",
+      columns: "lead_id,crm_lead_name",
+      filters: [
+        (query) => query.eq('uuid', currentUser.id)
+      ]
+    });
+    
+    return {
+      success: true,
+      data: result
+    };
+    
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}
+
 // Defining types for the query options
 type QueryOptions = {
   table: string;

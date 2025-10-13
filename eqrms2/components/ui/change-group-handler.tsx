@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { Users, Target, Loader2 } from "lucide-react";
 import { SearchButton } from '../forms/SearchButton';
+import { getCrmLeadDataForCurrentUser } from '@/lib/supabase/serverQueryHelper';
 
 export function ChangeGroupHandler() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -96,6 +97,35 @@ export function ChangeGroupHandler() {
     label: group.name,
   }));
 
+  // Get CRM lead_id for affiliate link using current user's UUID
+  const [crmLeadId, setCrmLeadId] = useState<any>(null);
+  const [isLoadingCrmData, setIsLoadingCrmData] = useState(false);
+
+  useEffect(() => {
+    const fetchCrmData = async () => {
+      setIsLoadingCrmData(true);
+      
+      try {
+        const result = await getCrmLeadDataForCurrentUser();
+        
+        if (result.success) {
+          setCrmLeadId(result.data);
+        } else {
+          setCrmLeadId(null);
+        }
+        
+      } catch (error) {
+        setCrmLeadId(null);
+      } finally {
+        setIsLoadingCrmData(false);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchCrmData();
+    }
+  }, [isAuthenticated]);
+
   // Don't render if user is not authenticated
   if (!isAuthenticated) {
     return null;
@@ -132,6 +162,17 @@ export function ChangeGroupHandler() {
                   </div>
                 </div>
               )}
+               <div>
+                 {crmLeadId ? (
+                   <p className="text-xs bg-gray-50 p-2 rounded-md">
+                     {crmLeadId?.crm_lead_name} Affiliate Link:<span className="font-semibold"> ?rf={crmLeadId?.lead_id}</span>
+                   </p>
+                 ) : (
+                   <Badge variant="outline">
+                     {isLoadingCrmData ? 'Loading...' : 'No CRM data'}
+                   </Badge>
+                 )}
+               </div>
 
             <div className='text-sm'>
               <SearchButton />
