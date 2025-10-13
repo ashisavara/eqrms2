@@ -165,7 +165,7 @@ export function ChangeGroupHandler() {
                <div>
                  {crmLeadId ? (
                    <p className="text-xs bg-gray-50 p-2 rounded-md">
-                     {crmLeadId?.crm_lead_name} Affiliate Link:<span className="font-semibold"> ?rf={crmLeadId?.lead_id}</span>
+                     {crmLeadId?.crm_lead_name} Aff Link:<span className="font-semibold"> rms.imecapital.in/?rf={crmLeadId?.lead_id}</span>
                    </p>
                  ) : (
                    <Badge variant="outline">
