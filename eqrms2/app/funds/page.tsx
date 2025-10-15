@@ -8,11 +8,13 @@ import { TableCategories } from "@/app/categories/TableCategories";
 import { Category } from "@/types/category-detail";
 import { AssetClass } from "@/types/asset-class-detail";
 import { TableAssetClass } from "@/app/assetclass/TableAssetclass"
+import { Structure } from "@/types/structure-detail";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import { PerformanceFootnote } from "@/components/ui/performance-footnote";
+import { TableStructure } from "../structure/TableStructure";
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
@@ -25,7 +27,7 @@ export default async function FundsPage() {
     redirect('/uservalidation'); // or wherever you want to send them
   }
 
-  const [funds, amc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass] = await Promise.all([
+  const [funds, amc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass, DomesticStructure, GlobalStructure] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({
       table: "view_rms_funds_screener",
       columns: "fund_id,fund_name,fund_rating,fund_performance_rating,amc_name,amc_rating,asset_class_name,category_name,cat_long_name,structure_name,open_for_subscription, estate_duty_exposure,us_investors,one_yr,three_yr,five_yr,since_inception,slug",
@@ -115,8 +117,17 @@ export default async function FundsPage() {
       table: "rms_asset_class",
       columns: "asset_class_id, asset_class_name, asset_class_summary, asset_class_desc, asset_class_slug",
       filters: [(query) => query.in('asset_class_name', ['Global - Equity', 'Global - Debt', 'Global - Alt'])]
+    }),
+    supabaseListRead<Structure>({
+      table: "rms_structure",
+      columns: "structure_id, structure_name, structure_summary, structure_desc, structure_slug",
+      filters: [(query) => query.in('structure_id', [1, 2, 3])]
+    }),
+    supabaseListRead<Structure>({
+      table: "rms_structure",
+      columns: "structure_id, structure_name, structure_summary, structure_desc, structure_slug",
+      filters: [(query) => query.in('structure_id', [5])]
     })
-
 
   ]);
 
@@ -141,13 +152,16 @@ export default async function FundsPage() {
                 <TabsContent value="india">
                     <Tabs defaultValue="Asset Class" className="w-full mx-auto mt-2">
                         <TabsList className="w-full">
-                            <TabsTrigger value="Asset Class">Asset Class</TabsTrigger>
+                            <TabsTrigger value="Asset Class">Indian Assets</TabsTrigger>
                             <TabsTrigger value="Equity">Equity</TabsTrigger>
                             <TabsTrigger value="Debt">Debt</TabsTrigger>
                             <TabsTrigger value="Hybrid">Hybrid</TabsTrigger>
                             <TabsTrigger value="Alternatives">Altenatives</TabsTrigger>
                         </TabsList>
                         <TabsContent value="Asset Class">
+                            <h3>Structures</h3>
+                            <TableStructure data={DomesticStructure}/>
+                            <h3 className="mt-6">Asset Classes</h3>
                             <TableAssetClass data={DomesticAssetClass}/>
                         </TabsContent> 
                         <TabsContent value="Equity">
@@ -196,6 +210,9 @@ export default async function FundsPage() {
                             <TabsTrigger value="Global-Others">Global-Others</TabsTrigger>
                         </TabsList>
                         <TabsContent value="Global-Assets">
+                            <h3>Structures</h3>
+                            <TableStructure data={GlobalStructure}/>
+                            <h3 className="mt-6">Asset Classes</h3>
                             <TableAssetClass data={GlobalAssetClass}/>
                         </TabsContent>
                         <TabsContent value="Global-Equity">

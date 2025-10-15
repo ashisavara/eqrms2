@@ -3,6 +3,7 @@ import { getCurrentGroupId, getCurrentMandateId } from "@/lib/auth/serverGroupMa
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Link from "next/link";
 import { MandateDetail } from "@/types/mandate-detail";
 import { FavStructure, FavAssetClass, FavCategory, FavFunds } from "@/types/favourite-detail";
 import { TableCategories } from "@/app/categories/TableCategories";
@@ -179,6 +180,8 @@ export default async function MandatePage() {
                   </div>
                   <div className="border-box">
                   <div>
+                  <p className="font-bold">Shortlisted Universe</p>
+                  <p>Use the <Link href="/funds" className="blue-hyperlink">RMS</Link> to add your favourite structures, asset classes, and categories.</p>
                   <span className="font-bold">Favourite Structures: </span>
                       {favStructure.map((structure, idx) => (
                           <span key={structure.fav_structure_id}>
