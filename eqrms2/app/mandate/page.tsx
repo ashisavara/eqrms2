@@ -150,7 +150,7 @@ export default async function MandatePage() {
                       <div className="border-box bg-blue-50">
                           <div className="flex items-center gap-2">
                             <p className="font-bold">Calculated Risk Profile</p>
-                            <RiskProfilerButton groupId={groupId} mandateId={mandate} />
+                            { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} mandateId={mandate} />)}
                           </div>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.risk_profile_calculated || ""}</ReactMarkdown>
                       </div>

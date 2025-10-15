@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MandateFormSheet } from "@/components/conversational-form/MandateFormSheet";
-import { riskProfilerFormConfig } from "@/lib/conversational-forms/configs/riskProfiler.config";
+import { RiskProfilerForm } from "@/components/conversational-form/RiskProfilerForm";
 import { Pencil } from "lucide-react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 interface RiskProfilerButtonProps {
@@ -17,8 +15,6 @@ export function RiskProfilerButton({ groupId, mandateId }: RiskProfilerButtonPro
   const router = useRouter();
 
   const handleComplete = () => {
-    setShowRiskProfiler(false);
-    toast.success("Risk profile saved successfully!");
     router.refresh();
   };
 
@@ -32,8 +28,7 @@ export function RiskProfilerButton({ groupId, mandateId }: RiskProfilerButtonPro
         <Pencil className="w-4 h-4 text-gray-600 hover:text-gray-800" />
       </button>
 
-      <MandateFormSheet
-        formConfig={riskProfilerFormConfig}
+      <RiskProfilerForm
         mandateId={mandateId}
         open={showRiskProfiler}
         onOpenChange={setShowRiskProfiler}
