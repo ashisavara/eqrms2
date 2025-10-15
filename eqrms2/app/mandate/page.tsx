@@ -18,6 +18,7 @@ import { redirect } from 'next/navigation';
 import { InteractionDetail } from "@/types/interaction-detail";
 import TableShowMeetingNotes from "@/app/crm/TableShowMeetingNotes";
 import { LeadsTagging } from "@/types/lead-detail";
+import { RiskProfilerButton } from "./RiskProfilerButton";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -136,18 +137,36 @@ export default async function MandatePage() {
               <TabsTrigger value="meetingnotes">Meeting Notes</TabsTrigger>
             </TabsList>
             <TabsContent value="mandate">
-              { can(userRoles, 'mandate', 'edit_mandate') && (
-              <EditMandateButton mandateData={invMandate} mandateId={mandate} />)}
-                  <div className="flex flex-col md:flex-row gap-2">
-                      <div className="border-box md:w-[250px] bg-green-50">
-                          <p className="font-bold">Risk Profile</p>
+              <div className="flex gap-2 mb-4">
+                { can(userRoles, 'mandate', 'edit_mandate') && (
+                  <EditMandateButton mandateData={invMandate} mandateId={mandate} />
+                )}
+              </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      <div className="border-box bg-green-50">
+                          <p className="font-bold">Selected Risk Profile</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.rp_override || ""}</ReactMarkdown>
                       </div>
-                      <div className="border-box md:flex-1">
+                      <div className="border-box bg-blue-50">
+                          <div className="flex items-center gap-2">
+                            <p className="font-bold">Calculated Risk Profile</p>
+                            <RiskProfilerButton groupId={groupId} mandateId={mandate} />
+                          </div>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.risk_profile_calculated || ""}</ReactMarkdown>
+                      </div>
+                      <div className="border-box bg-blue-50">
+                          <p className="font-bold">Risk Taking Ability</p>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.risk_appetite || ""}</ReactMarkdown>
+                      </div>
+                      <div className="border-box bg-blue-50">
+                          <p className="font-bold">Risk Appetite</p>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.risk_taking_ability || ""}</ReactMarkdown>
+                      </div>
+                  </div>
+                  <div className="border-box">
                           <p className="font-bold">One Line Objective</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.one_line_objective || ""}</ReactMarkdown>
                       </div>
-                  </div>
                   <div className="text-sm">
                       <div className="border-box">
                           <p className="font-bold">Investment Plan</p>

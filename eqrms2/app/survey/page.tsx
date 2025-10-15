@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { surveyFormConfig } from "@/lib/conversational-forms/configs/surveyForm.config";
-import { ConversationalFormSheet } from "@/components/conversational-form/ConversationalFormSheet";
+import { SimpleFormSheet } from "@/components/conversational-form/SimpleFormSheet";
 import { MessageSquare, CheckCircle } from "lucide-react";
 
 export default function SurveyPage() {
@@ -94,8 +94,8 @@ export default function SurveyPage() {
                     <span className="text-blue-600 text-sm font-semibold">2</span>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">Auto-Save</p>
-                    <p className="text-sm text-gray-600">Your progress is saved automatically</p>
+                    <p className="font-medium text-gray-900">Quick & Simple</p>
+                    <p className="text-sm text-gray-600">Navigate back and forth freely</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -112,10 +112,9 @@ export default function SurveyPage() {
           </div>
         )}
 
-        {/* Conversational Form Sheet */}
-        <ConversationalFormSheet
+        {/* Simple Form Sheet */}
+        <SimpleFormSheet
           formConfig={surveyFormConfig}
-          mode="create"
           open={showSurvey}
           onOpenChange={setShowSurvey}
           onComplete={handleComplete}

@@ -50,12 +50,13 @@ export interface ConversationalFormProps {
   formConfig: FormConfig;                        // Form configuration
   mode: 'create' | 'edit';                       // Create new or edit existing
   recordId?: number;                             // Record ID for edit mode
+  initialValues?: Record<string, any>;           // Initial/default values for hidden fields
   onComplete?: () => void;                       // Callback after successful submission
   onCancel?: () => void;                         // Callback for cancellation
 }
 
 // Props for wrapper components
-export interface ConversationalFormSheetProps extends ConversationalFormProps {
+export interface ConversationalFormSheetProps extends Omit<ConversationalFormProps, 'onCancel'> {
   trigger?: React.ReactNode;                     // Custom trigger element
   open?: boolean;                                // Controlled open state
   onOpenChange?: (open: boolean) => void;        // Open state change handler
@@ -87,5 +88,45 @@ export interface ServerActionResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
+}
+
+// ============================================
+// NEW SIMPLIFIED FORM TYPES
+// ============================================
+
+// Mandate form configuration (simplified - always edits investment_mandate)
+export interface MandateFormConfig {
+  formType: string;                              // Unique form identifier
+  title: string;                                 // Form title
+  description?: string;                          // Form description
+  questions: FormQuestion[];                     // Array of questions
+}
+
+// Props for MandateFormSheet component
+export interface MandateFormSheetProps {
+  formConfig: MandateFormConfig;                 // Form configuration
+  mandateId: number;                             // Investment mandate ID
+  onComplete?: () => void;                       // Callback after successful submission
+  trigger?: React.ReactNode;                     // Custom trigger element
+  open?: boolean;                                // Controlled open state
+  onOpenChange?: (open: boolean) => void;        // Open state change handler
+}
+
+// Simple form configuration (insert-only, no auto-save)
+export interface SimpleFormConfig {
+  formType: string;                              // Unique form identifier
+  table: string;                                 // Target table for insert
+  title: string;                                 // Form title
+  description?: string;                          // Form description
+  questions: FormQuestion[];                     // Array of questions
+}
+
+// Props for SimpleFormSheet component
+export interface SimpleFormSheetProps {
+  formConfig: SimpleFormConfig;                  // Form configuration
+  onComplete?: () => void;                       // Callback after successful submission
+  trigger?: React.ReactNode;                     // Custom trigger element
+  open?: boolean;                                // Controlled open state
+  onOpenChange?: (open: boolean) => void;        // Open state change handler
 }
 

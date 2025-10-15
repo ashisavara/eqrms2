@@ -1,3 +1,13 @@
+/**
+ * @deprecated This component is deprecated. Use MandateFormSheet or SimpleFormSheet instead.
+ * 
+ * - For mandate-linked forms with auto-save: Use MandateFormSheet
+ * - For insert-only forms without auto-save: Use SimpleFormSheet
+ * 
+ * See: components/conversational-form/MandateFormSheet.tsx
+ * See: components/conversational-form/SimpleFormSheet.tsx
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -27,6 +37,7 @@ export function ConversationalForm({
   formConfig,
   mode,
   recordId: initialRecordId,
+  initialValues = {},
   onComplete,
   onCancel
 }: ConversationalFormProps) {
@@ -43,10 +54,12 @@ export function ConversationalForm({
     }, {} as Record<string, z.ZodTypeAny>)
   );
 
-  // Initialize form with default values
+  // Initialize form with default values merged with initialValues
+  const defaultValues = { ...getDefaultFormValues(formConfig.questions), ...initialValues };
+  
   const { control, handleSubmit, trigger, getValues, reset, formState: { errors } } = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: getDefaultFormValues(formConfig.questions),
+    defaultValues,
     mode: 'onSubmit'
   });
 

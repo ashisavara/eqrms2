@@ -1,3 +1,13 @@
+/**
+ * @deprecated These actions are deprecated. Use mandateActions.ts or simpleActions.ts instead.
+ * 
+ * - For mandate-linked forms: Use mandateActions.ts (loadMandateData, updateMandateField)
+ * - For insert-only forms: Use simpleActions.ts (insertFormData)
+ * 
+ * See: lib/conversational-forms/mandateActions.ts
+ * See: lib/conversational-forms/simpleActions.ts
+ */
+
 "use server";
 
 import { supabaseUpdateRow, supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";

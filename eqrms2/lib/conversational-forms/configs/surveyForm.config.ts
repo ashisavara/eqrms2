@@ -1,12 +1,9 @@
 import { z } from "zod";
-import { FormConfig } from "../types";
+import { SimpleFormConfig } from "../types";
 
-export const surveyFormConfig: FormConfig = {
+export const surveyFormConfig: SimpleFormConfig = {
   formType: 'user_survey',
   table: 'survey_responses',
-  idColumn: 'survey_id',
-  statusColumn: 'form_status',
-  auditColumn: 'submission_data',
   title: 'User Feedback Survey',
   description: 'Help us improve by answering a few questions',
   questions: [

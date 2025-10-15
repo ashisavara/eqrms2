@@ -1,0 +1,26 @@
+-- ============================================
+-- RISK PROFILER - USING EXISTING COLUMNS
+-- ============================================
+-- The investment_mandate table already has risk profiler columns:
+-- 
+-- Risk Taking Questions (RT1-RT5):
+--   - rt1_score, rt2_score, rt3_score, rt4_score, rt5_score
+-- 
+-- Risk Appetite Questions (RA1-RA5):
+--   - ra1_score, ra2_score, ra3_score, ra4_score, ra5_score
+--
+-- Calculated Scores (computed later):
+--   - rt_score (Risk Taking total)
+--   - ra_score (Risk Appetite total)
+--   - rp_score (Risk Profile total)
+--
+-- Text Labels (computed later):
+--   - risk_taking_ability
+--   - risk_appetite
+--   - risk_profile
+--
+-- Note: No migration needed - columns already exist!
+-- The MandateFormSheet will save directly to these existing columns.
+--
+-- Note: rp_override is ignored (not used in the form)
+

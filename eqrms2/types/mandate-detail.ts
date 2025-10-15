@@ -22,4 +22,7 @@ export type MandateDetail = {
     ra5_score?: number;
     one_line_objective?: string;
     portfolio_reallocation_thoughts?: string;
+    risk_taking_ability?: string;
+    risk_appetite?: string;
+    risk_profile_calculated?: string;
 };

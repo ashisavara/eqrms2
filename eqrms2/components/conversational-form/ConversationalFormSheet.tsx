@@ -1,3 +1,13 @@
+/**
+ * @deprecated This component is deprecated. Use MandateFormSheet or SimpleFormSheet instead.
+ * 
+ * - For mandate-linked forms with auto-save: Use MandateFormSheet
+ * - For insert-only forms without auto-save: Use SimpleFormSheet
+ * 
+ * See: components/conversational-form/MandateFormSheet.tsx
+ * See: components/conversational-form/SimpleFormSheet.tsx
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -9,8 +19,8 @@ export function ConversationalFormSheet({
   formConfig,
   mode,
   recordId,
+  initialValues,
   onComplete,
-  onCancel,
   trigger,
   open: controlledOpen,
   onOpenChange
@@ -28,7 +38,6 @@ export function ConversationalFormSheet({
 
   const handleCancel = () => {
     setIsOpen(false);
-    onCancel?.();
   };
 
   return (
@@ -55,6 +64,7 @@ export function ConversationalFormSheet({
               formConfig={formConfig}
               mode={mode}
               recordId={recordId}
+              initialValues={initialValues}
               onComplete={handleComplete}
               onCancel={handleCancel}
             />

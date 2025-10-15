@@ -1,3 +1,13 @@
+/**
+ * @deprecated This component is deprecated. Use MandateFormSheet or SimpleFormSheet instead.
+ * 
+ * - For mandate-linked forms with auto-save: Use MandateFormSheet
+ * - For insert-only forms without auto-save: Use SimpleFormSheet
+ * 
+ * See: components/conversational-form/MandateFormSheet.tsx
+ * See: components/conversational-form/SimpleFormSheet.tsx
+ */
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -10,6 +20,7 @@ export function ConversationalFormPage({
   formConfig,
   mode,
   recordId,
+  initialValues,
   onComplete,
   onCancel,
   showBackButton = true,
@@ -48,6 +59,7 @@ export function ConversationalFormPage({
             formConfig={formConfig}
             mode={mode}
             recordId={recordId}
+            initialValues={initialValues}
             onComplete={onComplete}
             onCancel={onCancel}
           />

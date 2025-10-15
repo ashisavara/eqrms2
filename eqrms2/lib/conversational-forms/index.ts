@@ -1,29 +1,48 @@
 // Main exports for conversational forms system
-// Import from this file for convenience: import { ConversationalFormSheet, ... } from '@/lib/conversational-forms'
+// Import from this file for convenience: import { MandateFormSheet, SimpleFormSheet, ... } from '@/lib/conversational-forms'
 
-// Types
+// ============================================
+// NEW SIMPLIFIED TYPES
+// ============================================
+export type {
+  MandateFormConfig,
+  MandateFormSheetProps,
+  SimpleFormConfig,
+  SimpleFormSheetProps,
+} from './types';
+
+// ============================================
+// NEW SIMPLIFIED ACTIONS
+// ============================================
+// Mandate Actions
+export {
+  loadMandateData,
+  updateMandateField
+} from './mandateActions';
+
+// Simple Actions
+export {
+  insertFormData
+} from './simpleActions';
+
+// ============================================
+// NEW SIMPLIFIED COMPONENTS
+// ============================================
+export { MandateFormSheet } from '@/components/conversational-form/MandateFormSheet';
+export { SimpleFormSheet } from '@/components/conversational-form/SimpleFormSheet';
+
+// ============================================
+// SHARED UTILITIES & TYPES
+// ============================================
 export type {
   QuestionType,
   QuestionOption,
   FormQuestion,
-  FormConfig,
-  ConversationalFormProps,
-  ConversationalFormSheetProps,
-  ConversationalFormPageProps,
   AuditEntry,
   AuditData,
   ServerActionResponse
 } from './types';
 
-// Server Actions
-export {
-  createFormDraft,
-  updateFormDraft,
-  loadFormData,
-  submitForm
-} from './actions';
-
-// Utility Functions
 export {
   buildAuditData,
   getVisibleQuestions,
@@ -35,14 +54,40 @@ export {
   calculateCompletionPercentage
 } from './utils';
 
-// Components (re-export for convenience)
-export { ConversationalForm } from '@/components/conversational-form/ConversationalForm';
-export { ConversationalFormSheet } from '@/components/conversational-form/ConversationalFormSheet';
-export { ConversationalFormPage } from '@/components/conversational-form/ConversationalFormPage';
+// Shared components
 export { ProgressBar } from '@/components/conversational-form/ProgressBar';
 export { FormNavigation } from '@/components/conversational-form/FormNavigation';
 export { QuestionRenderer } from '@/components/conversational-form/QuestionRenderer';
 
-// Example configs
+// ============================================
+// DEPRECATED (for backward compatibility)
+// ============================================
+/** @deprecated Use MandateFormConfig or SimpleFormConfig instead */
+export type {
+  FormConfig,
+  ConversationalFormProps,
+  ConversationalFormSheetProps,
+  ConversationalFormPageProps,
+} from './types';
+
+/** @deprecated Use mandateActions or simpleActions instead */
+export {
+  createFormDraft,
+  updateFormDraft,
+  loadFormData,
+  submitForm
+} from './actions';
+
+/** @deprecated Use MandateFormSheet or SimpleFormSheet instead */
+export { ConversationalForm } from '@/components/conversational-form/ConversationalForm';
+/** @deprecated Use MandateFormSheet or SimpleFormSheet instead */
+export { ConversationalFormSheet } from '@/components/conversational-form/ConversationalFormSheet';
+/** @deprecated Use MandateFormSheet or SimpleFormSheet instead */
+export { ConversationalFormPage } from '@/components/conversational-form/ConversationalFormPage';
+
+// ============================================
+// EXAMPLE CONFIGS
+// ============================================
 export { surveyFormConfig } from './configs/surveyForm.config';
+export { riskProfilerFormConfig } from './configs/riskProfiler.config';
 

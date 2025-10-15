@@ -113,6 +113,10 @@ export function parseFormData(
       formValues[question.field] = dbValue ?? false;
     } else if (question.type === 'number') {
       formValues[question.field] = dbValue ?? null;
+    } else if (question.type === 'radio' || question.type === 'select' || question.type === 'toggle') {
+      // Convert numeric values to strings for radio/select/toggle
+      // (database might store as NUMERIC but form expects string enum)
+      formValues[question.field] = dbValue !== null && dbValue !== undefined ? String(dbValue) : '';
     } else {
       formValues[question.field] = dbValue ?? '';
     }
