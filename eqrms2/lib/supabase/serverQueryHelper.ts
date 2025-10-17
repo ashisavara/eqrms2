@@ -216,7 +216,7 @@ export async function searchEntities(
     },
     amc: {
       table: 'rms_amc', 
-      columns: 'amc_name',
+      columns: 'amc_name, slug',
       searchField: 'amc_name'
     },
     company: {

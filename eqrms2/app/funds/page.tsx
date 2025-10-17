@@ -42,6 +42,7 @@ export default async function FundsPage() {
       columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
       filters: [
         (query) => query.eq('open_for_distribution', ['Y']),
+        (query) => query.gt('amc_rating', 2),
         (query) => query.order('amc_rating', { ascending: false })
       ]
     }),

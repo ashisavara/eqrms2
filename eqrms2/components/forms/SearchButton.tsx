@@ -102,7 +102,7 @@ function SearchForm({
                   </Link>
                 )}
                 {result.amc_name && (
-                  <span className="text-gray-700">{result.amc_name}</span>
+                  <Link href={`/amc/${result.slug}`} className="text-blue-600 hover:text-blue-800" onClick={handleResultClick}>{result.amc_name}</Link>
                 )}
                 {result.ime_name && (
                   <Link 
