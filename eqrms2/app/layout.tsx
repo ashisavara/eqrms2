@@ -14,6 +14,7 @@ import { PWAInstallButton } from "@/components/ui/pwa-install-button";
 import { PWARegister } from "@/components/ui/pwa-register";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
+import RoleExpiring from "@/components/access-control/RoleExpiring";
 import {
   SidebarProvider,
   Sidebar,
@@ -135,7 +136,11 @@ export default async function RootLayout({
                   </SidebarContent>
                 </Sidebar>
                 <MainContent>
-                  <div className="px-4 pt-16 pb-4 md:px-6 md:py-4">{children}</div>
+                  <div className="px-4 pt-16 pb-4 md:px-6 md:py-4">
+                    {can(userRoles, 'expiring', 'view_expiring') && (
+                    <RoleExpiring />)}
+                    {children}
+                  </div>
                 </MainContent>
                 <Toaster />
                 <PWARegister />

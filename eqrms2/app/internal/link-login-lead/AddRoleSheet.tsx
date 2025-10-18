@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ToggleGroupInput } from '@/components/forms/FormFields';
+import { ToggleGroupInput, DatePicker } from '@/components/forms/FormFields';
 import { toast, Toaster } from 'sonner';
 import { LoginProfileWithoutRoles } from './types';
 import { MASTER_OPTIONS } from '@/lib/constants';
@@ -12,6 +12,7 @@ import { supabaseInsertRow } from '@/lib/supabase/serverQueryHelper';
 
 interface AddRoleFormData {
   user_role_name_id: number;
+  expires_on?: Date | null;
 }
 
 interface AddRoleSheetProps {
@@ -32,7 +33,8 @@ export function AddRoleSheet({ profile, isOpen, onClose, onSuccess }: AddRoleShe
 
   const { control, handleSubmit, reset, watch } = useForm<AddRoleFormData>({
     defaultValues: {
-      user_role_name_id: 0
+      user_role_name_id: 0,
+      expires_on: null
     }
   });
 
@@ -46,10 +48,17 @@ export function AddRoleSheet({ profile, isOpen, onClose, onSuccess }: AddRoleShe
 
     setIsLoading(true);
     try {
-      await supabaseInsertRow('acl_user_roles', {
+      const insertData: any = {
         user_uuid: profile.uuid,
         user_role_name_id: data.user_role_name_id
-      });
+      };
+      
+      // Only include expires_on if a date is selected
+      if (data.expires_on) {
+        insertData.expires_on = data.expires_on.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      }
+      
+      await supabaseInsertRow('acl_user_roles', insertData);
 
       toast.success('Role added successfully!');
       onSuccess();
@@ -91,6 +100,16 @@ export function AddRoleSheet({ profile, isOpen, onClose, onSuccess }: AddRoleShe
                   options={roleOptions} 
                   valueType="number" 
                   itemClassName="ime-choice-chips" 
+                />
+              </div>
+
+              <div>
+                <DatePicker 
+                  name="expires_on" 
+                  label="Expires On (Optional)" 
+                  control={control}
+                  placeholder="Select expiration date"
+                  showClearButton={true}
                 />
               </div>
 

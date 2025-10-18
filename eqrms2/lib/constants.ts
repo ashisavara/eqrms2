@@ -357,7 +357,8 @@ export const MASTER_OPTIONS = {
     { id: 6, name: "client" },
     { id: 7, name: "lead" },
     { id: 8, name: "trial_ended" },
-    { id: 9, name: "ban" }
+    { id: 9, name: "ban" }, 
+    { id: 12, name: "not_validated" }
   ]
 } as const;
 
