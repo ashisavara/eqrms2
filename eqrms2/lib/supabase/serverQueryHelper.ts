@@ -278,3 +278,47 @@ export async function getUnlinkedClientGroups(): Promise<Array<{
   
   return data || [];
 }
+
+// Upload image to Supabase Storage (server-side)
+export async function uploadImageToStorage(
+  file: File,
+  bucket: string = 'blog'
+): Promise<{ success: boolean; path?: string; error?: string }> {
+  try {
+    const supabase = await createClient();
+    
+    // Sanitize filename - remove spaces and special characters
+    const sanitizedFilename = file.name
+      .replace(/[^a-zA-Z0-9.-]/g, '_') // Replace special chars with underscore
+      .replace(/_+/g, '_') // Replace multiple underscores with single
+      .replace(/^_|_$/g, '') // Remove leading/trailing underscores
+      .substring(0, 80); // Limit to 80 characters
+    
+    // Convert File to ArrayBuffer for server-side upload
+    const arrayBuffer = await file.arrayBuffer();
+    
+    // Upload to Supabase Storage
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(sanitizedFilename, arrayBuffer, {
+        contentType: file.type,
+        upsert: false // Don't overwrite existing files
+      });
+
+    if (error) {
+      console.error('Upload error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { 
+      success: true, 
+      path: `/${data.path}` 
+    };
+  } catch (error) {
+    console.error('Upload error:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
+}

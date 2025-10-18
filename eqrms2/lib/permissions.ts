@@ -56,6 +56,11 @@ export const PERMISSION_GROUPS = {
 
   expiring: {
     view_expiring: ['guest','lead'],
+  },
+  
+  blogs: {
+    view: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'guest'],
+    edit: ['admin', 'super_admin', 'inv_desk'],
   }
 };
 
