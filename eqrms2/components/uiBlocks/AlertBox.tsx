@@ -40,7 +40,7 @@ export default function AlertBox({ color, heading, children }: AlertBoxProps) {
       <h4 className={`${styles.heading} font-bold text-base mb-2 text-center`}>
         {heading}
       </h4>
-      <div className="text-gray-800">
+      <div className="text-gray-800 text-sm">
         {children}
       </div>
     </div>

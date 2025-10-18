@@ -176,11 +176,12 @@ export function ResizableTextArea({ name, label, control }: { name: string; labe
               <TextareaAutosize
                 {...field}
                 id={name}
-                className={withErrorClass("form-textarea w-full p-2 border border-gray-300 rounded-md text-sm", hasError)}
+                className={withErrorClass("form-textarea w-full p-2 border border-gray-300 rounded-md text-sm whitespace-pre-wrap", hasError)}
                 minRows={2}
                 maxRows={15}
                 aria-invalid={hasError}
                 aria-describedby={hasError ? errId : undefined}
+                style={{ whiteSpace: 'pre-wrap' }}
               />
               <FormErrorMessage error={fieldState.error as any} id={errId} />
             </>

@@ -1,4 +1,4 @@
-import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
+import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { MDXContent } from '@/components/MDXContent';
 import { serialize } from 'next-mdx-remote/serialize';
 import Link from 'next/link';
@@ -11,7 +11,29 @@ import { redirect } from 'next/navigation';
 interface Blog {
     id: number;
     body: string;
+    title: string;
     // Add other blog fields as needed
+}
+
+// Fallback revalidation: Rebuild daily as safety net
+export const revalidate = 86400; // 24 hours in seconds
+
+// Generate static params for all blog posts at build time
+export async function generateStaticParams() {
+    try {
+        const blogs = await supabaseListRead<Blog>({
+            table: "blogs",
+            columns: "id",
+            filters: []
+        });
+
+        return blogs.map((blog) => ({
+            id: blog.id.toString(),
+        }));
+    } catch (error) {
+        console.error('Error generating static params for blogs:', error);
+        return []; // Return empty array on error to avoid build failure
+    }
 }
 
 export default async function BlogPage({ params }: { params: Promise<{ id: string }> }) {
@@ -31,8 +53,30 @@ export default async function BlogPage({ params }: { params: Promise<{ id: strin
         return <div>Blog not found</div>;
     }
 
+    // Normalize content: Clean up excessive newlines
+    // Replace 3+ consecutive newlines with exactly 2 (proper paragraph break)
+    const normalizedBody = blog.body
+        .replace(/\n{3,}/g, '\n\n')  // Replace 3+ newlines with exactly 2
+        .trim();  // Remove leading/trailing whitespace
+
+    // Dynamically import remark plugins to avoid ES6 import issues
+    const [remarkBreaks, remarkGfm] = await Promise.all([
+        import('remark-breaks').then(mod => mod.default),
+        import('remark-gfm').then(mod => mod.default)
+    ]);
+
     // Serialize MDX server-side for SEO
-    const mdxSource = await serialize(blog.body);
+    // remarkBreaks: treats single line breaks within paragraphs as <br>
+    // remarkGfm: enables GitHub Flavored Markdown (tables, strikethrough, etc.)
+    const mdxSource = await serialize(normalizedBody, {
+        mdxOptions: {
+            remarkPlugins: [
+                remarkGfm,
+                remarkBreaks
+            ]
+        },
+        parseFrontmatter: true
+    });
 
     return (
         <div className="max-w-4xl mx-auto p-6">
@@ -49,6 +93,7 @@ export default async function BlogPage({ params }: { params: Promise<{ id: strin
             )}
 
             {/* Blog Content */}
+            <h1>{blog.title}</h1>
             <div className="prose prose-lg">
                 <MDXContent mdxSource={mdxSource} />
             </div>
