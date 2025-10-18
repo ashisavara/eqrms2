@@ -15,7 +15,7 @@ export const PERMISSION_GROUPS = {
   },
 
   investments: {
-    view_investments: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'lead'],
+    view_investments: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'lead', 'guest'],
     add_edit_held_away: ['admin', 'super_admin', 'inv_desk', 'rm'],
     add_edit_financial_goals: ['admin', 'super_admin', 'inv_desk', 'rm'],
     add_edit_goal_inv_linking: ['admin', 'super_admin', 'inv_desk', 'rm'],
@@ -23,7 +23,7 @@ export const PERMISSION_GROUPS = {
   },
 
   mandate: {
-    view_mandate: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'lead'],
+    view_mandate: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'lead', 'guest'],
     edit_mandate: ['admin', 'super_admin', 'inv_desk', 'rm'],
     favouriting: ['admin', 'super_admin', 'inv_desk', 'rm']
   },
