@@ -15,7 +15,6 @@ import { DigitalAdsDetail } from "@/types/digital-ads-detail";
 import { CustomTagDetail } from "@/types/custom-tag";
 import { CustomTagValues, LeadRoleValues, DigitalAdValues } from "@/types/forms";
 import { AddLeadTags } from "@/components/forms/AddLeadTags";
-import { AddClientGroup } from "@/components/forms/AddGroup";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { AddCustomTag } from "@/components/forms/AddCustomTag";
 import { AddLeadRole } from "@/components/forms/AddLeadRole";
@@ -23,7 +22,6 @@ import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 import { AclLeadsDetail } from "@/types/acl-leads-detail";
 import { AclGroupDetail } from "@/types/acl-group-detail";
 import { AddAclLeadButton } from "@/components/forms/AddAclLeads";
-import { AddAclGroupButton } from "@/components/forms/AddAclGroup";
 import { LoginProfileWithRoles } from "@/app/internal/link-login-lead/types";
 
 
@@ -180,11 +178,9 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             {lead.linkedin_url ? <a href={lead.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">Linkedin</a> : ""}
                         </p>
                         <p className="text-sm">
-                            <span className="font-bold">Acess Control - Leads:</span> {aclLead.map((acll) => acll.name).join(", ")} 
-                            <span className="font-bold"> | Groups:</span> {aclGroup.map((acl) => acl.name).join(", ")} 
+                            <span className="font-bold">ACCESS:</span> {aclLead.map((acll) => acll.name).join(", ")} 
                         </p>
                         <AddAclLeadButton leadId={lead.lead_id} rmOptions={rmOptions} />
-                        { lead.rel_group_id && <AddAclGroupButton groupId={lead.rel_group_id} rmOptions={rmOptions} />}
                     </div>
                     <div className="text-sm gap-2 flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
@@ -203,7 +199,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             </p>
                         )}
                         <p>
-                            <span className="font-bold">Client Group:</span> {lead.group_name || <AddClientGroup leadId={lead.lead_id}/>} | 
+                            <span className="font-bold">Client Group:</span> {lead.group_name} | 
                             <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span>
                             {lead.referral_partner ? <span className="font-bold">Referral Partner: {lead.referral_partner} </span> :""}
                         </p>
