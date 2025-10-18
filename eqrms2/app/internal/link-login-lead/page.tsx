@@ -7,6 +7,7 @@ import { can } from '@/lib/permissions';
 import { UnlinkedLoginsTableClient } from './UnlinkedLoginsTableClient';
 import { ProfilesWithoutRolesTableClient } from './ProfilesWithoutRolesTableClient';
 import { SearchLoginProfilesClient } from './SearchLoginProfilesClient';
+import { UnlinkedGroupsData } from './UnlinkedGroupsData';
 import { LoginProfile, LoginProfileWithoutRoles } from './types';
 
 // Link Login to Lead functionality
@@ -91,7 +92,7 @@ export default async function LinkLoginLeadPage() {
         <p className="helper-text">
           TYPES: (a) LOGIN PROFILE: a number that allows used to login (b) ROLES: every login needs to be associated to a particular role. This determines access control (c) CRM: Whether they already exist in CRM (d) CLIENT GROUP: groups investments, mandates, risk-profiling 
           FUNCTIONALITY TO WORK: LOGIN PROFILE needs to be linked to a role (otherwise will be guest with limited capabilities) and linked to a group (to see investments, mandates etc)
-          VIEWS BELOW: (a) Search Login Profile - can search for specific person (b) Unlinked Login Profile - login created but not linked in the CRM (b) Unlinked Login Profile - new leads that are not linked to someone in CRM (c) Login profiles without roles - people who have no roles
+          VIEWS BELOW: (a) Search Login Profile - can search for specific person (b) Unlinked Login Profile - login created but not linked in the CRM (c) Login profiles without roles - people who have no roles (d) Unlinked Client Groups - client groups with no associated login profiles
         </p>
       </div>
 
@@ -125,6 +126,20 @@ export default async function LinkLoginLeadPage() {
           }
         >
           <ProfilesWithoutRolesData />
+        </Suspense>
+
+        {/* Unlinked Client Groups Table */}
+        <Suspense 
+          fallback={
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                <p className="text-sm text-gray-600">Loading unlinked client groups...</p>
+              </div>
+            </div>
+          }
+        >
+          <UnlinkedGroupsData />
         </Suspense>
       </div>
     </div>

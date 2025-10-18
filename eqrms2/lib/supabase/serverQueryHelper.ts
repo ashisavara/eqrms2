@@ -262,3 +262,19 @@ export async function searchRmsFundsWithDetails(
     ]
   });
 }
+
+// Get unlinked client groups (groups with no login profiles)
+export async function getUnlinkedClientGroups(): Promise<Array<{
+  group_id: number;
+  group_name: string;
+}>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc('get_unlinked_client_groups');
+  
+  if (error) {
+    console.error("Error fetching unlinked client groups:", error);
+    throw error;
+  }
+  
+  return data || [];
+}
