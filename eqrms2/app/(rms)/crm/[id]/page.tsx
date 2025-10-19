@@ -22,7 +22,7 @@ import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 import { AclLeadsDetail } from "@/types/acl-leads-detail";
 import { AclGroupDetail } from "@/types/acl-group-detail";
 import { AddAclLeadButton } from "@/components/forms/AddAclLeads";
-import { LoginProfileWithRoles } from "@/app/internal/link-login-lead/types";
+import { LoginProfileWithRoles } from "@/app/(rms)/internal/link-login-lead/types";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {

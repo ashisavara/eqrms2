@@ -1,7 +1,7 @@
 import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { AssetClass } from "@/types/asset-class-detail";
 import { Category } from "@/types/category-detail";
-import { TableCategories } from "@/app/categories/TableCategories";
+import { TableCategories } from "@/app/(rms)/categories/TableCategories";
 import { EditAssetClassButton } from "@/components/forms/EditAssetClass";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { getUserRoles } from '@/lib/auth/getUserRoles';

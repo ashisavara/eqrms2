@@ -1,7 +1,7 @@
 import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { Structure } from "@/types/structure-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
-import TableFundScreen from "@/app/funds/TableFundScreen";
+import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';

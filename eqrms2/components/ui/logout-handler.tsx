@@ -1,6 +1,6 @@
 "use client";
 
-import { logoutFromChangeGroupAction } from '@/app/auth/otp-login/otpServerActions';
+import { logoutFromChangeGroupAction } from '@/app/(canvas)/auth/otp-login/otpServerActions';
 
 export function LogoutHandler() {
   const handleLogout = async () => {

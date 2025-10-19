@@ -24,7 +24,7 @@ import { can } from '@/lib/permissions';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { EditPortRecoButton } from "@/components/forms/EditPortRecommendation";
-import TableFundScreen from "@/app/funds/TableFundScreen";
+import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
 import { RmsFundsScreener } from "@/types/funds-detail";
 
 interface TableInvestmentsProps {

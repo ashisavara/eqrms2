@@ -2,12 +2,12 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import TableFundScreen from "./TableFundScreen";
-import { TableAmcScreen } from "@/app/amc/TableAmcScreen";
+import { TableAmcScreen } from "@/app/(rms)/amc/TableAmcScreen";
 import { AMC } from "@/types/amc-detail";
-import { TableCategories } from "@/app/categories/TableCategories";
+import { TableCategories } from "@/app/(rms)/categories/TableCategories";
 import { Category } from "@/types/category-detail";
 import { AssetClass } from "@/types/asset-class-detail";
-import { TableAssetClass } from "@/app/assetclass/TableAssetclass"
+import { TableAssetClass } from "@/app/(rms)/assetclass/TableAssetclass"
 import { Structure } from "@/types/structure-detail";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserRoles } from '@/lib/auth/getUserRoles';

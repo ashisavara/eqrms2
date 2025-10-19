@@ -5,7 +5,7 @@ import { RatingDisplay, RatingContainer } from "@/components/conditional-formatt
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 import { RmsFundsScreener } from "@/types/funds-detail";
-import TableFundScreen from "@/app/funds/TableFundScreen";
+import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import TwoColLayout from "@/components/tables/TwoColLayout";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
