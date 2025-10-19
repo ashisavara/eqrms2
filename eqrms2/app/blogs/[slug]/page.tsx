@@ -73,7 +73,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
     });
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto p-6 ime-blog-page">
             {/* Edit Button */}
             {can(userRoles, 'blogs', 'edit') && (
                 <div className="mb-6 flex justify-end">

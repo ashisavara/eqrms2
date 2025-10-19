@@ -3,14 +3,19 @@ import AlertBox from '@/components/uiBlocks/AlertBox'
 import TextHighlight from '@/components/uiBlocks/TextHighlight'
 import HTML from '@/components/uiBlocks/HTML'
 import Image from '@/components/uiBlocks/Image'
-import ComparisonBox from '@/components/uiBlocks/ComparisonBox'
+import InfoCard from '@/components/uiBlocks/InfoCard'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
  
 const components: MDXComponents = {
   AlertBox,
   TextHighlight,
   HTML,
   Image,
-  ComparisonBox,
+  InfoCard,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
   // Add more global MDX components here
 }
  

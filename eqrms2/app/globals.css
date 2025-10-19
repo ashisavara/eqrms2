@@ -62,6 +62,22 @@
     @apply  mt-4 pt-4 border-t border-gray-400;
   }
 
+ /* for ime-blog-page */
+
+  div.ime-blog-page h2 {
+    @apply text-2xl font-bold mb-4 border-y-2 border-gray-500 py-2 mt-12 mb-4 text-center text-gray-500;
+  }
+
+  div.ime-blog-page p {
+    @apply mt-4;
+  }
+
+  div.ime-blog-page ul li p {
+    @apply mt-4 mb-2;
+  }
+
+
+
 }
 
 @layer base {
@@ -156,7 +172,7 @@
     @apply text-2xl text-center;
   }
   
-  h3 {
+  h2 {
     @apply text-base text-center font-bold mt-0 mb-2 bg-blue-50 rounded-md text-gray-600 p-2;
   }
 
