@@ -33,7 +33,10 @@ export async function generateStaticParams() {
 export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
   
+    console.log('[BlogPage] Loading blog with slug:', slug);
+  
     try {
+        console.log('[BlogPage] Fetching blog from database...');
         const blog = await supabaseSingleRead<blogDetail>({
             table: "blogs",
             columns: "*",
@@ -43,33 +46,40 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
         });
 
         if (!blog) {
+            console.log('[BlogPage] Blog not found:', slug);
             return <div className="max-w-4xl mx-auto p-6">
                 <h1 className="text-2xl font-bold">Blog not found</h1>
                 <p>The blog post you're looking for doesn't exist.</p>
             </div>;
         }
         
+        console.log('[BlogPage] Blog found:', blog.title);
+        
         // Get user roles for edit button check (optional - won't break if fails)
         let userRoles: string[] = [];
         try {
             userRoles = await getUserRoles();
+            console.log('[BlogPage] User roles retrieved');
         } catch (error) {
             // Silently fail - edit button just won't show
-            console.log('Could not get user roles for edit button');
+            console.log('[BlogPage] Could not get user roles:', error instanceof Error ? error.message : 'Unknown error');
         }
 
+        console.log('[BlogPage] Normalizing blog content...');
         // Normalize content: Clean up excessive newlines
         // Replace 3+ consecutive newlines with exactly 2 (proper paragraph break)
         const normalizedBody = blog.body
             .replace(/\n{3,}/g, '\n\n')  // Replace 3+ newlines with exactly 2
             .trim();  // Remove leading/trailing whitespace
 
+        console.log('[BlogPage] Importing remark plugins...');
         // Dynamically import remark plugins to avoid ES6 import issues
         const [remarkBreaks, remarkGfm] = await Promise.all([
             import('remark-breaks').then(mod => mod.default),
             import('remark-gfm').then(mod => mod.default)
         ]);
 
+        console.log('[BlogPage] Serializing MDX content...');
         // Serialize MDX server-side for SEO
         // remarkBreaks: treats single line breaks within paragraphs as <br>
         // remarkGfm: enables GitHub Flavored Markdown (tables, strikethrough, etc.)
@@ -82,6 +92,8 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
             },
             parseFrontmatter: true
         });
+        
+        console.log('[BlogPage] MDX serialization complete');
 
     return (
         <div className="max-w-4xl mx-auto p-6 ime-blog-page">
@@ -116,13 +128,20 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
         </div>
     );
     } catch (error) {
-        console.error('Error loading blog:', error);
+        console.error('[BlogPage] ERROR loading blog:', error);
+        console.error('[BlogPage] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
         return <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold text-red-600">Error loading blog</h1>
             <p>There was an error loading this blog post. Please try again later.</p>
-            <pre className="mt-4 text-sm bg-gray-100 p-4 rounded">
-                {error instanceof Error ? error.message : 'Unknown error'}
+            <pre className="mt-4 text-sm bg-gray-100 p-4 rounded overflow-auto">
+                {error instanceof Error ? error.message : JSON.stringify(error)}
             </pre>
+            <details className="mt-4">
+                <summary className="cursor-pointer text-sm text-gray-600">Stack trace</summary>
+                <pre className="mt-2 text-xs bg-gray-100 p-4 rounded overflow-auto">
+                    {error instanceof Error ? error.stack : 'No stack trace available'}
+                </pre>
+            </details>
         </div>;
     }
 }
