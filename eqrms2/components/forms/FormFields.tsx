@@ -161,7 +161,7 @@ export function TextArea({ name, label, control, placeholder }: Props) {
 }
 
 // Resizable TextArea component
-export function ResizableTextArea({ name, label, control }: { name: string; label: string; control: any }) {
+export function ResizableTextArea({ name, label, control, maxRows = 15 }: { name: string; label: string; control: any; maxRows?: number }) {
   return (
     <div className="form-group">
       <label htmlFor={name} className="form-label text-sm font-bold">{label}</label>
@@ -178,7 +178,7 @@ export function ResizableTextArea({ name, label, control }: { name: string; labe
                 id={name}
                 className={withErrorClass("form-textarea w-full p-2 border border-gray-300 rounded-md text-sm whitespace-pre-wrap", hasError)}
                 minRows={2}
-                maxRows={15}
+                maxRows={maxRows}
                 aria-invalid={hasError}
                 aria-describedby={hasError ? errId : undefined}
                 style={{ whiteSpace: 'pre-wrap' }}
@@ -201,7 +201,8 @@ export function ToggleGroupInput({
   className,
   toggleGroupClassName,
   itemClassName,
-  valueType = "string"
+  valueType = "string",
+  hiddenLabel = false
 }: { 
   name: string; 
   label: string; 
@@ -211,10 +212,11 @@ export function ToggleGroupInput({
   toggleGroupClassName?: string;
   itemClassName?: string;
   valueType?: "string" | "number";
+  hiddenLabel?: boolean;
 }) {
   return (
     <div className={className || "space-y-2"}>
-      <Label className="font-bold">{label}</Label>
+      {!hiddenLabel && <Label className="font-bold">{label}</Label>}
       <Controller
         name={name}
         control={control}

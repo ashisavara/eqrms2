@@ -4,16 +4,19 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ResizableTextArea } from '@/components/forms/FormFields';
+import { ResizableTextArea, TextInput, ToggleGroupInput } from '@/components/forms/FormFields';
 import { ComponentDirectorySheet } from '@/components/uiBlocks/ComponentDirectory';
 import { ImageUpload } from '@/components/forms/ImageUpload';
 import { supabaseUpdateRow } from '@/lib/supabase/serverQueryHelper';
 import { toast } from 'sonner';
 
 interface Blog {
-  id: number;
-  created_at: string;
+  slug: string;
+  created_at: Date;
   body: string;
+  title: string;
+  featured_image: string;
+  status: string;
 }
 
 interface EditBlogFormProps {
@@ -21,6 +24,9 @@ interface EditBlogFormProps {
 }
 
 interface BlogFormData {
+  title: string;
+  featured_image: string;
+  status: string;
   body: string;
 }
 
@@ -38,12 +44,18 @@ export function EditBlogForm({ initialData }: EditBlogFormProps) {
     reset
   } = useForm<BlogFormData>({
     defaultValues: {
+      title: initialData.title || '',
+      featured_image: initialData.featured_image || '',
+      status: initialData.status || 'draft',
       body: initialData.body || ''
     }
   });
 
   useEffect(() => {
     reset({
+      title: initialData.title || '',
+      featured_image: initialData.featured_image || '',
+      status: initialData.status || 'draft',
       body: initialData.body || ''
     });
   }, [initialData, reset]);
@@ -77,7 +89,10 @@ export function EditBlogForm({ initialData }: EditBlogFormProps) {
       console.log('Processed body:', JSON.stringify(processedBody));
 
       // Update blog in database with processed content
-      await supabaseUpdateRow('blogs', 'id', initialData.id, {
+      await supabaseUpdateRow('blogs', 'slug', initialData.slug, {
+        title: data.title,
+        featured_image: data.featured_image,
+        status: data.status,
         body: processedBody
       });
 
@@ -86,7 +101,7 @@ export function EditBlogForm({ initialData }: EditBlogFormProps) {
         const revalidateRes = await fetch('/api/revalidate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ path: `/blogs/${initialData.id}` })
+          body: JSON.stringify({ path: `/blogs/${initialData.slug}` })
         });
 
         if (!revalidateRes.ok) {
@@ -99,7 +114,7 @@ export function EditBlogForm({ initialData }: EditBlogFormProps) {
       }
 
       toast.success('Blog updated successfully!');
-      router.push(`/blogs/${initialData.id}`);
+      router.push(`/blogs/${initialData.slug}`);
     } catch (error) {
       console.error('Error updating blog:', error);
       toast.error('Failed to update blog');
@@ -109,42 +124,20 @@ export function EditBlogForm({ initialData }: EditBlogFormProps) {
   };
 
   const handleImageUploaded = (imagePath: string) => {
-    // This could be enhanced to automatically insert the image tag into the textarea
-    toast.info(`Image uploaded! Use this path: ${imagePath}`);
+    // Set the featured_image field with the uploaded image path
+    // This would require access to the form's setValue method
+    toast.info(`Image uploaded! Path: ${imagePath}`);
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-4">
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-2">Edit Blog</h1>
-        <p className="text-gray-600">Write your blog content using Markdown and MDX components</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Toolbar */}
-        <div className="flex gap-2 p-3 bg-gray-50 rounded-lg">
-          <ComponentDirectorySheet />
-          <ImageUpload onImageUploaded={handleImageUploaded} />
-        </div>
-
-        {/* Content Editor */}
-        <ResizableTextArea 
-          name="body" 
-          label="Blog Content" 
-          control={control}
-        />
-
-        {/* Error Display */}
-        {Object.keys(errors).length > 0 && (
-          <div className="text-red-500">
-            {Object.entries(errors).map(([field, error]) => (
-              <div key={field}>{field}: {(error as any).message}</div>
-            ))}
-          </div>
-        )}
-
-        {/* Submit Button */}
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <Button 
             type="submit" 
             disabled={isLoading}
@@ -156,10 +149,61 @@ export function EditBlogForm({ initialData }: EditBlogFormProps) {
             type="button" 
             variant="outline"
             onClick={() => router.back()}
+            className="bg-red-100 hover:bg-red-200 text-red-800 border-red-300"
           >
             Cancel
           </Button>
+          <ToggleGroupInput 
+            name="status" 
+            label="Status" 
+            control={control}
+            itemClassName="ime-choice-chips"
+            hiddenLabel={true}
+            options={[
+              { value: 'published', label: 'Published' },
+              { value: 'draft', label: 'Draft' },
+              { value: 'archived', label: 'Archived' }
+            ]}
+          />
         </div>
+
+        {/* Blog Fields */}
+        <div className="grid grid-cols-2 space-x-4">
+          <TextInput 
+            name="title" 
+            label="Blog Title" 
+            control={control}
+            placeholder="Enter blog title"
+          />
+          <TextInput 
+            name="featured_image" 
+            label="Featured Image URL" 
+            control={control}
+            placeholder="Image URL from uploader"
+          />
+        </div>
+        <div className="grid grid-cols-2 space-x-4">  
+          <ComponentDirectorySheet />
+          <ImageUpload onImageUploaded={handleImageUploaded} />
+        </div>
+
+        {/* Content Editor */}
+        <ResizableTextArea 
+          name="body" 
+          label="Blog Content" 
+          control={control}
+          maxRows={20}
+        />
+
+        {/* Error Display */}
+        {Object.keys(errors).length > 0 && (
+          <div className="text-red-500">
+            {Object.entries(errors).map(([field, error]) => (
+              <div key={field}>{field}: {(error as any).message}</div>
+            ))}
+          </div>
+        )}
+
       </form>
     </div>
   );

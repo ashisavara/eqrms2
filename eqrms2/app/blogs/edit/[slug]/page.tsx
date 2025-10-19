@@ -1,20 +1,15 @@
 import { supabaseSingleRead } from '@/lib/supabase/serverQueryHelper';
 import { EditBlogForm } from './EditBlogForm';
+import { blogDetail } from '@/types/blog-detail';
 
-interface Blog {
-  id: number;
-  created_at: string;
-  body: string;
-}
-
-export default async function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function EditBlogPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   
-  const blog = await supabaseSingleRead<Blog>({
+  const blog = await supabaseSingleRead<blogDetail>({
     table: "blogs",
     columns: "*",
     filters: [
-      (query) => query.eq("id", id)
+      (query) => query.eq("slug", slug)
     ]
   });
 

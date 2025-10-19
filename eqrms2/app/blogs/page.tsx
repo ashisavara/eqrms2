@@ -1,12 +1,26 @@
-import Content from './content.mdx';
+import { blogDetail } from "@/types/blog-detail";
+import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
+import Link from "next/link";
 
-export default function BlogsPage() {
+export default async function BlogsPage() {
+  const blogs = await supabaseListRead<blogDetail>({
+    table: "blogs",
+    columns: "*",
+    filters: [
+      (query) => query.order('id', { ascending: true })
+    ],
+  });
+
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="prose prose-lg prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl">
-        <Content />
+      <div>
+        <h1>Blog List</h1>
+        {blogs.map((blog) => (
+          <div key={blog.id}>
+            <span>{blog.id}</span>
+            <Link href={`/blogs/${blog.slug}`}><span className="blue-hyperlink my-5">      {blog.title}</span></Link>
+          </div>
+        ))}
       </div>
-    </div>
   );
 }
 

@@ -7,6 +7,7 @@ import { Edit } from 'lucide-react';
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import { blogDetail } from "@/types/blog-detail";
 
 interface Blog {
     id: number;
@@ -23,7 +24,7 @@ export async function generateStaticParams() {
     try {
         const blogs = await supabaseListRead<Blog>({
             table: "blogs",
-            columns: "id",
+            columns: "slug",
             filters: []
         });
 
@@ -36,16 +37,16 @@ export async function generateStaticParams() {
     }
 }
 
-export default async function BlogPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
+export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
 
     const userRoles = await getUserRoles();
   
-    const blog = await supabaseSingleRead<Blog>({
+    const blog = await supabaseSingleRead<blogDetail>({
         table: "blogs",
         columns: "*",
         filters: [
-            (query) => query.eq("id", id)
+            (query) => query.eq("slug", slug)
         ]
     });
 
@@ -83,7 +84,7 @@ export default async function BlogPage({ params }: { params: Promise<{ id: strin
             {/* Edit Button */}
             {can(userRoles, 'blogs', 'edit') && (
                 <div className="mb-6 flex justify-end">
-                    <Link href={`/blogs/edit/${id}`}>
+                    <Link href={`/blogs/edit/${slug}`}>
                         <Button variant="outline" className="gap-2">
                             <Edit className="h-4 w-4" />
                             Edit Blog
