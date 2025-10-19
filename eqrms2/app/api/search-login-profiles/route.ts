@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseListRead } from '@/lib/supabase/serverQueryHelper';
-import { LoginProfileWithRoles } from '../../internal/link-login-lead/types';
+import { LoginProfileWithRoles } from '../../(rms)/internal/link-login-lead/types';
 
 export async function POST(req: NextRequest) {
   try {
