@@ -32,45 +32,50 @@ export async function generateStaticParams() {
 
 export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-
-    const userRoles = await getUserRoles();
   
-    const blog = await supabaseSingleRead<blogDetail>({
-        table: "blogs",
-        columns: "*",
-        filters: [
-            (query) => query.eq("slug", slug)
-        ]
-    });
-
-    if (!blog) {
-        return <div>Blog not found</div>;
-    }
-
-    // Normalize content: Clean up excessive newlines
-    // Replace 3+ consecutive newlines with exactly 2 (proper paragraph break)
-    const normalizedBody = blog.body
-        .replace(/\n{3,}/g, '\n\n')  // Replace 3+ newlines with exactly 2
-        .trim();  // Remove leading/trailing whitespace
-
-    // Dynamically import remark plugins to avoid ES6 import issues
-    const [remarkBreaks, remarkGfm] = await Promise.all([
-        import('remark-breaks').then(mod => mod.default),
-        import('remark-gfm').then(mod => mod.default)
-    ]);
-
-    // Serialize MDX server-side for SEO
-    // remarkBreaks: treats single line breaks within paragraphs as <br>
-    // remarkGfm: enables GitHub Flavored Markdown (tables, strikethrough, etc.)
-    const mdxSource = await serialize(normalizedBody, {
-        mdxOptions: {
-            remarkPlugins: [
-                remarkGfm,
-                remarkBreaks
+    try {
+        const blog = await supabaseSingleRead<blogDetail>({
+            table: "blogs",
+            columns: "*",
+            filters: [
+                (query) => query.eq("slug", slug)
             ]
-        },
-        parseFrontmatter: true
-    });
+        });
+
+        if (!blog) {
+            return <div className="max-w-4xl mx-auto p-6">
+                <h1 className="text-2xl font-bold">Blog not found</h1>
+                <p>The blog post you're looking for doesn't exist.</p>
+            </div>;
+        }
+        
+        // Get user roles for edit button check
+        const userRoles = await getUserRoles();
+
+        // Normalize content: Clean up excessive newlines
+        // Replace 3+ consecutive newlines with exactly 2 (proper paragraph break)
+        const normalizedBody = blog.body
+            .replace(/\n{3,}/g, '\n\n')  // Replace 3+ newlines with exactly 2
+            .trim();  // Remove leading/trailing whitespace
+
+        // Dynamically import remark plugins to avoid ES6 import issues
+        const [remarkBreaks, remarkGfm] = await Promise.all([
+            import('remark-breaks').then(mod => mod.default),
+            import('remark-gfm').then(mod => mod.default)
+        ]);
+
+        // Serialize MDX server-side for SEO
+        // remarkBreaks: treats single line breaks within paragraphs as <br>
+        // remarkGfm: enables GitHub Flavored Markdown (tables, strikethrough, etc.)
+        const mdxSource = await serialize(normalizedBody, {
+            mdxOptions: {
+                remarkPlugins: [
+                    remarkGfm,
+                    remarkBreaks
+                ]
+            },
+            parseFrontmatter: true
+        });
 
     return (
         <div className="max-w-4xl mx-auto p-6 ime-blog-page">
@@ -103,5 +108,15 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
                 <MDXContent mdxSource={mdxSource} />
             </div>
         </div>
-    )
+    );
+    } catch (error) {
+        console.error('Error loading blog:', error);
+        return <div className="max-w-4xl mx-auto p-6">
+            <h1 className="text-2xl font-bold text-red-600">Error loading blog</h1>
+            <p>There was an error loading this blog post. Please try again later.</p>
+            <pre className="mt-4 text-sm bg-gray-100 p-4 rounded">
+                {error instanceof Error ? error.message : 'Unknown error'}
+            </pre>
+        </div>;
+    }
 }
