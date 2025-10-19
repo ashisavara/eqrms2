@@ -49,8 +49,14 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
             </div>;
         }
         
-        // Get user roles for edit button check
-        const userRoles = await getUserRoles();
+        // Get user roles for edit button check (optional - won't break if fails)
+        let userRoles: string[] = [];
+        try {
+            userRoles = await getUserRoles();
+        } catch (error) {
+            // Silently fail - edit button just won't show
+            console.log('Could not get user roles for edit button');
+        }
 
         // Normalize content: Clean up excessive newlines
         // Replace 3+ consecutive newlines with exactly 2 (proper paragraph break)
