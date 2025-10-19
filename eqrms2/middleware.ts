@@ -1,12 +1,13 @@
 /**
- * OTP-ONLY AUTHENTICATION MIDDLEWARE + AFFILIATE COOKIE CAPTURE
+ * SUBDOMAIN ROUTING + OTP AUTHENTICATION + AFFILIATE COOKIE CAPTURE
  *
+ * - Routes requests based on subdomain:
+ *    • rms.imecapital.in → serves /(rms) routes (authenticated)
+ *    • public.imecapital.in → serves /(public) routes (mostly public)
+ *    • imecapital.in → NOT HANDLED (continues to WordPress)
  * - Captures rf + UTM params site-wide and stores them in an httpOnly cookie for 30 days (last-click)
- * - Enforces OTP-only auth:
- *    • Redirects unauthenticated users to /auth/otp-login
- *    • Redirects old email/password routes to /auth/otp-login
- *    • Allows public access to static assets and OTP routes
- *    • Post-login redirects / -> /investments
+ * - Enforces OTP-only auth with subdomain-aware redirects
+ * - Cross-subdomain session persistence via .imecapital.in cookies
  */
 
 import { updateSession } from "@/lib/supabase/middleware";
@@ -16,6 +17,57 @@ import { type NextRequest, NextResponse } from "next/server";
 // ===== Affiliate capture config =====
 const AFF_COOKIE = "aff_rf";
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"] as const;
+
+// ===== Subdomain detection =====
+type Subdomain = 'rms' | 'public' | 'root' | null;
+
+function getSubdomain(host: string): Subdomain {
+  // Localhost or non-production
+  if (!host.includes('.imecapital.in') && host !== 'imecapital.in') return null;
+  
+  // Root domain - NOT HANDLED by Next.js (continues to WordPress)
+  if (host === 'imecapital.in') return 'root';
+  
+  // Subdomains
+  if (host.startsWith('rms.')) return 'rms';
+  if (host.startsWith('public.')) return 'public';
+  
+  return null;
+}
+
+// ===== Route group detection =====
+type RouteGroup = 'rms' | 'public' | 'canvas' | 'api' | 'static';
+
+function getRouteGroup(pathname: string): RouteGroup {
+  // Static assets and Next.js internals
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico)$/)
+  ) {
+    return 'static';
+  }
+
+  // API routes
+  if (pathname.startsWith('/api/')) return 'api';
+
+  // Auth/canvas routes
+  if (pathname.startsWith('/auth/')) return 'canvas';
+
+  // Known RMS routes
+  const rmsRoutes = [
+    '/investments', '/mandate', '/funds', '/companies', '/categories',
+    '/amc', '/assetclass', '/sectors', '/structure', '/crm',
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected'
+  ];
+  
+  if (rmsRoutes.some(r => pathname === r || pathname.startsWith(r + '/'))) {
+    return 'rms';
+  }
+
+  // Everything else is public (blogs, homepage, etc.)
+  return 'public';
+}
 
 /** Parse rf + utm_* from URL and build cookie payload string, or return null if no valid rf */
 function buildAffiliateCookiePayload(req: NextRequest): string | null {
@@ -56,17 +108,42 @@ function applyAffCookie(req: NextRequest, res: NextResponse, payload: string | n
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const host = request.headers.get("host") || "";
 
   // Build affiliate cookie payload UP FRONT so we can attach it on any return branch
   const affPayload = buildAffiliateCookiePayload(request);
 
-  // ----- Public/old routes config -----
-  const publicRoutes = [
-    "/auth/otp-login",
-    "/api/send-otp",
-    "/api/verify-otp",
-  ];
+  // ===== PHASE 1: Subdomain Detection =====
+  const subdomain = getSubdomain(host);
+  const routeGroup = getRouteGroup(pathname);
 
+  // Root domain (imecapital.in) - NOT HANDLED, pass through to WordPress
+  if (subdomain === 'root') {
+    const res = NextResponse.next();
+    return applyAffCookie(request, res, affPayload);
+  }
+
+  // ===== PHASE 2: Static Assets (always allowed) =====
+  if (routeGroup === 'static') {
+    const res = NextResponse.next();
+    return applyAffCookie(request, res, affPayload);
+  }
+
+  // ===== PHASE 3: Subdomain Routing (Production only) =====
+  if (subdomain) {
+    // RMS routes on public subdomain -> redirect to RMS subdomain
+    if (subdomain === 'public' && routeGroup === 'rms') {
+      const url = request.nextUrl.clone();
+      url.host = host.replace('public.', 'rms.');
+      const res = NextResponse.redirect(url);
+      return applyAffCookie(request, res, affPayload);
+    }
+
+    // Public routes on RMS subdomain -> will be handled by auth check below
+    // (RMS requires auth for everything, so they'll be redirected to login)
+  }
+
+  // ===== PHASE 4: Old Auth Route Redirects =====
   const oldAuthRoutes = [
     "/auth/login",
     "/auth/sign-up",
@@ -76,25 +153,10 @@ export async function middleware(request: NextRequest) {
     "/auth/error",
   ];
 
-  const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
-  );
-
   const isOldAuthRoute = oldAuthRoutes.some(
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
 
-  // ----- Allow static assets and Next.js internals -----
-  if (
-    pathname.startsWith("/_next/") ||
-    pathname.startsWith("/favicon.ico") ||
-    pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico)$/)
-  ) {
-    const res = NextResponse.next();
-    return applyAffCookie(request, res, affPayload);
-  }
-
-  // ----- Redirect old auth routes to OTP login -----
   if (isOldAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/otp-login";
@@ -102,47 +164,81 @@ export async function middleware(request: NextRequest) {
     return applyAffCookie(request, res, affPayload);
   }
 
-  // ----- Allow public routes (no auth needed) -----
-  if (isPublicRoute) {
+  // ===== PHASE 5: Authentication =====
+
+  // Public routes (no auth needed)
+  const publicRoutes = [
+    "/auth/otp-login",
+    "/api/send-otp",
+    "/api/verify-otp",
+  ];
+
+  const isPublicRoute = publicRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/")
+  );
+
+  // Canvas routes (auth pages) are always public
+  if (routeGroup === 'canvas' || isPublicRoute) {
     const res = NextResponse.next();
     return applyAffCookie(request, res, affPayload);
   }
 
-  // ----- Protected routes: check Supabase session -----
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
+  // API routes are always accessible (they handle their own auth)
+  if (routeGroup === 'api') {
+    const res = NextResponse.next();
+    return applyAffCookie(request, res, affPayload);
+  }
+
+  // Determine if this route requires authentication
+  let requiresAuth = false;
+
+  if (subdomain === 'rms' || (!subdomain && routeGroup === 'rms')) {
+    // On RMS subdomain or RMS routes: always require auth
+    requiresAuth = true;
+  } else if (subdomain === 'public' || (!subdomain && routeGroup === 'public')) {
+    // On public subdomain or public routes: only /blogs/edit/* requires auth
+    requiresAuth = pathname.startsWith('/blogs/edit/');
+  }
+
+  // Check Supabase session if auth required
+  if (requiresAuth) {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(_cookiesToSet) {
+            // Intentionally no-op here (we set our own affiliate cookie via applyAffCookie)
+          },
         },
-        setAll(_cookiesToSet) {
-          // Intentionally no-op here (we set our own affiliate cookie via applyAffCookie)
-        },
-      },
+      }
+    );
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // Unauthenticated -> redirect to OTP login on same subdomain
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/auth/otp-login";
+      // Store original URL for post-login redirect
+      url.searchParams.set('redirectTo', pathname);
+      const res = NextResponse.redirect(url);
+      return applyAffCookie(request, res, affPayload);
     }
-  );
 
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Unauthenticated -> redirect to OTP login
-  if (!user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/auth/otp-login";
-    const res = NextResponse.redirect(url);
-    return applyAffCookie(request, res, affPayload);
+    // Authenticated and on root path of RMS -> redirect to /investments
+    if (user && pathname === "/" && (subdomain === 'rms' || routeGroup === 'rms')) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/investments";
+      const res = NextResponse.redirect(url);
+      return applyAffCookie(request, res, affPayload);
+    }
   }
 
-  // Authenticated and on root -> redirect to /investments
-  if (user && pathname === "/") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/investments";
-    const res = NextResponse.redirect(url);
-    return applyAffCookie(request, res, affPayload);
-  }
-
-  // Authenticated on other routes -> maintain session
+  // ===== PHASE 6: Maintain Session & Return =====
   const res = await updateSession(request);
   return applyAffCookie(request, res, affPayload);
 }

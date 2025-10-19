@@ -52,6 +52,7 @@ export const PERMISSION_GROUPS = {
   internal: {
     view: ['admin', 'super_admin', 'research', 'inv_desk', 'rm','ops'],
     link_login_lead: ['admin', 'super_admin', 'inv_desk'],
+    admin_only: ['admin', 'super_admin'],
   },
 
   expiring: {
