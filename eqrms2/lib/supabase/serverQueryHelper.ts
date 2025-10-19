@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "./server"; // Make sure this is your server-side client
+import { createClient as createAnonymousClient } from '@supabase/supabase-js';
 
 // Get current user from JWT token (server-side)
 export async function getCurrentUser(): Promise<{ id: string; email?: string } | null> {
@@ -277,6 +278,32 @@ export async function getUnlinkedClientGroups(): Promise<Array<{
   }
   
   return data || [];
+}
+
+// Get public blog slugs for static generation (anonymous client)
+export async function getPublicBlogSlugs(): Promise<Array<{ slug: string }>> {
+  try {
+    // Create anonymous client for build-time static generation
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('slug')
+      .eq('status', 'published'); // Only published blogs
+    
+    if (error) {
+      console.error('Error fetching public blog slugs:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error in getPublicBlogSlugs:', error);
+    return [];
+  }
 }
 
 // Upload image to Supabase Storage (server-side)

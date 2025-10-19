@@ -1,4 +1,4 @@
-import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
+import { supabaseSingleRead, getPublicBlogSlugs } from "@/lib/supabase/serverQueryHelper";
 import { MDXContent } from '@/components/MDXContent';
 import { serialize } from 'next-mdx-remote/serialize';
 import Link from 'next/link';
@@ -22,15 +22,8 @@ export const revalidate = 86400; // 24 hours in seconds
 // Generate static params for all blog posts at build time
 export async function generateStaticParams() {
     try {
-        const blogs = await supabaseListRead<Blog>({
-            table: "blogs",
-            columns: "slug",
-            filters: []
-        });
-
-        return blogs.map((blog) => ({
-            id: blog.id.toString(),
-        }));
+        const blogs = await getPublicBlogSlugs();
+        return blogs.map((blog) => ({ slug: blog.slug }));
     } catch (error) {
         console.error('Error generating static params for blogs:', error);
         return []; // Return empty array on error to avoid build failure
@@ -93,8 +86,19 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
                 </div>
             )}
 
+            {/* Featured Image */}
+            {blog.featured_image && (
+                <div className="mb-8">
+                    <img
+                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog${blog.featured_image}`}
+                        alt={blog.title}
+                        className="w-full h-auto rounded-lg shadow-sm"
+                    />
+                </div>
+            )}
+
             {/* Blog Content */}
-            <h1>{blog.title}</h1>
+            <h1 className="text-3xl font-bold mb-6">{blog.title}</h1>
             <div className="prose prose-lg">
                 <MDXContent mdxSource={mdxSource} />
             </div>

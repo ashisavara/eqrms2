@@ -12,6 +12,7 @@ import AlertBox from './AlertBox';
 import TextHighlight from './TextHighlight';
 import HTML from './HTML';
 import Image from './Image';
+import ComparisonBox from './ComparisonBox';
 
 // Component directory data with detailed prop metadata
 const mdxComponents = [
@@ -47,6 +48,18 @@ const mdxComponents = [
       { name: 'caption', type: 'text', default: 'Optional caption' },
       { name: 'width', type: 'number', default: 400 },
       { name: 'height', type: 'number', default: 300 }
+    ]
+  },
+  {
+    name: 'ComparisonBox',
+    component: ComparisonBox,
+    props: [
+      { name: 'leftHeader', type: 'text', default: 'What we like' },
+      { name: 'rightHeader', type: 'text', default: 'What we don\'t like' },
+      { name: 'leftColor', type: 'select', options: ['green', 'red', 'blue', 'yellow', 'gray', 'purple'], default: 'green' },
+      { name: 'rightColor', type: 'select', options: ['green', 'red', 'blue', 'yellow', 'gray', 'purple'], default: 'red' },
+      { name: 'leftChildren', type: 'text', default: '<ul><li>Ease of operations</li><li>Systematic investments</li></ul>' },
+      { name: 'rightChildren', type: 'text', default: '<ul><li>No differentiated strategies</li><li>Risk of fund-manager churn</li></ul>' }
     ]
   }
 ];
