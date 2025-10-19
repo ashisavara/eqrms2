@@ -1,4 +1,4 @@
-import { supabaseSingleRead, getPublicBlogSlugs } from "@/lib/supabase/serverQueryHelper";
+import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
 import { MDXContent } from '@/components/MDXContent';
 import { serialize } from 'next-mdx-remote/serialize';
 import Link from 'next/link';
@@ -16,19 +16,11 @@ interface Blog {
     // Add other blog fields as needed
 }
 
-// Fallback revalidation: Rebuild daily as safety net
-export const revalidate = 86400; // 24 hours in seconds
+// Force dynamic rendering since we need cookies for Supabase
+export const dynamic = 'force-dynamic';
 
-// Generate static params for all blog posts at build time
-export async function generateStaticParams() {
-    try {
-        const blogs = await getPublicBlogSlugs();
-        return blogs.map((blog) => ({ slug: blog.slug }));
-    } catch (error) {
-        console.error('Error generating static params for blogs:', error);
-        return []; // Return empty array on error to avoid build failure
-    }
-}
+// Optionally revalidate every 24 hours for better performance
+export const revalidate = 86400; // 24 hours in seconds
 
 export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
