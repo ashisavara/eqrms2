@@ -37,10 +37,10 @@ export default function AlertBox({ color, heading, children }: AlertBoxProps) {
 
   return (
     <div className={`${styles.background} ${styles.border} border rounded-lg p-4 my-4`}>
-      <h4 className={`${styles.heading} text-center font-bold text-base mb-2`}>
+      <h4 className={`${styles.heading} text-center font-bold text-lg mb-2`}>
         {heading}
       </h4>
-      <div className={`${styles.heading} text-sm`}>
+      <div className={`${styles.heading} text-[15px]`}>
         {children}
       </div>
     </div>

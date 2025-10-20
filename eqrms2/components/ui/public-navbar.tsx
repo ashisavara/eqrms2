@@ -23,21 +23,18 @@ const menuItems = [
     label: "About Us",
     href: "#",
     subItems: [
-      { label: "Our Story", href: "#" },
-    ],
-  },
-  {
-    label: "Differentiators",
-    href: "#",
-    subItems: [
-      { label: "Why Choose Us", href: "#" },
+      { label: "About us", href: "/about-us" },
+      { label: "Our Team", href: "/our-team" },
+      { label: "Expertise", href: "/expertise" },
+      { label: "Transparency", href: "/rms" },
+      { label: "Customer Focus", href: "/client-dedication" },
     ],
   },
   {
     label: "Solutions",
     href: "#",
     subItems: [
-      { label: "Investment Solutions", href: "#" },
+      { label: "Individuals & Families", href: "/family-solutions" },
     ],
   },
   {
@@ -70,9 +67,9 @@ export function PublicNavBar() {
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
                 <img
-                  src="/logo.png"
+                  src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-logo.png"
                   alt="IME Capital"
-                  className="h-8 w-auto"
+                  className="h-10 w-auto"
                 />
               </Link>
             </div>
@@ -151,9 +148,9 @@ export function PublicNavBar() {
             <div className="flex-1 flex justify-center">
               <Link href="/" className="flex items-center">
                 <img
-                  src="/logo.png"
+                  src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-logo.png"
                   alt="IME Capital"
-                  className="h-6 w-auto"
+                  className="h-10 w-auto"
                 />
               </Link>
             </div>
