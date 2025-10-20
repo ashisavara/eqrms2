@@ -166,41 +166,28 @@ export async function middleware(request: NextRequest) {
 
   // ===== PHASE 5: Authentication =====
 
-  // Public routes (no auth needed)
-  const publicRoutes = [
-    "/auth/otp-login",
-    "/api/send-otp",
-    "/api/verify-otp",
+  // Define private routes that require authentication
+  const privateRoutes = [
+    // All RMS routes
+    '/investments', '/mandate', '/funds', '/companies', '/categories',
+    '/amc', '/assetclass', '/sectors', '/structure', '/crm',
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected',
+    // Specific public routes that need auth
+    '/blogs/edit'
   ];
 
-  const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
+  // Determine if this route requires authentication
+  const requiresAuth = privateRoutes.some(route => 
+    pathname === route || pathname.startsWith(route + '/')
   );
 
-  // Canvas routes (auth pages) are always public
-  if (routeGroup === 'canvas' || isPublicRoute) {
+  // If not requiring auth, just pass through and apply affiliate cookie
+  if (!requiresAuth) {
     const res = NextResponse.next();
     return applyAffCookie(request, res, affPayload);
   }
 
-  // API routes are always accessible (they handle their own auth)
-  if (routeGroup === 'api') {
-    const res = NextResponse.next();
-    return applyAffCookie(request, res, affPayload);
-  }
-
-  // Determine if this route requires authentication
-  let requiresAuth = false;
-
-  if (subdomain === 'rms' || (!subdomain && routeGroup === 'rms')) {
-    // On RMS subdomain or RMS routes: always require auth
-    requiresAuth = true;
-  } else if (subdomain === 'public' || (!subdomain && routeGroup === 'public')) {
-    // On public subdomain or public routes: only /blogs/edit/* requires auth
-    requiresAuth = pathname.startsWith('/blogs/edit/');
-  }
-
-  // Check Supabase session if auth required
+  // If requiring auth, check Supabase session
   if (requiresAuth) {
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -230,6 +217,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Authenticated and on root path of RMS -> redirect to /investments
+    // this is required since there is no landing page for rms.imecapital.in
     if (user && pathname === "/" && (subdomain === 'rms' || routeGroup === 'rms')) {
       const url = request.nextUrl.clone();
       url.pathname = "/investments";
