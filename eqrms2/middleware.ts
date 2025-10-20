@@ -7,7 +7,7 @@
  *    • imecapital.in → NOT HANDLED (continues to WordPress)
  * - Captures rf + UTM params site-wide and stores them in an httpOnly cookie for 30 days (last-click)
  * - Enforces OTP-only auth with subdomain-aware redirects
- * - Cross-subdomain session persistence via .imecapital.in cookies
+ * - Cross-subdomain session persistence via .imecapital.in cookies.
  */
 
 import { updateSession } from "@/lib/supabase/middleware";
