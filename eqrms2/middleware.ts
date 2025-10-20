@@ -6,8 +6,9 @@
  *    • public.imecapital.in → serves /(public) routes (mostly public)
  *    • imecapital.in → NOT HANDLED (continues to WordPress)
  * - Captures rf + UTM params site-wide and stores them in an httpOnly cookie for 30 days (last-click)
- * - Enforces OTP-only auth with subdomain-aware redirects
+ * - Enforces OTP-only auth with subdomain-aware redirects.
  * - Cross-subdomain session persistence via .imecapital.in cookies.
+ *  - some text 
  */
 
 import { updateSession } from "@/lib/supabase/middleware";

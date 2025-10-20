@@ -68,7 +68,7 @@ export default async function CrmPage() {
             <Tabs defaultValue="crm" className="w-full mx-auto mt-6 text-sm">
                 <TabsList className="w-full">
                         <TabsTrigger value="crm">CRM</TabsTrigger>
-                        <TabsTrigger value="interactions">Interactions</TabsTrigger>
+                        <TabsTrigger value="interactions">Interaction</TabsTrigger>
                         <TabsTrigger value="deals">Deals</TabsTrigger>
                         <TabsTrigger value="mis">MIS</TabsTrigger>
                 </TabsList>
