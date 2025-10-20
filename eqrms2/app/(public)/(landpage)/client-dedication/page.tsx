@@ -47,8 +47,8 @@ export default function RMSPage() {
             </Section>
        
             <Section className="bg-green-900 py-12 text-white text-center">
-            <p>By ensuring documentation of core qualitative factors that drive your wealth management decisions, the IME client portal provides a more holistic view on your investments, keeping you and your relationship managers on the same page and protecting against the risk of RM churn.  </p>
-        </Section>
+                <p>By ensuring documentation of core qualitative factors that drive your wealth management decisions, the IME client portal provides a more holistic view on your investments, keeping you and your relationship managers on the same page and protecting against the risk of RM churn.  </p>
+            </Section>
             
 
 
