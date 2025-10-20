@@ -8,6 +8,7 @@
  * - Captures rf + UTM params site-wide and stores them in an httpOnly cookie for 30 days (last-click)
  * - Enforces OTP-only auth with subdomain-aware redirects
  * - Cross-subdomain session persistence via .imecapital.in cookies.
+ * - just adding a comment
  */
 
 import { updateSession } from "@/lib/supabase/middleware";
@@ -189,6 +190,8 @@ export async function middleware(request: NextRequest) {
 
   // If requiring auth, check Supabase session
   if (requiresAuth) {
+    let supabaseResponse = NextResponse.next({ request });
+    
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -197,8 +200,27 @@ export async function middleware(request: NextRequest) {
           getAll() {
             return request.cookies.getAll();
           },
-          setAll(_cookiesToSet) {
-            // Intentionally no-op here (we set our own affiliate cookie via applyAffCookie)
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            
+            // Determine cookie domain for cross-subdomain persistence
+            const host = request.headers.get("host") || "";
+            const onProdDomain = host.endsWith(".imecapital.in") || host === "imecapital.in";
+            const cookieDomain = onProdDomain ? ".imecapital.in" : undefined;
+            
+            // Update response with cross-subdomain cookies
+            supabaseResponse = NextResponse.next({ request });
+            cookiesToSet.forEach(({ name, value, options }) => {
+              supabaseResponse.cookies.set(name, value, {
+                ...options,
+                domain: cookieDomain,
+                sameSite: "lax",
+                secure: process.env.NODE_ENV === "production",
+                path: "/",
+              });
+            });
           },
         },
       }
@@ -224,6 +246,9 @@ export async function middleware(request: NextRequest) {
       const res = NextResponse.redirect(url);
       return applyAffCookie(request, res, affPayload);
     }
+
+    // ===== PHASE 6: Maintain Session & Return =====
+    return applyAffCookie(request, supabaseResponse, affPayload);
   }
 
   // ===== PHASE 6: Maintain Session & Return =====
