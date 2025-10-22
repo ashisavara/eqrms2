@@ -37,7 +37,7 @@ const menuItems = [
       { label: "Products", href: "/products" },
       { label: "Individuals & Families", href: "/family-solutions" },
       { label: "Retirees", href: "/retiree-solutions" },
-      { label: "Family Offices & Ultra HNI", href: "/family-office-and-ultra-hni" },
+      { label: "Family Offices / Ultra HNI", href: "/family-office-and-ultra-hni" },
       { label: "Corporate Treasury", href: "/corporate-solutions" },
       { label: "NRI/OCI/PIO", href: "/nri-investment-solutions" },
     ],

@@ -144,7 +144,62 @@ export async function middleware(request: NextRequest) {
     // (RMS requires auth for everything, so they'll be redirected to login)
   }
 
-  // ===== PHASE 4: Old Auth Route Redirects =====
+  // ===== PHASE 4: RMS Root Handling =====
+  // Handle RMS subdomain root with auth-based redirects
+  if (subdomain === 'rms' && pathname === '/') {
+    let supabaseResponse = NextResponse.next({ request });
+    
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            
+            // Cross-subdomain cookie persistence
+            const host = request.headers.get("host") || "";
+            const onProdDomain = host.endsWith(".imecapital.in") || host === "imecapital.in";
+            const cookieDomain = onProdDomain ? ".imecapital.in" : undefined;
+            
+            supabaseResponse = NextResponse.next({ request });
+            cookiesToSet.forEach(({ name, value, options }) => {
+              supabaseResponse.cookies.set(name, value, {
+                ...options,
+                domain: cookieDomain,
+                sameSite: "lax",
+                secure: process.env.NODE_ENV === "production",
+                path: "/",
+              });
+            });
+          },
+        },
+      }
+    );
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      // Authenticated -> redirect to /funds
+      const url = request.nextUrl.clone();
+      url.pathname = "/funds";
+      const res = NextResponse.redirect(url);
+      return applyAffCookie(request, res, affPayload);
+    } else {
+      // Unauthenticated -> redirect to OTP login
+      const url = request.nextUrl.clone();
+      url.pathname = "/auth/otp-login";
+      const res = NextResponse.redirect(url);
+      return applyAffCookie(request, res, affPayload);
+    }
+  }
+
+  // ===== PHASE 5: Old Auth Route Redirects =====
   const oldAuthRoutes = [
     "/auth/login",
     "/auth/sign-up",
@@ -165,7 +220,7 @@ export async function middleware(request: NextRequest) {
     return applyAffCookie(request, res, affPayload);
   }
 
-  // ===== PHASE 5: Authentication =====
+  // ===== PHASE 6: Authentication =====
 
   // Define private routes that require authentication
   const privateRoutes = [
@@ -238,20 +293,12 @@ export async function middleware(request: NextRequest) {
       return applyAffCookie(request, res, affPayload);
     }
 
-    // Authenticated and on root path of RMS -> redirect to /investments
-    // this is required since there is no landing page for rms.imecapital.in
-    if (user && pathname === "/" && (subdomain === 'rms' || routeGroup === 'rms')) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/investments";
-      const res = NextResponse.redirect(url);
-      return applyAffCookie(request, res, affPayload);
-    }
 
-    // ===== PHASE 6: Maintain Session & Return =====
+    // ===== PHASE 7: Maintain Session & Return =====
     return applyAffCookie(request, supabaseResponse, affPayload);
   }
 
-  // ===== PHASE 6: Maintain Session & Return =====
+  // ===== PHASE 7: Maintain Session & Return =====
   const res = await updateSession(request);
   return applyAffCookie(request, res, affPayload);
 }
