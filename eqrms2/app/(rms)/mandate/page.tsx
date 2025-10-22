@@ -129,7 +129,7 @@ export default async function MandatePage() {
 
   return (
     <GoalOptionsProvider goalOptions={goalOptionsForm}>
-      <div>
+      <div className="mandatePage">
         <div className="pageHeadingBox"><h1>Investment Mandate</h1></div>
           <Tabs defaultValue="mandate" className="w-full">
             <TabsList className="w-full">

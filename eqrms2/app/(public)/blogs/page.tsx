@@ -12,7 +12,7 @@ export default async function BlogsPage() {
   });
 
   return (
-      <div>
+      <div className="ime-blog-page">
         <h1>Blog List</h1>
         {blogs.map((blog) => (
           <div key={blog.id}>

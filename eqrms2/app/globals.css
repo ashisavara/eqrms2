@@ -19,6 +19,10 @@
   }
 
   p {
+    @apply mt-1 mb-1;
+  }
+
+  div.ime-blog-page .p {
     @apply mt-6 mb-6;
   }
 
