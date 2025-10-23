@@ -48,6 +48,8 @@ const menuItems = [
     subItems: [
       { label: "Blog", href: "/blogs" },
       { label: "Queries", href: "/investment-query" },
+      { label: "Media", href: "/media-interview" },
+      { label: "Calculators", href: "/financial-calculator" },
     ],
   },
 ];
