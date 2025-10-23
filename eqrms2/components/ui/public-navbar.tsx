@@ -46,7 +46,8 @@ const menuItems = [
     label: "Insights",
     href: "#",
     subItems: [
-      { label: "Market Insights", href: "#" },
+      { label: "Blog", href: "/blogs" },
+      { label: "Queries", href: "/investment-query" },
     ],
   },
 ];
