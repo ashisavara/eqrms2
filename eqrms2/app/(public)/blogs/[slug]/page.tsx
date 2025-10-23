@@ -8,6 +8,8 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import { blogDetail } from "@/types/blog-detail";
+import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/utils";
 
 interface Blog {
     id: number;
@@ -113,7 +115,11 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
             )}
 
             {/* Blog Content */}
-            <h1 className="text-3xl font-bold mb-6">{blog.title}</h1>
+            <h1 className="text-3xl font-bold mb-2 text-gray-600">{blog.title}</h1>
+            <div className="flex flex-row justify-center">
+                
+                <Badge variant="secondary">{blog.category} </Badge>  <span className="text-sm text-gray-500">| Written by IME's Investor Desk on {formatDate(blog.created_at)} </span>
+            </div>
             <div className="prose prose-lg">
                 <MDXContent mdxSource={mdxSource} />
             </div>

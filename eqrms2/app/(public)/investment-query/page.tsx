@@ -1,6 +1,6 @@
 import { InvQueryDetail } from "@/types/inv-query-detail";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
-import Link from "next/link";
+import InvQueryClient from "./InvQueryClient";
 
 export default async function InvQueryPage() {
   const invQuery = await supabaseListRead<InvQueryDetail>({
@@ -11,16 +11,6 @@ export default async function InvQueryPage() {
     ],
   });
 
-  return (
-      <div className="ime-invQuery-page">
-        <h1>invQuery List</h1>
-        {invQuery.map((invQuery) => (
-          <div key={invQuery.query_id}>
-            <span>{invQuery.query_id}</span>
-            <Link href={`/investment-query/${invQuery.slug}`}><span className="blue-hyperlink my-5">      {invQuery.title}</span></Link>
-          </div>
-        ))}
-      </div>
-  );
+  return <InvQueryClient invQuery={invQuery} />;
 }
 

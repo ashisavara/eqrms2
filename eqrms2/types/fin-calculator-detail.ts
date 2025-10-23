@@ -5,4 +5,5 @@ export type FinCalculatorDetail = {
     slug: string;
     calculator: string;
     summary: string;
+    category: string;
 };

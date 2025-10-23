@@ -6,6 +6,7 @@ export type blogDetail = {
     slug: string;
     featured_image: string;
     status: string;
+    category: string;
 };
 
 
