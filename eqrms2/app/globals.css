@@ -190,7 +190,7 @@
   }
   
   h2 {
-    @apply text-xl text-center font-bold mt-0 mb-2 bg-blue-50 rounded-md text-gray-600 py-4;
+    @apply text-xl text-center font-bold mt-4 mb-2 bg-blue-50 rounded-md text-gray-600 py-2;
   }
 
 

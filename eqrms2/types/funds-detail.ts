@@ -35,6 +35,7 @@ export type RmsFundAmc = {
     five_yr: number | null;
     since_inception: number | null;
     fund_commission: number | null;
+    fund_body: string | null;
   
     amc_name: string | null;
     amc_rating: number | null;
@@ -66,6 +67,7 @@ export type RmsFundAmc = {
   asset_class_slug: string | null;
   category_slug: string | null;
   mkt_material_link: string | null;
+  show_public_website: boolean | null;
   };
 
 
