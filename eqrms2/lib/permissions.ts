@@ -7,7 +7,7 @@ import { getUserRoles } from './auth/getUserRoles';
 export const PERMISSION_GROUPS = {
   rms: {
     view_basic: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'trial_ended', 'guest'],
-    view_detailed: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'trial_ended'],
+    view_detailed: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'trial_ended', 'guest'],
     view_due_diligence: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
     view_all_funds: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
     view_changelog: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
