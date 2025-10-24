@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     // Search the v_login_profile_with_roles view
     const results = await supabaseListRead<LoginProfileWithRoles>({
       table: 'v_login_profile_with_roles',
-      columns: 'uuid, phone_number, lead_name, user_roles, lead_id, crm_lead_name, group_id, group_name, rm_name',
+      columns: 'uuid, phone_number, lead_name, user_roles, lead_id, crm_lead_name, group_id, group_name, rm_name, mandate_id, mandate_name',
       filters
     });
 

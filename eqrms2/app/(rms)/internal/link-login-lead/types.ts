@@ -34,6 +34,8 @@ export interface LoginProfileWithRoles {
   group_id?: number | null;
   group_name?: string | null;
   rm_name?: string | null;
+  mandate_id?: number | null;
+  mandate_name?: string | null;
 }
 
 export interface SearchLoginProfilesRequest {
