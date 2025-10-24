@@ -7,8 +7,11 @@ import { can } from '@/lib/permissions';
 import { UnlinkedLoginsTableClient } from './UnlinkedLoginsTableClient';
 import { ProfilesWithoutRolesTableClient } from './ProfilesWithoutRolesTableClient';
 import { SearchLoginProfilesClient } from './SearchLoginProfilesClient';
+import { SearchLeadsClient } from './SearchLeadsClient';
 import { UnlinkedGroupsData } from './UnlinkedGroupsData';
 import { LoginProfile, LoginProfileWithoutRoles } from './types';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+
 
 // Link Login to Lead functionality
 
@@ -96,52 +99,63 @@ export default async function LinkLoginLeadPage() {
         </p>
       </div>
 
-      <div className="space-y-8">
-        {/* Search Login Profiles */}
-        <SearchLoginProfilesClient />
+      <Tabs defaultValue="link_login_lead" className="ime-tabs">
+      <TabsList className="w-full">
+            <TabsTrigger value="link_login_lead">Link Login Lead</TabsTrigger>
+            <TabsTrigger value="search_login">Search Login</TabsTrigger>
+            <TabsTrigger value="search_leads">Search Leads</TabsTrigger>
+            <TabsTrigger value="investment_team">Unlinked Groups</TabsTrigger>
+     </TabsList>
+          <TabsContent value="link_login_lead">
+            <Suspense 
+              fallback={
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                    <p className="text-sm text-gray-600">Loading unlinked login profiles...</p>
+                  </div>
+                </div>
+              }
+            >
+              <UnlinkedLoginsData />
+            </Suspense>
 
-        {/* Unlinked Login Profiles Table */}
-        <Suspense 
-          fallback={
-            <div className="flex items-center justify-center py-8">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                <p className="text-sm text-gray-600">Loading unlinked login profiles...</p>
-              </div>
-            </div>
-          }
-        >
-          <UnlinkedLoginsData />
-        </Suspense>
+            {/* Login Profiles Without Roles Table */}
+            <Suspense 
+              fallback={
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                    <p className="text-sm text-gray-600">Loading profiles without roles...</p>
+                  </div>
+                </div>
+              }
+            >
+              <ProfilesWithoutRolesData />
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="search_login">
+            <SearchLoginProfilesClient />
+          </TabsContent>
+          <TabsContent value="search_leads">
+            <SearchLeadsClient />
+          </TabsContent>
+          <TabsContent value="investment_team">
+            <Suspense 
+              fallback={
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                    <p className="text-sm text-gray-600">Loading unlinked client groups...</p>
+                  </div>
+                </div>
+              }
+            >
+              <UnlinkedGroupsData />
+            </Suspense>
+          </TabsContent>  
+    </Tabs>
 
-        {/* Login Profiles Without Roles Table */}
-        <Suspense 
-          fallback={
-            <div className="flex items-center justify-center py-8">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                <p className="text-sm text-gray-600">Loading profiles without roles...</p>
-              </div>
-            </div>
-          }
-        >
-          <ProfilesWithoutRolesData />
-        </Suspense>
-
-        {/* Unlinked Client Groups Table */}
-        <Suspense 
-          fallback={
-            <div className="flex items-center justify-center py-8">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                <p className="text-sm text-gray-600">Loading unlinked client groups...</p>
-              </div>
-            </div>
-          }
-        >
-          <UnlinkedGroupsData />
-        </Suspense>
-      </div>
     </div>
   );
 }

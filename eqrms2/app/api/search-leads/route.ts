@@ -2,36 +2,44 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
 // Helper function for ILIKE-based fallback search
-async function performIlikeSearch(supabase: any, phone: string, name: string, limit: number) {
-  const searchStrategies = [
-    // Strategy 1: Combined OR search (most comprehensive)
-    {
+async function performIlikeSearch(supabase: any, phone: string | null, name: string | null, limit: number) {
+  const searchStrategies = [];
+
+  // Strategy 1: Combined OR search (if both parameters provided)
+  if (phone && name) {
+    searchStrategies.push({
       name: 'combined_search',
       query: supabase
-        .from('leads_tagging')
-        .select('lead_id, lead_name, phone_e164, primary_rm_uuid')
+        .from('view_leads_tagcrm')
+        .select('lead_id, lead_name, lead_progression, lead_source, phone_e164, login_name, rm_name')
         .or(`lead_name.ilike.%${name}%,phone_e164.ilike.%${phone}%`)
         .limit(limit)
-    },
-    // Strategy 2: Name contains search (if combined finds too many)
-    {
+    });
+  }
+
+  // Strategy 2: Name contains search
+  if (name) {
+    searchStrategies.push({
       name: 'name_contains',
       query: supabase
-        .from('leads_tagging')
-        .select('lead_id, lead_name, phone_e164, primary_rm_uuid')
+        .from('view_leads_tagcrm')
+        .select('lead_id, lead_name, lead_progression, lead_source, phone_e164, login_name, rm_name')
         .ilike('lead_name', `%${name}%`)
         .limit(limit)
-    },
-    // Strategy 3: Phone number match (if name search fails)
-    {
+    });
+  }
+
+  // Strategy 3: Phone number match
+  if (phone) {
+    searchStrategies.push({
       name: 'phone_match',
       query: supabase
-        .from('leads_tagging')
-        .select('lead_id, lead_name, phone_e164, primary_rm_uuid')
+        .from('view_leads_tagcrm')
+        .select('lead_id, lead_name, lead_progression, lead_source, phone_e164, login_name, rm_name')
         .ilike('phone_e164', `%${phone}%`)
         .limit(limit)
-    }
-  ];
+    });
+  }
 
   for (const strategy of searchStrategies) {
     const { data: strategyData, error: strategyError } = await strategy.query;
@@ -39,9 +47,15 @@ async function performIlikeSearch(supabase: any, phone: string, name: string, li
     if (!strategyError && strategyData && strategyData.length > 0) {
       // Map results to match RPC format
       return strategyData.map((item: any) => ({
-        ...item,
+        lead_id: item.lead_id,
+        lead_name: item.lead_name,
+        lead_progression: item.lead_progression || null,
+        lead_source: item.lead_source || null,
+        phone_e164: item.phone_e164,
+        login_name: item.login_name || null,
+        rm_name: item.rm_name || null,
         name_score: null, // No similarity scoring in ILIKE
-        phone_exact: item.phone_e164 === phone
+        phone_exact: phone ? item.phone_e164 === phone : false
       }));
     }
   }
@@ -53,12 +67,13 @@ export async function POST(req: NextRequest) {
   try {
     const { phone, name, limit = 20 } = await req.json();
 
-    console.log('Search API called with:', { phone, name, limit });
+    console.log('Search Leads API called with:', { phone, name, limit });
 
-    if (!phone || !name) {
-      console.log('Missing required parameters:', { phone: !!phone, name: !!name });
+    // At least one parameter must be provided
+    if (!phone && !name) {
+      console.log('Missing required parameters: at least one of phone or name must be provided');
       return NextResponse.json(
-        { error: 'Phone and name are required' },
+        { error: 'At least one search parameter (phone or name) is required' },
         { status: 400 }
       );
     }
@@ -66,10 +81,9 @@ export async function POST(req: NextRequest) {
     const supabase = await createClient();
 
     // Try the Supabase RPC function first (with pg_trgm similarity)
-
-    const { data: rpcData, error: rpcError } = await supabase.rpc('search_leads_new_login', {
-      p_phone: phone,
-      p_name: name,
+    const { data: rpcData, error: rpcError } = await supabase.rpc('search_leads_flexible', {
+      p_phone: phone || null,
+      p_name: name || null,
       p_limit: limit
     });
 
