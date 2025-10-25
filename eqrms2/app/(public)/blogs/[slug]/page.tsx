@@ -1,15 +1,10 @@
-import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
+import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { MDXContent } from '@/components/MDXContent';
 import { serialize } from 'next-mdx-remote/serialize';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Edit } from 'lucide-react';
-import { getUserRoles } from '@/lib/auth/getUserRoles';
-import { can } from '@/lib/permissions';
-import { redirect } from 'next/navigation';
 import { blogDetail } from "@/types/blog-detail";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
+import { notFound } from 'next/navigation';
 
 interface Blog {
     id: number;
@@ -18,11 +13,38 @@ interface Blog {
     // Add other blog fields as needed
 }
 
-// Force dynamic rendering since we need cookies for Supabase
-export const dynamic = 'force-dynamic';
+// Generate static params for all published blogs
+export async function generateStaticParams() {
+    try {
+        // Use direct Supabase client for build-time generation (no cookies needed)
+        const { createClient } = await import('@supabase/supabase-js');
+        const supabase = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+        
+        const { data: blogs, error } = await supabase
+            .from('blogs')
+            .select('slug')
+            .eq('status', 'published')
+            .not('slug', 'is', null);
+        
+        if (error) {
+            console.error('Error fetching blogs for static generation:', error);
+            return [];
+        }
+        
+        return blogs?.map((blog) => ({
+            slug: blog.slug,
+        })) || [];
+    } catch (error) {
+        console.error('Error generating static params for blogs:', error);
+        return [];
+    }
+}
 
-// Optionally revalidate every 24 hours for better performance
-export const revalidate = 86400; // 24 hours in seconds
+// Hybrid revalidation: time-based + on-demand
+export const revalidate = 3600; // Revalidate every hour
 
 export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -41,23 +63,10 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
 
         if (!blog) {
             console.log('[BlogPage] Blog not found:', slug);
-            return <div className="max-w-4xl mx-auto p-6">
-                <h1 className="text-2xl font-bold">Blog not found</h1>
-                <p>The blog post you're looking for doesn't exist.</p>
-            </div>;
+            notFound();
         }
         
         console.log('[BlogPage] Blog found:', blog.title);
-        
-        // Get user roles for edit button check (optional - won't break if fails)
-        let userRoles: string[] = [];
-        try {
-            userRoles = await getUserRoles();
-            console.log('[BlogPage] User roles retrieved');
-        } catch (error) {
-            // Silently fail - edit button just won't show
-            console.log('[BlogPage] Could not get user roles:', error instanceof Error ? error.message : 'Unknown error');
-        }
 
         console.log('[BlogPage] Normalizing blog content...');
         // Normalize content: Clean up excessive newlines
@@ -91,18 +100,6 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
 
     return (
         <div className="max-w-4xl mx-auto p-6 ime-blog-page">
-            {/* Edit Button */}
-            {can(userRoles, 'blogs', 'edit') && (
-                <div className="mb-6 flex justify-end">
-                    <Link href={`/blogs/edit/${slug}`}>
-                        <Button variant="outline" className="gap-2">
-                            <Edit className="h-4 w-4" />
-                            Edit Blog
-                        </Button>
-                    </Link>
-                </div>
-            )}
-
             {/* Featured Image */}
             {blog.featured_image && (
                 <div className="mb-8">
