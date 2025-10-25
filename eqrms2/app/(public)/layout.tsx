@@ -1,6 +1,7 @@
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import { PublicNavBar } from '@/components/ui/public-navbar';
+import { PublicFooter } from '@/components/ui/public-footer';
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
@@ -24,9 +25,12 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   // For now, allow all access during development
   
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <PublicNavBar />
-      {children}
+      <main className="flex-1">
+        {children}
+      </main>
+      <PublicFooter />
     </div>
   );
 }

@@ -99,7 +99,7 @@ export function PublicNavBar() {
             {/* Create Account Button */}
             <div className="flex-shrink-0">
               <Button asChild>
-                <Link href="#">Create Account</Link>
+                <Link href="/15-minute-introductory-call">Book Introduction Call</Link>
               </Button>
             </div>
           </div>

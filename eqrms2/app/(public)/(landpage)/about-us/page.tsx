@@ -7,7 +7,7 @@ import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
 
 export default function AboutUsPage() {
   return (
-    <div>
+    <div className="prose">
         <PageTitle 
                 title="About us" 
                 caption="Learn more about our firm, our values and our mission." 
