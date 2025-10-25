@@ -12,12 +12,12 @@ export function LogoutHandler() {
         // Still redirect even if server logout fails
       }
       
-      // Redirect to OTP login page after logout
-      window.location.href = '/auth/otp-login';
+      // Redirect to root landing page after logout
+      window.location.href = '/';
     } catch (error) {
       console.error('Logout error:', error);
       // Still redirect even if there's an error
-      window.location.href = '/auth/otp-login';
+      window.location.href = '/';
     }
   };
 

@@ -145,59 +145,8 @@ export async function middleware(request: NextRequest) {
   }
 
   // ===== PHASE 4: RMS Root Handling =====
-  // Handle RMS subdomain root with auth-based redirects
-  if (subdomain === 'rms' && pathname === '/') {
-    let supabaseResponse = NextResponse.next({ request });
-    
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll();
-          },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value),
-            );
-            
-            // Cross-subdomain cookie persistence
-            const host = request.headers.get("host") || "";
-            const onProdDomain = host.endsWith(".imecapital.in") || host === "imecapital.in";
-            const cookieDomain = onProdDomain ? ".imecapital.in" : undefined;
-            
-            supabaseResponse = NextResponse.next({ request });
-            cookiesToSet.forEach(({ name, value, options }) => {
-              supabaseResponse.cookies.set(name, value, {
-                ...options,
-                domain: cookieDomain,
-                sameSite: "lax",
-                secure: process.env.NODE_ENV === "production",
-                path: "/",
-              });
-            });
-          },
-        },
-      }
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (user) {
-      // Authenticated -> redirect to /funds
-      const url = request.nextUrl.clone();
-      url.pathname = "/funds";
-      const res = NextResponse.redirect(url);
-      return applyAffCookie(request, res, affPayload);
-    } else {
-      // Unauthenticated -> redirect to OTP login
-      const url = request.nextUrl.clone();
-      url.pathname = "/auth/otp-login";
-      const res = NextResponse.redirect(url);
-      return applyAffCookie(request, res, affPayload);
-    }
-  }
+  // Root path (/) is now the landing/login page - allow access for all users
+  // No redirect needed - both authenticated and unauthenticated users can view it
 
   // ===== PHASE 5: Old Auth Route Redirects =====
   const oldAuthRoutes = [
@@ -207,6 +156,7 @@ export async function middleware(request: NextRequest) {
     "/auth/update-password",
     "/auth/sign-up-success",
     "/auth/error",
+    "/auth/otp-login",
   ];
 
   const isOldAuthRoute = oldAuthRoutes.some(
@@ -215,7 +165,7 @@ export async function middleware(request: NextRequest) {
 
   if (isOldAuthRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/otp-login";
+    url.pathname = "/";
     const res = NextResponse.redirect(url);
     return applyAffCookie(request, res, affPayload);
   }
@@ -283,10 +233,10 @@ export async function middleware(request: NextRequest) {
 
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Unauthenticated -> redirect to OTP login on same subdomain
+    // Unauthenticated -> redirect to root landing page
     if (!user) {
       const url = request.nextUrl.clone();
-      url.pathname = "/auth/otp-login";
+      url.pathname = "/";
       // Store original URL for post-login redirect
       url.searchParams.set('redirectTo', pathname);
       const res = NextResponse.redirect(url);

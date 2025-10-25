@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from './otpServerActions'
+import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from './auth/otp-login/otpServerActions'
 import { useGroupMandate } from '@/lib/contexts/GroupMandateContext'
 import Section from "@/components/uiComponents/section"
 import ImageTextBox from "@/components/uiComponents/image-text-box"
@@ -14,7 +14,7 @@ import PageTitle from "@/components/uiComponents/page-title"
 import SectionTextHighlight from "@/components/uiComponents/section-text-highlight"
 import AlertBox from "@/components/uiBlocks/AlertBox"
 
-export default function OtpTestPage() {
+export default function RMSLandingPage() {
   const [phone, setPhone] = useState('')
   const [otp, setOtp] = useState('')
   const [status, setStatus] = useState('')
@@ -347,3 +347,4 @@ export default function OtpTestPage() {
     </div>
   )
 }
+
