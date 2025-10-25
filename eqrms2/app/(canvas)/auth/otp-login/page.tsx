@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from './otpServerActions'
+import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from '@/app/(rms)/app/otpServerActions'
 import { useGroupMandate } from '@/lib/contexts/GroupMandateContext'
 import Section from "@/components/uiComponents/section"
 import ImageTextBox from "@/components/uiComponents/image-text-box"

@@ -1,6 +1,6 @@
 "use client";
 
-import { logoutFromChangeGroupAction } from '@/app/(canvas)/auth/otp-login/otpServerActions';
+import { logoutFromChangeGroupAction } from '@/app/(rms)/app/otpServerActions';
 
 export function LogoutHandler() {
   const handleLogout = async () => {
@@ -12,12 +12,12 @@ export function LogoutHandler() {
         // Still redirect even if server logout fails
       }
       
-      // Redirect to root landing page after logout
-      window.location.href = '/';
+      // Redirect to RMS app landing page after logout
+      window.location.href = '/app';
     } catch (error) {
       console.error('Logout error:', error);
       // Still redirect even if there's an error
-      window.location.href = '/';
+      window.location.href = '/app';
     }
   };
 

@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { useGroupMandate, type Group, type Mandate } from "@/lib/contexts/GroupMandateContext";
 import { Badge } from "@/components/ui/badge";
 import { Users, Target, Loader2, LogOut } from "lucide-react";
-import { logoutFromChangeGroupAction } from '@/app/(canvas)/auth/otp-login/otpServerActions';
+import { logoutFromChangeGroupAction } from '@/app/(rms)/app/otpServerActions';
 import { SearchButton } from "@/components/forms/SearchButton";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';

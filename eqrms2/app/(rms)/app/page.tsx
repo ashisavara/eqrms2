@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from '../auth/otp-login/otpServerActions'
+import { getUserServerAction, verifyOtpServerAction, logoutServerAction } from './otpServerActions'
 import { useGroupMandate } from '@/lib/contexts/GroupMandateContext'
 import Section from "@/components/uiComponents/section"
 import ImageTextBox from "@/components/uiComponents/image-text-box"
@@ -110,7 +110,7 @@ export default function RMSLandingPage() {
       setOtp('')
       
       // Redirect to refresh the page
-      window.location.href = '/'
+      window.location.href = '/app'
     } catch (error) {
       console.error('Logout error:', error)
       // Still clear local state even if there's an error
@@ -120,6 +120,8 @@ export default function RMSLandingPage() {
       setOtpSent(false)
       setPhone('')
       setOtp('')
+      // Still redirect even if there's an error
+      window.location.href = '/app'
     }
   }
 
