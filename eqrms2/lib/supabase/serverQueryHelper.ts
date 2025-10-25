@@ -2,6 +2,7 @@
 
 import { createClient } from "./server"; // Make sure this is your server-side client
 import { createClient as createAnonymousClient } from '@supabase/supabase-js';
+import { blogDetail } from "@/types/blog-detail";
 
 // Get current user from JWT token (server-side)
 export async function getCurrentUser(): Promise<{ id: string; email?: string } | null> {
@@ -280,6 +281,9 @@ export async function getUnlinkedClientGroups(): Promise<Array<{
   return data || [];
 }
 
+// ===== STATIC GENERATION FUNCTIONS (No Authentication Required) =====
+// These functions use anonymous client and are safe for static generation
+
 // Get public blog slugs for static generation (anonymous client)
 export async function getPublicBlogSlugs(): Promise<Array<{ slug: string }>> {
   try {
@@ -304,6 +308,329 @@ export async function getPublicBlogSlugs(): Promise<Array<{ slug: string }>> {
     console.error('Error in getPublicBlogSlugs:', error);
     return [];
   }
+}
+
+// Static-friendly single read function (no authentication)
+export async function supabaseStaticSingleRead<T = any>({ 
+  table, 
+  columns = "*", 
+  filters = [] 
+}: QueryOptions): Promise<T | null> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    
+    let query = supabase.from(table).select(columns);
+
+    filters.forEach((filterFn) => {
+      query = filterFn(query);
+    });
+
+    const { data, error } = await query.maybeSingle();
+    if (error) {
+      console.error("Supabase static error:", error);
+      throw error;
+    }
+    return data as T;
+  } catch (error) {
+    console.error("Error in supabaseStaticSingleRead:", error);
+    return null;
+  }
+}
+
+// Static-friendly list read function (no authentication)
+export async function supabaseStaticListRead<T = any>({ 
+  table, 
+  columns = "*", 
+  filters = [] 
+}: QueryOptions): Promise<T[]> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    
+    let query = supabase.from(table).select(columns);
+
+    filters.forEach((filterFn) => {
+      query = filterFn(query);
+    });
+
+    const { data, error } = await query;
+    if (error) {
+      console.error("Supabase static error:", error);
+      throw error;
+    }
+    return data as T[];
+  } catch (error) {
+    console.error("Error in supabaseStaticListRead:", error);
+    return [];
+  }
+}
+
+// Get a single blog for static generation
+export async function getStaticBlog(slug: string): Promise<blogDetail | null> {
+  return await supabaseStaticSingleRead<blogDetail>({
+    table: "blogs",
+    columns: "*",
+    filters: [
+      (query) => query.eq("slug", slug)
+    ]
+  });
+}
+
+// Get public media interview slugs for static generation
+export async function getPublicMediaInterviewSlugs(): Promise<Array<{ slug: string }>> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    
+    const { data, error } = await supabase
+      .from('media_interviews')
+      .select('slug')
+      .eq('status', 'published'); // Only published media interviews
+    
+    if (error) {
+      console.error('Error fetching public media interview slugs:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error in getPublicMediaInterviewSlugs:', error);
+    return [];
+  }
+}
+
+// Get a single media interview for static generation
+export async function getStaticMediaInterview(slug: string): Promise<any | null> {
+  return await supabaseStaticSingleRead({
+    table: "media_interviews",
+    columns: "*",
+    filters: [
+      (query) => query.eq("slug", slug)
+    ]
+  });
+}
+
+// Get public investment query slugs for static generation
+export async function getPublicInvestmentQuerySlugs(): Promise<Array<{ slug: string }>> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    
+    const { data, error } = await supabase
+      .from('investment_queries')
+      .select('slug')
+      .eq('status', 'published'); // Only published investment queries
+    
+    if (error) {
+      console.error('Error fetching public investment query slugs:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error in getPublicInvestmentQuerySlugs:', error);
+    return [];
+  }
+}
+
+// Get a single investment query for static generation
+export async function getStaticInvestmentQuery(slug: string): Promise<any | null> {
+  return await supabaseStaticSingleRead({
+    table: "investment_queries",
+    columns: "*",
+    filters: [
+      (query) => query.eq("slug", slug)
+    ]
+  });
+}
+
+// Get public PMS AMC slugs for static generation
+export async function getPublicPmsAmcSlugs(): Promise<Array<{ slug: string }>> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    
+    const { data, error } = await supabase
+      .from('v_public_rms_amc')
+      .select('slug')
+      .not('slug', 'is', null); // Only AMCs with slugs
+    
+    if (error) {
+      console.error('Error fetching public PMS AMC slugs:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error in getPublicPmsAmcSlugs:', error);
+    return [];
+  }
+}
+
+// Get a single PMS AMC for static generation
+export async function getStaticPmsAmc(slug: string): Promise<any | null> {
+  return await supabaseStaticSingleRead({
+    table: "v_public_rms_amc",
+    columns: "*",
+    filters: [
+      (query) => query.eq("slug", slug)
+    ]
+  });
+}
+
+// Get PMS AMC funds for static generation
+export async function getStaticPmsAmcFunds(slug: string): Promise<any[]> {
+  return await supabaseStaticListRead({
+    table: "v_public_rms_funds",
+    columns: "*",
+    filters: [
+      (query) => query.eq("amc_slug", slug)
+    ]
+  });
+}
+
+// Get public PMS scheme slugs for static generation
+export async function getPublicPmsSchemeSlugs(): Promise<Array<{ slug: string }>> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    
+    const { data, error } = await supabase
+      .from('v_public_rms_funds')
+      .select('slug')
+      .not('slug', 'is', null); // Only schemes with slugs
+    
+    if (error) {
+      console.error('Error fetching public PMS scheme slugs:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error in getPublicPmsSchemeSlugs:', error);
+    return [];
+  }
+}
+
+// Get a single PMS scheme for static generation
+export async function getStaticPmsScheme(slug: string): Promise<any | null> {
+  return await supabaseStaticSingleRead({
+    table: "v_public_rms_funds",
+    columns: "*",
+    filters: [
+      (query) => query.eq("slug", slug)
+    ]
+  });
+}
+
+// Get server-side data for blogs (e.g., top-rated PMSs, market data)
+export async function getStaticServerData(dataType: string, params: any = {}): Promise<any> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    switch (dataType) {
+      case 'top-rated-flexicap-pms':
+        const { data: pmsData, error: pmsError } = await supabase
+          .from('pms_ratings')
+          .select('*')
+          .eq('category', 'flexicap')
+          .order('rating', { ascending: false })
+          .limit(10);
+        
+        if (pmsError) throw pmsError;
+        return pmsData || [];
+
+      case 'market-data':
+        const { data: marketData, error: marketError } = await supabase
+          .from('market_data')
+          .select('*')
+          .order('date', { ascending: false })
+          .limit(30);
+        
+        if (marketError) throw marketError;
+        return marketData || [];
+
+      case 'fund-ratings':
+        const { data: fundData, error: fundError } = await supabase
+          .from('fund_ratings')
+          .select('*')
+          .eq('status', 'active')
+          .order('rating', { ascending: false })
+          .limit(20);
+        
+        if (fundError) throw fundError;
+        return fundData || [];
+
+      default:
+        console.warn(`Unknown data type: ${dataType}`);
+        return null;
+    }
+  } catch (error) {
+    console.error(`Error fetching static server data for ${dataType}:`, error);
+    return null;
+  }
+}
+
+// Manual revalidation for specific paths
+export async function revalidatePaths(paths: string[]): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { revalidatePath } = await import('next/cache');
+    
+    // Revalidate all specified paths
+    for (const path of paths) {
+      revalidatePath(path);
+    }
+    
+    console.log(`✅ Revalidated ${paths.length} path(s):`, paths);
+    return { success: true };
+  } catch (error) {
+    console.error('❌ Revalidation error:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
+}
+
+// Convenience function for blog revalidation
+export async function revalidateBlog(slug: string): Promise<{ success: boolean; error?: string }> {
+  return revalidatePaths([`/blogs/${slug}`, '/blogs']);
+}
+
+// Convenience function for media interview revalidation
+export async function revalidateMediaInterview(slug: string): Promise<{ success: boolean; error?: string }> {
+  return revalidatePaths([`/media-interview/${slug}`, '/media-interview']);
+}
+
+// Convenience function for investment query revalidation
+export async function revalidateInvestmentQuery(slug: string): Promise<{ success: boolean; error?: string }> {
+  return revalidatePaths([`/investment-query/${slug}`, '/investment-query']);
+}
+
+// Convenience function for PMS AMC revalidation
+export async function revalidatePmsAmc(slug: string): Promise<{ success: boolean; error?: string }> {
+  return revalidatePaths([`/pms-amc/${slug}`, '/pms-amc']);
+}
+
+// Convenience function for PMS scheme revalidation
+export async function revalidatePmsScheme(slug: string): Promise<{ success: boolean; error?: string }> {
+  return revalidatePaths([`/pms-scheme/${slug}`, '/pms-scheme']);
 }
 
 // Upload image to Supabase Storage (server-side)

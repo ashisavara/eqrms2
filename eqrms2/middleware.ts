@@ -37,7 +37,7 @@ function getSubdomain(host: string): Subdomain {
 }
 
 // ===== Route group detection =====
-type RouteGroup = 'rms' | 'public' | 'canvas' | 'api' | 'static';
+type RouteGroup = 'rms' | 'public' | 'canvas' | 'static';
 
 function getRouteGroup(pathname: string): RouteGroup {
   // Static assets and Next.js internals
@@ -49,9 +49,6 @@ function getRouteGroup(pathname: string): RouteGroup {
     return 'static';
   }
 
-  // API routes
-  if (pathname.startsWith('/api/')) return 'api';
-
   // Auth/canvas routes
   if (pathname.startsWith('/auth/')) return 'canvas';
 
@@ -59,7 +56,7 @@ function getRouteGroup(pathname: string): RouteGroup {
   const rmsRoutes = [
     '/investments', '/mandate', '/funds', '/companies', '/categories',
     '/amc', '/assetclass', '/sectors', '/structure', '/crm',
-    '/tickets', '/internal', '/uservalidation', '/survey', '/protected'
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/app'
   ];
   
   if (rmsRoutes.some(r => pathname === r || pathname.startsWith(r + '/'))) {
@@ -130,6 +127,12 @@ export async function middleware(request: NextRequest) {
     return applyAffCookie(request, res, affPayload);
   }
 
+  // ===== PHASE 2.5: API Routes (no auth required) =====
+  if (pathname.startsWith('/api/')) {
+    const res = NextResponse.next();
+    return applyAffCookie(request, res, affPayload);
+  }
+
   // ===== PHASE 3: Subdomain Routing (Production only) =====
   if (subdomain) {
     // RMS routes on public subdomain -> redirect to RMS subdomain
@@ -182,9 +185,8 @@ export async function middleware(request: NextRequest) {
     // All RMS routes
     '/investments', '/mandate', '/funds', '/companies', '/categories',
     '/amc', '/assetclass', '/sectors', '/structure', '/crm',
-    '/tickets', '/internal', '/uservalidation', '/survey', '/protected',
-    // Specific public routes that need auth
-    '/blogs/edit'
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected'
+    // Note: /blogs/edit moved to (rms)/internal/edit/blog/[slug]
   ];
 
   // Determine if this route requires authentication

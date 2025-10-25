@@ -1,10 +1,10 @@
-import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { MDXContent } from '@/components/MDXContent';
 import { serialize } from 'next-mdx-remote/serialize';
 import { blogDetail } from "@/types/blog-detail";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { notFound } from 'next/navigation';
+import { getPublicBlogSlugs, getStaticBlog } from '@/lib/supabase/serverQueryHelper';
 
 interface Blog {
     id: number;
@@ -16,35 +16,18 @@ interface Blog {
 // Generate static params for all published blogs
 export async function generateStaticParams() {
     try {
-        // Use direct Supabase client for build-time generation (no cookies needed)
-        const { createClient } = await import('@supabase/supabase-js');
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-        
-        const { data: blogs, error } = await supabase
-            .from('blogs')
-            .select('slug')
-            .eq('status', 'published')
-            .not('slug', 'is', null);
-        
-        if (error) {
-            console.error('Error fetching blogs for static generation:', error);
-            return [];
-        }
-        
-        return blogs?.map((blog) => ({
+        const blogs = await getPublicBlogSlugs();
+        return blogs.map((blog) => ({
             slug: blog.slug,
-        })) || [];
+        }));
     } catch (error) {
         console.error('Error generating static params for blogs:', error);
         return [];
     }
 }
 
-// Hybrid revalidation: time-based + on-demand
-export const revalidate = 3600; // Revalidate every hour
+// ISR: Revalidate every 7 days (604800 seconds)
+export const revalidate = 604800; // 7 days
 
 export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -53,13 +36,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
   
     try {
         console.log('[BlogPage] Fetching blog from database...');
-        const blog = await supabaseSingleRead<blogDetail>({
-            table: "blogs",
-            columns: "*",
-            filters: [
-                (query) => query.eq("slug", slug)
-            ]
-        });
+        const blog = await getStaticBlog(slug);
 
         if (!blog) {
             console.log('[BlogPage] Blog not found:', slug);
