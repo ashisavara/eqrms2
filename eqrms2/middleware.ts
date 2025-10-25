@@ -147,7 +147,16 @@ export async function middleware(request: NextRequest) {
     // (RMS subdomain should only serve RMS routes)
   }
 
-  // ===== PHASE 3.5: Strict Subdomain-Path Enforcement =====
+  // ===== PHASE 3.5: RMS Root Handling (BEFORE strict enforcement) =====
+  // Handle RMS subdomain root - redirect to /app for clean URL structure
+  if (subdomain === 'rms' && pathname === '/') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/app';
+    const res = NextResponse.redirect(url);
+    return applyAffCookie(request, res, affPayload);
+  }
+
+  // ===== PHASE 3.6: Strict Subdomain-Path Enforcement =====
   if (subdomain === 'rms' || subdomain === 'public') {
     // RMS subdomain trying to access public routes -> 404
     if (subdomain === 'rms' && routeGroup === 'public') {
@@ -164,15 +173,6 @@ export async function middleware(request: NextRequest) {
       const res = NextResponse.rewrite(url);
       return applyAffCookie(request, res, affPayload);
     }
-  }
-
-  // ===== PHASE 4: RMS Root Handling =====
-  // Handle RMS subdomain root - redirect to /app for clean URL structure
-  if (subdomain === 'rms' && pathname === '/') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/app';
-    const res = NextResponse.redirect(url);
-    return applyAffCookie(request, res, affPayload);
   }
 
   // ===== PHASE 5: Old Auth Route Redirects =====

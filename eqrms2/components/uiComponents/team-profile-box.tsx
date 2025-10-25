@@ -36,7 +36,7 @@ const TeamProfileBox: React.FC<TeamProfileBoxProps> = ({
         </div>
         
         {/* Content Section */}
-        <div className="text-sm">
+        <div className="text-base">
           {children}
         </div>
       </div>

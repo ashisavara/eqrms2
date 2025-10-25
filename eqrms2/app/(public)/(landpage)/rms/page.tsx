@@ -3,6 +3,8 @@ import ImageTextBox from "@/components/uiComponents/image-text-box";
 import YouTube from "@/components/uiComponents/youtube";
 import PageTitle from "@/components/uiComponents/page-title";
 import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function RMSPage() {
     return (
@@ -15,7 +17,10 @@ export default function RMSPage() {
 
             <Section className="py-12">
                 <div className="ime-grid-2col">
-                    <div><h3 className="text-center">Sign-up Box</h3></div>
+                    <div>
+                        <h3 className="text-center">Sign-up Box</h3>
+                        <Button><Link href="https://rms.imecapital.in">Free Trial</Link></Button>
+                    </div>
                     <div><h3 className="text-center">IME RMS Demo</h3><YouTube url="https://www.youtube.com/watch?v=QNrr0nsUX3M" /></div>
                 </div>
             </Section>

@@ -27,7 +27,7 @@ export default function RMSPage() {
             </ImageTextBox>
             </Section>
 
-            <Section>
+            <Section className="py-12">
                 <div className="ime-grid-2col">
                     <AlertBox color="blue" heading="How it works">
                         <p>Each of your requirements, feeds into portfolio construction & fund selection.</p>

@@ -4,6 +4,7 @@ import AlertBox from "@/components/uiBlocks/AlertBox";
 import Image from "@/components/uiBlocks/Image";
 import PageTitle from "@/components/uiComponents/page-title";
 import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
+import Link from "next/link";
 
 export default function AboutUsPage() {
   return (
@@ -25,7 +26,9 @@ export default function AboutUsPage() {
                 <div>
                     <p>IME was founded by Ashi Anand – in his career of over 20 years as a fund manager, Ashi found structural flaws in the workings of the wealth management industry. He used his experience, knowledge and instinct to found IME Capital – a firm free of conventional restraints; one that focuses on research, expertise and innovation, and can do this with integrity.</p>
                     <p>Ashi spent 2 decades managing funds and investments for large firms like ICICI Prudential and Kotak Mahindra. Among his accomplishments are the fact that he was one of the youngest fund managers of his time, which helped him gain years of insight and experience.</p>
-                    <Button variant="outline">Read More</Button>
+                    <Button variant="outline">
+                        <Link href="/ime-founder-ashi-anand">Read More</Link>
+                    </Button>
                 </div>
             </div>
 
