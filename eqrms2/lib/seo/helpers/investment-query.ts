@@ -24,7 +24,7 @@ export async function generateInvestmentQuerySEO(
   const contentFallbacks: ContentFallbacks = {
     title: query.title,
     description: query.body,
-    publishedTime: query.created_at,
+    publishedTime: query.created_at ? new Date(query.created_at).toISOString() : undefined,
     section: query.query_categories,
     keywords: [
       'IME Capital',

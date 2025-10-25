@@ -25,7 +25,7 @@ export async function generateMediaInterviewSEO(
     title: interview.title,
     description: interview.summary,
     image: interview.youtube_url, // Will extract YouTube thumbnail
-    publishedTime: interview.publication_date,
+    publishedTime: interview.publication_date ? new Date(interview.publication_date).toISOString() : undefined,
     section: interview.publication,
     keywords: [
       'IME Capital',

@@ -25,7 +25,7 @@ export async function generateBlogSEO(
     title: blog.title,
     description: blog.body,
     image: blog.featured_image,
-    publishedTime: blog.created_at,
+    publishedTime: blog.created_at ? new Date(blog.created_at).toISOString() : undefined,
     section: blog.category,
     tags: [blog.category],
     keywords: ['IME Capital', 'Blog', blog.category, 'Investment Research'],
