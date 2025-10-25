@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { notFound } from 'next/navigation';
 import { getPublicBlogSlugs, getStaticBlog } from '@/lib/supabase/serverQueryHelper';
+import { generateBlogSEO } from '@/lib/seo/helpers/blog';
+import type { Metadata } from 'next';
 
 interface Blog {
     id: number;
@@ -24,6 +26,14 @@ export async function generateStaticParams() {
         console.error('Error generating static params for blogs:', error);
         return [];
     }
+}
+
+// Generate SEO metadata for blog posts
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const blog = await getStaticBlog(slug);
+    if (!blog) return {};
+    return generateBlogSEO(blog);
 }
 
 // ISR: Revalidate every 7 days (604800 seconds)

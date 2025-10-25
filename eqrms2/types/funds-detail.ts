@@ -57,21 +57,27 @@ export type RmsFundAmc = {
     inv_phil_desc: string | null;
     salient_points: string | null;
   
-      category_name: string | null;
-  category_long_name: string | null;
-  asset_class_name: string | null;
-  structure_name: string | null;
+    category_name: string | null;
+    category_long_name: string | null;
+    asset_class_name: string | null;
+    structure_name: string | null;
   
-  amc_slug: string | null;
-  structure_slug: string | null;
-  asset_class_slug: string | null;
-  category_slug: string | null;
-  mkt_material_link: string | null;
-  show_public_website: boolean | null;
-  };
+    amc_slug: string | null;
+    structure_slug: string | null;
+    asset_class_slug: string | null;
+    category_slug: string | null;
+    mkt_material_link: string | null;
+    show_public_website: boolean | null;
+    // Optional SEO fields
+    seo_title?: string | null;
+    seo_description?: string | null;
+    og_title?: string | null;
+    og_description?: string | null;
+    og_image?: string | null;
+};
 
 
-  export type RmsFundsScreener = {
+export type RmsFundsScreener = {
     fund_id: number;
     fund_name: string | null;
     asset_class_id: number | null;
@@ -103,5 +109,3 @@ export type RmsFundAmc = {
     amc_rating: number | null;
     amc_team_rating: number | null;
   };
-  
-  

@@ -3,6 +3,8 @@ import { RmsPublicFundsOfAmc  } from "@/types/funds-detail-public";
 import FundPerformanceTable from "@/components/tables/FundPerformanceTable";
 import { notFound } from 'next/navigation';
 import { getPublicPmsAmcSlugs, getStaticPmsAmc, getStaticPmsAmcFunds } from '@/lib/supabase/serverQueryHelper';
+import { generateAmcSEO } from '@/lib/seo/helpers/amc';
+import type { Metadata } from 'next';
 
 // Generate static params for all published PMS AMCs
 export async function generateStaticParams() {
@@ -15,6 +17,14 @@ export async function generateStaticParams() {
         console.error('Error generating static params for PMS AMCs:', error);
         return [];
     }
+}
+
+// Generate SEO metadata for PMS AMCs
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const amc = await getStaticPmsAmc(slug);
+    if (!amc) return {};
+    return generateAmcSEO(amc);
 }
 
 // ISR: Revalidate every 7 days (604800 seconds)

@@ -1,6 +1,8 @@
 import { RmsFundAmc } from "@/types/funds-detail";
 import { notFound } from 'next/navigation';
 import { getPublicPmsSchemeSlugs, getStaticPmsScheme } from '@/lib/supabase/serverQueryHelper';
+import { generateFundSEO } from '@/lib/seo/helpers/fund';
+import type { Metadata } from 'next';
 
 // Generate static params for all published PMS schemes
 export async function generateStaticParams() {
@@ -13,6 +15,14 @@ export async function generateStaticParams() {
         console.error('Error generating static params for PMS schemes:', error);
         return [];
     }
+}
+
+// Generate SEO metadata for PMS schemes
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const fund = await getStaticPmsScheme(slug);
+    if (!fund) return {};
+    return generateFundSEO(fund);
 }
 
 // ISR: Revalidate every 7 days (604800 seconds)

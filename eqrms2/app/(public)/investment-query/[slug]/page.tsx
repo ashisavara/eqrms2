@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { notFound } from 'next/navigation';
 import { getPublicInvestmentQuerySlugs, getStaticInvestmentQuery } from '@/lib/supabase/serverQueryHelper';
+import { generateInvestmentQuerySEO } from '@/lib/seo/helpers/investment-query';
+import type { Metadata } from 'next';
 
 // Generate static params for all published investment queries
 export async function generateStaticParams() {
@@ -15,6 +17,14 @@ export async function generateStaticParams() {
         console.error('Error generating static params for investment queries:', error);
         return [];
     }
+}
+
+// Generate SEO metadata for investment queries
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const query = await getStaticInvestmentQuery(slug);
+    if (!query) return {};
+    return generateInvestmentQuerySEO(query);
 }
 
 // ISR: Revalidate every 7 days (604800 seconds)

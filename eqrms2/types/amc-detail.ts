@@ -66,5 +66,11 @@ export type AMC = {
     amc_diligence_last_check: Date,
     amc_fm_html: string,
     mkt_material_link: string,
-    amc_body: string
+    amc_body: string,
+    // Optional SEO fields
+    seo_title?: string | null;
+    seo_description?: string | null;
+    og_title?: string | null;
+    og_description?: string | null;
+    og_image?: string | null;
 };

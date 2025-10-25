@@ -152,7 +152,7 @@ export async function middleware(request: NextRequest) {
     // RMS subdomain trying to access public routes -> 404
     if (subdomain === 'rms' && routeGroup === 'public') {
       const url = request.nextUrl.clone();
-      url.pathname = '/404';
+      url.pathname = '/not-found';
       const res = NextResponse.rewrite(url);
       return applyAffCookie(request, res, affPayload);
     }
@@ -160,7 +160,7 @@ export async function middleware(request: NextRequest) {
     // Public subdomain trying to access RMS routes -> 404  
     if (subdomain === 'public' && routeGroup === 'rms') {
       const url = request.nextUrl.clone();
-      url.pathname = '/404';
+      url.pathname = '/not-found';
       const res = NextResponse.rewrite(url);
       return applyAffCookie(request, res, affPayload);
     }

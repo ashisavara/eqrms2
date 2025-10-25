@@ -4,6 +4,8 @@ import { formatDate } from "@/lib/utils";
 import YouTube from "@/components/uiComponents/youtube";
 import { notFound } from 'next/navigation';
 import { getPublicMediaInterviewSlugs, getStaticMediaInterview } from '@/lib/supabase/serverQueryHelper';
+import { generateMediaInterviewSEO } from '@/lib/seo/helpers/media-interview';
+import type { Metadata } from 'next';
 
 // Generate static params for all published media interviews
 export async function generateStaticParams() {
@@ -16,6 +18,14 @@ export async function generateStaticParams() {
         console.error('Error generating static params for media interviews:', error);
         return [];
     }
+}
+
+// Generate SEO metadata for media interviews
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const interview = await getStaticMediaInterview(slug);
+    if (!interview) return {};
+    return generateMediaInterviewSEO(interview);
 }
 
 // ISR: Revalidate every 7 days (604800 seconds)
