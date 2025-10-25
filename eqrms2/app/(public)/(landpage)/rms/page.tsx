@@ -1,14 +1,17 @@
 import Section from "@/components/uiComponents/section";
 import ImageTextBox from "@/components/uiComponents/image-text-box";
 import YouTube from "@/components/uiComponents/youtube";
+import PageTitle from "@/components/uiComponents/page-title";
+import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
 
 export default function RMSPage() {
     return (
         <div>
-            <Section className="bg-blue-800 py-12 text-white text-center">
-            <h2>IME RMS (Research Management Solution)</h2>
-            <p>Gain direct access to the investment ratings & rationales of IME’s Central Research Team across an exhaustive universe of investment options (across MFs, PMSs, AIFs & Global investments)</p> 
-            </Section>
+            <PageTitle 
+                title="IME RMS (Research Management Solution)" 
+                caption="Gain direct access to investment ratings & rationales of IME’s Central Research Team across MFs, PMSs, AIFs & Global investments." 
+            />
+            
 
             <Section className="py-12">
                 <div className="ime-grid-2col">
@@ -17,10 +20,10 @@ export default function RMSPage() {
                 </div>
             </Section>
 
-        <Section className="bg-green-900 py-12 text-white text-center">
+        <SectionTextHighlight>
             <p>The IME RMS is the first tool ever, to give investors direct access to the insights of the central research team. Investors gain direct access to our ratings, rating rationales & analysis across thousands of funds (MFs, PMSs, AIFs, Global funds), asset classes, categories & more.</p>
             <p>The RMS helps address one of the biggest fundamental flaws of the wealth management industry, the weak flow down of investment insights. This often leads to investors taking investment decisions with incomplete, biased or flawed insights.</p>
-        </Section>
+        </SectionTextHighlight>
 
         <Section className="py-12 bg-gray-50">
             <ImageTextBox
@@ -54,10 +57,10 @@ export default function RMSPage() {
             </ImageTextBox>
         </Section>
 
-        <Section className="bg-green-900 py-12 text-white text-center">
+        <SectionTextHighlight color="blue">
             <p>We offer a no-commitment free 30-Day Trial of the IME RMS, which includes access to a Dedicated Private Banker who can help build your customised Financial Plan & Investment Mandate, and review your existing portfolio. </p>
             <p>Sign-up today to experience the difference of direct access to central research insights makes (as compared to depending solely on Relationship Managers/Sales People for your investment advice). </p>
-        </Section>
+        </SectionTextHighlight>
 
         
         </div>
