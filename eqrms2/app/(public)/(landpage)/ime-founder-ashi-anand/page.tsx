@@ -1,20 +1,26 @@
 import Section from "@/components/uiComponents/section";
 import { Button } from "@/components/ui/button";
 import AlertBox from "@/components/uiBlocks/AlertBox";
+import PageTitle from "@/components/uiComponents/page-title";
+import TeamProfileBox from "@/components/uiComponents/team-profile-box";
 
 export default function IMEFounderAshiAnandPage() {
     return (
         <div>
-            <Section className="border-t-2 border-b-2 border-blue-800 py-6 text-blue-800 mb-6">
-                <div className="flex justify-center items-center">
-                    <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ashi-profile.jpg" alt="Ashi Anand" className="w-[75px] rounded-full mr-5" />
-                    <h1>IME Founder - Ashi Anand</h1>
-                    
-                </div>
-            </Section>
+            <PageTitle 
+                title="IME's Founder - Ashi Anand" 
+             
+            />
 
             <Section> 
+            <TeamProfileBox 
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ashi-profile.jpg"
+                name="Ashi Anand"
+                designation="Founder & CEO"
+            >
+                <p>IME was founded by Ashi Anand – in his career of over 20 years as a fund manager, Ashi found structural flaws in the workings of the wealth management industry. He used his experience, knowledge and instinct to found IME Capital – a firm free of conventional restraints; one that focuses on research, expertise and innovation, and can do this with integrity.</p>
                 <p>Ashi spent 2 decades managing funds and investments for large firms like ICICI Prudential and Kotak Mahindra. Among his accomplishments are the fact that he was one of the youngest fund managers of his time, which helped him gain years of insight and experience.</p>
+            </TeamProfileBox>
 
                 <p>At ICICI Pru PMS, Ashi was an indispensable member of a 4 person team that took the PMS firm from 40 crores to 5000 crores. The fund he was managing (ICICI Pru Deep Value Portfolio) was ranked 3rd amongst over 127 funds in terms of performance over the period he was the manager, making him one of the most sought after Fund managers almost as soon as he started his career.</p>
 
@@ -24,7 +30,9 @@ export default function IMEFounderAshiAnandPage() {
 
                 <p>Ashi's other accomplishments include managing one of the best performing healthcare strategies in India while at Allegro and having designed from scratch a highly innovative & disruptive Research Management Solution (RMS) to help manage investment insights for Asset Management firms (the bedrock of IME's RMS).</p>
                 <h2>Ashi - Performance Track Record</h2>
+                <div className="p-12 border border-gray-200 rounded-lg">
                 <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ashi-track-record.png" alt="Ashi - Performance Track Record" />
+                </div>
 
                 <AlertBox color="gray" heading="Founders Note">
                     <div className="text-sm">

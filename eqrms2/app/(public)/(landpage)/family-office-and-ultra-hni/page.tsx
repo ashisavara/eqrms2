@@ -10,10 +10,12 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 export default function FamilySolutionsPage() {
     return (
         <div>
+            <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ultrahni%20(1).jpg" alt="Ultra HNI Solutions" className="w-2/4 mx-auto my-6"></img>
             <PageTitle 
                 title="Family Office & Ultra HNI Solutions" 
                 caption="Specialised Investment Solutions for the Ultra-Wealthy." 
             />
+            
 
 
             <Section className="py-6">
@@ -27,7 +29,7 @@ export default function FamilySolutionsPage() {
             <Section className="py-6">
                 
                 <p>More often than not, we have noticed the following common challenges while evaluating the investment portfolios of larger family offices & ultra-HNIs. Here are some examples and also a glimpse into what we would do differently:</p>
-                <p className="font-bold">Dealing with complexity of too many investment options</p>
+                <p className="font-bold text-center mt-12 text-lg">Dealing with complexity of too many investment options</p>
                     <AlertBox color="red" heading="Too many investment options">
                         <p>The complexities dealing with a large universe of investible options & the increasing complexities of sophisticated investment products focused on the Ultra-HNI segment</p>
                         <p>Over the past decade, the range of investment options have exploded, especially with the tremendous growth in the alternatives investments industry.</p>
@@ -39,26 +41,26 @@ export default function FamilySolutionsPage() {
                         <p>We accordingly understand some of the deeper nuances of how these funds operate, and their investment merits within your portfolios.</p>
                     </AlertBox>
 
-                <p className="font-bold"> A common degradation of combined investment portfolio that occurs when dealing with multiple advisors</p>
+                <p className="font-bold text-center mt-12 text-lg"> A common degradation of combined investment portfolio that occurs when dealing with multiple advisors</p>
                 
                     <AlertBox color="red" heading="Too many advisors">
                         <p>Ultra-HNI’s often deal with more than one advisor, each of whom are looking at their individual allocations in isolation. With each advisor trying to optimize their individual allocations, this often leads to over diversification issues around too many funds and very poor portfolio construction at the combined level. </p>
                     </AlertBox>
-                    <AlertBox color="green" heading="Deep Alternatives Insights">
+                    <AlertBox color="green" heading="Superior Portfolio Construction">
                     <p>Ultimately,<strong> what truly matters for wealth creation is the portfolio construction of the total investment portfolio</strong>&nbsp;(across all investment advisors). Our Investment Mandate development process (driven by institutional fund management best-practices of portfolio construction &amp; mandate development)&nbsp; &amp; our focus on Level 1-5 Investing (which helps evaluate your true exposures), helps ensure clarity around how you wish to have your overall portfolio to be constructed.</p>
                     <p>Allocations to specific advisors can then focus around their areas of specialisation, as compared to multiple advisors all running similar mandates.</p>
                     </AlertBox>
 
-                <p className="font-bold"> Complexities dealing with multi-advisors & multi-family member portfolios</p>
+                <p className="font-bold text-center mt-12 text-lg"> Complexities dealing with multi-advisors & multi-family member portfolios</p>
                 
-                    <AlertBox color="red" heading="Too many advisors">
+                    <AlertBox color="red" heading="Disparate Portfolio Reports">
                         <p>When dealing with multiple advisors & for different family members, it is often very challenging reconciling the very large number of different portfolio reports for you to get a holistic view of the total portfolio and to drill down to specific advisors, family members, asset classes or investments. </p>
                     </AlertBox>
                     <AlertBox color="green" heading="Intuitive & Interactive Portfolio Reporting">
                         <p>Our highly intuitive & interactive client portal has been designed to address this very common issue when dealing with multi-advisor multi-family member portfolios. Our reporting allows for you to view your portfolio in any manner that you want, and allows for a level of interactiveness & an ability to drill down to any small part of the portfolio you wish to evaluate in a manner that is unparalleled in portfolio reporting. </p>
                     </AlertBox>
 
-                <p className="font-bold"> Needs that go beyond traditional wealth management</p>
+                <p className="font-bold text-center mt-12 text-lg"> Needs that go beyond traditional wealth management</p>
                 
                     <AlertBox color="red" heading="Complex Needs">
                         <p>Family Offices & Ultra-HNIs often have needs that go well beyond traditional wealth management services. This includes needs such as sophisticated estate planning, complex international investing, multi-tiered trust structures, more sophisticated tax planning, investment banking or advice on non-financial security assets (such as complex real-estate, art etc).  </p>
@@ -71,7 +73,7 @@ export default function FamilySolutionsPage() {
             <h2>Flexible Engagement Models</h2>
             <Section>
                 
-                <p>Keeping in mind the sensitivity that comes with dealing with larger investors, we have a number of different ways in which we can collaborate together and add value to your investments</p>
+                <p className="text-center mt-12 text-lg">Keeping in mind the sensitivity that comes with dealing with larger investors, we have a number of different ways in which we can collaborate together and add value to your investments</p>
                 <div className="ime-grid-3col">
                     <InfoCard headline="Outsourced Family Office">
                         <p>With the full bouquet of investment options, we can provide you with all the benefits of your own dedicated family office, at a fraction of the cost of hiring a full-fledged investment team. </p>

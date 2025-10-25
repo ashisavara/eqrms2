@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 
 export function PublicFooter() {
   return (
-    <div className="bg-gray-50 border-t border-gray-200 pt-6 pb-12 px-4 mt-12">
+    <div className="bg-gray-50 border-t border-gray-200 pt-6 pb-12 px-4 mt-20">
         <div className="max-w-5xl mx-auto text-center">
           <div className="flex flex-row items-center justify-center gap-x-5 text-sm border-b-2 border-gray-200 pb-8">
                 <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-logo.png" alt="IME Capital Logo" className="w-[60px] h-[45px]" />

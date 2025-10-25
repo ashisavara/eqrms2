@@ -3,13 +3,15 @@ import TeamProfileBox from "@/components/uiComponents/team-profile-box";
 import { Button } from "@/components/ui/button";
 import AlertBox from "@/components/uiBlocks/AlertBox";
 import Link from "next/link";
+import PageTitle from "@/components/uiComponents/page-title";
 
 export default function OurTeamPage() {
     return (
         <div>
-            <Section className="border-t-2 border-b-2 border-blue-800 py-6 text-blue-800 mb-6">
-                <h1>Meet our Leadership Team</h1>
-            </Section>
+            <PageTitle 
+                title="Our Team" 
+                caption="Learn more about IME's leadership team." 
+            />
             <h2>Research</h2>
             <Section>
             <TeamProfileBox 
@@ -72,7 +74,7 @@ export default function OurTeamPage() {
                 <p>Shagun pursues her passion for reading by being part of several book clubs and is always seen in the company of her trusty Kindle.</p>
             </TeamProfileBox>
             <TeamProfileBox 
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/himani-profile.jpg"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/himani-shetty-profile1.jpg"
                 name="Himani Shetty"
                 designation="Senior VP"
             >
