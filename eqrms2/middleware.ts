@@ -151,13 +151,17 @@ export async function middleware(request: NextRequest) {
   if (subdomain === 'rms' || subdomain === 'public') {
     // RMS subdomain trying to access public routes -> 404
     if (subdomain === 'rms' && routeGroup === 'public') {
-      const res = new NextResponse('Not Found', { status: 404 });
+      const url = request.nextUrl.clone();
+      url.pathname = '/404';
+      const res = NextResponse.rewrite(url);
       return applyAffCookie(request, res, affPayload);
     }
     
     // Public subdomain trying to access RMS routes -> 404  
     if (subdomain === 'public' && routeGroup === 'rms') {
-      const res = new NextResponse('Not Found', { status: 404 });
+      const url = request.nextUrl.clone();
+      url.pathname = '/404';
+      const res = NextResponse.rewrite(url);
       return applyAffCookie(request, res, affPayload);
     }
   }
