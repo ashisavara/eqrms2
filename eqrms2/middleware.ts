@@ -145,8 +145,51 @@ export async function middleware(request: NextRequest) {
   }
 
   // ===== PHASE 4: RMS Root Handling =====
-  // Root path (/) is now the landing/login page - allow access for all users
-  // No redirect needed - both authenticated and unauthenticated users can view it
+  // Handle RMS subdomain root - redirect to /rmsapp for backward compatibility
+  if (subdomain === 'rms' && pathname === '/') {
+    // Check if user is authenticated
+    let supabaseResponse = NextResponse.next({ request });
+    
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            
+            // Cross-subdomain cookie persistence
+            const host = request.headers.get("host") || "";
+            const onProdDomain = host.endsWith(".imecapital.in") || host === "imecapital.in";
+            const cookieDomain = onProdDomain ? ".imecapital.in" : undefined;
+            
+            supabaseResponse = NextResponse.next({ request });
+            cookiesToSet.forEach(({ name, value, options }) => {
+              supabaseResponse.cookies.set(name, value, {
+                ...options,
+                domain: cookieDomain,
+                sameSite: "lax",
+                secure: process.env.NODE_ENV === "production",
+                path: "/",
+              });
+            });
+          },
+        },
+      }
+    );
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // Both authenticated and unauthenticated users can access the root page
+    // The page itself will handle showing login form or logout button
+    const res = NextResponse.next();
+    return applyAffCookie(request, res, affPayload);
+  }
 
   // ===== PHASE 5: Old Auth Route Redirects =====
   const oldAuthRoutes = [
