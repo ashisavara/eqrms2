@@ -143,8 +143,23 @@ export async function middleware(request: NextRequest) {
       return applyAffCookie(request, res, affPayload);
     }
 
-    // Public routes on RMS subdomain -> will be handled by auth check below
-    // (RMS requires auth for everything, so they'll be redirected to login)
+    // Public routes on RMS subdomain -> will be handled by strict enforcement below
+    // (RMS subdomain should only serve RMS routes)
+  }
+
+  // ===== PHASE 3.5: Strict Subdomain-Path Enforcement =====
+  if (subdomain === 'rms' || subdomain === 'public') {
+    // RMS subdomain trying to access public routes -> 404
+    if (subdomain === 'rms' && routeGroup === 'public') {
+      const res = new NextResponse('Not Found', { status: 404 });
+      return applyAffCookie(request, res, affPayload);
+    }
+    
+    // Public subdomain trying to access RMS routes -> 404  
+    if (subdomain === 'public' && routeGroup === 'rms') {
+      const res = new NextResponse('Not Found', { status: 404 });
+      return applyAffCookie(request, res, affPayload);
+    }
   }
 
   // ===== PHASE 4: RMS Root Handling =====
