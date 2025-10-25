@@ -104,7 +104,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
                 
                 <Badge variant="secondary">{blog.category} </Badge>  <span className="text-sm text-gray-500">| Written by IME's Investor Desk on {formatDate(blog.created_at)} </span>
             </div>
-            <div className="prose prose-lg">
+            <div className="ime-blog-page">
                 <MDXContent mdxSource={mdxSource} />
             </div>
         </div>
