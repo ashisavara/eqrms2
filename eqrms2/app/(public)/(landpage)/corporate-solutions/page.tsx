@@ -6,13 +6,16 @@ import AlertBox from "@/components/uiBlocks/AlertBox";
 import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
 import InfoCard from "@/components/uiBlocks/InfoCard";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import HeroImgTitle from "@/components/uiComponents/hero-img-title";
 
-export default function FamilySolutionsPage() {
+export default function CorporateSolutionsPage() {
     return (
         <div>
-            <PageTitle 
+            <HeroImgTitle 
                 title="IME Corporate Treasury Solutions" 
-                caption="Board-approved Investment Mandates for Corporates" 
+                caption="Board-approved Investment Mandates for Corporates"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/corporate-treasury-solutions.jpg"
+                imgAlt="Corporate Treasury Solutions"
             />
 
 

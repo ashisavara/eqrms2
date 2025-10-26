@@ -43,7 +43,7 @@ export default function RMSPage() {
             </AlertBox>
         </Section>
 
-        <Section className="bg-green-900 py-12 text-white text-center">
+        <Section className="bg-green-900 py-12 text-white text-center text-lg">
             <p>A combination of our greater depth of investment expertise & the ability to share this directly with you – our end investor, results in superior portfolio construction. </p>
         </Section>
 

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { InvQueryDetail } from "@/types/inv-query-detail";
 import Link from "next/link";
+import PageTitle from "@/components/uiComponents/page-title";
 
 interface InvQueryClientProps {
   invQuery: InvQueryDetail[];
@@ -28,8 +29,9 @@ export default function InvQueryClient({ invQuery }: InvQueryClientProps) {
   }, [invQuery, selectedCategory, searchTerm]);
 
   return (
+    <div>
+      <PageTitle title="Investment Queries" />
     <div className="p-5 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Investment Queries</h1>
       
       {/* Filters */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
@@ -98,6 +100,7 @@ export default function InvQueryClient({ invQuery }: InvQueryClientProps) {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

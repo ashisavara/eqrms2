@@ -22,7 +22,7 @@ const TeamProfileBox: React.FC<TeamProfileBoxProps> = ({
 }) => {
   
   return (
-    <div className={`py-8 border-b-2 border-gray-200 ${className}`}>
+    <div className={`py-8 border-b-2 border-gray-200 ime-team-profile-box ${className}`}>
       <div className="ime-grid-2col flex">
         {/* Image Section */}
         <div className={`w-[700px] pt-10 pr-12 text-center`}>

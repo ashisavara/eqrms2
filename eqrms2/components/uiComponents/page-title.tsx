@@ -23,7 +23,7 @@ type PageTitleProps = {
 const PageTitle: React.FC<PageTitleProps> = ({
   title,
   caption,
-  className = 'bg-blue-800 pt-8 pb-8 mb-6 text-white text-center',
+  className = 'bg-blue-800 pt-8 pb-8 mb-2 text-white text-center',
   titleClassName = '',
   captionClassName = '',
 }) => {

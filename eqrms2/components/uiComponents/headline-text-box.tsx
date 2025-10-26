@@ -30,13 +30,13 @@ type HeadlineTextBoxProps = {
 const HeadlineTextBox: React.FC<HeadlineTextBoxProps> = ({
   headline,
   alignHeadline = 'left',
-  headlineClassName = 'text-lg font-semibold text-blue-900',
-  childrenClassName = 'space-y-4',
-  className = 'py-4',
+  headlineClassName = 'text-base font-semibold text-blue-900',
+  childrenClassName = 'text-sm',
+  className = 'py-1',
   children,
 }) => {
   const HeadlineCol = (
-    <div className={`max-w-[200px] w-full mx-auto ${headlineClassName}`}>
+    <div className={`max-w-[200px] my-auto w-full ${headlineClassName}`}>
       {headline}
     </div>
   );
@@ -52,7 +52,7 @@ const HeadlineTextBox: React.FC<HeadlineTextBoxProps> = ({
     : 'md:grid-cols-[1fr_200px]';
 
   return (
-    <div className={`ime-grid-2col ${gridColsClass} ${className}`}>
+    <div className={`ime-grid-2col ime-headline-text-box bg-gray-50 px-4 my-2 rounded-lg border border-gray-300 ${gridColsClass} ${className}`}>
       {alignHeadline === 'left' ? (
         <>
           {HeadlineCol}

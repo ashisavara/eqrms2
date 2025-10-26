@@ -6,20 +6,23 @@ import AlertBox from "@/components/uiBlocks/AlertBox";
 import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
 import InfoCard from "@/components/uiBlocks/InfoCard";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import HeroImgTitle from "@/components/uiComponents/hero-img-title";
 
-export default function FamilySolutionsPage() {
+export default function RetireeSolutionsPage() {
     return (
         <div>
-            <PageTitle 
+            <HeroImgTitle 
                 title="Retiree Solutions" 
-                caption="Tax-efficient income with clarity on corpus sufficiency." 
+                caption="Tax-efficient income with clarity on corpus sufficiency."
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/retiree-investment-solutions.jpg"
+                imgAlt="Retiree Investment Solutions"
             />
 
             <Section className="py-6">
                 <TextHighlight>
-                    <p>As a retiree, your needs are completely different from those who are earning. As are your priorities. After working hard your entire life, the last thing you want is to worry about how long your funds will last or how to make the best possible use of your nest egg, despite inflation, taxes and changes in the markets.</p>
+                    <p>As a retiree, your needs are completely different from those who are earning. As are your priorities. </p>
+                    <p>After working hard your entire life, the last thing you want is to worry about how long your funds will last, or how to make the best possible use of your nest egg, despite inflation, taxes and changes in the markets.</p>
                     <p>We can help you develop an investment plan that identifies the best investment options for your retirement corpus.</p>
-                    <p>AT IME Capital, we can help you develop an investment plan that identifies the best investment options for your retirement corpus.</p>
                 </TextHighlight>
             </Section>
 

@@ -6,14 +6,16 @@ import AlertBox from "@/components/uiBlocks/AlertBox";
 import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
 import InfoCard from "@/components/uiBlocks/InfoCard";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import HeroImgTitle from "@/components/uiComponents/hero-img-title";
 
 export default function FamilySolutionsPage() {
     return (
         <div>
-            <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ultrahni%20(1).jpg" alt="Ultra HNI Solutions" className="w-2/4 mx-auto my-6"></img>
-            <PageTitle 
+            <HeroImgTitle 
                 title="Family Office & Ultra HNI Solutions" 
-                caption="Specialised Investment Solutions for the Ultra-Wealthy." 
+                caption="Specialised Investment Solutions for the Ultra-Wealthy."
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ultrahni%20(1).jpg"
+                imgAlt="Ultra HNI Solutions"
             />
             
 
@@ -74,17 +76,19 @@ export default function FamilySolutionsPage() {
             <Section>
                 
                 <p className="text-center mt-12 text-lg">Keeping in mind the sensitivity that comes with dealing with larger investors, we have a number of different ways in which we can collaborate together and add value to your investments</p>
-                <div className="ime-grid-3col">
-                    <InfoCard headline="Outsourced Family Office">
-                        <p>With the full bouquet of investment options, we can provide you with all the benefits of your own dedicated family office, at a fraction of the cost of hiring a full-fledged investment team. </p>
-                    </InfoCard>
-                    <InfoCard headline="Advisor of Advisors">
-                        <p>We can help you with investment banking services, helping you raise capital for your family office or ultra-HNI. </p>
-                    </InfoCard>
-                    <InfoCard headline="Custom Solutions">
-                        <p>We also have the ability to engage with you in specific parts of our services where you see the greatest level of value-addition. Our arrangement/partnership can be tailor made depending on what you need us to do. </p>
-                    </InfoCard>
-                </div>
+
+                <HeadlineTextBox headline="Outsourced Family Office">
+                    <p>With the full bouquet of investment options, we can provide you with all the benefits of your own dedicated family office, at a fraction of the cost of hiring a full-fledged investment team.</p>
+                </HeadlineTextBox>
+
+                <HeadlineTextBox headline="Advisor of Advisors">
+                    <p>We can help you with investment banking services, helping you raise capital for your family office or ultra-HNI.</p>
+                </HeadlineTextBox>
+
+                <HeadlineTextBox headline="Custom Solutions">
+                    <p>We also have the ability to engage with you in specific parts of our services where you see the greatest level of value-addition. Our arrangement/partnership can be tailor made depending on what you need us to do.</p>
+                </HeadlineTextBox>
+
             </Section>
         </div>
 

@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { MediaInterviewDetail } from "@/types/media-interview-detail";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
+import PageTitle from "@/components/uiComponents/page-title";
 
 interface MediaInterviewClientProps {
   mediaInterview: MediaInterviewDetail[];
@@ -29,8 +30,9 @@ export default function MediaInterviewClient({ mediaInterview }: MediaInterviewC
   }, [mediaInterview, selectedPublication, searchTerm]);
 
   return (
+    <div>
+      <PageTitle title="Media Interviews" />
     <div className="p-5 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Media Interviews</h1>
       
       {/* Filters */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
@@ -102,6 +104,7 @@ export default function MediaInterviewClient({ mediaInterview }: MediaInterviewC
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

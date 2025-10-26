@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { FinCalculatorDetail } from "@/types/fin-calculator-detail";
 import Link from "next/link";
+import PageTitle from "@/components/uiComponents/page-title";
 
 interface FinCalculatorClientProps {
   finCalculator: FinCalculatorDetail[];
@@ -34,8 +35,9 @@ export default function FinCalculatorClient({ finCalculator }: FinCalculatorClie
   }, [finCalculator, selectedCategory, searchTerm]);
 
   return (
+    <div>
+      <PageTitle title="Financial Calculators" />
     <div className="p-5 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Financial Calculators</h1>
       
       {/* Filters */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
@@ -102,6 +104,7 @@ export default function FinCalculatorClient({ finCalculator }: FinCalculatorClie
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

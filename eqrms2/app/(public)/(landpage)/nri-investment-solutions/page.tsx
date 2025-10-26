@@ -6,13 +6,16 @@ import AlertBox from "@/components/uiBlocks/AlertBox";
 import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
 import InfoCard from "@/components/uiBlocks/InfoCard";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import HeroImgTitle from "@/components/uiComponents/hero-img-title";
 
 export default function FamilySolutionsPage() {
     return (
         <div>
-            <PageTitle 
+            <HeroImgTitle 
                 title="NRI/OCI Investment Solutions" 
-                caption="Investment Solutions for Overseas Indians" 
+                caption="Investment Solutions for Overseas Indians"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/nri-investment-solutions.jpg"
+                imgAlt="NRI Investment Solutions"
             />
 
 

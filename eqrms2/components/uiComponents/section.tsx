@@ -16,11 +16,13 @@ const Section: React.FC<SectionProps> = ({
   contentClassName = ''
 }) => {
   return (
-    <section className={`w-full ${className}`}>
+    <div className="ime-section">
+    <section className={`w-full py-20 ${className}`}>
       <div className={`max-w-5xl mx-auto px-4 ${contentClassName}`}>
         {children}
       </div>
     </section>
+    </div>
   );
 };
 

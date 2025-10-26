@@ -20,7 +20,7 @@ export default function SectionTextHighlight({
 
   return (
     <section className={`w-full ${colorClasses[color]} py-12 text-white text-center ${className}`}>
-      <div className="max-w-5xl mx-auto px-4 prose prose-invert">
+      <div className="max-w-5xl mx-auto px-4 text-lg">
         {children}
       </div>
     </section>

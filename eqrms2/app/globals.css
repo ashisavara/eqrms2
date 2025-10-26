@@ -22,9 +22,14 @@
     @apply mt-6 mb-6;
   }
 
-  div.ime-blog-page .p {
-    @apply mt-6 mb-6;
+  div.ime-section p {
+    @apply text-lg;
   }
+
+  div.ime-accordion p, div.ime-headline-text-box p, div.ime-team-profile-box p {
+    @apply text-base mt-3 mb-3;
+  }
+
 
 
   /* Choice Chips Styling with high specificity */
@@ -190,7 +195,7 @@
   }
   
   h2 {
-    @apply text-xl text-center font-bold mt-4 mb-2 bg-blue-50 rounded-md text-gray-600 py-2;
+    @apply text-xl text-center font-bold mt-2 mb-2 bg-blue-50 rounded-md text-gray-600 py-3;
   }
 
 
@@ -199,7 +204,8 @@
   ul, ol {
     list-style-type: disc;   
     margin-left: 1rem;     
-    padding-left: 0.5rem;   
+    padding-left: 0.5rem;  
+    list-style-position: inside; 
   }
 
   ul ul, ol ol, ul ol, ol ul {

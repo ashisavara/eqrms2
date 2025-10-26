@@ -1,15 +1,34 @@
 import Section from "@/components/uiComponents/section";
 import PageTitle from "@/components/uiComponents/page-title";
 import ImageTextBox from "@/components/uiComponents/image-text-box";
-import AlertBox from "@/components/uiBlocks/AlertBox";
+import ImageCarousel from "@/components/uiComponents/image-carousel";
+
+const images = [
+    { src: "https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/landing-page-carousel/family-inv-solutions.jpg", alt: "Individual and Family Investment Solutions" },
+    { src: "https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/landing-page-carousel/ultra-HNI-investment-solutions.jpg", alt: "Family Office and Ultra HNI Investment Solutions" },
+    { src: "https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/landing-page-carousel/retiree_investment_solutions.jpg", alt: "Retiree Investment Solutions" },
+    { src: "https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/landing-page-carousel/corporate_treasury_solutions.jpg", alt: "Corporate Treasury Solutions" },
+    { src: "https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/landing-page-carousel/nri_investment_solutions.jpg", alt: "NRI Investement Solutions" },
+  ];
 
 export default function HomePage() {
     return (
         <div>
-            <PageTitle 
-                title="A research-first investments firm" 
-                caption="IME Capital is a research-first investments firm. We aim to disrupt the wealth management industry, by shrinking the gap in investment insights between central research teams & RMs/Clients. " 
-            />
+            <div className="flex flex-col md:flex-row bg-blue-800">
+                <div className="min-w-[400px] w-full md:w-1/4 px-6">
+                    <h2 className="bg-blue-50 mt-12 text-blue-800 text-center'">A research-first Investments Firm</h2>
+                    <p className="text-white text-center">
+                        Specialised Investment Solutions for Families, Retirees, NRIs, Ultra-HNIs, Family Offices and Corporate Treasuries.
+                    </p> 
+                </div>
+                <div className="w-full">
+                    <ImageCarousel 
+                    images={images}
+                    autoplay={true}
+                    autoplayInterval={4000}
+                    />
+                </div>  
+            </div>
 
         <Section className="py-12 bg-gray-50">
             <ImageTextBox
@@ -22,7 +41,7 @@ export default function HomePage() {
             </ImageTextBox>
         </Section>
 
-        <Section className="py-12 bg-blue-50">
+        <Section>
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/depth-of-expertise.png"
                 heading="Depth of our Expertise"
@@ -33,7 +52,7 @@ export default function HomePage() {
             </ImageTextBox>
         </Section>
 
-        <Section className="py-12 bg-green-50">
+        <Section className="bg-gray-50">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/weak-flow-down-insights.png"
                 heading="Unmatched Transparency"
@@ -44,7 +63,7 @@ export default function HomePage() {
             </ImageTextBox>
         </Section>
 
-        <Section className="py-12 bg-blue-50">
+        <Section>
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
                 heading="Client Centricity"
@@ -55,7 +74,7 @@ export default function HomePage() {
             </ImageTextBox>
         </Section>
 
-        <Section className="py-12 bg-green-50">
+        <Section className=" bg-gray-50">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME%2030-day%20Free%20Trial.png"
                 heading="Free 30-Day Trial"

@@ -6,15 +6,21 @@ import AlertBox from "@/components/uiBlocks/AlertBox";
 import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
 import InfoCard from "@/components/uiBlocks/InfoCard";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import HeroImgTitle from "@/components/uiComponents/hero-img-title";
+import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
 
 export default function FamilySolutionsPage() {
     return (
         <div>
-            <PageTitle 
+            <HeroImgTitle 
                 title="Family Solutions" 
-                caption="Tailored Investment Solutions to help secure your family's future" 
+                caption="Tailored Investment Solutions to help secure your family's future"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/individual-family-investment-solutions.jpg"
+                imgAlt="Individual Family Investment Solutions"
             />
-
+            
+            
+            
             <Section className="py-12">
                 <TextHighlight>
                     <p>So far, the industry focuses on “Which fund / investment is right for you?”.</p>
@@ -22,40 +28,34 @@ export default function FamilySolutionsPage() {
                 </TextHighlight>
             </Section>
 
-            <Section className="bg-green-50 py-12 text-center">
-                <p>A financial plan is not just about where to invest your money. A financial plan is a way for you to be able to plan to achieve what you want and need from your life. While from a technical perspective, this means we will find the right investment category and asset class that fits your needs, what it actually means is that we make your money for you. </p>
-                <p>At IME Capital, we help families and individuals plan their future goals, after a careful understanding of your risk profile, investment beliefs and level of investment knowledge. </p>
-            </Section>
+            <SectionTextHighlight>
+                <p>A financial plan is not just about where to invest your money. A financial plan is a way for you to be able to plan to achieve what you want and need from your life. </p>
+                <p>While from a technical perspective, this means we will find the right investment category and asset class that fits your needs, what it actually means is that we make your money for you. </p>
+            </SectionTextHighlight>
 
             <h2 className="my-12">The Benefits of a Clear Financial Plan</h2>
-
-            <Section>
-                <div className="ime-grid-3col pb-12">
-                    <InfoCard headline="Fund Requirements">
-                    Have clear visibility of the amount of money you require through different stages of life
-                    </InfoCard>
-                    <InfoCard headline="Clarity on Investment Horizon">
-                    Gain a better sense of your true investment horizon, helping deal with market volaility. 
-                    </InfoCard>
-                    <InfoCard headline="Better Portfolio Construction">
-                    Better Portfolio Construction aligned to your goals and risk profile.
-                    </InfoCard>
-                
+            <Section className="pt-1">
+                <div className="ime-grid-2col pb-6">
+                    <AlertBox color="green" heading="Visibility of Fund Requirements">
+                        <p>Clarity on funding of large & lumpy longer-term life goals. Gain confidence on being able to meet all your families core desires. </p>
+                    </AlertBox>
+                    <AlertBox color="blue" heading="Superior Portfolio Construction">
+                        <p>A better sense of your true Investment Horizon, drives superior asset allocation decisions & helps you deal with market volatility. </p>
+                    </AlertBox>
+                </div>
+                <div className="ime-grid-2col">
+                    <AlertBox color="blue" heading="Solve lumpiness of Life Goals">
+                        <p>Longer-term life goals are very large & lumpy. A strong financial plan helps you convert these to smaller, manegable monthly systematic investments. </p>
+                    </AlertBox>
+                    <AlertBox color="green" heading="Dealing with Inflation">
+                        <p>Harness the power of compounding to ensure your money grows faster than inflation, helping you achive large longer-term goals with ease. </p>
+                    </AlertBox>
                 </div>
             
-            <AlertBox color="green" heading="Solve Lumpiness of Life Goals">
-                <p>Income & expenses for families do not move at the same pace. There are certain expenses related to core life goals (retirement, child’s education, home purchase) that are very large and lumpy; they tend to all come to a head at the same time. This leads to families having to make major compromises at later years of their life.</p>
-                <p>We work around this by investing a small amount every month. This plan can be made after we work out your investment mandate. </p>
-            </AlertBox>
-            <AlertBox color="blue" heading="Dealing with Inflation">
-                <p>The same annual expenditure of Rs. 20 lakhs today, will cost you Rs. 40 lakhs in 10 years, Rs. 80 lakhs in 20 years and Rs. 1.6 cr in 30 years.</p>
-                <p>The only way to mitigate the impact of inflation, is to use the power of compounding in your favour. With smart and careful planning, you can save yourself from a lot of pressure. For instance, an investment of Rs. 20 lakhs in equity today (earning 15% p.a.), will be worth Rs. 80 lakhs (10 years), 3.2 cr (20 years) and Rs.12.8 cr (30 years). </p>
-            </AlertBox>
-            
             </Section>
-
+        <h2>FAQs on Financial Planning</h2>
         <Section>
-            <h2>FAQs on Financial Planning</h2>
+            
             <Accordion type="single" collapsible>
 
                 <AccordionItem value="item-1">

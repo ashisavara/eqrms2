@@ -5,6 +5,7 @@ import { blogDetail } from "@/types/blog-detail";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import PageTitle from "@/components/uiComponents/page-title";
 
 interface BlogsClientProps {
   blogs: blogDetail[];
@@ -41,8 +42,11 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
   }, [blogs, selectedCategory, searchTerm]);
 
   return (
+    <div>
+      <PageTitle title="Blogs" />
+   
     <div className="p-5 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Blog List</h1>
+      
       
       {/* Filters */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
@@ -126,6 +130,7 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }
