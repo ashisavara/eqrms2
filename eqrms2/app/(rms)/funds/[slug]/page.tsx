@@ -42,7 +42,7 @@ export default async function FundPage({ params }: PageProps) {
   }
 
   return (
-    <div>
+    <div className="ime-funds-page">
       <div>
         <div className="flex items-center justify-center gap-4 p-4 bg-gray-100 rounded">
           <h1 className="text-2xl font-bold">{fund.fund_name}</h1>
@@ -95,7 +95,7 @@ export default async function FundPage({ params }: PageProps) {
           <TabsContent value="rating_snapshot">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                 <div className="text-sm">
-                  <h3 className="text-center font-bold mb-2">How we rate the fund</h3>
+                  <h2>How we rate the fund</h2>
                   <SimpleTable 
                   headers = {[{label:"Fund"},{label:"Strategy"},{label:"Performance"}]}
                   body = {[{value:<RatingDisplay rating={fund.fund_rating} />},{value:<RatingDisplay rating={fund.fund_strategy_rating} />},{value:<RatingDisplay rating={fund.fund_performance_rating} />} ]}
@@ -125,7 +125,7 @@ export default async function FundPage({ params }: PageProps) {
                   </div>
                 </div>
                 <div className="text-sm">
-                  <h3 className="text-center font-bold mb-2"> How we rate the AMC</h3>
+                  <h2 className="text-center font-bold mb-2"> How we rate the AMC</h2>
                   <SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[{value:<RatingDisplay rating={fund.amc_rating} />},{value:<RatingDisplay rating={fund.amc_team_rating} />},{value:<RatingDisplay rating={fund.amc_philosophy_rating} />}]}
@@ -164,17 +164,17 @@ export default async function FundPage({ params }: PageProps) {
                 </div>
             </div>
           <div className="text-base seperator-line">
-            <h3 className="ime-basic-h3 mt-4"> Trailing Performance </h3>
+            <h2 className="ime-basic-h3 mt-4"> Trailing Performance </h2>
             {fund.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.trailing_perf_html }} />}
-            <h3 className="ime-basic-h3 mt-6"> Annual Performance </h3>
+            <h2 className="ime-basic-h3 mt-6"> Annual Performance </h2>
             {fund.ann_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.ann_perf_html }} />}
-            <h3 className="ime-basic-h mt-6"> Portfolio Composition </h3>
+            <h2 className="ime-basic-h mt-6"> Portfolio Composition </h2>
             {fund.port_comp_html && <div className="text-sm"><div dangerouslySetInnerHTML={{ __html: fund.port_comp_html }} /></div>}
           </div>
           </TabsContent>
           <TabsContent value="rating_rationale">
             <div className="text-sm">
-                  <h3 className="ime-basic-h3"> Rationale behind our fund rating</h3>
+                  <h2 className="ime-basic-h3"> Rationale behind our fund rating</h2>
                   <div className="flex flex-col md:flex-row mb-4">
                       <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
                       <div className="w-full md:flex-1 md:min-w-0">{fund.investment_view}</div>
@@ -193,7 +193,7 @@ export default async function FundPage({ params }: PageProps) {
                   </div>
           </div>
           <div className="text-sm mt-6">
-                  <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
+                  <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
                   <div className="flex flex-col md:flex-row mb-4">
                       <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
                       <div className="w-full md:flex-1 md:min-w-0">{fund.amc_view}</div>
@@ -218,13 +218,13 @@ export default async function FundPage({ params }: PageProps) {
           </TabsContent>
           <TabsContent value="investment_team">
             <div className="text-base">
-              <h3 className="ime-basic-h3"> Investment Team </h3>
+              <h2 className="ime-basic-h3"> Investment Team </h2>
               {fund.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: fund.amc_fm_html }} />}
             </div>
           </TabsContent>
           <TabsContent value="fund_details">
             <div className="text-base">
-              <h3 className="ime-basic-h3"> Fee Structure </h3>
+              <h2 className="ime-basic-h3"> Fee Structure </h2>
               {fund.fee_structure_html && <div dangerouslySetInnerHTML={{ __html: fund.fee_structure_html }} />}
             </div>
           </TabsContent>

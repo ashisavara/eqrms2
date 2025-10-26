@@ -78,7 +78,7 @@ export default async function AmcPage({ params }: PageProps) {
           </TabsList>
               <TabsContent value="rating_snapshot">
                   <div className="text-sm">
-                  <h3 className="ime-basic-h3"> IME AMC rating</h3>
+                  <h2 className="ime-basic-h3"> IME AMC rating</h2>
                   <SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[
@@ -124,13 +124,13 @@ export default async function AmcPage({ params }: PageProps) {
                   </div>
                   </div>
                   <div className="mt-6">
-                    <h3> Investment Team </h3>
+                    <h2> Investment Team </h2>
                     {AMC.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: AMC.amc_fm_html }} />}
                   </div>
               </TabsContent>
               <TabsContent value="rating_rationale">
                 <div className="flex-col gap-y-5 text-sm">
-                  <h3 className="ime-basic-h3"> Rationale behind our AMC rating</h3>
+                  <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
                   <div className="flex flex-col md:flex-row mb-4">
                     <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
                     <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.amc_view}</div>
@@ -155,7 +155,7 @@ export default async function AmcPage({ params }: PageProps) {
               </TabsContent>
               <TabsContent value="funds">
                   
-                  <h3>Recommended Funds</h3>
+                  <h2>Recommended Funds</h2>
                     <TableFundScreen data={funds} />
               </TabsContent>  
           </Tabs>

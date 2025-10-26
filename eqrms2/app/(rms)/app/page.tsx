@@ -192,9 +192,7 @@ export default function RMSLandingPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-50">
-      
-      
+    <div>
       {/* RMS Page Content */}
       <PageTitle 
         title="IME RMS (Research Management Solution)" 

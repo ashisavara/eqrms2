@@ -53,19 +53,19 @@ export default async function AssetClassPage({params}: PageProps) {
                         <FavouriteHeart entityType="asset_class" entityId={assetClass.asset_class_id}  size="lg" />
                     </div>
                 </div>
-                <p className="font-bold">{assetClass.asset_class_summary}</p>
-                <p className="text-sm">{assetClass.asset_class_desc}</p>
+                <span className="font-bold">{assetClass.asset_class_summary} | </span>
                 {(can(userRoles, 'rms', 'edit_rms')) && (
                     <EditAssetClassButton assetClassData={assetClass} assetClassId={assetClass.asset_class_id} />
                 )}
             </div>
+            <p className="text-sm">{assetClass.asset_class_desc}</p>
             <div>
-                <h3> Trailing Returns</h3>
+                <h2> Trailing Returns</h2>
                 <TableCategories data={catTrailing}/>
                 <PerformanceFootnote additionalText="Category returns are average returns for all funds in category." />
             </div>
             <div className="hidden md:block md:mt-6">
-                <h3> Annual Returns</h3>
+                <h2> Annual Returns</h2>
                 <TableCategories data={catAnnual} columnType="annual"/>
             </div>
         </div>

@@ -26,6 +26,10 @@
     @apply text-base mt-3 mb-3;
   }
 
+  div.mandatePage p {
+    @apply text-sm mt-2 mb-2;
+  }
+
 
 
   /* Choice Chips Styling with high specificity */
