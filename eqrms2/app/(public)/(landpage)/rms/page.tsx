@@ -18,10 +18,9 @@ export default function RMSPage() {
             <Section className="py-12">
                 <div className="ime-grid-2col">
                     <div>
-                        <h3 className="text-center">Sign-up Box</h3>
                         <Button><Link href="https://rms.imecapital.in">Free Trial</Link></Button>
                     </div>
-                    <div><h3 className="text-center">IME RMS Demo</h3><YouTube url="https://www.youtube.com/watch?v=QNrr0nsUX3M" /></div>
+                    <div><YouTube url="https://www.youtube.com/watch?v=QNrr0nsUX3M" /></div>
                 </div>
             </Section>
 

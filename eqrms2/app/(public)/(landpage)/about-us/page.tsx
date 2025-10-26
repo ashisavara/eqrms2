@@ -13,9 +13,9 @@ export default function AboutUsPage() {
                 title="About us" 
                 caption="Learn more about our firm, our values and our mission." 
             />
-        
+        <h2>What we are</h2>
         <Section className="bg-gray-50 py-12 text-center">
-            <h2>What we are</h2>
+            
             <p>IME (Investments made Easy) Capital is a boutique investments firm that provides end to end services to investors, families and corporates about all their investments, customised to their unique financial needs.</p> 
             <p>What you can expect at IME is the best of two worlds – the DNA, ethos and personal attention of a boutique firm combined with institutional practices and research methodologies of a global asset management firm. </p>
             <h2>Our Genesis</h2>

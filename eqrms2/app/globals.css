@@ -22,10 +22,6 @@
     @apply mt-6 mb-6;
   }
 
-  div.ime-section p {
-    @apply text-lg;
-  }
-
   div.ime-accordion p, div.ime-headline-text-box p, div.ime-team-profile-box p {
     @apply text-base mt-3 mb-3;
   }
@@ -209,8 +205,8 @@
   }
 
   ul ul, ol ol, ul ol, ol ul {
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .blue-hyperlink {
