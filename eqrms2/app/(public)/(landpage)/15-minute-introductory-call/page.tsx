@@ -10,7 +10,7 @@ export default function IntroductoryCallPage() {
         <div>
             <PageTitle 
                 title="Introductory Call" 
-                caption="Book an Introduction call to learn more about our services" 
+                caption="Book an Introduction Call to learn more about our services" 
             />
             <div className="relative">
                 {isLoading && (

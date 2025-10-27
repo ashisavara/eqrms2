@@ -185,11 +185,7 @@ export default function FamilySolutionsPage() {
 
                 </Accordion>
 
-
-
         </Section>
-
-
 
         </div>
     );
