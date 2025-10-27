@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
-// Helper function for ILIKE-based fallback search (for generic lead search)
-async function performIlikeSearchGeneric(supabase: any, phone: string | null, name: string | null, limit: number) {
+// Helper function for ILIKE-based fallback search (for linking context)
+async function performIlikeSearchForLinking(supabase: any, phone: string | null, name: string | null, limit: number) {
   const searchStrategies = [];
 
   // Strategy 1: Combined OR search (if both parameters provided)
@@ -10,8 +10,8 @@ async function performIlikeSearchGeneric(supabase: any, phone: string | null, na
     searchStrategies.push({
       name: 'combined_search',
       query: supabase
-        .from('view_leads_tagcrm')
-        .select('lead_id, lead_name, lead_progression, lead_source, phone_e164, login_name, rm_name')
+        .from('leads_tagging')
+        .select('lead_id, lead_name, phone_e164, primary_rm_uuid')
         .or(`lead_name.ilike.%${name}%,phone_e164.ilike.%${phone}%`)
         .limit(limit)
     });
@@ -22,8 +22,8 @@ async function performIlikeSearchGeneric(supabase: any, phone: string | null, na
     searchStrategies.push({
       name: 'name_contains',
       query: supabase
-        .from('view_leads_tagcrm')
-        .select('lead_id, lead_name, lead_progression, lead_source, phone_e164, login_name, rm_name')
+        .from('leads_tagging')
+        .select('lead_id, lead_name, phone_e164, primary_rm_uuid')
         .ilike('lead_name', `%${name}%`)
         .limit(limit)
     });
@@ -34,8 +34,8 @@ async function performIlikeSearchGeneric(supabase: any, phone: string | null, na
     searchStrategies.push({
       name: 'phone_match',
       query: supabase
-        .from('view_leads_tagcrm')
-        .select('lead_id, lead_name, lead_progression, lead_source, phone_e164, login_name, rm_name')
+        .from('leads_tagging')
+        .select('lead_id, lead_name, phone_e164, primary_rm_uuid')
         .ilike('phone_e164', `%${phone}%`)
         .limit(limit)
     });
@@ -49,11 +49,8 @@ async function performIlikeSearchGeneric(supabase: any, phone: string | null, na
       return strategyData.map((item: any) => ({
         lead_id: item.lead_id,
         lead_name: item.lead_name,
-        lead_progression: item.lead_progression || null,
-        lead_source: item.lead_source || null,
         phone_e164: item.phone_e164,
-        login_name: item.login_name || null,
-        rm_name: item.rm_name || null,
+        primary_rm_uuid: item.primary_rm_uuid,
         name_score: null, // No similarity scoring in ILIKE
         phone_exact: phone ? item.phone_e164 === phone : false
       }));
@@ -67,7 +64,7 @@ export async function POST(req: NextRequest) {
   try {
     const { phone, name, limit = 20 } = await req.json();
 
-    console.log('Search Leads (Generic) API called with:', { phone, name, limit });
+    console.log('Search Leads for Linking API called with:', { phone, name, limit });
 
     // At least one parameter must be provided
     if (!phone && !name) {
@@ -81,7 +78,7 @@ export async function POST(req: NextRequest) {
     const supabase = await createClient();
 
     // Try the Supabase RPC function first (with pg_trgm similarity)
-    const { data: rpcData, error: rpcError } = await supabase.rpc('search_leads_flexible', {
+    const { data: rpcData, error: rpcError } = await supabase.rpc('search_leads_new_login', {
       p_phone: phone || null,
       p_name: name || null,
       p_limit: limit
@@ -96,7 +93,7 @@ export async function POST(req: NextRequest) {
       
       if (isPgTrgmError) {
         // Fallback to ILIKE-based search
-        const fallbackResults = await performIlikeSearchGeneric(supabase, phone, name, limit);
+        const fallbackResults = await performIlikeSearchForLinking(supabase, phone, name, limit);
         
         return NextResponse.json({ 
           data: fallbackResults,
@@ -115,7 +112,7 @@ export async function POST(req: NextRequest) {
 
     // If RPC succeeded but returned 0 results, try fallback
     if (!rpcData || rpcData.length === 0) {
-      const fallbackResults = await performIlikeSearchGeneric(supabase, phone, name, limit);
+      const fallbackResults = await performIlikeSearchForLinking(supabase, phone, name, limit);
       
       if (fallbackResults.length > 0) {
         return NextResponse.json({ 
@@ -136,3 +133,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
