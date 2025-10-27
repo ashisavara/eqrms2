@@ -391,8 +391,7 @@ export async function getPublicMediaInterviewSlugs(): Promise<Array<{ slug: stri
     
     const { data, error } = await supabase
       .from('media_interviews')
-      .select('slug')
-      .eq('status', 'published'); // Only published media interviews
+      .select('slug');
     
     if (error) {
       console.error('Error fetching public media interview slugs:', error);
@@ -427,8 +426,7 @@ export async function getPublicInvestmentQuerySlugs(): Promise<Array<{ slug: str
     
     const { data, error } = await supabase
       .from('investment_queries')
-      .select('slug')
-      .eq('status', 'published'); // Only published investment queries
+      .select('slug');
     
     if (error) {
       console.error('Error fetching public investment query slugs:', error);
