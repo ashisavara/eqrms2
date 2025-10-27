@@ -9,8 +9,8 @@ export const SEO_DEFAULTS: SEODefaults = {
   defaultDescription: 'Proprietary Fund Research Database by IME Capital - Expert insights on mutual funds, PMS schemes, and investment strategies.',
   defaultImage: '/og-default.svg',
   twitterCard: 'summary_large_image',
-  baseUrl: process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}` 
+  baseUrl: process.env.NODE_ENV === 'production'
+    ? 'https://imecapital.in'
     : 'http://localhost:3000',
 };
 

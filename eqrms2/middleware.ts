@@ -3,12 +3,11 @@
  *
  * - Routes requests based on subdomain:
  *    • rms.imecapital.in → serves /(rms) routes (authenticated)
- *    • public.imecapital.in → serves /(public) routes (mostly public)
- *    • imecapital.in → NOT HANDLED (continues to WordPress)
+ *    • imecapital.in (root) → serves /(public) routes (public website)
+ *    • public.imecapital.in → redirects to imecapital.in (legacy staging)
  * - Captures rf + UTM params site-wide and stores them in an httpOnly cookie for 30 days (last-click)
  * - Enforces OTP-only auth with subdomain-aware redirects.
  * - Cross-subdomain session persistence via .imecapital.in cookies.
- *  - some text 
  */
 
 import { updateSession } from "@/lib/supabase/middleware";
@@ -26,12 +25,12 @@ function getSubdomain(host: string): Subdomain {
   // Localhost or non-production
   if (!host.includes('.imecapital.in') && host !== 'imecapital.in') return null;
   
-  // Root domain - NOT HANDLED by Next.js (continues to WordPress)
+  // Root domain - serves public routes (main website)
   if (host === 'imecapital.in') return 'root';
   
   // Subdomains
   if (host.startsWith('rms.')) return 'rms';
-  if (host.startsWith('public.')) return 'public';
+  if (host.startsWith('public.')) return 'public'; // Legacy staging subdomain
   
   return null;
 }
@@ -115,9 +114,12 @@ export async function middleware(request: NextRequest) {
   const subdomain = getSubdomain(host);
   const routeGroup = getRouteGroup(pathname);
 
-  // Root domain (imecapital.in) - NOT HANDLED, pass through to WordPress
-  if (subdomain === 'root') {
-    const res = NextResponse.next();
+  // ===== PHASE 1.5: Legacy Public Subdomain Redirect =====
+  // Redirect public.imecapital.in to root domain (301 permanent redirect)
+  if (subdomain === 'public') {
+    const url = request.nextUrl.clone();
+    url.host = 'imecapital.in';
+    const res = NextResponse.redirect(url, { status: 301 });
     return applyAffCookie(request, res, affPayload);
   }
 
@@ -135,16 +137,15 @@ export async function middleware(request: NextRequest) {
 
   // ===== PHASE 3: Subdomain Routing (Production only) =====
   if (subdomain) {
-    // RMS routes on public subdomain -> redirect to RMS subdomain
-    if (subdomain === 'public' && routeGroup === 'rms') {
+    // Root domain trying to access RMS routes -> redirect to RMS subdomain
+    if (subdomain === 'root' && routeGroup === 'rms') {
       const url = request.nextUrl.clone();
-      url.host = host.replace('public.', 'rms.');
+      url.host = 'rms.imecapital.in';
       const res = NextResponse.redirect(url);
       return applyAffCookie(request, res, affPayload);
     }
 
-    // Public routes on RMS subdomain -> will be handled by strict enforcement below
-    // (RMS subdomain should only serve RMS routes)
+    // RMS subdomain should only serve RMS routes (handled by strict enforcement below)
   }
 
   // ===== PHASE 3.5: RMS Root Handling (BEFORE strict enforcement) =====
@@ -157,23 +158,17 @@ export async function middleware(request: NextRequest) {
   }
 
   // ===== PHASE 3.6: Strict Subdomain-Path Enforcement =====
-  if (subdomain === 'rms' || subdomain === 'public') {
+  if (subdomain === 'rms') {
     // RMS subdomain trying to access public routes -> 404
-    if (subdomain === 'rms' && routeGroup === 'public') {
-      const url = request.nextUrl.clone();
-      url.pathname = '/not-found';
-      const res = NextResponse.rewrite(url);
-      return applyAffCookie(request, res, affPayload);
-    }
-    
-    // Public subdomain trying to access RMS routes -> 404  
-    if (subdomain === 'public' && routeGroup === 'rms') {
+    if (routeGroup === 'public') {
       const url = request.nextUrl.clone();
       url.pathname = '/not-found';
       const res = NextResponse.rewrite(url);
       return applyAffCookie(request, res, affPayload);
     }
   }
+  
+  // Root domain serves public routes only (RMS routes already redirected above)
 
   // ===== PHASE 5: Old Auth Route Redirects =====
   const oldAuthRoutes = [

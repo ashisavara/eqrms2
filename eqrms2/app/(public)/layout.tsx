@@ -6,9 +6,12 @@ import { PublicFooter } from '@/components/ui/public-footer';
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
   const host = headersList.get('host') || '';
-  const isStaging = host.startsWith('public.');
+  
+  // Only apply noindex to RMS subdomain (private/authenticated content)
+  // public.imecapital.in now redirects to root domain via middleware
+  const isRMS = host.startsWith('rms.');
 
-  if (isStaging) {
+  if (isRMS) {
     return {
       robots: {
         index: false,
@@ -17,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   }
 
+  // Root domain (imecapital.in) - allow indexing
   return {};
 }
 
