@@ -161,6 +161,109 @@ export function CrmLeadSourceRating({ rating }: { rating: string }) {
 }
 
 
+export function RmsFundFiveYrPerfRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Strong': 5,
+      'Good': 4,
+      'Average': 3,
+      'Weak': 2,
+      'Very Weak': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <div className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+
+export function RmsFundPerfConsistencyRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Highly Consistent': 5,
+      'Good Consistency': 4,
+      'Average Consistency': 3,
+      'Weak Consistency': 2,
+      'Very Weak Consistency': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <div className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+export function RmsFundStrategyDefRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Strongly Defined & Followed': 5,
+      'Strongly Defined': 4,
+      'Generic Philosophy': 3,
+      'Flexible Philosphy': 3,
+      'Well Defined': 3,
+      'Loosely Defined': 2,
+
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <div className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+
+export function RmsFundFmChurnRiskRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Nil (FM-Founder)': 5,
+      'Low (Depth in team)': 4,
+      'Low (Large ESOP)': 4,
+      'Moderate (AMC-driven)': 3,
+      'High (Risk of churn)': 2,
+      'V High (FM-dependence)': 1,
+
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <div className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+
+export function RmsAmcMaturityRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Highly Seasoned (10+ yrs)': 5,
+      'Matured (5-10 yrs)': 4,
+      'New AMC (3-5 yrs)': 3,
+      'Nascent AMC (<3 yrs)': 2
+
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <div className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </div>
+  );
+}
+
+
 /**
  * Conditional formatting component for numbers, which use the same color System as rating styles
  * Maps text ratings to numeric equivalents for consistent styling

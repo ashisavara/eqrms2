@@ -1,7 +1,7 @@
 import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, fetchOptions } from "@/lib/supabase/serverQueryHelper";
 import { RmsFundAmc } from "@/types/funds-detail";
-import { RatingDisplay, RatingContainer } from "@/components/conditional-formatting";
+import { RatingDisplay, RatingContainer, RmsFundFiveYrPerfRating, RmsFundPerfConsistencyRating, RmsAmcMaturityRating, RmsFundStrategyDefRating, RmsFundFmChurnRiskRating } from "@/components/conditional-formatting";
 import { EditFundsButton } from "@/components/forms/EditFunds";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -108,15 +108,15 @@ export default async function FundPage({ params }: PageProps) {
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Definition</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_strategy_rating ?? 0}>{fund.strategy_tag}</RatingContainer></div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundStrategyDefRating rating={String(fund.strategy_tag ?? 0)} /></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">5yr Performance</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_performance_rating ?? 0}>{fund.perf_tag_5yr}</RatingContainer></div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundFiveYrPerfRating rating={fund.perf_tag_5yr ?? ''} /></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">LT Performance</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_performance_rating ?? 0}>{fund.perf_tag_consistent}</RatingContainer></div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundPerfConsistencyRating rating={fund.perf_tag_consistent ?? ''} /></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Desc</span></div>
@@ -142,11 +142,11 @@ export default async function FundPage({ params }: PageProps) {
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">FM Churn Risk</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.inv_team_risk}</RatingContainer></div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundFmChurnRiskRating rating={fund.inv_team_risk ?? ''} /></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Maturity</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_rating ?? 0}>{fund.amc_maturity}</RatingContainer></div>
+                          <div className="w-full md:flex-1 md:min-w-0"><RmsAmcMaturityRating rating={fund.amc_maturity ?? ''} /></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                           <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Philosphy Name</span></div>

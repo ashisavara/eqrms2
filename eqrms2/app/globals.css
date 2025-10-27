@@ -95,7 +95,7 @@
   }
 
   div.ime-blog-page ul li p {
-    @apply mt-4 mb-2;
+    @apply mt-0 mb-0 inline;
   }
 
 
