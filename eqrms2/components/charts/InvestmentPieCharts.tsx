@@ -77,7 +77,7 @@ export function PieChart<TData>({
       <CardContent>
         <ChartContainer config={chartConfig}> 
           <div>
-            <RechartsPieChart width={400} height={350}>
+            <RechartsPieChart width={350} height={350}>
               <Pie
                 data={chartData}
                 cx="50%"

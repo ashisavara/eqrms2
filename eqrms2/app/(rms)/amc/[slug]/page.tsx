@@ -1,7 +1,7 @@
 import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, fetchOptions, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { AMC } from "@/types/amc-detail";
-import { RatingDisplay, RatingContainer } from "@/components/conditional-formatting";
+import { RatingDisplay, RatingDisplayWithStar,RatingContainer } from "@/components/conditional-formatting";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 import { RmsFundsScreener } from "@/types/funds-detail";
@@ -82,9 +82,9 @@ export default async function AmcPage({ params }: PageProps) {
                   <SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[
-                    {value: <RatingDisplay rating={AMC?.amc_rating ?? null} />},
-                    {value: <RatingDisplay rating={AMC?.amc_team_rating ?? null} />},
-                    {value: <RatingDisplay rating={AMC?.amc_philosophy_rating ?? null} />}
+                    {value: <RatingDisplayWithStar rating={AMC?.amc_rating ?? null} />},
+                    {value: <RatingDisplayWithStar rating={AMC?.amc_team_rating ?? null} />},
+                    {value: <RatingDisplayWithStar rating={AMC?.amc_philosophy_rating ?? null} />}
                   ]}
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-200">

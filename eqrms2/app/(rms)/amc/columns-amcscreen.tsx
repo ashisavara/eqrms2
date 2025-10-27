@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";  
 import { AMC } from "@/types/amc-detail";
 import Link from "next/link";
-import { RatingDisplay } from "@/components/conditional-formatting";
+import { RatingDisplay, RatingDisplayWithStar } from "@/components/conditional-formatting";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import SimpleTable from "@/components/tables/singleRowTable";
 
@@ -53,7 +53,7 @@ export const columns: ColumnDef<AMC>[] = [
     header: "AMC",
     size: 100,
     filterFn: "arrIncludesSome",
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => <RatingDisplayWithStar rating={getValue() as number} />
   },
   {
     accessorKey: "amc_pedigree_rating",

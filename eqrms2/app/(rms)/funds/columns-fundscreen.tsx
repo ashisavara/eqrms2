@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";  
 import { RmsFundsScreener } from "@/types/funds-detail";
 import Link from "next/link";
-import { ComGrowthNumberRating, RatingDisplay } from "@/components/conditional-formatting";
+import { ComGrowthNumberRating, RatingDisplay, RatingDisplayWithStar } from "@/components/conditional-formatting";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import SimpleTable from "@/components/tables/singleRowTable";
@@ -70,7 +70,7 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
     header: "Fund",
     filterFn: "arrIncludesSome",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => <RatingDisplayWithStar rating={getValue() as number} />
   },
   {
     accessorKey: "fund_performance_rating",

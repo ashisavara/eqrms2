@@ -1,4 +1,5 @@
 import React from 'react';
+import { StarIcon } from "lucide-react";
 
 /**
  * Conditional formatting component for ratings (1-5 scale)
@@ -36,8 +37,19 @@ export function RatingDisplay({ rating }: { rating: number | null }) {
   const displayRating = rating ?? '';
   
   return (
-    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(rating as number)}`}>
-      {displayRating}
+    <div className={`flex flex-row gap-1 items-center justify-center px-1 py-1 rounded font-medium text-center ${getRatingStyles(rating as number)}`}>
+      {displayRating} 
+    </div>
+  );
+}
+
+export function RatingDisplayWithStar({ rating }: { rating: number | null }) {
+  // Handle null/undefined rating
+  const displayRating = rating ?? '';
+  
+  return (
+    <div className={`flex flex-row gap-1 items-center justify-center px-1 py-1 rounded font-medium text-center ${getRatingStyles(rating as number)}`}>
+      {displayRating} <StarIcon className="w-4 h-4" />
     </div>
   );
 }

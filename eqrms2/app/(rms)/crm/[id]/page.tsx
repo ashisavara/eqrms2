@@ -146,8 +146,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
 
     
     return (
-        <div>
-            <div className="pageHeadingBox !p-5">
+        <div className="ime-crm-detail-page">
+            <div className="pageHeadingBox">
                 <div className="grid grid-cols-2 gap-4 text-left">
                     <div className="text-left">
                         <div className="flex flex-row gap-2">
@@ -182,7 +182,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         </p>
                         <AddAclLeadButton leadId={lead.lead_id} rmOptions={rmOptions} />
                     </div>
-                    <div className="text-sm gap-2 flex flex-col">
+                    <div className="text-sm flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
                         {hasAnyTags && (
                             <p>

@@ -128,19 +128,12 @@ function AddFinGoalsForm({onSuccess}: {onSuccess?: () => void}) {
                 </Button>
             </div>
         </form>
-        <div className="bg-gray-50 m-5 p-4 rounded-lg border">
-          <p className="text-sm text-center"><span className="font-semibold">Future Value Goal Calculator: </span>Calculate future value of goal, based on current cost and the goal date & inflation rate entered above.</p>
+
+        <p className="text-sm text-center mb-0 mt-0"><b>Useful Links: </b> <a href="/financial-calculator/retirement-corpus-required" className="blue-hyperlink" target="_blank">Retirement Corpus </a>| <a href="https://imecapital.in/financial-calculator/annual-expense-calculator" className="blue-hyperlink" target="_blank">Annual Expenses</a> </p>
+
+        <div className="bg-gray-50 m-5 p-2 rounded-lg border">
+          <p className="text-sm text-center mb-0 mt-0"><span className="font-semibold">Future Value Goal Calculator: </span>Calculate future value of goal, based on current cost and the goal date & inflation rate entered above.</p>
           <div className="grid grid-cols-2 gap-4 mt-2">
-            <div>
-              <Label htmlFor="current-cost">Current Cost (Rs. lakh)</Label>
-              <Input
-                id="current-cost"
-                type="number"
-                placeholder="Enter current cost"
-                value={currentCost || ''}
-                onChange={(e) => setCurrentCost(Number(e.target.value))}
-              />
-            </div>
             <div>
               <Label htmlFor="future-value">Calculated Future Value</Label>
               <Input
@@ -154,8 +147,8 @@ function AddFinGoalsForm({onSuccess}: {onSuccess?: () => void}) {
           </div>
         </div>
         
-        <div className="bg-gray-50 m-5 p-4 rounded-lg border">
-          <p className="text-sm text-center"><span className="font-semibold">Goal Date Calculator: </span>Calculate goal date based on birth date and age at goal.</p>
+        <div className="bg-gray-50 m-5 p-2 rounded-lg border">
+          <p className="text-sm text-center mb-0 mt-0"><span className="font-semibold">Goal Date Calculator: </span>Calculate goal date based on birth date and age at goal.</p>
           <div className="grid grid-cols-3 gap-4 mt-2">
             <div>
               <Label htmlFor="birth-date">Birth Date</Label>
@@ -188,6 +181,7 @@ function AddFinGoalsForm({onSuccess}: {onSuccess?: () => void}) {
             </div>
           </div>
         </div>
+
       </div>
     );
 }

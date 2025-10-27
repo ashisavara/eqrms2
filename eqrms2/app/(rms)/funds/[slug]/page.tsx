@@ -1,7 +1,7 @@
 import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, fetchOptions } from "@/lib/supabase/serverQueryHelper";
 import { RmsFundAmc } from "@/types/funds-detail";
-import { RatingDisplay, RatingContainer, RmsFundFiveYrPerfRating, RmsFundPerfConsistencyRating, RmsAmcMaturityRating, RmsFundStrategyDefRating, RmsFundFmChurnRiskRating } from "@/components/conditional-formatting";
+import { RatingDisplay, RatingDisplayWithStar, RatingContainer, RmsFundFiveYrPerfRating, RmsFundPerfConsistencyRating, RmsAmcMaturityRating, RmsFundStrategyDefRating, RmsFundFmChurnRiskRating } from "@/components/conditional-formatting";
 import { EditFundsButton } from "@/components/forms/EditFunds";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -98,7 +98,7 @@ export default async function FundPage({ params }: PageProps) {
                   <h2>How we rate the fund</h2>
                   <SimpleTable 
                   headers = {[{label:"Fund"},{label:"Strategy"},{label:"Performance"}]}
-                  body = {[{value:<RatingDisplay rating={fund.fund_rating} />},{value:<RatingDisplay rating={fund.fund_strategy_rating} />},{value:<RatingDisplay rating={fund.fund_performance_rating} />} ]}
+                  body = {[{value:<RatingDisplayWithStar rating={fund.fund_rating} />},{value:<RatingDisplayWithStar rating={fund.fund_strategy_rating} />},{value:<RatingDisplayWithStar rating={fund.fund_performance_rating} />} ]}
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
                   <div className="w-full mt-2 text-xs">
@@ -128,7 +128,7 @@ export default async function FundPage({ params }: PageProps) {
                   <h2 className="text-center font-bold mb-2"> How we rate the AMC</h2>
                   <SimpleTable 
                   headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
-                  body = {[{value:<RatingDisplay rating={fund.amc_rating} />},{value:<RatingDisplay rating={fund.amc_team_rating} />},{value:<RatingDisplay rating={fund.amc_philosophy_rating} />}]}
+                  body = {[{value:<RatingDisplayWithStar rating={fund.amc_rating} />},{value:<RatingDisplayWithStar rating={fund.amc_team_rating} />},{value:<RatingDisplayWithStar rating={fund.amc_philosophy_rating} />}]}
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
                   <div className="w-full mt-2 text-xs">
