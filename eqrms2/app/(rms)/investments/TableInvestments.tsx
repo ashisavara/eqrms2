@@ -19,13 +19,14 @@ import { PieChart } from "@/components/charts/InvestmentPieCharts";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { AddHeldAwayButton } from "@/components/forms/AddHeldAway";
-import { CirclePlusIcon } from "lucide-react";
+import { CirclePlusIcon, UserRoundPlusIcon } from "lucide-react";
 import { can } from '@/lib/permissions';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { EditPortRecoButton } from "@/components/forms/EditPortRecommendation";
 import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
 import { RmsFundsScreener } from "@/types/funds-detail";
+import { AddGroupInvestorButton } from "@/components/forms/AddGroupInvestor";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -226,7 +227,10 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
           </ToggleVisibility>
           </div>
           {can(userRoles, 'investments', 'add_edit_held_away') && (
-            <AddHeldAwayButton investorOptions={investorOptions}><CirclePlusIcon className="w-6 h-6 m-4" /></AddHeldAwayButton>
+            <div className="flex">
+              <AddHeldAwayButton investorOptions={investorOptions}><CirclePlusIcon className="w-6 h-6 m-4" /></AddHeldAwayButton>
+              <AddGroupInvestorButton><UserRoundPlusIcon className="w-6 h-6" /></AddGroupInvestorButton>
+            </div>
           )}
           </div>
             <ReactTableWrapper 

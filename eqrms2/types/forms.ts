@@ -497,4 +497,14 @@ export const AcOnboardSchema = z.object({
 export type AcOnboardValues = z.infer<typeof AcOnboardSchema>;
 
 
+// -------------------
+// GROUP INVESTOR
+// -------------------
+export const GroupInvestorSchema = z.object({
+  investor_name: z.string().min(1, "Investor name is required"),
+});
+
+export type GroupInvestorValues = z.infer<typeof GroupInvestorSchema>;
+
+
 

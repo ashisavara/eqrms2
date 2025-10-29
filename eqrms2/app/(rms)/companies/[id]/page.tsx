@@ -51,7 +51,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
   }
 
   return (
-        <div>
+        <div className="ime-company-page">
           <div className="pageHeadingBox">
             <h1>{company.ime_name}</h1>
           </div>
