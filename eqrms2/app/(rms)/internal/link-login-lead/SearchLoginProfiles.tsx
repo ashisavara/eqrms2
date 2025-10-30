@@ -8,6 +8,7 @@ import { LoginProfileWithRoles, SearchLoginProfilesRequest, UserRole } from './t
 import { AddRoleSheet } from './AddRoleSheet';
 import { DeleteRoleConfirmation } from './DeleteRoleConfirmation';
 import { UpdateGroupNameButton, UpdateMandateNameButton } from '@/components/forms/UpdateGroupMandateNames';
+import { LinkLoginProfileGroupButton } from '@/components/forms/LinkLoginProfileGroup';
 
 interface SearchLoginProfilesProps {
   onResults: (results: LoginProfileWithRoles[]) => void;
@@ -231,7 +232,7 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
                       {profile.group_name}
                     </UpdateGroupNameButton>
                   ) : (
-                    '-'
+                    <LinkLoginProfileGroupButton uuid={profile.uuid} />
                   )}
                 </td>
                 
