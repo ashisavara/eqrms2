@@ -2,6 +2,10 @@ import type { SEODefaults } from './types';
 
 /**
  * Site-wide SEO constants and defaults
+ * 
+ * IMPORTANT: baseUrl should ALWAYS be the production domain for canonical URLs,
+ * even when running in preview deployments. This ensures canonical tags always
+ * point to the production site, not preview deployments.
  */
 export const SEO_DEFAULTS: SEODefaults = {
   siteName: 'IME Capital',
@@ -9,9 +13,11 @@ export const SEO_DEFAULTS: SEODefaults = {
   defaultDescription: 'Proprietary Fund Research Database by IME Capital - Expert insights on mutual funds, PMS schemes, and investment strategies.',
   defaultImage: '/og-default.svg',
   twitterCard: 'summary_large_image',
-  baseUrl: process.env.NODE_ENV === 'production'
-    ? 'https://imecapital.in'
-    : 'http://localhost:3000',
+  // Always use production domain for canonical URLs, even in preview deployments
+  // This ensures canonical tags always point to the production site
+  baseUrl: process.env.NODE_ENV === 'development' && !process.env.VERCEL_URL
+    ? 'http://localhost:3000'
+    : 'https://imecapital.in',
 };
 
 /**
@@ -151,9 +157,17 @@ export const SEO_UTILS = {
   /**
    * Format date for OpenGraph
    */
-  formatDateForOG: (date: Date | string): string => {
-    const d = new Date(date);
-    return d.toISOString();
+  formatDateForOG: (date: Date | string | null | undefined): string | undefined => {
+    if (!date) return undefined;
+    try {
+      const d = new Date(date);
+      // Check if date is valid
+      if (isNaN(d.getTime())) return undefined;
+      return d.toISOString();
+    } catch (error) {
+      console.error('Error formatting date for OG:', error);
+      return undefined;
+    }
   },
 
   /**

@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { notFound } from 'next/navigation';
 import { getPublicBlogSlugs, getStaticBlog } from '@/lib/supabase/serverQueryHelper';
 import { generateBlogSEO } from '@/lib/seo/helpers/blog';
+import { SEO_DEFAULTS } from '@/lib/seo/constants';
 import type { Metadata } from 'next';
 
 interface Blog {
@@ -30,10 +31,19 @@ export async function generateStaticParams() {
 
 // Generate SEO metadata for blog posts
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params;
-    const blog = await getStaticBlog(slug);
-    if (!blog) return {};
-    return generateBlogSEO(blog);
+    try {
+        const { slug } = await params;
+        const blog = await getStaticBlog(slug);
+        if (!blog) return {};
+        return generateBlogSEO(blog);
+    } catch (error) {
+        console.error('Error generating metadata for blog:', error);
+        // Return safe default metadata to prevent 5xx errors
+        return {
+            title: 'IME Capital Blog',
+            description: SEO_DEFAULTS.defaultDescription,
+        };
+    }
 }
 
 // ISR: Revalidate every 7 days (604800 seconds)

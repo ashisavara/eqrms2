@@ -126,13 +126,23 @@ function processTitle(title: string, template?: string): string {
 /**
  * Process description (truncate and clean)
  */
-function processDescription(description: string): string {
-  // Strip HTML and markdown
-  let cleanDescription = SEO_UTILS.stripHtml(description);
-  cleanDescription = SEO_UTILS.stripMarkdown(cleanDescription);
+function processDescription(description: string | null | undefined): string {
+  // Handle null/undefined/empty strings
+  if (!description || typeof description !== 'string') {
+    return SEO_DEFAULTS.defaultDescription;
+  }
   
-  // Truncate to 160 characters
-  return SEO_UTILS.truncateText(cleanDescription, 160);
+  try {
+    // Strip HTML and markdown
+    let cleanDescription = SEO_UTILS.stripHtml(description);
+    cleanDescription = SEO_UTILS.stripMarkdown(cleanDescription);
+    
+    // Truncate to 160 characters
+    return SEO_UTILS.truncateText(cleanDescription, 160);
+  } catch (error) {
+    console.error('Error processing description:', error);
+    return SEO_DEFAULTS.defaultDescription;
+  }
 }
 
 /**
@@ -213,12 +223,18 @@ function buildArticleMetadata(
   
   // Published time
   if (contentFallbacks.publishedTime) {
-    article.publishedTime = SEO_UTILS.formatDateForOG(contentFallbacks.publishedTime);
+    const publishedTime = SEO_UTILS.formatDateForOG(contentFallbacks.publishedTime);
+    if (publishedTime) {
+      article.publishedTime = publishedTime;
+    }
   }
   
   // Modified time
   if (contentFallbacks.modifiedTime) {
-    article.modifiedTime = SEO_UTILS.formatDateForOG(contentFallbacks.modifiedTime);
+    const modifiedTime = SEO_UTILS.formatDateForOG(contentFallbacks.modifiedTime);
+    if (modifiedTime) {
+      article.modifiedTime = modifiedTime;
+    }
   }
   
   // Section

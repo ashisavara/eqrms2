@@ -20,32 +20,38 @@ export async function generateBlogSEO(
     og_image: (blog as any).og_image,
   };
 
-  // Build content fallbacks
+  // Safely extract blog fields with null checks
+  const blogTitle = blog.title || 'Untitled Blog Post';
+  const blogBody = blog.body || '';
+  const blogCategory = blog.category || 'General';
+  const blogSlug = blog.slug || '';
+
+  // Build content fallbacks with safe defaults
   const contentFallbacks: ContentFallbacks = {
-    title: blog.title,
-    description: blog.body,
-    image: blog.featured_image,
+    title: blogTitle,
+    description: blogBody,
+    image: blog.featured_image || undefined,
     publishedTime: blog.created_at ? new Date(blog.created_at).toISOString() : undefined,
-    section: blog.category,
-    tags: [blog.category],
-    keywords: ['IME Capital', 'Blog', blog.category, 'Investment Research'],
+    section: blogCategory,
+    tags: blogCategory ? [blogCategory] : [],
+    keywords: ['IME Capital', 'Blog', blogCategory, 'Investment Research'].filter(Boolean),
   };
 
-  // Build SEO config
+  // Build SEO config with safe defaults
   const config: SEOConfig = {
     type: CONTENT_TYPE_CONFIG.blog.type,
     titleTemplate: CONTENT_TYPE_CONFIG.blog.titleTemplate,
-    descriptionFallback: `${CONTENT_TYPE_CONFIG.blog.descriptionPrefix}${blog.title}`,
+    descriptionFallback: `${CONTENT_TYPE_CONFIG.blog.descriptionPrefix}${blogTitle}`,
     noIndex: subdomain === 'rms' || subdomain === 'public',
-    canonicalUrl: `/blogs/${blog.slug}`,
-    keywords: ['IME Capital', 'Blog', blog.category, 'Investment Research'],
+    canonicalUrl: blogSlug ? `/blogs/${blogSlug}` : undefined,
+    keywords: ['IME Capital', 'Blog', blogCategory, 'Investment Research'].filter(Boolean),
     article: {
       publishedTime: SEO_UTILS.formatDateForOG(blog.created_at),
-      section: blog.category,
-      tags: [blog.category],
+      section: blogCategory || undefined,
+      tags: blogCategory ? [blogCategory] : undefined,
       authors: ['IME Capital'],
     },
   };
 
-  return generateSEOMetadata(seoData, contentFallbacks, config, `/blogs/${blog.slug}`);
+  return generateSEOMetadata(seoData, contentFallbacks, config, blogSlug ? `/blogs/${blogSlug}` : undefined);
 }
