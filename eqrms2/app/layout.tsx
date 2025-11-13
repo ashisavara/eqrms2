@@ -7,9 +7,11 @@ import { MasterOptionsProvider } from "@/lib/contexts/MasterOptionsContext";
 import { Toaster } from "sonner";
 import { PWARegister } from "@/components/ui/pwa-register";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+// Always use production domain for metadataBase to ensure canonical URLs
+// always point to imecapital.in, even in preview deployments
+const defaultUrl = process.env.NODE_ENV === 'development' && !process.env.VERCEL_URL
+  ? "http://localhost:3000"
+  : "https://imecapital.in";
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),

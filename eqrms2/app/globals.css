@@ -26,7 +26,7 @@
     @apply text-base mt-3 mb-3;
   }
 
-  div.mandatePage p, div.ime-crm-detail-page p {
+  div.mandatePage p, div.ime-crm-detail-page p, div.ime-fund-view-box p {
     @apply text-sm mt-1 mb-1;
   }
 
