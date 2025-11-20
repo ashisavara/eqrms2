@@ -55,7 +55,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                     <h1>{amc.amc_name}</h1>
                     <span>{amc.structure} </span>
                 </div>
-                <div className="border-box">
+                <div className="border-box ime-fund-view-box">
                     <h2>IME's View on {amc.amc_name}</h2>
                     <p className="font-semibold">AMC View</p>
                     <p>{amc.amc_view}</p>

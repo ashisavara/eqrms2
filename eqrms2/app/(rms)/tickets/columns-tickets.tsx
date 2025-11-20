@@ -23,8 +23,6 @@ export const columns: ColumnDef<Ticket>[] = [
   { accessorKey: "status", header: "Status",  size:80,
       cell: ({ getValue }) => getValue() == null ? null : <div>{getValue() as string}</div> },
   { accessorKey: "ticket_summary", size:150, header: "Summary" },
-  { accessorKey: "status_desc", header: "Status Desc", 
-    cell: ({ getValue }) => getValue() == null ? null : <div>{getValue() as string}</div> },
   { accessorKey: "hours_passed", header: "Hours",  size:50,
     cell: ({ getValue }) => getValue() == null ? null : <div>{getValue() as number}</div> },
   { accessorKey: "creator_name", header: "Raised by", size:90,

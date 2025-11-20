@@ -30,6 +30,10 @@
     @apply text-sm mt-1 mb-1;
   }
 
+  table td p, table td {
+    @apply mt-1 mb-1;
+  }
+
 
 
   /* Choice Chips Styling with high specificity */

@@ -133,7 +133,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
         {/* ✅ Top-level filters */}
         <div className="flex flex-wrap gap-4">
           {filters.map((filter) => (
-            <div key={filter.column} className="min-w-[180px]">
+            <div key={filter.column} className="min-w-[150px]">
               <MultiSelectFilter
                 title={filter.title}
                 options={originalOptions[filter.column] || []}
