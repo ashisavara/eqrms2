@@ -1,3 +1,5 @@
+'use client';
+
 interface AlertBoxProps {
   color: 'blue' | 'green' | 'red' | 'yellow' | 'gray';
   heading: string;

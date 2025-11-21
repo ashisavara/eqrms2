@@ -1,5 +1,4 @@
-import { MDXContent } from '@/components/MDXContent';
-import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote } from 'next-mdx-remote-client/rsc';
 import { blogDetail } from "@/types/blog-detail";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
@@ -8,6 +7,7 @@ import { getPublicBlogSlugs, getStaticBlog } from '@/lib/supabase/serverQueryHel
 import { generateBlogSEO } from '@/lib/seo/helpers/blog';
 import { SEO_DEFAULTS } from '@/lib/seo/constants';
 import type { Metadata } from 'next';
+import { useMDXComponents } from '@/mdx-components';
 
 interface Blog {
     id: number;
@@ -79,21 +79,17 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
             import('remark-gfm').then(mod => mod.default)
         ]);
 
-        console.log('[BlogPage] Serializing MDX content...');
-        // Serialize MDX server-side for SEO
+        console.log('[BlogPage] Preparing MDX options...');
+        // Prepare MDX options for server-side rendering
         // remarkBreaks: treats single line breaks within paragraphs as <br>
         // remarkGfm: enables GitHub Flavored Markdown (tables, strikethrough, etc.)
-        const mdxSource = await serialize(normalizedBody, {
-            mdxOptions: {
-                remarkPlugins: [
-                    remarkGfm,
-                    remarkBreaks
-                ]
-            },
-            parseFrontmatter: true
-        });
+        const mdxOptions = {
+            remarkPlugins: [remarkGfm, remarkBreaks]
+        };
         
-        console.log('[BlogPage] MDX serialization complete');
+        const components = useMDXComponents();
+        
+        console.log('[BlogPage] MDX ready for rendering');
 
     return (
         <div className="max-w-4xl mx-auto ime-blog-page">
@@ -115,7 +111,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
                 <Badge variant="secondary">{blog.category} </Badge>  <span className="text-sm text-gray-500">| Written by IME's Investor Desk on {formatDate(blog.created_at)} </span>
             </div>
             <div className="ime-blog-page">
-                <MDXContent mdxSource={mdxSource} />
+                <MDXRemote source={normalizedBody} options={{ mdxOptions }} components={components} />
             </div>
         </div>
     );

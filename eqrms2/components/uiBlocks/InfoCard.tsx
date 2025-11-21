@@ -1,3 +1,5 @@
+'use client';
+
 interface InfoCardProps {
   image?: string;
   headline?: string;

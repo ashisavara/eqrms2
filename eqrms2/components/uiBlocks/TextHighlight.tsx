@@ -1,3 +1,5 @@
+'use client';
+
 interface TextHighlightProps {
   children: React.ReactNode;
 }
