@@ -92,7 +92,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
         console.log('[BlogPage] MDX ready for rendering');
 
     return (
-        <div className="max-w-4xl mx-auto ime-blog-page">
+        <div className="max-w-4xl mx-auto ime-blog-pag px-6 md:px-0 pt-5">
             {/* Featured Image */}
             {blog.featured_image && (
                 <div className="mb-8">

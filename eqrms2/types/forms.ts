@@ -51,9 +51,6 @@ export type CompanyQrtNotesValues = z.infer<typeof CompanyQrtNotesSchema>;
 
 // Defining the zodSchema for funds update
 export const fundsUpdateSchema = z.object({
-  fund_rating: z.coerce.number().nullable(),
-  fund_performance_rating: z.coerce.number().nullable(),
-  fund_strategy_rating: z.coerce.number().nullable(),
   open_for_subscription: z.string().nullable(),
   recommendation_tag: z.string().nullable(),
   strategy_tag: z.string().nullable(),
@@ -72,11 +69,6 @@ export type FundsUpdateValues = z.infer<typeof fundsUpdateSchema>;
 
 // Defining the zodSchema for amc update
 export const amcUpdateSchema = z.object({
-  amc_rating: z.coerce.number().nullable(),
-  amc_pedigree_rating: z.coerce.number().nullable(),
-  amc_team_rating: z.coerce.number().nullable(),
-  amc_philosophy_rating: z.coerce.number().nullable(),
-  amc_size_rating: z.coerce.number().nullable(),
   amc_pedigree: z.string().nullable(),
   team_pedigree: z.string().nullable(),
   inv_team_risk: z.string().nullable(),

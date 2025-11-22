@@ -29,9 +29,6 @@ function EditFundsForm({
   const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: FundsUpdateValues = {
-    fund_rating: initialData.fund_rating ?? 0,
-    fund_performance_rating: initialData.fund_performance_rating ?? 0,
-    fund_strategy_rating: initialData.fund_strategy_rating ?? 0,
     open_for_subscription: initialData.open_for_subscription ?? "",
     recommendation_tag: initialData.recommendation_tag ?? "",
     strategy_tag: initialData.strategy_tag ?? "",
@@ -81,11 +78,6 @@ function EditFundsForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full p-4 space-y-4">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-      
-      {/* Rating Fields with Toggle Groups */}
-      <ToggleGroupInput name="fund_rating" label="Fund Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips" />
-      <ToggleGroupInput name="fund_performance_rating" label="Performance Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
-      <ToggleGroupInput name="fund_strategy_rating" label="Strategy Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
       
       <ToggleGroupInput 
         name="open_for_subscription" 
@@ -137,9 +129,6 @@ export function EditFundsButton({
 
   // Convert fund data to FundsUpdateValues format
   const fundUpdateData: FundsUpdateValues = {
-    fund_rating: fundData.fund_rating ?? 0,
-    fund_performance_rating: fundData.fund_performance_rating ?? 0,
-    fund_strategy_rating: fundData.fund_strategy_rating ?? 0,
     open_for_subscription: fundData.open_for_subscription ?? "",
     recommendation_tag: fundData.recommendation_tag ?? "",
     strategy_tag: fundData.strategy_tag ?? "",

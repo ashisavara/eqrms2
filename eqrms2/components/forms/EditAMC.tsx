@@ -32,11 +32,6 @@ function EditAmcForm({
   const router = useRouter();
   // Convert null values to empty strings for form inputs
   const cleanedData: AmcUpdateValues = {
-    amc_rating: initialData.amc_rating ?? 0,
-    amc_pedigree_rating: initialData.amc_pedigree_rating ?? 0,
-    amc_team_rating: initialData.amc_team_rating ?? 0,
-    amc_philosophy_rating: initialData.amc_philosophy_rating ?? 0,
-    amc_size_rating: initialData.amc_size_rating ?? 0,
     amc_pedigree: initialData.amc_pedigree ?? "",
     team_pedigree: initialData.team_pedigree ?? "",
     inv_team_risk: initialData.inv_team_risk ?? "",
@@ -90,13 +85,6 @@ function EditAmcForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full p-4 space-y-4">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-      
-      {/* Rating Fields with Toggle Groups */}
-      <ToggleGroupInput name="amc_rating" label="AMC Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips" />
-      <ToggleGroupInput name="amc_pedigree_rating" label="AMC Pedigree Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
-      <ToggleGroupInput name="amc_team_rating" label="Team Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
-      <ToggleGroupInput name="amc_philosophy_rating" label="Philosophy Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
-      <ToggleGroupInput name="amc_size_rating" label="Size Rating" control={control} options={ratingOptions} valueType="number" itemClassName="ime-choice-chips"  />
       
       <ToggleGroupInput 
         name="amc_pedigree" 
@@ -175,11 +163,6 @@ export function EditAMCButton({
 
   // Convert amc data to AmcUpdateValues format
   const amcUpdateData: AmcUpdateValues = {
-    amc_rating: amcData.amc_rating ?? 0,
-    amc_pedigree_rating: amcData.amc_pedigree_rating ?? 0,
-    amc_team_rating: amcData.amc_team_rating ?? 0,
-    amc_philosophy_rating: amcData.amc_philosophy_rating ?? 0,
-    amc_size_rating: amcData.amc_size_rating ?? 0,
     amc_pedigree: amcData.amc_pedigree ?? "",
     team_pedigree: amcData.team_pedigree ?? "",
     inv_team_risk: amcData.inv_team_risk ?? "",
