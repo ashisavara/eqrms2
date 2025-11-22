@@ -42,7 +42,6 @@ export function TableAmcScreen({ data }: TableAmcScreenProps) {
   });
 
   const filters = [
-    { column: "structure", title: "Structure", placeholder: "Structure" },
     { column: "amc_rating", title: "Rating", placeholder: "Rating" },
     { column: "us_investor_tagging", title: "US Investor", placeholder: "US Investor" }
   ];

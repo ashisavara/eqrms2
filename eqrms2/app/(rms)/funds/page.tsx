@@ -27,7 +27,7 @@ export default async function FundsPage() {
     redirect('/uservalidation'); // or wherever you want to send them
   }
 
-  const [funds, amc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass, DomesticStructure, GlobalStructure] = await Promise.all([
+  const [funds, mfAmc, pmsAmc, globalAmc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass, DomesticStructure, GlobalStructure] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({
       table: "view_rms_funds_screener",
       columns: "fund_id,fund_name,fund_rating,fund_performance_rating,amc_name,amc_rating,asset_class_name,category_name,cat_long_name,structure_name,open_for_subscription, estate_duty_exposure,us_investors,one_yr,three_yr,five_yr,since_inception,slug",
@@ -42,6 +42,27 @@ export default async function FundsPage() {
       columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
       filters: [
         (query) => query.eq('open_for_distribution', ['Y']),
+        (query) => query.eq('structure', ['MF']),
+        (query) => query.gt('amc_rating', 2),
+        (query) => query.order('amc_rating', { ascending: false })
+      ]
+    }),
+    supabaseListRead<AMC>({
+      table: "rms_amc",
+      columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
+      filters: [
+        (query) => query.eq('open_for_distribution', ['Y']),
+        (query) => query.in('structure', ['PMS','AIF']),
+        (query) => query.gt('amc_rating', 2),
+        (query) => query.order('amc_rating', { ascending: false })
+      ]
+    }),
+    supabaseListRead<AMC>({
+      table: "rms_amc",
+      columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
+      filters: [
+        (query) => query.eq('open_for_distribution', ['Y']),
+        (query) => query.eq('structure', ['Global AMC']),
         (query) => query.gt('amc_rating', 2),
         (query) => query.order('amc_rating', { ascending: false })
       ]
@@ -148,7 +169,23 @@ export default async function FundsPage() {
                     <PerformanceFootnote />
                 </TabsContent>
                 <TabsContent value="amc">
-                  <TableAmcScreen data={amc}/>
+                  <Tabs defaultValue="MF" className="w-full mx-auto mt-2">
+                      <TabsList className="w-full">
+                          <TabsTrigger value="MF">MF</TabsTrigger>
+                          <TabsTrigger value="PMS/AIF">PMS/AIF</TabsTrigger>
+                          <TabsTrigger value="Global">Global</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="MF">
+                        <TableAmcScreen data={mfAmc}/>
+                      </TabsContent>
+                      <TabsContent value="PMS/AIF">
+                        <p className="text-sm text-gray-500 mt-0 mb-0">Note: Certain PMS AMCs also offer AIF's similar to their PMS offerings, that are managed by the same team. Prominent examples include Alfaccurate, Buoyant, Carnelian, Sameeksha, Abakkus, WhiteOak and others. </p>
+                        <TableAmcScreen data={pmsAmc}/>
+                      </TabsContent>
+                      <TabsContent value="Global">
+                        <TableAmcScreen data={globalAmc}/>
+                      </TabsContent>
+                  </Tabs>
                 </TabsContent>
                 <TabsContent value="india">
                     <Tabs defaultValue="Asset Class" className="w-full mx-auto mt-2">
