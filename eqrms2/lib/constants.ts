@@ -138,18 +138,20 @@ export const MASTER_OPTIONS = {
   ],
 
   // Team & Responsibility
+  // primaryRm is now value-label pairs: UUID (value) maps to name (label)
+  // The UUID is saved to Supabase, while the name is displayed in the dropdown
   primaryRm: [
-    "Ankita Singh",
-    "Aravind Kodipaka",
-    "Ashi Anand",
-    "Deepak Jayakumar",
-    "IME Investor Desk",
-    "Maneesh Gupta",
-    "Srini P",
-    "Paresh Vaish",
-    "Chittaranjan",
-    "Preethy Uthup"
-  ],
+    { value: "892c7542-3416-45da-bda4-719d6e302f9a", label: "Deepak Jayakumar" },
+    { value: "5c2c3fef-095b-4e50-8125-2824bc4aefa4", label: "Maneesh Gupta" },
+    { value: "7c4976f8-ae7d-4843-b98b-4d58d409f732", label: "Srini P" },
+    { value: "d096fae3-6fd4-4294-8f3f-f1d13f7720e6", label: "Paresh Vaish" },
+    { value: "53ed22d1-c0fe-4978-9df4-72f3a934cc0a", label: "Ankita Singh" },
+    { value: "bceeb088-265d-434c-870a-c2752e60ef47", label: "Ashi Anand" },
+    { value: "8b4d186e-6ab3-43ae-b719-034f6ea50f82", label: "Manisha Ravindran" },
+    { value: "bccf827f-03c9-4472-94cb-bc4ee094463f", label: "Shagun Luthra" },
+    { value: "44db20a2-71de-41ae-ac72-36612d96235f", label: "Aravind Kodipaka" },
+    { value: "ad0a0c17-21f4-4d2f-b87d-b9534c22a205", label: "Chittaranjan" },
+  ] as const,
   
   issueResponsibility: [
     "Hritwik",

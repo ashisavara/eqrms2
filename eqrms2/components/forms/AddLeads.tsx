@@ -28,7 +28,8 @@ function AddLeadForm({
   const leadSourceOptions = transformToValueLabel(masterOptions.leadSource);
   const leadTypeOptions = transformToValueLabel(masterOptions.leadType);
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
-  const primaryRmOptions = transformToValueLabel(masterOptions.primaryRm);
+  // primaryRm is already in value-label format, no transformation needed
+  const primaryRmOptions = masterOptions.primaryRm.map(item => ({ value: item.value, label: item.label }));
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   
@@ -53,7 +54,7 @@ function AddLeadForm({
     email_3: "",
     lead_summary: "",
     lead_background: "",
-    primary_rm: "",
+    primary_rm_uuid: "",
     subs_email: false,
     subs_whatsapp: false,
     subs_imecapital: false,
@@ -88,7 +89,7 @@ function AddLeadForm({
         email_3: data.email_3,
         lead_summary: data.lead_summary,
         lead_background: data.lead_background,
-        primary_rm: data.primary_rm,
+        primary_rm_uuid: data.primary_rm_uuid || null, // Convert empty string to null for UUID field
         phone_validated: data.phone_validated,
         email_validated: data.email_validated,
         referral_partner: data.referral_partner || null
@@ -132,7 +133,7 @@ function AddLeadForm({
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
-          <SelectInput name="primary_rm" label="Primary RM" control={control} options={primaryRmOptions} />
+          <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
           <SelectInput name="referral_partner" label="Referral Partner" control={control} options={referralPartnerOptions} />
         </div>
       </div>

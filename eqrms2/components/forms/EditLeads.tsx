@@ -33,7 +33,8 @@ function EditLeadsForm({
   const leadSourceOptions = transformToValueLabel(masterOptions.leadSource);
   const leadTypeOptions = transformToValueLabel(masterOptions.leadType);
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
-  const primaryRmOptions = transformToValueLabel(masterOptions.primaryRm);
+  // primaryRm is already in value-label format, no transformation needed
+  const primaryRmOptions = masterOptions.primaryRm.map(item => ({ value: item.value, label: item.label }));
   const router = useRouter();  
   // Convert null values to empty strings/defaults for form inputs
   const cleanedData: LeadsTaggingValues = {
@@ -56,7 +57,7 @@ function EditLeadsForm({
     email_3: initialData.email_3 ?? "",
     lead_summary: initialData.lead_summary ?? "",
     lead_background: initialData.lead_background ?? "",
-    primary_rm: initialData.primary_rm ?? "",
+    primary_rm_uuid: initialData.primary_rm_uuid ?? "",
     subs_email: initialData.subs_email ?? false,
     subs_whatsapp: initialData.subs_whatsapp ?? false,
     subs_imecapital: initialData.subs_imecapital ?? false,
@@ -94,7 +95,7 @@ function EditLeadsForm({
         email_3: data.email_3,
         lead_summary: data.lead_summary,
         lead_background: data.lead_background,
-        primary_rm: data.primary_rm,
+        primary_rm_uuid: data.primary_rm_uuid || null, // Convert empty string to null for UUID field
         phone_validated: data.phone_validated,
         email_validated: data.email_validated,
         subs_email: data.subs_email,
@@ -141,7 +142,7 @@ function EditLeadsForm({
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
-          <SelectInput name="primary_rm" label="Primary RM" control={control} options={primaryRmOptions} />
+          <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
           <SelectInput name="referral_partner" label="Referral Partner" control={control} options={referralPartnerOptions} />
         </div>
       </div>
@@ -217,7 +218,7 @@ export function EditLeadsButton({
     email_3: leadData.email_3 ?? "",
     lead_summary: leadData.lead_summary ?? "",
     lead_background: leadData.lead_background ?? "",
-    primary_rm: leadData.primary_rm ?? "",
+    primary_rm_uuid: leadData.primary_rm_uuid ?? "",
     subs_email: leadData.subs_email ?? false,
     subs_whatsapp: leadData.subs_whatsapp ?? false,
     subs_imecapital: leadData.subs_imecapital ?? false,
