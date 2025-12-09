@@ -18,21 +18,36 @@ import { type NextRequest, NextResponse } from "next/server";
 const AFF_COOKIE = "aff_rf";
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"] as const;
 
-// ===== Subdomain detection =====
-type Subdomain = 'rms' | 'public' | 'root' | null;
+// ===== Domain and Subdomain detection =====
+type DomainInfo = {
+  domain: 'imecapital' | 'imepms' | null;
+  subdomain: 'root' | 'rms' | 'public' | null;
+};
 
-function getSubdomain(host: string): Subdomain {
-  // Localhost or non-production
-  if (!host.includes('.imecapital.in') && host !== 'imecapital.in') return null;
+function getDomainInfo(host: string): DomainInfo {
+  // Localhost - allow access to all routes (no domain restrictions)
+  if (host.startsWith('localhost') || host.startsWith('127.0.0.1')) {
+    return { domain: null, subdomain: null };
+  }
   
-  // Root domain - serves public routes (main website)
-  if (host === 'imecapital.in') return 'root';
+  // Production - imecapital.in domain family
+  if (host === 'imecapital.in') {
+    return { domain: 'imecapital', subdomain: 'root' };
+  }
+  if (host === 'rms.imecapital.in' || host.startsWith('rms.imecapital.in')) {
+    return { domain: 'imecapital', subdomain: 'rms' };
+  }
+  if (host === 'public.imecapital.in' || host.startsWith('public.imecapital.in')) {
+    return { domain: 'imecapital', subdomain: 'public' };
+  }
   
-  // Subdomains
-  if (host.startsWith('rms.')) return 'rms';
-  if (host.startsWith('public.')) return 'public'; // Legacy staging subdomain
+  // Production - imepms.in domain family
+  if (host === 'imepms.in' || host === 'www.imepms.in') {
+    return { domain: 'imepms', subdomain: 'root' };
+  }
   
-  return null;
+  // Unknown host - treat as localhost
+  return { domain: null, subdomain: null };
 }
 
 // ===== Route group detection =====
@@ -84,7 +99,11 @@ function buildAffiliateCookiePayload(req: NextRequest): string | null {
   return JSON.stringify({ rf: rfRaw, ...utm });
 }
 
-/** Attach affiliate cookie to a response if payload exists */
+/** 
+ * Attach affiliate cookie to a response if payload exists 
+ * Note: Currently, imepms.in shares cookies with imecapital.in domains
+ * (no domain restriction for imepms.in at this time) .. however since cookies are domain specific they will not work on imepms.in
+ */
 function applyAffCookie(req: NextRequest, res: NextResponse, payload: string | null) {
   if (!payload) return res;
 
@@ -110,13 +129,26 @@ export async function middleware(request: NextRequest) {
   // Build affiliate cookie payload UP FRONT so we can attach it on any return branch
   const affPayload = buildAffiliateCookiePayload(request);
 
-  // ===== PHASE 1: Subdomain Detection =====
-  const subdomain = getSubdomain(host);
+  // ===== PHASE 1: Domain Detection =====
+  const domainInfo = getDomainInfo(host);
   const routeGroup = getRouteGroup(pathname);
 
-  // ===== PHASE 1.5: Legacy Public Subdomain Redirect =====
+  // ===== PHASE 1.5: imepms.in Domain Rewrite =====
+  // Rewrite imepms.in requests to /imepms path (transparent to user)
+  // Note: imepms.in currently shares affiliate cookies with imecapital.in
+  if (domainInfo.domain === 'imepms') {
+    // Don't rewrite if already on /imepms path or static assets
+    if (!pathname.startsWith('/imepms') && routeGroup !== 'static' && !pathname.startsWith('/api/')) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/imepms${pathname}`;
+      const res = NextResponse.rewrite(url);
+      return applyAffCookie(request, res, affPayload);
+    }
+  }
+
+  // ===== PHASE 1.6: Legacy Public Subdomain Redirect =====
   // Redirect public.imecapital.in to root domain (301 permanent redirect)
-  if (subdomain === 'public') {
+  if (domainInfo.subdomain === 'public') {
     const url = request.nextUrl.clone();
     url.host = 'imecapital.in';
     const res = NextResponse.redirect(url, { status: 301 });
@@ -136,9 +168,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // ===== PHASE 3: Subdomain Routing (Production only) =====
-  if (subdomain) {
+  if (domainInfo.domain === 'imecapital' && domainInfo.subdomain) {
     // Root domain trying to access RMS routes -> redirect to RMS subdomain
-    if (subdomain === 'root' && routeGroup === 'rms') {
+    if (domainInfo.subdomain === 'root' && routeGroup === 'rms') {
       const url = request.nextUrl.clone();
       url.host = 'rms.imecapital.in';
       const res = NextResponse.redirect(url);
@@ -150,7 +182,7 @@ export async function middleware(request: NextRequest) {
 
   // ===== PHASE 3.5: RMS Root Handling (BEFORE strict enforcement) =====
   // Handle RMS subdomain root - redirect to /app for clean URL structure
-  if (subdomain === 'rms' && pathname === '/') {
+  if (domainInfo.subdomain === 'rms' && pathname === '/') {
     const url = request.nextUrl.clone();
     url.pathname = '/app';
     const res = NextResponse.redirect(url);
@@ -158,7 +190,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // ===== PHASE 3.6: Strict Subdomain-Path Enforcement =====
-  if (subdomain === 'rms') {
+  if (domainInfo.subdomain === 'rms') {
     // RMS subdomain trying to access public routes -> 404
     if (routeGroup === 'public') {
       const url = request.nextUrl.clone();
