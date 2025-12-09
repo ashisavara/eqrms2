@@ -30,6 +30,10 @@
     @apply text-sm mt-1 mb-1;
   }
 
+  p.table-footer-note {
+    @apply text-xs text-gray-500 mt-2 mb-2;
+  }
+
   table td p, table td {
     @apply mt-1 mb-1;
   }
