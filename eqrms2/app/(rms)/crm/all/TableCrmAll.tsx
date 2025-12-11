@@ -4,6 +4,11 @@ import { ServerTablePage, ServerTablePageConfig } from "@/components/server-tabl
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating, CrmFollowupNumberRating } from "@/components/conditional-formatting";
 import {LeadsTagging} from "@/types/lead-detail";
 import Link from "next/link";
+import { EditLeadsButton } from "@/components/forms/EditLeads";
+import { AddDealButton } from "@/components/forms/AddDeals";
+import { AddInteractionButton } from "@/components/forms/AddInteractions";
+import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
+import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 
 // Table Interface
 interface LeadsTableProps {data: LeadsTagging[];
@@ -68,6 +73,12 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
         render: (value, row) => (
           <div className="w-[140px] truncate text-left">
             <Link href={`/crm/${row.lead_id}`} className="text-blue-500 hover:text-blue-800 font-bold !text-left hover:underline">{row.lead_name} </Link>
+            <ToggleVisibility toggleText="Edit" className="text-xs text-green-700 hover:underline hover:font-bold">
+              <EditLeadsButton leadData={row} leadId={row.lead_id} />
+              <AddDealButton relLeadId={row.lead_id} initialLeadData={row} />
+              <AddInteractionButton relLeadId={row.lead_id} initialLeadData={row} />
+              <AddFollowUpButton relLeadId={row.lead_id} initialLeadData={row} />
+            </ToggleVisibility>
           </div>
         )
       },

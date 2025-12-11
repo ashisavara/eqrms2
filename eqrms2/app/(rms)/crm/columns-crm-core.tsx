@@ -5,6 +5,7 @@ import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSour
 import { EditLeadsButton } from "@/components/forms/EditLeads";
 import { AddDealButton } from "@/components/forms/AddDeals";
 import { AddInteractionButton } from "@/components/forms/AddInteractions";
+import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 
 export const createColumns = (
@@ -23,7 +24,6 @@ export const createColumns = (
     leadSourceOptions: { value: string; label: string }[],
     leadTypeOptions: { value: string; label: string }[],
     primaryRmOptions: { value: string; label: string }[],
-    referralPartnerOptions: { value: string; label: string }[],
 ): ColumnDef<LeadsTagging>[] => [
     {
         accessorKey: "lead_name",
@@ -33,9 +33,10 @@ export const createColumns = (
             return <div className="text-left">
                 <Link href={`/crm/${row.original.lead_id}`} className="blue-hyperlink">{row.original.lead_name} </Link> 
                 <ToggleVisibility toggleText="Edit" className="text-xs text-green-700 hover:underline hover:font-bold">
-                    <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} referralPartnerOptions={referralPartnerOptions} />
+                    <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} />
                     <AddDealButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
                     <AddInteractionButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
+                    <AddFollowUpButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
                 </ToggleVisibility>
                 </div>
         }

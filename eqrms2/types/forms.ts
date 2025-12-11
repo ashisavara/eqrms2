@@ -252,7 +252,7 @@ export const MeetingNoteSchema = z.object({
   interaction_channel: z.string(),
   interaction_tag: z.string(),
   interaction_type: z.string().trim().min(1, 'Required'),
-  meeting_name: z.string(),
+  meeting_name: z.string().trim().min(1, 'Required'),
   meeting_notes: z.string(),
   meeting_summary: z.string(),
   show_to_client: z.coerce.boolean(),
@@ -266,6 +266,27 @@ export const MeetingNoteSchema = z.object({
 });
 
 export type MeetingNoteValues = z.infer<typeof MeetingNoteSchema>;
+
+
+// -----------------------
+// FOLLOW-UP FORM 
+// -----------------------
+
+export const FollowUpSchema = z.object({
+
+  // meeting notes fields
+  interaction_channel: z.string(),
+  interaction_type: z.string().trim().min(1, 'Required'),
+
+  //lead fields
+  followup_date: z.coerce.date().nullable(),
+  importance: z.string().nullable(),
+  lead_progression: z.string().nullable(),
+  wealth_level: z.string().nullable(),
+  lead_summary: z.string().nullable(),
+});
+
+export type FollowUpValues = z.infer<typeof FollowUpSchema>;
 
 
 // -----------------------

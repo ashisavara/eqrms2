@@ -79,7 +79,7 @@ export default async function CrmPage() {
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 
                         interactionTagOptions={interactionTagOptions} interactionTypeOptions={interactionTypeOptions} customTagOptions={customTagOptions} 
                         leadRoleOptions={leadRoleOptions} digitalAdOptions={digitalAdOptions} leadSourceOptions={leadSourceOptions} 
-                        leadTypeOptions={leadTypeOptions} primaryRmOptions={primaryRmOptions} referralPartnerOptions={referralPartnerOptions}/>
+                        leadTypeOptions={leadTypeOptions} primaryRmOptions={primaryRmOptions} />
                     </TabsContent>
                     <TabsContent value="interactions">
                          <TableInteractions data={interactions} leadsData={leads} />

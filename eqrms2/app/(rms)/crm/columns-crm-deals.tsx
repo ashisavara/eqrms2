@@ -49,5 +49,7 @@ export const createColumns = (
     },
     { accessorKey: "deal_segment", header: "Segment", size:130,},
     { accessorKey: "deal_summary", header: "Summary", size:600,},   
-    
+    { accessorKey: "rm_name", header: "RM", size:150,
+        cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>,
+    },
 ];

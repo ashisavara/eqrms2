@@ -5,20 +5,18 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import { MeetingNoteSchema, MeetingNoteValues } from "@/types/forms";
+import { FollowUpSchema, FollowUpValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResizableTextArea, TextInput, BooleanToggleInput, ToggleGroupInput, SelectInput, DatePicker } from "./FormFields";
+import { TextInput, ToggleGroupInput, SelectInput, DatePicker } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow, supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
-import { Handshake } from "lucide-react";
+import { Clock } from "lucide-react";
 
 // Field extraction arrays
 const INTERACTION_FIELDS = [
-  'meeting_name', 'meeting_notes', 'meeting_summary',
-  'interaction_type', 'interaction_tag', 'interaction_channel',
-  'show_to_client'
+  'interaction_type', 'interaction_channel'
 ] as const;
 
 const LEAD_FIELDS = [
@@ -27,7 +25,7 @@ const LEAD_FIELDS = [
 ] as const;
 
 // Field extraction functions
-function extractInteractionFields(formData: MeetingNoteValues) {
+function extractInteractionFields(formData: FollowUpValues) {
   const interactionData: any = {};
   
   INTERACTION_FIELDS.forEach(field => {
@@ -39,7 +37,7 @@ function extractInteractionFields(formData: MeetingNoteValues) {
   return interactionData;
 }
 
-function extractLeadFields(formData: MeetingNoteValues) {
+function extractLeadFields(formData: FollowUpValues) {
   const leadData: any = {};
   
   LEAD_FIELDS.forEach(field => {
@@ -52,7 +50,7 @@ function extractLeadFields(formData: MeetingNoteValues) {
 }
 
 // Internal form component
-function AddInteractionForm({
+function AddFollowUpForm({
   onSuccess, 
   relLeadId,
   initialLeadData
@@ -66,22 +64,15 @@ function AddInteractionForm({
   const importanceOptions = transformToValueLabel(masterOptions.importance);
   const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
-  const interactionTypeOptions = transformToValueLabel(masterOptions.interactionType);
-  const interactionTagOptions = transformToValueLabel(masterOptions.interactionTag);
   const interactionChannelOptions = transformToValueLabel(masterOptions.interactionChannelTag);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   // Default values - empty interaction, pre-populated lead data
-  const defaultData: MeetingNoteValues = {
-    // Interaction fields (empty for new interaction)
+  const defaultData: FollowUpValues = {
+    // Interaction fields (empty for new follow-up)
     interaction_channel: "WA",
-    interaction_tag: "",
-    interaction_type: "Interaction",
-    meeting_name: "",
-    meeting_notes: "",
-    meeting_summary: "",
-    show_to_client: false,
+    interaction_type: "Follow up",
     
     // Lead fields (pre-populated from current lead data)
     followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
@@ -91,9 +82,9 @@ function AddInteractionForm({
     lead_summary: initialLeadData?.lead_summary ?? null,
   };
 
-  const { control, handleSubmit } = useForm<MeetingNoteValues>({
+  const { control, handleSubmit } = useForm<FollowUpValues>({
     defaultValues: defaultData,
-    resolver: zodResolver(MeetingNoteSchema)
+    resolver: zodResolver(FollowUpSchema)
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -108,7 +99,7 @@ function AddInteractionForm({
       const insertData = relLeadId ? { ...interactionData, rel_lead_id: relLeadId } : interactionData;
       // Debug payload for meeting_notes insert
       // eslint-disable-next-line no-console
-      console.log('[AddInteractions] meeting_notes insertData:', insertData);
+      console.log('[AddFollowUp] meeting_notes insertData:', insertData);
       await supabaseInsertRow('meeting_notes', insertData);
       
       // Step 2: Update lead (if we have lead data and relLeadId)
@@ -121,12 +112,12 @@ function AddInteractionForm({
             };
           // Debug payload for leads_tagging update
           // eslint-disable-next-line no-console
-          console.log('[AddInteractions] leads_tagging update:', { lead_id: relLeadId, payload: processedLeadData });
+          console.log('[AddFollowUp] leads_tagging update:', { lead_id: relLeadId, payload: processedLeadData });
           
           await supabaseUpdateRow('leads_tagging', 'lead_id', relLeadId, processedLeadData);
           
           if (typeof window !== "undefined") {
-            toast.success("Interaction added and lead updated successfully!");
+            toast.success("Follow-up added and lead updated successfully!");
             setTimeout(() => {
               onSuccess?.();
               router.refresh();
@@ -136,14 +127,14 @@ function AddInteractionForm({
         } catch (leadError) {
           console.error('Lead update failed:', leadError);
           if (typeof window !== "undefined") {
-            toast.error("Interaction was saved successfully, but lead update failed. Please update lead information manually.");
+            toast.error("Follow-up was saved successfully, but lead update failed. Please update lead information manually.");
           }
           setIsLoading(false);
         }
       } else {
-        // Only interaction was saved
+        // Only follow-up was saved
         if (typeof window !== "undefined") {
-          toast.success("Interaction created successfully!");
+          toast.success("Follow-up created successfully!");
           setTimeout(() => {
             onSuccess?.();
             router.refresh();
@@ -152,9 +143,9 @@ function AddInteractionForm({
       }
       
     } catch (interactionError) {
-      console.error('Error creating Interaction:', interactionError);
+      console.error('Error creating Follow-up:', interactionError);
       if (typeof window !== "undefined") {
-        toast.error("Failed to create Interaction. Please try again.");
+        toast.error("Failed to create Follow-up. Please try again.");
       }
       setIsLoading(false);
     }
@@ -163,36 +154,14 @@ function AddInteractionForm({
   return (
     <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-      <p className="bg-red-100 p-2 text-xs"><span className="font-bold">Interaction Type:</span> 
-        (a) INTERACTIONS: basic interaction ... meeting name & summary required
-        (b) MEETINGS: more detailed disccussion (consultation, portfolio discussion)
-        </p>
 
-      {/* Section 1: Interaction Details */}
+      {/* Section 1: Follow-up Details */}
       <div className="space-y-4">
+        <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Follow-up Details</h3>
         
-        
-        
-        <div className="grid grid-cols-3 gap-4">
-          <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
-          <ToggleGroupInput name="interaction_type" label="Interaction Type" control={control} options={interactionTypeOptions} itemClassName="ime-choice-chips" />
-          <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Creating...' : 'Create Interaction & Update Lead'}
-            </Button>
-          </div>      
-         
+        <div className="grid grid-cols-1 gap-4">
+          <ToggleGroupInput name="interaction_channel" label="Interaction Channel" control={control} options={interactionChannelOptions} itemClassName="ime-choice-chips" />
         </div>
-        
-        <div className="grid grid-cols-3 gap-4">
-          <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
-          <SelectInput name="interaction_channel" label="Interaction Channel" control={control} options={interactionChannelOptions} />
-          <SelectInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} />
-        </div>
-        
-        <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
-        
-        <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
       </div>
 
       {/* Section 2: Update Lead Details (Optional) */}
@@ -210,12 +179,18 @@ function AddInteractionForm({
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
         </div>
       </div>
+
+      <div className="flex justify-end">
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Creating...' : 'Create Follow-up & Update Lead'}
+        </Button>
+      </div>
     </form>
   );
 }
 
 // Main component that exports the button and handles sheet state
-export function AddInteractionButton({ 
+export function AddFollowUpButton({ 
   relLeadId,
   initialLeadData
 }: { 
@@ -230,7 +205,7 @@ export function AddInteractionButton({
         onClick={() => setShowAddSheet(true)}
         className="cursor-pointer flex items-center w-full p-2 hover:bg-gray-100 rounded"
       >
-        <Handshake className="w-4 h-4 mr-2" /> Add Interaction
+        <Clock className="w-4 h-4 mr-2" /> Add Follow-up
       </span>
 
       {/* Add Sheet */}
@@ -238,10 +213,10 @@ export function AddInteractionButton({
         <Sheet open={true} onOpenChange={() => setShowAddSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Add New Interaction</SheetTitle>
+              <SheetTitle>Add New Follow-up</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
-              <AddInteractionForm
+              <AddFollowUpForm
                 onSuccess={() => setShowAddSheet(false)}
                 relLeadId={relLeadId}
                 initialLeadData={initialLeadData}

@@ -63,6 +63,7 @@ export default function TableDeals({
       { column: "deal_stage", title: "Stage", placeholder: "Stage" },
       { column: "deal_segment", title: "Segment", placeholder: "Segment" },
       { column: "est_closure", title: "Est. Closure", placeholder: "Est. Closure" },
+      { column: "rm_name", title: "RM", placeholder: "RM" },
     ];
 
     // ✅ Generate filter options for top-level filters

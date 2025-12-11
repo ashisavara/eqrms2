@@ -23,6 +23,7 @@ import { AclLeadsDetail } from "@/types/acl-leads-detail";
 import { AclGroupDetail } from "@/types/acl-group-detail";
 import { AddAclLeadButton } from "@/components/forms/AddAclLeads";
 import { LoginProfileWithRoles } from "@/app/(rms)/internal/link-login-lead/types";
+import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -153,9 +154,10 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         <div className="flex flex-row gap-2">
                             <h1>{lead.lead_name}</h1>
                             <ToggleVisibility toggleText="Edit">
-                                <EditLeadsButton leadData={lead} leadId={lead.lead_id} referralPartnerOptions={referralPartnerOptions} />
+                                <EditLeadsButton leadData={lead} leadId={lead.lead_id} />
                                 <AddDealButton relLeadId={lead.lead_id} initialLeadData={lead} />
                                 <AddInteractionButton relLeadId={lead.lead_id} initialLeadData={lead} />
+                                <AddFollowUpButton relLeadId={lead.lead_id} initialLeadData={lead} />
                                 <AddCustomTag 
                                     leadId={lead.lead_id} 
                                     customTagOptions={customTagOptions} 

@@ -26,19 +26,22 @@ export const createColumns = (
 
     { accessorKey: "meeting_name", header: "Meeting Name", size:200, 
         cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
-    { accessorKey: "interaction_type", header: "Type", size:100, cell: ({ row }) => {
+    { accessorKey: "interaction_type", header: "Type", size:100, cell: ({ row, getValue }) => {
         // Find the corresponding lead data for this interaction
         const currentLeadData = leadsData.find(lead => lead.lead_id === row.original.rel_lead_id);
+        const interactionType = getValue() as string;
         
-        return row.original.meeting_name == null ? null : 
+        return (
         <div className="text-left">
-        <EditInteractionButton 
-            meetingId={row.original.meeting_id} 
-            interactionData={row.original} 
-            relLeadId={row.original.rel_lead_id}
-            initialLeadData={currentLeadData}
-        />
+            
+            <EditInteractionButton 
+                meetingId={row.original.meeting_id} 
+                interactionData={row.original} 
+                relLeadId={row.original.rel_lead_id}
+                initialLeadData={currentLeadData}
+            />
         </div>
+        );
     }},
     { accessorKey: "rm_name", header: "Created By", size:150, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
     { accessorKey: "lead_name", header: "Lead", size:150, cell: ({ row }) => {

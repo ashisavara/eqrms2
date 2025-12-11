@@ -18,20 +18,16 @@ import { Pencil } from "lucide-react";
 function EditLeadsForm({ 
   initialData, 
   id,  // lead_id
-  onSuccess,
-  referralPartnerOptions
+  onSuccess
 }: { 
   initialData: LeadsTaggingValues; 
   id: number;  
   onSuccess?: () => void;
-  referralPartnerOptions: { value: string; label: string }[];
 }) {
   // Get options from context (static options)
   const masterOptions = useMasterOptions();
   const importanceOptions = transformToValueLabel(masterOptions.importance);
   const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
-  const leadSourceOptions = transformToValueLabel(masterOptions.leadSource);
-  const leadTypeOptions = transformToValueLabel(masterOptions.leadType);
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
   // primaryRm is already in value-label format, no transformation needed
   const primaryRmOptions = masterOptions.primaryRm.map(item => ({ value: item.value, label: item.label }));
@@ -137,13 +133,10 @@ function EditLeadsForm({
       <div className="bg-gray-100 p-4">
         <ToggleGroupInput name="importance" label="Importance" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
 
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
-          <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
-          <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
-          <SelectInput name="referral_partner" label="Referral Partner" control={control} options={referralPartnerOptions} />
         </div>
       </div>
       {/* Categorization Fields with Options */}
@@ -184,12 +177,10 @@ function EditLeadsForm({
 // Main component that exports the button and handles sheet state
 export function EditLeadsButton({ 
   leadData,
-  leadId,  
-  referralPartnerOptions
+  leadId
 }: { 
   leadData: any;
-  leadId: number;  
-  referralPartnerOptions: { value: string; label: string }[];
+  leadId: number;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -248,7 +239,6 @@ export function EditLeadsButton({
                 initialData={leadUpdateData}
                 id={leadId}  
                 onSuccess={() => setShowEditSheet(false)}
-                referralPartnerOptions={referralPartnerOptions}
               />
             </div>
           </SheetContent>

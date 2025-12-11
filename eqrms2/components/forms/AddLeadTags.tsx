@@ -24,15 +24,13 @@ export function AddLeadTags({
   customTagOptions,
   leadRoleOptions,
   digitalAdOptions,
-  lead,
-  referralPartnerOptions
+  lead
 }: { 
   leadId: number;
   customTagOptions: { value: string; label: string }[];
   leadRoleOptions: { value: string; label: string }[];
   digitalAdOptions: { value: string; label: string }[];
   lead: LeadsTaggingValues;
-  referralPartnerOptions: { value: string; label: string }[];
 }) {
   // Note: This component no longer needs to get options from context since
   // the child components (EditLeadsButton, AddDealButton, etc.) now get them directly
@@ -47,7 +45,7 @@ export function AddLeadTags({
       <DropdownMenuContent align="end" className="w-48">
 
         <DropdownMenuItem>
-          <EditLeadsButton leadData={lead} leadId={leadId} referralPartnerOptions={referralPartnerOptions} />
+          <EditLeadsButton leadData={lead} leadId={leadId} />
         </DropdownMenuItem>
 
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
