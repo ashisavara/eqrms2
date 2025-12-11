@@ -129,7 +129,7 @@ function AddFinGoalsForm({onSuccess}: {onSuccess?: () => void}) {
             </div>
         </form>
 
-        <p className="text-sm text-center mb-0 mt-0"><b>Useful Links: </b> <a href="/financial-calculator/retirement-corpus-required" className="blue-hyperlink" target="_blank">Retirement Corpus </a>| <a href="https://imecapital.in/financial-calculator/annual-expense-calculator" className="blue-hyperlink" target="_blank">Annual Expenses</a> </p>
+        <p className="text-sm text-center mb-0 mt-0"><b>Useful Links: </b> <a href="https://imecapital.in/financial-calculator/retirement-corpus-required" className="blue-hyperlink" target="_blank">Retirement Corpus </a>| <a href="https://imecapital.in/financial-calculator/annual-expense-calculator" className="blue-hyperlink" target="_blank">Annual Expenses</a> </p>
 
         <div className="bg-gray-50 m-5 p-2 rounded-lg border">
           <p className="text-sm text-center mb-0 mt-0"><span className="font-semibold">Future Value Goal Calculator: </span>Calculate future value of goal, based on current cost and the goal date & inflation rate entered above.</p>
