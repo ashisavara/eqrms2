@@ -75,7 +75,8 @@ function EditAmcDueDilForm({
     // CHECK Section - Dates can stay null as they represent absence of a check
     disclosure_doc_last_check: initialData.disclosure_doc_last_check ?? null,
     mkt_mat_last_check: initialData.mkt_mat_last_check ?? null,
-    amc_diligence_last_check: initialData.amc_diligence_last_check ?? null
+    amc_diligence_last_check: initialData.amc_diligence_last_check ?? null,
+    mkt_material_link: initialData.mkt_material_link ?? ""
   };
 
   const { control, handleSubmit, formState: { errors } } = useForm<AmcDueDiligenceValues>({
@@ -144,6 +145,7 @@ function EditAmcDueDilForm({
             <DatePicker name="mkt_mat_last_check" label="Market Materials Last Check" control={control} />
             <DatePicker name="amc_diligence_last_check" label="AMC Diligence Last Check" control={control} />
             </div>
+            <TextInput name="mkt_material_link" label="Mkt Material Link" control={control} />
         </TabsContent>
         <TabsContent value="dd">
             <div className="space-y-4">
@@ -312,7 +314,8 @@ export function EditAmcDueDilButton({
     // CHECK Section - Dates can stay null as they represent absence of a check
     disclosure_doc_last_check: amcData.disclosure_doc_last_check ?? null,
     mkt_mat_last_check: amcData.mkt_mat_last_check ?? null,
-    amc_diligence_last_check: amcData.amc_diligence_last_check ?? null
+    amc_diligence_last_check: amcData.amc_diligence_last_check ?? null,
+    mkt_material_link: amcData.mkt_material_link ?? ""
   };
 
   return (

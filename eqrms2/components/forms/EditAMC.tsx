@@ -138,6 +138,7 @@ function EditAmcForm({
         <ResizableTextArea name="amc_pedigree_desc" label="AMC Pedigree Description" control={control} />
         <ResizableTextArea name="team_pedigree_desc" label="Team Pedigree Description" control={control} />
         <ResizableTextArea name="inv_phil_desc" label="Inv Philosophy Description" control={control} />
+        <TextInput name="inv_phil_name" label="Inv Philosophy Name" control={control} />
         <ResizableTextArea name="salient_points" label="Salient Points" control={control} />
       </div>
       

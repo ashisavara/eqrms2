@@ -64,7 +64,9 @@ export default async function AmcPage({ params }: PageProps) {
           )}
           {(can(userRoles,'rms','view_all_funds')) && (
             <>
-            <a href={AMC.mkt_material_link} target="_blank" className="blue-hyperlink"> Presentations</a>
+            {AMC.mkt_material_link && AMC.mkt_material_link.trim() !== "" && (
+              <a href={AMC.mkt_material_link} target="_blank" className="blue-hyperlink"> Presentations</a>
+            )}
             </>
           )}
         </div>
@@ -80,9 +82,10 @@ export default async function AmcPage({ params }: PageProps) {
                   <div className="text-sm">
                   <h2 className="ime-basic-h3"> IME AMC rating</h2>
                   <SimpleTable 
-                  headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
+                  headers = {[{label:"AMC"},{label:"Pedigree"},{label:"Team"},{label:"Philosophy"}]}
                   body = {[
                     {value: <RatingDisplayWithStar rating={AMC?.amc_rating ?? null} />},
+                    {value: <RatingDisplayWithStar rating={AMC?.amc_pedigree_rating ?? null} />},
                     {value: <RatingDisplayWithStar rating={AMC?.amc_team_rating ?? null} />},
                     {value: <RatingDisplayWithStar rating={AMC?.amc_philosophy_rating ?? null} />}
                   ]}

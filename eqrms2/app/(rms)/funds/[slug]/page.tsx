@@ -127,8 +127,8 @@ export default async function FundPage({ params }: PageProps) {
                 <div className="text-sm">
                   <h2 className="text-center font-bold mb-2"> How we rate the AMC</h2>
                   <SimpleTable 
-                  headers = {[{label:"AMC"},{label:"Team"},{label:"Philosophy"}]}
-                  body = {[{value:<RatingDisplayWithStar rating={fund.amc_rating} />},{value:<RatingDisplayWithStar rating={fund.amc_team_rating} />},{value:<RatingDisplayWithStar rating={fund.amc_philosophy_rating} />}]}
+                  headers = {[{label:"AMC"},{label:"Pedigree"},{label:"Team"},{label:"Philosophy"}]}
+                  body = {[{value:<RatingDisplayWithStar rating={fund.amc_rating} />},{value:<RatingDisplayWithStar rating={fund.amc_pedigree_rating} />},{value:<RatingDisplayWithStar rating={fund.amc_team_rating} />},{value:<RatingDisplayWithStar rating={fund.amc_philosophy_rating} />}]}
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
                   <div className="w-full mt-2 text-xs">

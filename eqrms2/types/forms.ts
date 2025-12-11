@@ -131,7 +131,8 @@ export const amcDueDiligenceSchema = z.object({
   mailing_list_amc: z.coerce.boolean().nullable(),
   disclosure_doc_last_check: z.coerce.date().nullable(),
   mkt_mat_last_check: z.coerce.date().nullable(),
-  amc_diligence_last_check: z.coerce.date().nullable()
+  amc_diligence_last_check: z.coerce.date().nullable(),
+  mkt_material_link: z.string().nullable()
 });
 
 // Add the type export for use in TypeScript
