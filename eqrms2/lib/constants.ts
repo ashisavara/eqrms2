@@ -244,7 +244,7 @@ export const MASTER_OPTIONS = {
   ],
   
   fundPerformanceAsOf: [
-    "Performance as of: 30-Oct-25 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses. Global fund returns are in USD or in the funds currency"
+    "Performance as of: 30-Nov-25 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses (some AIF returns are post-tax). Global fund returns are in USD or in the funds currency"
   ],
   
   openForSubscriptionTag: [

@@ -243,7 +243,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 formatter: (value) => value.toFixed(1)
               }}
             />
-            <p className="helper-text"><span className="font-bold">Note:</span> All values in Rs. lakhs | Abs Ret & CAGR (absolute returns & annualised returns) are in % |<span className="font-bold"> Last Updates:</span> Daily (MF, IME PMS, Kristal), Monthly (PMS & AIF: 30-Oct), Held-Away (when last given by investor). 
+            <p className="helper-text"><span className="font-bold">Note:</span> All values in Rs. lakhs | Abs Ret & CAGR (absolute returns & annualised returns) are in % |<span className="font-bold"> Last Updates:</span> Daily (MF, IME PMS, Kristal), Monthly (PMS & AIF: 30-Nov), Held-Away (when last given by investor). 
               <br/>1yr, 3yr, 5yr returns (%) are the funds reported annualised returns, that are not impacted by the timing of your entry/exit and therefore better for comparisons.
                </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

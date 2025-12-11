@@ -57,7 +57,13 @@ export default async function FundPage({ params }: PageProps) {
              {fund.structure_name} -  
             <Link href={`/assetclass/${fund.asset_class_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.asset_class_name} -  </Link>
             <Link href={`/categories/${fund.category_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.category_name} |  </Link>
-            <div className="whitespace-nowrap"> AUM: {fund.fund_aum} cr |  </div>
+            <div className="whitespace-nowrap">
+              {fund.fund_aum != null && (
+                <>
+                  AUM: {fund.structure_id === 5 ? `$ ${fund.fund_aum} mn` : `Rs. ${fund.fund_aum} cr`}|
+                </>
+              )}
+            </div>
             <div className="whitespace-nowrap"> Open: {fund.open_for_subscription}  | </div>
             {can(userRoles, 'rms', 'edit_rms') ? 
               <div className="whitespace-nowrap">

@@ -55,7 +55,16 @@ export default async function AmcPage({ params }: PageProps) {
     <div>
         <div className="pageHeadingBox">
           <h1>{AMC.amc_name}</h1>
-          {AMC.structure} | AUM: {AMC.aum} cr | 
+          {AMC.structure}
+          {AMC.aum != null && (
+            <>
+              {" | AUM: "}
+              {AMC.structure === "Global AMC"
+                ? `$ ${AMC.aum} bn`
+                : `Rs. ${AMC.aum} cr`}
+              {" | "}
+            </>
+          )}
           {(can(userRoles, 'rms', 'edit_rms')) && (
           <>
               <EditAMCButton amcData={AMC} amcId={AMC.id} />
