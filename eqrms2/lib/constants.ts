@@ -19,12 +19,11 @@ export const MASTER_OPTIONS = {
     "4) Urgent",
     "3) High",
     "2) Medium",
-    "2) Not Set",
-    "1) Reassign",
-    "1) DB Nuture", 
     "1) Low",
-    "0) Nil",
-    "0) Avoid"
+    "1) Telecaller",
+    "1) DB Nuture", 
+    "0) Avoid",
+    "2) Not Set"
   ],
   
   leadProgression: [
@@ -32,20 +31,20 @@ export const MASTER_OPTIONS = {
     "1) Contact Initiated",
     "2) Initial Discussion",
     "3) Inv Consultation",
-    "6) Client",
     "3) Ex-Client",
     "4) Deal Indicated",
-    "5) Documentation"
+    "5) Documentation",
+    "6) Client"
   ],
   
   wealthLevel: [
+    "0) NA",
     "0) Unknown",
     "0) Retail",
     "1) Wealth",
     "2) Affluent",
     "3) HNI",
-    "4) Ultra-HNI",
-    "0) NA"
+    "4) Ultra-HNI"
   ],
   
   leadType: [

@@ -133,11 +133,24 @@ function EditLeadsForm({
       <div className="bg-gray-100 p-4">
         <ToggleGroupInput name="importance" label="Importance" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
 
-        <div className="grid grid-cols-3 gap-4">
-          <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
-          <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
-          <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
-        </div>
+          <ToggleGroupInput
+            name="wealth_level"
+            label="Wealth"
+            control={control}
+            options={wealthLevelOptions}
+            valueType="string"
+            toggleGroupClassName="gap-2 flex-wrap"
+            itemClassName="ime-choice-chips"
+          />
+          <ToggleGroupInput
+            name="lead_progression"
+            label="Lead Stage"
+            control={control}
+            options={leadProgressionOptions}
+            valueType="string"
+            toggleGroupClassName="gap-2 flex-wrap"
+            itemClassName="ime-choice-chips"
+          />
       </div>
       {/* Categorization Fields with Options */}
       
