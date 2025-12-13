@@ -127,6 +127,12 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
     const sipTotal = sipData.reduce((sum, row) => sum + (Number(row.sip_amount) || 0), 0);
     const stpTotal = stpData.reduce((sum, row) => sum + (Number(row.stp_amt) || 0), 0);
     
+    // ✅ Get filtered data from the table to pass to child components
+    const filteredData = useMemo(() => {
+      const filteredRows = table.getFilteredRowModel().rows;
+      return filteredRows.map(row => row.original);
+    }, [table.getFilteredRowModel().rows]);
+    
     return (
       <div className="space-y-4">
         <div className="pageHeadingBox"><h1>Investments</h1></div>
@@ -269,17 +275,17 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Change" 
-                value={data.reduce((sum, row) => sum + (row.amt_change || 0), 0)}
+                value={filteredData.reduce((sum, row) => sum + (row.amt_change || 0), 0)}
                 formatter={(value) => `${value.toFixed(1)}`}
               />
               <AggregateCard 
                 title="Total Current Value" 
-                value={data.reduce((sum, row) => sum + (row.cur_amt || 0), 0)}
+                value={filteredData.reduce((sum, row) => sum + (row.cur_amt || 0), 0)}
                 formatter={(value) => `${value.toFixed(1)}`}
               />
               <AggregateCard 
                 title="Total New Value" 
-                value={data.reduce((sum, row) => sum + (row.new_amt || 0), 0)}
+                value={filteredData.reduce((sum, row) => sum + (row.new_amt || 0), 0)}
                 formatter={(value) => `${value.toFixed(1)}`}
               />
             </div>
@@ -355,7 +361,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
               </div>
             )}
             <p className="helper-text"><span className="font-bold">Note: </span> You can sort on the Change Amt column by clicking on it, to see the key changes being recommended</p>
-            <TableInvChange data={data} />
+            <TableInvChange data={filteredData} />
           </TabsContent>
           <TabsContent value="shortlist">
             <TableFundScreen data={favFunds}/>

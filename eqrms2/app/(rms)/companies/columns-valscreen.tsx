@@ -53,6 +53,7 @@ export const columns: ColumnDef<Company>[] = [
   { 
     accessorKey: "stock_score", 
     header: "Rating",
+    filterFn: "arrIncludesSome",
     cell : ({ getValue }) => <RatingDisplay rating={getValue() as number} />
   },
   { 

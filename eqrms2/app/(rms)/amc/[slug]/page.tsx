@@ -1,7 +1,7 @@
 import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, fetchOptions, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { AMC } from "@/types/amc-detail";
-import { RatingDisplay, RatingDisplayWithStar,RatingContainer } from "@/components/conditional-formatting";
+import { RatingDisplay, RatingDisplayWithStar,RatingContainer,RmsFundFmChurnRiskRating,RmsAmcMaturityRating } from "@/components/conditional-formatting";
 import { EditAMCButton } from "@/components/forms/EditAMC";
 import { EditAmcDueDilButton } from "@/components/forms/EditAmcDueDil";
 import { RmsFundsScreener } from "@/types/funds-detail";
@@ -112,11 +112,11 @@ export default async function AmcPage({ params }: PageProps) {
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                         <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">FM Churn Risk</span></div>
-                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_team_rating ?? 0}>{AMC.inv_team_risk}</RatingContainer></div>
+                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RmsFundFmChurnRiskRating rating={AMC.inv_team_risk ?? ''} /></div>
                       </div>
                       <div className="flex flex-col md:flex-row mb-2">
                         <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Maturity</span></div>
-                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RatingContainer rating={AMC.amc_rating ?? 0}>{AMC.amc_maturity}</RatingContainer></div>
+                        <div className="w-full pr-4 md:flex-1 md:min-w-0"><RmsAmcMaturityRating rating={AMC.amc_maturity ?? ''} /></div>
                       </div>
                     </div>
                     <div>

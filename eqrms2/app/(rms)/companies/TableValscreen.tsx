@@ -54,6 +54,7 @@ export function TableValscreen({ data }: TableValscreenProps) {
 
 
   const filters = [
+    { column: "stock_score", title: "Rating", placeholder: "Rating" },
     { column: "sector_name", title: "Sector", placeholder: "Sectors" },
     { column: "industry", title: "Industry", placeholder: "Industry" },
     { column: "quality", title: "Quality", placeholder: "Quality" },
