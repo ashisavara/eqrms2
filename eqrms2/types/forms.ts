@@ -217,7 +217,7 @@ export const LeadsTaggingSchema = z.object({
   email_3: z.string().nullable(),
   lead_summary: z.string().min(1, "Lead summary is required"),
   lead_background: z.string().nullable(),
-  primary_rm_uuid: z.string().min(1, "Primary RM is required"),
+  primary_rm_uuid: z.string().nullable(),
   subs_email: z.coerce.boolean().nullable(),
   subs_whatsapp: z.coerce.boolean().nullable(),
   subs_imecapital: z.coerce.boolean().nullable(),
