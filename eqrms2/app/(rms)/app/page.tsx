@@ -296,7 +296,7 @@ export default function RMSLandingPage() {
         </CardContent>
       </Card>
           </div>
-          <div><YouTube url="https://www.youtube.com/watch?v=QNrr0nsUX3M" /></div>
+          <div><YouTube url="https://youtu.be/3WnkkjU5S0g" /></div>
         </div>
       </Section>
 

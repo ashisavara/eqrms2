@@ -24,7 +24,7 @@ export default function RMSPage() {
                         <Button><Link href="https://rms.imecapital.in">Free Trial</Link></Button>
                         </AlertBox>
                     </div>
-                    <div><YouTube url="https://www.youtube.com/watch?v=QNrr0nsUX3M" /></div>
+                    <div><YouTube url="https://youtu.be/3WnkkjU5S0g" /></div>
                 </div>
             </Section>
 

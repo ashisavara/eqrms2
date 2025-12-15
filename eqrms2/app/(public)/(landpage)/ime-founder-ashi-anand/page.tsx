@@ -31,7 +31,7 @@ export default function IMEFounderAshiAnandPage() {
                 <p>Ashi's other accomplishments include managing one of the best performing healthcare strategies in India while at Allegro and having designed from scratch a highly innovative & disruptive Research Management Solution (RMS) to help manage investment insights for Asset Management firms (the bedrock of IME's RMS).</p>
                 <h2>Ashi - Performance Track Record</h2>
                 <div className="p-12 border border-gray-200 rounded-lg">
-                <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ashi-track-record.png" alt="Ashi - Performance Track Record" />
+                <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/Ashi%20Anand%20Performance%20TrackRecord.jpeg" alt="Ashi - Performance Track Record" />
                 </div>
 
                 <AlertBox color="gray" heading="Founders Note">
