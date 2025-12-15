@@ -60,7 +60,7 @@ export default function OurTeamPage() {
                 <p>Maneesh spends his free time reading and/or watching media about modern history – ranging from business to economics and geopolitics, with a global view in general and India in particular.</p>
             </TeamProfileBox>
             <TeamProfileBox 
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/deepak%20profile.jpeg"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/deepak-profile.jpg"
                 name="Deepak Jayakumar"
                 designation="Executive Director"
             >
