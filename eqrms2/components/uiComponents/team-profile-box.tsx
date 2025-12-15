@@ -23,14 +23,16 @@ const TeamProfileBox: React.FC<TeamProfileBoxProps> = ({
   
   return (
     <div className={`py-8 border-b-2 border-gray-200 ime-team-profile-box ${className}`}>
-      <div className="ime-grid-2col flex">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,250px)_1fr] gap-4">
         {/* Image Section */}
-        <div className={`w-[700px] pt-10 pr-12 text-center`}>
-          <img 
-            src={imgSrc} 
-            alt={name} 
-            className="rounded-3xl w-[150px] h-[150px] mx-auto shadow-sm" 
-          />
+        <div className="pt-10 pr-12 text-center">
+          <div className="w-[150px] h-[150px] mx-auto rounded-3xl overflow-hidden shadow-sm">
+            <img 
+              src={imgSrc} 
+              alt={name} 
+              className="w-full h-full object-cover object-center" 
+            />
+          </div>
           <div className="pt-3">
             <span className="font-bold">{name}</span><br/>
             <span>{designation}</span>

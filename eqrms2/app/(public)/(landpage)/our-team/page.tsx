@@ -30,9 +30,8 @@ export default function OurTeamPage() {
                 name="Anil Sarin"
                 designation="Chief Mentor"
             >
-                <p>Anil is the chief mentor at IME Capital, helping oversee and refine best practices around fund selection & equity stock research. As a veteran stock market investor, Anil brings a wealth of experience to IME Capital.</p>
-                <p>Over a fruitful 30 year career in finance, Anil has held senior positions at leading investment firms. These include Fund Manager at Birla Mutual Fund, FM & Co-head Equities at ICICI Prudential Mutual Fund, Managing Director at Bessemer Venture Partners, CIO at Edelweiss PMS and CIO at Centrum PMS.</p>
-                <p>Prior to his career in finance, Anil served in the Indian army as an Infantry officer and saw action in Sri Lanka as part of the IPKF. Aside from being an active investor, Anil practices Vipassna meditation and makes time every year to attend a ten day Vipassna retreat.</p>
+                <p>Anil is the Chief Mentor at IME Capital, guiding best practices in fund selection and equity research. A veteran investor with over 30 years in finance, he has held senior leadership roles across asset management and private investing, including Fund Manager at Birla Mutual Fund, Co-Head of Equities at ICICI Prudential Mutual Fund, Managing Director at Bessemer Venture Partners, and CIO roles at Edelweiss PMS and Centrum PMS. </p>
+                <p>Earlier, Anil served as an Infantry officer in the Indian Army and saw active duty with the IPKF in Sri Lanka. He is also a long-time practitioner of Vipassana meditation.</p>
             </TeamProfileBox>
             <TeamProfileBox 
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/aravind-kodipaka-profile.jpeg"
@@ -44,23 +43,43 @@ export default function OurTeamPage() {
             </TeamProfileBox>
             </Section>
             <h2>Business Development</h2>
-            <Section>    
+            <Section>
             <TeamProfileBox 
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/maneesh-gupta-profile.jpeg"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/Paresh%20Vaish%20Profile.jpg"
+                name="Paresh Vaish"
+                designation="Strategic Advisor"
+            >
+                <p>Paresh brings over 30 years of experience in business transformation, delivering measurable results for large and mid-sized clients in India and globally. An alumnus of Harvard Business School (MBA) and Dartmouth College, his career spans finance, strategy, and operations. He co-founded McKinsey’s India practice, advising leading family-owned business groups on long-term transformations. He later led Management Consulting at EY India and served as Managing Partner at Alvarez & Marsal India. As a partner and board member at SFW Capital Partners, he helped identify and evaluate multiple investment opportunities.</p><p> His strategic insight and relationship-building strengths make him a valuable asset in private banking and investment advisory.</p>
+            </TeamProfileBox>    
+            <TeamProfileBox 
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/maneesh-gupta-profile1.jpeg"
                 name="Maneesh Gupta"
                 designation="Executive Director"
             >
-                <p>Maneesh heads Business Development for Corporate Treasuries & Partnerships at IME Capital. Maneesh is a business leader with over 2 decades of experience in the banking, finance and real estate industry, which includes heading the valuation business for Colliers International in India.</p>
-                <p>He has worked extensively in the real estate domain across India and SAARC nations, and is an expert in expansion activities, valuation services, strategic consulting and also scaling up business to their true potential. Maneesh has co-founded as well as invested in several start-ups within prop-tech, AI and food-tech domains.</p>
+                <p>Maneesh heads Business Development for Corporate Treasuries and Partnerships at IME Capital. He brings over two decades of experience across banking, finance, and real estate, including leading the valuation business for Colliers International in India. Maneesh has worked extensively across India and SAARC markets, with deep expertise in business expansion, valuation, strategic advisory, and scaling enterprises. He has also co-founded and invested in multiple startups across prop-tech, AI, and food-tech sectors, combining institutional experience with an entrepreneurial mindset to drive long-term partnerships and growth initiatives.</p>
                 <p>Maneesh spends his free time reading and/or watching media about modern history – ranging from business to economics and geopolitics, with a global view in general and India in particular.</p>
             </TeamProfileBox>
             <TeamProfileBox 
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/deepak-jayakumar-profile.jpeg"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/deepak%20profile.jpeg"
                 name="Deepak Jayakumar"
                 designation="Executive Director"
             >
                 <p>Deepak is a Senior Private Banker at IME Capital. With over 2 decades of experience in Business Development & Entrepreneurship (in IT & Defense), Deepak comes with rich experience of building long-term relationships. His natural instinct and empathy, along with his deep passion for the field of investments, are an ideal combination in his role as a private banker. Deepak is constantly learning, and continues to further his knowledge in the field of investing by following top investors global & local.</p>
                 <p>As part of his experience, Deepak has managed key relationships involved with the Chandrayaan-2 and Mangalyaan missions – perfect for a space enthusiast.</p>
+            </TeamProfileBox>
+            <TeamProfileBox 
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/Srini%20P.jpeg"
+                name="Srini Parthasathy"
+                designation="Executive Director"
+            >
+                <p>Srini brings a diverse background spanning sales, financial planning, operations, entrepreneurship, and investing. This breadth of experience enables him to deliver comprehensive, client-specific wealth planning and management solutions. Throughout his career, Srini has maintained a strong client-centric approach, designing personalized strategies aligned with both individual and business financial goals.</p><p> His entrepreneurial mindset, combined with operational depth, allows him to navigate complex financial situations with clarity and precision, positioning him as a trusted advisor for long-term wealth creation and stewardship.</p>
+            </TeamProfileBox>
+            <TeamProfileBox 
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/Ankita%20Singh.jpeg"
+                name="Ankita Singh"
+                designation="Vice President"
+            >
+                <p>Ankita is a seasoned wealth manager with over 12 years of experience. In her role, she focuses on transforming financial futures for individuals, retirees, and corporate treasuries by designing tailored financial strategies.</p><p> At HDFC Securities, she used to manage NRI accounts across APAC and EMEA, overseeing client onboarding, investment advisory, and retention strategies across equity, PMS, AIF, mutual funds, and insurance products. She previously worked at ICICIdirect and Geojit Financial, where she provided equity portfolio management, trade execution, and personalized investment strategies.</p>
             </TeamProfileBox>
             </Section>
             <h2>Communication & Marketing</h2>
