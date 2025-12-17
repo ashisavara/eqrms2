@@ -1,8 +1,8 @@
 import Section from "@/components/uiComponents/section";
 import ImageTextBox from "@/components/uiComponents/image-text-box";
-import YouTube from "@/components/uiComponents/youtube";
 import PageTitle from "@/components/uiComponents/page-title";
 import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
+import RmaCta from "@/components/uiComponents/rma-cta";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import AlertBox from "@/components/uiBlocks/AlertBox";
@@ -15,17 +15,8 @@ export default function RMSPage() {
                 caption="Gain direct access to investment ratings & rationales of IME’s Central Research Team across MFs, PMSs, AIFs & Global investments." 
             />
             
-
-            <Section className="py-12">
-                <div className="ime-grid-2col">
-                    <div>
-                        <AlertBox color="green" heading="Free 30-Day Trial">
-                        <p>Get complete access to the revolutionary IME RMS for 30-days, along with a dedicated private banker who can help build your customised Financial Plan & Investment Mandate, and review your existing portfolio.</p>
-                        <Button><Link href="https://rms.imecapital.in">Free Trial</Link></Button>
-                        </AlertBox>
-                    </div>
-                    <div><YouTube url="https://youtu.be/3WnkkjU5S0g" /></div>
-                </div>
+      <Section className="py-12">
+            <RmaCta />
             </Section>
 
             <SectionTextHighlight>

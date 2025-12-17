@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getPublicPmsSchemeSlugs, getStaticPmsScheme } from '@/lib/supabase/serverQueryHelper';
 import { generateFundSEO } from '@/lib/seo/helpers/fund';
 import type { Metadata } from 'next';
+import RmaCta from "@/components/uiComponents/rma-cta";
 
 // Generate static params for all published PMS schemes
 export async function generateStaticParams() {
@@ -84,6 +85,10 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                 {pmsScheme.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: pmsScheme.trailing_perf_html }} />}
                 <h2>Investment team</h2>
                 {pmsScheme.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: pmsScheme.amc_fm_html }} />}
+                <div className="py-12">
+                    <h2>Experience the Benefits of working with a 'research-first' investments firm</h2>
+                    <RmaCta />
+                </div>
             </div>
         );
     } catch (error) {

@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import { getPublicPmsAmcSlugs, getStaticPmsAmc, getStaticPmsAmcFunds } from '@/lib/supabase/serverQueryHelper';
 import { generateAmcSEO } from '@/lib/seo/helpers/amc';
 import type { Metadata } from 'next';
+import RmaCta from "@/components/uiComponents/rma-cta";
+
 
 // Generate static params for all published PMS AMCs
 export async function generateStaticParams() {
@@ -76,6 +78,10 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
 
                 <h2>Recommended Funds</h2>
                 <FundPerformanceTable data={funds} />
+                <div className="py-12">
+                    <h2>Experience the Benefits of working with a 'research-first' investments firm</h2>
+                    <RmaCta />
+                </div>
             </div>
         );
     } catch (error) {
