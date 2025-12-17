@@ -5,8 +5,12 @@ import {Investments} from"@/types/investment-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditInvAmtButton } from "@/components/forms/EditInvNewAmt";
 import SimpleTable from "@/components/tables/singleRowTable";
+import { can } from '@/lib/permissions';
 
-export const columns: ColumnDef<Investments>[] = [
+export const createColumns = (userRoles: string[]): ColumnDef<Investments>[] => {
+  const canEditInvestments = can(userRoles, 'investments', 'add_edit_held_away');
+
+  return [
 
 
     { accessorKey: "fund_name", 
@@ -37,9 +41,9 @@ export const columns: ColumnDef<Investments>[] = [
         } else {
             // Desktop view - show as normal table cell
             if (row.original.slug) {
-                return <div className="text-left"><Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link> | <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
+                return <div className="text-left"><Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link> {canEditInvestments && <>| <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></>}</div>
             } else {
-                return <div className="text-left">{row.original.fund_name} | <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></div>
+                return <div className="text-left">{row.original.fund_name} {canEditInvestments && <>| <EditInvAmtButton investmentData={row.original} investmentId={row.original.investment_id} /></>}</div>
             }
         }
     }
@@ -94,4 +98,8 @@ export const columns: ColumnDef<Investments>[] = [
     { accessorKey: "one_yr", header: "1 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "three_yr", header: "3 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
     { accessorKey: "five_yr", header: "5 yr", size:40, cell: ({ getValue }) => getValue() == null ? null : <div className="text-blue-500"> {Number(getValue()).toFixed(1)}</div>  },
-];
+  ];
+};
+
+// Export the default columns for backward compatibility (without permissions)
+export const columns = createColumns([]);

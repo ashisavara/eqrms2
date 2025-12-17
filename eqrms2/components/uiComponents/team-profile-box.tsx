@@ -27,11 +27,11 @@ const TeamProfileBox: React.FC<TeamProfileBoxProps> = ({
         {/* Image Section */}
         <div className="pt-10 pr-12 text-center">
           <div className="w-[150px] h-[150px] mx-auto rounded-3xl overflow-hidden shadow-sm">
-            <img 
-              src={imgSrc} 
-              alt={name} 
+          <img 
+            src={imgSrc} 
+            alt={name} 
               className="w-full h-full object-cover object-center" 
-            />
+          />
           </div>
           <div className="pt-3">
             <span className="font-bold">{name}</span><br/>

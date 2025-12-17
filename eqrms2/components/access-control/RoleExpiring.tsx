@@ -24,10 +24,10 @@ export default async function RoleExpiring() {
         return (
           <div key={index}>
             {roleId === 7 && (
-              <p>Your trial access to the IME RMS will expire on <span className="font-bold">{formatDate(userRole?.expires_on)}</span>.</p>
+              <p className="my-2">Your trial access to the IME RMS will expire on <span className="font-bold">{formatDate(userRole?.expires_on)}</span>.</p>
             )}
             {roleId === 11 && (
-              <p>As a new user you get a limited 1 day trial to the IME RMS, which is extended to 15 days post-validation of your account. </p>
+              <p className="my-2">As a new user you get a limited 1 day trial to the IME RMS, which is extended to 30 days post-validation of your account. </p>
             )}
           </div>
         );

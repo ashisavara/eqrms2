@@ -43,15 +43,14 @@ export const createColumns = (userRoles: string[]): ColumnDef<Investments>[] => 
             if (row.original.slug) {
                 return <div className="text-left flex items-center">
                     <Link href={`/funds/${row.original.slug}`} className="blue-hyperlink">{row.original.fund_name}</Link>  
-                    {canEditInvestments && <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />}
-                    <DeleteInvestmentButton investmentId={row.original.investment_id} advisorName={row.original.advisor_name} />
+                    {canEditInvestments &&<EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />}
                     </div>
             } else {
                 return (
                   <div className="text-left flex items-center">
                     {row.original.fund_name}
-                    {canEditInvestments && <EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />}
-                    <DeleteInvestmentButton investmentId={row.original.investment_id} advisorName={row.original.advisor_name} />
+                    {canEditInvestments &&  <><EditHeldAwayAssetsButton investmentData={row.original} investmentId={row.original.investment_id} />
+                    <DeleteInvestmentButton investmentId={row.original.investment_id} advisorName={row.original.advisor_name} /></>}
                   </div>
                 )
             }

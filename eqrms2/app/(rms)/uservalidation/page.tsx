@@ -1,18 +1,12 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MessageCircle, Shield, Clock } from 'lucide-react';
+import { MessageCircle, Shield } from 'lucide-react';
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import UserValidationClient from './UserValidationClient';
 
-export default function UserValidation() {
-  const handleWhatsAppClick = () => {
-    const phoneNumber = '+918088770050';
-    const message = 'Request Validation for App Access';
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${phoneNumber.replace('+', '')}?text=${encodedMessage}`;
-    
-    window.open(whatsappUrl, '_blank');
-  };
+export default async function UserValidation() {
+  const userRoles = await getUserRoles();
+  const isTrialEnded = userRoles.includes('trial_ended');
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -22,34 +16,21 @@ export default function UserValidation() {
             <Shield className="h-8 w-8 text-yellow-600" />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900">
-            Account Validation Required
+            {isTrialEnded ? 'Trial Ended - Request Extension' : 'Account Validation Required'}
           </CardTitle>
         </CardHeader>
         
         <CardContent className="space-y-6">
           <div className="text-center">
             <p className="text-gray-600 mb-4">
-              Your account is not yet validated. You need to be validated to access key features of the IME RMS.
+              {isTrialEnded 
+                ? 'Your trial period has ended. Please request an extension to continue accessing the IME RMS.' 
+                : 'Your account is not yet validated. You need to be validated to access key features of the IME RMS.'}
             </p>
             
           </div>
           
-          <div className="space-y-3">
-            <Button 
-              onClick={handleWhatsAppClick}
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
-            >
-              <MessageCircle className="h-4 w-4 mr-2" />
-              Request Validation via WhatsApp
-            </Button>
-            
-            <p className="text-xs text-gray-500 text-center">
-              Validation is required to confirm that you are a genuine potential investor, and not competition/media.   
-            </p>
-            <p className="text-xs text-gray-500 text-center">
-                You will receive a call from our central team, to ask you some basic qualification questions in order to validate your account. Validation typically takes 1 business day.
-            </p>
-          </div>
+          <UserValidationClient isTrialEnded={isTrialEnded} />
           
         </CardContent>
       </Card>
