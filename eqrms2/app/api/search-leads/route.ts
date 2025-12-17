@@ -88,6 +88,15 @@ export async function POST(req: NextRequest) {
     });
 
     if (rpcError) {
+      // Log full error details for debugging
+      console.error('RPC Error Details:', {
+        message: rpcError.message,
+        code: rpcError.code,
+        details: rpcError.details,
+        hint: rpcError.hint,
+        full: rpcError
+      });
+
       // Check if it's a pg_trgm related error
       const isPgTrgmError = rpcError.message?.includes('similarity') || 
                            rpcError.message?.includes('pg_trgm') ||
@@ -107,7 +116,7 @@ export async function POST(req: NextRequest) {
       } else {
         // Other RPC errors (auth, etc.)
         return NextResponse.json(
-          { error: `Search function error: ${rpcError.message}` },
+          { error: `Search function error: ${rpcError.message}`, code: rpcError.code, details: rpcError.details },
           { status: 500 }
         );
       }

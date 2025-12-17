@@ -158,6 +158,7 @@ export function SearchResultsSheet({
                       <th className="px-3 py-2 text-left font-medium text-gray-900">Lead Name</th>
                       <th className="px-3 py-2 text-left font-medium text-gray-900">Phone</th>
                       <th className="px-3 py-2 text-left font-medium text-gray-900">Primary RM</th>
+                      <th className="px-3 py-2 text-left font-medium text-gray-900">Match Reason</th>
                       <th className="px-3 py-2 text-left font-medium text-gray-900">Match Score</th>
                     </tr>
                   </thead>
@@ -184,7 +185,17 @@ export function SearchResultsSheet({
                           </div>
                         </td>
                         <td className="px-3 py-2 text-gray-600">
-                          {lead.primary_rm_uuid || 'Not assigned'}
+                          {lead.rm_name || 'Not assigned'}
+                        </td>
+                        <td className="px-3 py-2">
+                          {lead.match_reason && (
+                            <Badge 
+                              variant={lead.match_reason.includes('Exact') ? "default" : "secondary"}
+                              className="text-xs"
+                            >
+                              {lead.match_reason}
+                            </Badge>
+                          )}
                         </td>
                         <td className="px-3 py-2">
                           <div className="flex items-center gap-1">

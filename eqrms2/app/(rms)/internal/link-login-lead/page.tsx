@@ -51,7 +51,7 @@ async function ProfilesWithoutRolesData() {
     // Use the v_login_profile_with_roles view and filter for empty user_roles arrays
     const allProfiles = await supabaseListRead<LoginProfileWithoutRoles>({
       table: 'v_login_profile_with_roles',
-      columns: 'uuid, phone_number, lead_name, created_at, user_roles, rm_name',
+      columns: 'uuid, phone_number, lead_name, created_at, user_roles, rm_name, lead_id',
       filters: []
     });
 

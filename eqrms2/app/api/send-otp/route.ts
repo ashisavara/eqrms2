@@ -68,8 +68,6 @@ async function sendWhatsAppOTP(phoneNumber: string, otpCode: string, deviceId?: 
         FirstName: otpCode // Fallback value
       }
     }
-
-    console.log(`[AI SENSY] Sending OTP to ${destination}: ${otpCode}`)
     
     const response = await fetch(AI_SENSY_API_URL, {
       method: 'POST',

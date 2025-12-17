@@ -14,6 +14,7 @@ export interface LoginProfileWithoutRoles {
   uuid: string;
   phone_number: string;
   lead_name?: string | null;
+  lead_id?: number | null;
   rm_name?: string | null;
   created_at: string;
   user_roles: any[]; // Empty array when no roles
@@ -49,8 +50,10 @@ export interface SearchLeadResult {
   lead_name: string;
   phone_e164: string;
   primary_rm_uuid?: string | null;
+  rm_name?: string | null;
   name_score?: number;
   phone_exact?: boolean;
+  match_reason?: string | null;
 }
 
 export interface UpdateLeadNameFormData {
