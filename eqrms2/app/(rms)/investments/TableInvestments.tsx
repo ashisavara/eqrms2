@@ -361,7 +361,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
               </div>
             )}
             <p className="helper-text"><span className="font-bold">Note: </span> You can sort on the Change Amt column by clicking on it, to see the key changes being recommended</p>
-            <TableInvChange data={filteredData} />
+            <TableInvChange data={filteredData} userRoles={userRoles} />
           </TabsContent>
           <TabsContent value="shortlist">
             <TableFundScreen data={favFunds}/>
