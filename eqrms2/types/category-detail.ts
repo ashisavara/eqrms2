@@ -23,4 +23,6 @@ export type Category = {
     cy_10: number;
     asset_class_name: string;
     category_slug: string;
+    category_stance: string;
+    category_risk_profile: string;
 };

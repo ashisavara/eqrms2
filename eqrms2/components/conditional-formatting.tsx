@@ -173,6 +173,28 @@ export function CrmLeadSourceRating({ rating }: { rating: string }) {
 }
 
 
+export function RmsCategoryStanceRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Positive': 4,
+      'Conservative': 4,
+      'Neutral': 3,
+      'Balanced': 3,
+      'Negative': 2,
+      'Aggressive': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <span className={`px-1 py-1 rounded text-xs text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </span>
+  );
+}
+
+
+
 export function RmsFundFiveYrPerfRating({ rating }: { rating: string }) {
   const getNumericRating = (textRating: string): number => {
     const ratingMap: Record<string, number> = {

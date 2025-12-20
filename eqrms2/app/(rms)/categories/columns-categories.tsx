@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Category } from "@/types/category-detail";
 import Link from "next/link";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
-import { ComGrowthNumberRating } from "@/components/conditional-formatting";
+import { ComGrowthNumberRating, RmsCategoryStanceRating } from "@/components/conditional-formatting";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import SimpleTable from "@/components/tables/singleRowTable";
 
@@ -100,6 +100,26 @@ export const columns: ColumnDef<Category>[] = [
       return <ComGrowthNumberRating rating={Number(num.toFixed(1))} />;
     },
     size: 100,
+  },
+  {
+    accessorKey: "category_stance",
+    header: "Stance",  
+    size: 100,
+    cell: ({ getValue }) => {
+      const value = getValue();
+      if (value == null) return null;
+      return <RmsCategoryStanceRating rating={value as string} />;
+    },
+  },
+  {
+    accessorKey: "category_risk_profile",
+    header: "Risk-Profile",  
+    size: 100,
+    cell: ({ getValue }) => {
+      const value = getValue();
+      if (value == null) return null;
+      return <RmsCategoryStanceRating rating={value as string} />;
+    },
   },
   {
     accessorKey: "cat_summary",
