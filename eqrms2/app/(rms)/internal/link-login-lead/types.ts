@@ -7,7 +7,7 @@ export interface LoginProfile {
   created_at: string;
   lead_id?: number | null;
   rm_name?: string | null;
-  affiliate_name?: string | null;
+  affiliate_lead_id?: number | null;
 }
 
 export interface LoginProfileWithoutRoles {

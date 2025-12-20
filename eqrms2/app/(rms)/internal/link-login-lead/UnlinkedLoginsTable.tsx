@@ -239,7 +239,7 @@ export function UnlinkedLoginsTable({ data, onRefresh }: UnlinkedLoginsTableProp
                   <td className="px-4 py-3 text-sm text-gray-600">
                     {formatDate(loginProfile.created_at)}
                   </td>
-                  <td className="px-4 py-3 text-sm">{loginProfile.affiliate_name}</td>
+                  <td className="px-4 py-3 text-sm">{loginProfile.affiliate_lead_id}</td>
                   <td className="px-4 py-3 text-sm">
                     <Button
                       size="sm"

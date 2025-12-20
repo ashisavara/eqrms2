@@ -85,7 +85,7 @@
   }
 
   p.helper-text {
-    @apply bg-gray-100 rounded-md p-2 text-xs mt-2 mb-2;
+    @apply bg-gray-100 rounded-md p-2 text-xs mt-0 mb-0;
   }
 
   div.seperator-line {

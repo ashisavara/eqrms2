@@ -21,7 +21,7 @@ async function UnlinkedLoginsData() {
     // Use the v_unlinked_logins view with correct column names
     const unlinkedLogins = await supabaseListRead<LoginProfile>({
       table: 'v_unlinked_logins',
-      columns: 'uuid, phone_number, lead_name, created_at,affiliate_name',
+      columns: 'uuid, phone_number, lead_name, created_at,affiliate_lead_id',
       filters: []
     });
 
@@ -119,6 +119,9 @@ export default async function LinkLoginLeadPage() {
             >
               <UnlinkedLoginsData />
             </Suspense>
+            <p className="helper-text">
+              <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 24886(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Ratnakar Shetty), 26505(Ashi Admin), 25970(Ankita Singh), 25436(Ankita Singh)
+            </p>
 
             {/* Login Profiles Without Roles Table */}
             <Suspense 

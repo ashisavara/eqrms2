@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Switch } from "@/components/ui/switch";
 import TextareaAutosize from 'react-textarea-autosize';
 import { format } from "date-fns"; // Comment out the DatePicker import
 import { Calendar } from "@/components/ui/calendar"; // Comment out the DatePicker import
@@ -43,13 +44,17 @@ type Props = {
   placeholder?: string;
   type?: string;
   step?: string;
+  helperText?: string;
 };
 
 // Update the TextInput component
-export function TextInput({ name, label, control, placeholder, type, step }: Props) {
+export function TextInput({ name, label, control, placeholder, type, step, helperText }: Props) {
   return (
     <div>
       <Label htmlFor={name} className="font-bold">{label}</Label>
+      {helperText && (
+        <p className="helper-text">{helperText}</p>
+      )}
       <Controller 
         name={name} 
         control={control} 
@@ -161,10 +166,13 @@ export function TextArea({ name, label, control, placeholder }: Props) {
 }
 
 // Resizable TextArea component
-export function ResizableTextArea({ name, label, control, maxRows = 15 }: { name: string; label: string; control: any; maxRows?: number }) {
+export function ResizableTextArea({ name, label, control, maxRows = 15, helperText }: { name: string; label: string; control: any; maxRows?: number; helperText?: string }) {
   return (
     <div className="form-group">
       <label htmlFor={name} className="form-label text-sm font-bold">{label}</label>
+      {helperText && (
+        <p className="helper-text">{helperText}</p>
+      )}
       <Controller
         name={name}
         control={control}
@@ -558,7 +566,7 @@ export function DatePicker({
           const errId = `${name}-error`;
           return (
             <>
-              <div className="flex gap-2">
+              <div className="flex gap-0 !mt-[1px]">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -667,6 +675,58 @@ export function BooleanToggleInput({
                   </ToggleGroupItem>
                 ))}
               </ToggleGroup>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
+      />
+    </div>
+  );
+}
+
+// Switch input field (for boolean toggle)
+export function SwitchInput({ 
+  name, 
+  label, 
+  control, 
+  helperText,
+  className,
+  disabled
+}: { 
+  name: string; 
+  label: string; 
+  control: Control<any>; 
+  helperText?: string;
+  className?: string;
+  disabled?: boolean;
+}) {
+  return (
+    <div className={className || "space-y-2"}>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <div className="flex items-center gap-2">
+                <Switch
+                  id={name}
+                  checked={field.value || false}
+                  onCheckedChange={field.onChange}
+                  disabled={disabled}
+                  aria-invalid={hasError}
+                  aria-describedby={hasError ? errId : undefined}
+                  className={cn(hasError && "ring-2 ring-red-500")}
+                />
+                <div className="flex flex-col">
+                  <Label htmlFor={name} className="font-bold">{label}</Label>
+                  {helperText && (
+                    <p className="helper-text">{helperText}</p>
+                  )}
+                </div>
+              </div>
               <FormErrorMessage error={fieldState.error as any} id={errId} />
             </>
           );

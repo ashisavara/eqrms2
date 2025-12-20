@@ -415,6 +415,15 @@ export const EditMandateSchema = z.object({
   other_mandate_details: z.string(),
   one_line_objective: z.string(),
   rp_override: z.string(),
+  last_review_date: z.coerce.date().nullable(),
+  investment_background: z.string().nullable(),
+  investments_purpose: z.string().nullable(),
+  investment_recommendations: z.string().nullable(),
+  background_done: z.coerce.boolean().nullable(),
+  risk_profile_done: z.coerce.boolean().nullable(),
+  fin_plan_done: z.coerce.boolean().nullable(),
+  inv_plan_done: z.coerce.boolean().nullable(),
+  shortlisting_done: z.coerce.boolean().nullable(),
 });
 
 export type EditMandateValues = z.infer<typeof EditMandateSchema>;

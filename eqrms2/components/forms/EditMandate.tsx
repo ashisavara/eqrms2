@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { EditMandateSchema, EditMandateValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextInput, ResizableTextArea, ToggleGroupInput, SelectInput } from "./FormFields";
+import { TextInput, ResizableTextArea, DatePicker, SelectInput, SwitchInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,16 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
         inv_plan: initialData?.inv_plan || "",
         other_mandate_details: initialData?.other_mandate_details || "",
         one_line_objective: initialData?.one_line_objective || "",
-        rp_override: initialData?.rp_override || ""
+        rp_override: initialData?.rp_override || "",
+        last_review_date: initialData?.last_review_date || null,
+        investment_background: initialData?.investment_background || null,
+        investments_purpose: initialData?.investments_purpose || null,
+        investment_recommendations: initialData?.investment_recommendations || null,
+        background_done: initialData?.background_done ?? null,
+        risk_profile_done: initialData?.risk_profile_done ?? null,
+        fin_plan_done: initialData?.fin_plan_done ?? null,
+        inv_plan_done: initialData?.inv_plan_done ?? null,
+        shortlisting_done: initialData?.shortlisting_done ?? null
     };
 
     const { control, handleSubmit} = useForm<EditMandateValues>({
@@ -55,7 +64,14 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
     return (
         <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <SwitchInput name="background_done" label="Background" control={control} />
+                <SwitchInput name="risk_profile_done" label="Risk Profile" control={control} />
+                <SwitchInput name="fin_plan_done" label="Fin Plan" control={control} />
+                <SwitchInput name="inv_plan_done" label="Inv Plan" control={control} />
+                <SwitchInput name="shortlisting_done" label="Shortlisting" control={control} />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <TextInput name="mandate_name" label="Mandate Name" control={control} />
                 <SelectInput
                   name="rp_override"
@@ -63,10 +79,24 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
                   control={control}
                   options={transformToValueLabel(masterOptions.riskProfile)}
                 />
+                <DatePicker name="last_review_date" label="Last Review Date" control={control} />
             </div>
-            <TextInput name="one_line_objective" label="One Line Objective" control={control} />
-            <ResizableTextArea name="inv_plan" label="Investment Plan" control={control} />
-            <ResizableTextArea name="other_mandate_details" label="Other Mandate Details" control={control} />
+            <TextInput name="one_line_objective" label="One Line Objective" control={control} 
+              helperText="What these investments mean for you? The emotional or core purpose of what money well managed does for you?"/>
+            <ResizableTextArea 
+              name="investment_background" 
+              label="Investor Background" 
+              control={control}
+              helperText="Past experience with investments - types of experience, what worked, what didn't work, problems experienced, etc."
+            />
+            <ResizableTextArea name="investments_purpose" label="Investments Purpose" control={control}
+              helperText="Key goals or objectives that you desire from your investments." />
+            <ResizableTextArea name="inv_plan" label="Investment Plan" control={control} 
+              helperText="Asset Allocation, Other Mandate Requirements, Funding of Goals, Lumpsum vs Staggered, Dos & Donts etc."/>
+            <ResizableTextArea name="inv_plan" label="Investment Recommendations" control={control} 
+              helperText="Core Investment Recommendations"/>
+            <ResizableTextArea name="other_mandate_details" label="To Dos" control={control} 
+             helperText="Action Plan & Tasks"/>
             
             
             
@@ -100,7 +130,16 @@ export function EditMandateButton({
     inv_plan: mandateData.inv_plan ?? "",
     other_mandate_details: mandateData.other_mandate_details ?? "",
     one_line_objective: mandateData.one_line_objective ?? "",
-    rp_override: mandateData.rp_override ?? ""
+    rp_override: mandateData.rp_override ?? "",
+    last_review_date: mandateData.last_review_date ? new Date(mandateData.last_review_date) : null,
+    investment_background: mandateData.investment_background ?? null,
+    investments_purpose: mandateData.investments_purpose ?? null,
+    investment_recommendations: mandateData.investment_recommendations ?? null,
+    background_done: mandateData.background_done ?? null,
+    risk_profile_done: mandateData.risk_profile_done ?? null,
+    fin_plan_done: mandateData.fin_plan_done ?? null,
+    inv_plan_done: mandateData.inv_plan_done ?? null,
+    shortlisting_done: mandateData.shortlisting_done ?? null
   };
 
   return (
