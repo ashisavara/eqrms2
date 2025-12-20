@@ -25,7 +25,7 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
         one_line_objective: initialData?.one_line_objective || "",
         rp_override: initialData?.rp_override || "",
         last_review_date: initialData?.last_review_date || null,
-        investment_background: initialData?.investment_background || null,
+        investments_background: initialData?.investments_background || null,
         investments_purpose: initialData?.investments_purpose || null,
         investment_recommendations: initialData?.investment_recommendations || null,
         background_done: initialData?.background_done ?? null,
@@ -84,7 +84,7 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
             <TextInput name="one_line_objective" label="One Line Objective" control={control} 
               helperText="What these investments mean for you? The emotional or core purpose of what money well managed does for you?"/>
             <ResizableTextArea 
-              name="investment_background" 
+              name="investments_background" 
               label="Investor Background" 
               control={control}
               helperText="Past experience with investments - types of experience, what worked, what didn't work, problems experienced, etc."
@@ -93,7 +93,7 @@ function EditMandateForm({initialData, id, onSuccess}: {initialData: EditMandate
               helperText="Key goals or objectives that you desire from your investments." />
             <ResizableTextArea name="inv_plan" label="Investment Plan" control={control} 
               helperText="Asset Allocation, Other Mandate Requirements, Funding of Goals, Lumpsum vs Staggered, Dos & Donts etc."/>
-            <ResizableTextArea name="inv_plan" label="Investment Recommendations" control={control} 
+            <ResizableTextArea name="investment_recommendations" label="Investment Recommendations" control={control} 
               helperText="Core Investment Recommendations"/>
             <ResizableTextArea name="other_mandate_details" label="To Dos" control={control} 
              helperText="Action Plan & Tasks"/>
@@ -132,7 +132,7 @@ export function EditMandateButton({
     one_line_objective: mandateData.one_line_objective ?? "",
     rp_override: mandateData.rp_override ?? "",
     last_review_date: mandateData.last_review_date ? new Date(mandateData.last_review_date) : null,
-    investment_background: mandateData.investment_background ?? null,
+    investments_background: mandateData.investment_background ?? null,
     investments_purpose: mandateData.investments_purpose ?? null,
     investment_recommendations: mandateData.investment_recommendations ?? null,
     background_done: mandateData.background_done ?? null,

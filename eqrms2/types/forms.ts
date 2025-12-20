@@ -416,7 +416,7 @@ export const EditMandateSchema = z.object({
   one_line_objective: z.string(),
   rp_override: z.string(),
   last_review_date: z.coerce.date().nullable(),
-  investment_background: z.string().nullable(),
+  investments_background: z.string().nullable(),
   investments_purpose: z.string().nullable(),
   investment_recommendations: z.string().nullable(),
   background_done: z.coerce.boolean().nullable(),

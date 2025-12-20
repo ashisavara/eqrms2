@@ -25,4 +25,13 @@ export type MandateDetail = {
     risk_taking_ability?: string;
     risk_appetite?: string;
     risk_profile_calculated?: string;
+    background_done?: boolean;
+    risk_profile_done?: boolean;
+    fin_plan_done?: boolean;
+    inv_plan_done?: boolean;
+    shortlisting_done?: boolean;
+    investment_background?: string;
+    investments_purpose?: string;
+    investment_recommendations?: string;
+    last_review_date?: Date;
 };

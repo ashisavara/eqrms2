@@ -20,6 +20,8 @@ import { InteractionDetail } from "@/types/interaction-detail";
 import TableShowMeetingNotes from "@/app/(rms)/crm/TableShowMeetingNotes";
 import { LeadsTagging } from "@/types/lead-detail";
 import { RiskProfilerButton } from "./RiskProfilerButton";
+import { formatDate } from "@/lib/utils";
+import { MandateProgressBar } from "@/components/mandate/MandateProgressBar";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -143,7 +145,17 @@ export default async function MandatePage() {
                   <EditMandateButton mandateData={invMandate} mandateId={mandate} />
                 )}
               </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <MandateProgressBar
+                background_done={invMandate.background_done}
+                risk_profile_done={invMandate.risk_profile_done}
+                fin_plan_done={invMandate.fin_plan_done}
+                inv_plan_done={invMandate.inv_plan_done}
+                shortlisting_done={invMandate.shortlisting_done}
+              />
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+                      <div className="border-box">
+                        <b>Last Review:</b><br/> {formatDate(invMandate.last_review_date)}
+                      </div>
                       <div className="border-box bg-green-50">
                           <p className="font-bold">Selected Risk Profile</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.rp_override || ""}</ReactMarkdown>
@@ -170,11 +182,24 @@ export default async function MandatePage() {
                       </div>
                   <div className="text-sm">
                       <div className="border-box">
+                          <p className="font-bold">Investor Background</p>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investment_background || ""}</ReactMarkdown>
+                      </div>
+                      <div className="border-box">
+                          <p className="font-bold">Investments Purpose</p>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investments_purpose || ""}</ReactMarkdown>
+                      </div>
+                      
+                      <div className="border-box">
                           <p className="font-bold">Investment Plan</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.inv_plan || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box">
-                          <p className="font-bold">Other Mandate Details</p>
+                          <p className="font-bold">Investment Recommendations</p>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investment_recommendations || ""}</ReactMarkdown>
+                      </div>
+                      <div className="border-box">
+                          <p className="font-bold">To-Dos</p>
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.other_mandate_details || ""}</ReactMarkdown>
                       </div>
                   </div>
