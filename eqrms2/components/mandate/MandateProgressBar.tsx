@@ -1,7 +1,7 @@
 'use client';
 
 import { Progress } from "@/components/ui/progress";
-import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 interface MandateProgressBarProps {
   background_done?: boolean | null;
@@ -26,8 +26,6 @@ export function MandateProgressBar({
   inv_plan_done,
   shortlisting_done
 }: MandateProgressBarProps) {
-  const progressRef = useRef<HTMLDivElement>(null);
-
   // Calculate progress
   const tasks = [
     { key: 'background_done', done: background_done },
@@ -41,33 +39,23 @@ export function MandateProgressBar({
   const progressPercentage = completedCount * 20;
 
   // Determine color based on percentage
-  const getProgressColor = (percentage: number): string => {
-    if (percentage === 0) return '#7f1d1d'; // dark red
-    if (percentage === 20) return '#ef4444'; // red
-    if (percentage === 40) return '#eab308'; // yellow
-    if (percentage === 60) return '#f97316'; // orange
-    if (percentage === 80) return '#22c55e'; // green
-    if (percentage === 100) return '#15803d'; // dark green
+  const getProgressColor = (percentage: number) => {
+    if (percentage === 0) return 'bg-red-900'; // dark red
+    if (percentage === 20) return 'bg-red-500'; // red
+    if (percentage === 40) return 'bg-yellow-500'; // yellow
+    if (percentage === 60) return 'bg-orange-500'; // orange
+    if (percentage === 80) return 'bg-green-500'; // green
+    if (percentage === 100) return 'bg-green-700'; // dark green
     // For values between thresholds, use the lower threshold color
-    if (percentage < 20) return '#7f1d1d';
-    if (percentage < 40) return '#ef4444';
-    if (percentage < 60) return '#eab308';
-    if (percentage < 80) return '#f97316';
-    if (percentage < 100) return '#22c55e';
-    return '#15803d';
+    if (percentage < 20) return 'bg-red-900';
+    if (percentage < 40) return 'bg-red-500';
+    if (percentage < 60) return 'bg-yellow-500';
+    if (percentage < 80) return 'bg-orange-500';
+    if (percentage < 100) return 'bg-green-500';
+    return 'bg-green-700';
   };
 
   const progressColor = getProgressColor(progressPercentage);
-
-  // Apply color to progress indicator
-  useEffect(() => {
-    if (progressRef.current) {
-      const indicator = progressRef.current.querySelector('[data-slot="progress-indicator"]') as HTMLElement;
-      if (indicator) {
-        indicator.style.backgroundColor = progressColor;
-      }
-    }
-  }, [progressColor]);
 
   // Separate completed and pending tasks
   const completed = tasks
@@ -79,13 +67,23 @@ export function MandateProgressBar({
     .map(task => TASK_LABELS[task.key as keyof typeof TASK_LABELS]);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="flex items-center justify-between gap-4">
-        <div ref={progressRef} className="flex-1">
+        <div className="flex-1">
           <Progress 
             value={progressPercentage} 
             className="w-full"
           />
+          <style jsx>{`
+            :global([data-slot="progress-indicator"]) {
+              background-color: ${progressColor === 'bg-red-900' ? '#7f1d1d' :
+                                progressColor === 'bg-red-500' ? '#ef4444' :
+                                progressColor === 'bg-yellow-500' ? '#eab308' :
+                                progressColor === 'bg-orange-500' ? '#f97316' :
+                                progressColor === 'bg-green-500' ? '#22c55e' :
+                                progressColor === 'bg-green-700' ? '#15803d' : '#22c55e'} !important;
+            }
+          `}</style>
         </div>
         <span className="text-sm font-semibold whitespace-nowrap">
           {progressPercentage}%
@@ -93,13 +91,13 @@ export function MandateProgressBar({
       </div>
       <div className="text-xs text-gray-600">
         {completed.length > 0 && (
-          <span>
+          <span className="bg-green-50 p-1 rounded-md text-green-800">
             <span className="font-semibold">Completed:</span> {completed.join(', ')}
           </span>
         )}
         {completed.length > 0 && pending.length > 0 && ' | '}
         {pending.length > 0 && (
-          <span>
+          <span className="bg-red-50 p-1 rounded-md text-red-800">
             <span className="font-semibold">Pending:</span> {pending.join(', ')}
           </span>
         )}

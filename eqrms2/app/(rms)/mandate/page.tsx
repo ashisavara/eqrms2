@@ -145,13 +145,16 @@ export default async function MandatePage() {
                   <EditMandateButton mandateData={invMandate} mandateId={mandate} />
                 )}
               </div>
-              <MandateProgressBar
-                background_done={invMandate.background_done}
-                risk_profile_done={invMandate.risk_profile_done}
-                fin_plan_done={invMandate.fin_plan_done}
-                inv_plan_done={invMandate.inv_plan_done}
-                shortlisting_done={invMandate.shortlisting_done}
-              />
+              <div className="border-box">
+                <h3>Mandate Progress</h3>
+                <MandateProgressBar
+                  background_done={invMandate.background_done}
+                  risk_profile_done={invMandate.risk_profile_done}
+                  fin_plan_done={invMandate.fin_plan_done}
+                  inv_plan_done={invMandate.inv_plan_done}
+                  shortlisting_done={invMandate.shortlisting_done}
+                />
+              </div>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
                       <div className="border-box">
                         <b>Last Review:</b><br/> {formatDate(invMandate.last_review_date)}
