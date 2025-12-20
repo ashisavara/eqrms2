@@ -7,8 +7,8 @@ export default function RMSPage() {
     return (
         <div>
             <PageTitle 
-                title="Client Dedication" 
-                caption="Understanding our commitment to our clients" 
+                title="Customisation" 
+                caption="Truly tailor-made Investment Advice" 
             />
 
             <Section className="bg-green-50 py-12 text-green-900 text-center">

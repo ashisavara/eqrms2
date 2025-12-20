@@ -27,7 +27,7 @@ const menuItems = [
       { label: "Our Team", href: "/our-team" },
       { label: "Expertise", href: "/expertise" },
       { label: "Transparency", href: "/rms" },
-      { label: "Customer Focus", href: "/client-dedication" },
+      { label: "Customisation", href: "/client-dedication" },
     ],
   },
   {
@@ -113,21 +113,21 @@ export function PublicNavBar() {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-64">
+              <SheetContent side="left" className="w-80">
                 <SheetHeader>
                   <SheetTitle>Menu</SheetTitle>
                 </SheetHeader>
-                <div className="mt-6 space-y-4">
+                <div className="mt-6 space-y-4 px-4">
                   {menuItems.map((item) => (
                     <div key={item.label}>
                       <Link
                         href={item.href}
-                        className="block text-sm font-medium text-gray-900 mb-2"
+                        className="block text-sm bg-gray-100 p-2 font-medium text-gray-900 mb-2"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.label}
                       </Link>
-                      <div className="ml-4 space-y-1">
+                      <div className="ml-4 space-y-2 text-base">
                         {item.subItems.map((subItem) => (
                           <Link
                             key={subItem.label}

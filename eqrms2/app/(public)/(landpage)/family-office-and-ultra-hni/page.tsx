@@ -75,7 +75,7 @@ export default function FamilySolutionsPage() {
             <h2>Flexible Engagement Models</h2>
             <Section>
                 
-                <p className="text-center mt-12 text-lg">Keeping in mind the sensitivity that comes with dealing with larger investors, we have a number of different ways in which we can collaborate together and add value to your investments</p>
+                <p className="text-center text-lg">Keeping in mind the sensitivity that comes with dealing with larger investors, we have a number of different ways in which we can collaborate together and add value to your investments</p>
 
                 <HeadlineTextBox headline="Outsourced Family Office">
                     <p>With the full bouquet of investment options, we can provide you with all the benefits of your own dedicated family office, at a fraction of the cost of hiring a full-fledged investment team.</p>

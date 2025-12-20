@@ -49,7 +49,7 @@ export default function AlertBox({ color, heading, children }: AlertBoxProps) {
           {heading}
         </h4>
       </div>
-      <div className="px-4 py-4 text-[15px] text-center">
+      <div className="px-4 py-4 text-[15px] text-left">
         {children}
       </div>
     </div>
