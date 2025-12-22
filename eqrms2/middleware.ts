@@ -70,7 +70,7 @@ function getRouteGroup(pathname: string): RouteGroup {
   const rmsRoutes = [
     '/investments', '/mandate', '/funds', '/companies', '/categories',
     '/amc', '/assetclass', '/sectors', '/structure', '/crm',
-    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/app'
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/app', 'ime-view'
   ];
   
   if (rmsRoutes.some(r => pathname === r || pathname.startsWith(r + '/'))) {

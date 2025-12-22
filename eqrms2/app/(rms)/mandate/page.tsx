@@ -186,7 +186,7 @@ export default async function MandatePage() {
                   <div className="text-sm">
                       <div className="border-box">
                           <p className="font-bold">Investor Background</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investment_background || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investments_background || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box">
                           <p className="font-bold">Investments Purpose</p>

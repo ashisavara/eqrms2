@@ -30,7 +30,7 @@ export type MandateDetail = {
     fin_plan_done?: boolean;
     inv_plan_done?: boolean;
     shortlisting_done?: boolean;
-    investment_background?: string;
+    investments_background?: string;
     investments_purpose?: string;
     investment_recommendations?: string;
     last_review_date?: Date;

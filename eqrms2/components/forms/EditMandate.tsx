@@ -132,7 +132,7 @@ export function EditMandateButton({
     one_line_objective: mandateData.one_line_objective ?? "",
     rp_override: mandateData.rp_override ?? "",
     last_review_date: mandateData.last_review_date ? new Date(mandateData.last_review_date) : null,
-    investments_background: mandateData.investment_background ?? null,
+    investments_background: mandateData.investments_background ?? null,
     investments_purpose: mandateData.investments_purpose ?? null,
     investment_recommendations: mandateData.investment_recommendations ?? null,
     background_done: mandateData.background_done ?? null,

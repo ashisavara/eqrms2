@@ -155,7 +155,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
         <Tabs defaultValue="investments" className="w-full">
           <TabsList className="w-full">
             <TabsTrigger value="investments">Investments</TabsTrigger>
-            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+            <TabsTrigger value="reallocations">Reallocation</TabsTrigger>
             <TabsTrigger value="shortlist">Shortlisted</TabsTrigger>
           </TabsList>
           
@@ -271,7 +271,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
           
           
           </TabsContent>
-          <TabsContent value="recommendations">
+          <TabsContent value="reallocations">
             <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Change" 
