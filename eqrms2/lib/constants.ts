@@ -378,6 +378,18 @@ export const MASTER_OPTIONS = {
     "PMS AIF",
     "International",
     "Recommendations"
+  ],
+
+  // Media Publications
+  media: [
+    "Economic Times",
+    "ET Now",
+    "Moneycontrol",
+    "CNBC-TV18"
+  ], 
+
+  investmentQuery:[
+    "International","Fixed Income","NRI","Equity","Fixed Income"
   ]
 } as const;
 

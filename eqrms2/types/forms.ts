@@ -545,4 +545,30 @@ export const BlogSchema = z.object({
 
 export type BlogValues = z.infer<typeof BlogSchema>;
 
+// -------------------
+// Media Interview
+// -------------------
+export const MediaInterviewSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  publication: z.string().min(1, "Publication is required"),
+  publication_date: z.coerce.date().nullable(),
+  youtube_url: z.string().nullable(),
+  summary: z.string().min(1, "Summary is required"),
+  slug: z.string().nullable(),
+})
+
+export type MediaInterviewValues = z.infer<typeof MediaInterviewSchema>;
+
+// -------------------
+// Investment Query
+// -------------------
+export const InvestmentQuerySchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  body: z.string().min(1, "Body is required"),
+  query_categories: z.string().min(1, "Query Category is required"),
+  slug: z.string().nullable(),
+})
+
+export type InvestmentQueryValues = z.infer<typeof InvestmentQuerySchema>;
+
 
