@@ -7,7 +7,8 @@ export default async function BlogsPage() {
     table: "blogs",
     columns: "*",
     filters: [
-      (query) => query.order('created_at', { ascending: false })
+      (query) => query.order('created_at', { ascending: false }),
+      (query) => query.eq('status', 'Published')
     ],
   });
 

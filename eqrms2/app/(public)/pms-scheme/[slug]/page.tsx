@@ -86,7 +86,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                 <h2>Investment team</h2>
                 {pmsScheme.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: pmsScheme.amc_fm_html }} />}
                 <div className="py-12">
-                    <h2>Experience the Benefits of working with a 'research-first' investments firm</h2>
+                    <h2>Experience the benefits of working with a 'research-first' investments firm</h2>
                     <RmaCta />
                 </div>
             </div>

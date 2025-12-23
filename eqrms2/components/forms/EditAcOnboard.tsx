@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { AcOnboardSchema, AcOnboardValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextInput, NumberInput, BooleanToggleInput, SelectInput } from "./FormFields";
+import { TextInput, NumberInput, SwitchInput, SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
@@ -32,7 +32,6 @@ function EditAcOnboardForm({
         onboarding_title: initialData?.onboarding_title || "",
         onboarding_type: initialData?.onboarding_type || 0,
         rel_group_id: initialData?.rel_group_id || 0,
-        status_client: initialData?.status_client || "",
         status_internal: initialData?.status_internal || "",
         get_customer_info: initialData?.get_customer_info || false,
         ops_check_info: initialData?.ops_check_info || false,
@@ -41,7 +40,8 @@ function EditAcOnboardForm({
         form_recieved: initialData?.form_recieved || false,
         form_processing: initialData?.form_processing || false,
         account_opened: initialData?.account_opened || false,
-        funding_done: initialData?.funding_done || false
+        funding_done: initialData?.funding_done || false,
+        client_cancellation: initialData?.client_cancellation || false
     };
 
     const { control, handleSubmit} = useForm<AcOnboardValues>({
@@ -80,20 +80,20 @@ function EditAcOnboardForm({
                 <SelectInput name="onboarding_type" label="Onboarding Type" control={control} options={onboardingTypeOptions} valueType="number" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <TextInput name="status_client" label="Status Client" control={control} />
+            <div>
                 <TextInput name="status_internal" label="Status Internal" control={control} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <BooleanToggleInput name="get_customer_info" label="Get Customer Info" control={control} />
-                <BooleanToggleInput name="ops_check_info" label="Ops Check Info" control={control} />
-                <BooleanToggleInput name="forms_filled" label="Forms Filled" control={control} />
-                <BooleanToggleInput name="sent_for_sig" label="Sent for Signature" control={control} />
-                <BooleanToggleInput name="form_recieved" label="Form Received" control={control} />
-                <BooleanToggleInput name="form_processing" label="Form Processing" control={control} />
-                <BooleanToggleInput name="account_opened" label="Account Opened" control={control} />
-                <BooleanToggleInput name="funding_done" label="Funding Done" control={control} />
+                <SwitchInput name="get_customer_info" label="Get Customer Info" control={control} />
+                <SwitchInput name="ops_check_info" label="Ops Check Info" control={control} />
+                <SwitchInput name="forms_filled" label="Forms Filled" control={control} />
+                <SwitchInput name="sent_for_sig" label="Sent for Signature" control={control} />
+                <SwitchInput name="form_recieved" label="Form Received" control={control} />
+                <SwitchInput name="form_processing" label="Form Processing" control={control} />
+                <SwitchInput name="account_opened" label="Account Opened" control={control} />
+                <SwitchInput name="funding_done" label="Funding Done" control={control} />
+                <SwitchInput name="client_cancellation" label="Client Cancellation" control={control} />
             </div>
             
 
@@ -175,7 +175,6 @@ export function EditAcOnboardButton({
     onboarding_title: AcOnboardingData.onboarding_title ?? "",
     onboarding_type: AcOnboardingData.onboarding_type ?? 0,
     rel_group_id: AcOnboardingData.rel_group_id ?? 0,
-    status_client: AcOnboardingData.status_client ?? "",
     status_internal: AcOnboardingData.status_internal ?? "",
     get_customer_info: AcOnboardingData.get_customer_info ?? false,
     ops_check_info: AcOnboardingData.ops_check_info ?? false,
@@ -184,7 +183,8 @@ export function EditAcOnboardButton({
     form_recieved: AcOnboardingData.form_recieved ?? false,
     form_processing: AcOnboardingData.form_processing ?? false,
     account_opened: AcOnboardingData.account_opened ?? false,
-    funding_done: AcOnboardingData.funding_done ?? false
+    funding_done: AcOnboardingData.funding_done ?? false,
+    client_cancellation: AcOnboardingData.client_cancellation ?? false
   };
 
   return (

@@ -508,7 +508,6 @@ export const AcOnboardSchema = z.object({
   onboarding_title: z.string(),
   onboarding_type: z.coerce.number(),
   rel_group_id: z.coerce.number(),
-  status_client: z.string(),
   status_internal: z.string(),
   get_customer_info: z.coerce.boolean(),
   ops_check_info: z.coerce.boolean(),
@@ -518,6 +517,7 @@ export const AcOnboardSchema = z.object({
   form_processing: z.coerce.boolean(),
   account_opened: z.coerce.boolean(),
   funding_done: z.coerce.boolean(),
+  client_cancellation: z.coerce.boolean()
 });
 
 export type AcOnboardValues = z.infer<typeof AcOnboardSchema>;
@@ -532,5 +532,17 @@ export const GroupInvestorSchema = z.object({
 
 export type GroupInvestorValues = z.infer<typeof GroupInvestorSchema>;
 
+// -------------------
+// Blog
+// -------------------
+export const BlogSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  body: z.string().min(1, "Body is required"),
+  featured_image: z.string().nullable(),
+  status: z.string().min(1, "Status is required"),
+  category: z.string().min(1, "Category is required"),
+})
+
+export type BlogValues = z.infer<typeof BlogSchema>;
 
 

@@ -17,7 +17,7 @@ export default async function TicketsPage() {
     redirect('/404'); // or wherever you want to send them
   }
 
-  const [tickets,ongoing] = await Promise.all([
+  const [tickets,ongoing,waitingFunding] = await Promise.all([
     supabaseListRead<Ticket>({
     table: "v_tickets",
     columns: "*",
@@ -26,13 +26,23 @@ export default async function TicketsPage() {
       (query) => query.order('created_at', { ascending: false }),
     ],
   }),
-  supabaseListRead<AccountOnboarding>({
-    table: "v_account_onboard",
-    columns: "*",
-    filters: [
-      (query) => query.neq('funding_done', 'TRUE'),
-    ],
-  }),
+    supabaseListRead<AccountOnboarding>({
+      table: "v_account_onboard",
+      columns: "*",
+      filters: [
+        (query) => query.neq('account_opened', 'TRUE'),
+        (query) => query.neq('client_cancellation', 'TRUE'),
+      ],
+    }),
+    supabaseListRead<AccountOnboarding>({
+      table: "v_account_onboard",
+      columns: "*",
+      filters: [
+        (query) => query.eq('funding_done', 'FALSE'),
+        (query) => query.eq('account_opened', 'TRUE'),
+        (query) => query.neq('client_cancellation', 'TRUE'),
+      ],
+    }),
   ])
 
   return (
@@ -51,7 +61,10 @@ export default async function TicketsPage() {
           </TabsContent>
           <TabsContent value="accountonboard">
             <AddAcOnboardButton />
+            <h2>Ongoing Account Onboarding</h2>
             <TableAccOnboard data={ongoing} />
+            <h2>Funding Awaited</h2>
+            <TableAccOnboard data={waitingFunding} />
           </TabsContent>
           <TabsContent value="appbugs">
             <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>

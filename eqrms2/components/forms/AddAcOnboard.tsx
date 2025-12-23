@@ -28,7 +28,6 @@ function AddAcOnboardForm({
         onboarding_title: "",
         onboarding_type: 0,
         rel_group_id: 0,
-        status_client: "",
         status_internal: "",
         get_customer_info: false,
         ops_check_info: false,
@@ -37,7 +36,8 @@ function AddAcOnboardForm({
         form_recieved: false,
         form_processing: false,
         account_opened: false,
-        funding_done: false
+        funding_done: false, 
+        client_cancellation: false
     };
 
     const { control, handleSubmit} = useForm<AcOnboardValues>({

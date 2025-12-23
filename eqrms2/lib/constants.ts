@@ -360,6 +360,24 @@ export const MASTER_OPTIONS = {
     { id: 8, name: "trial_ended" },
     { id: 9, name: "ban" }, 
     { id: 12, name: "not_validated" }
+  ],
+
+  // Blog Status
+  blogStatus: [
+    "Draft",
+    "Published",
+    "Archived"
+  ],
+
+  // Blog Category
+  blogCategory: [
+    "Equity",
+    "Debt",
+    "Hybrid Funds",
+    "Financial Advice",
+    "PMS AIF",
+    "International",
+    "Recommendations"
   ]
 } as const;
 

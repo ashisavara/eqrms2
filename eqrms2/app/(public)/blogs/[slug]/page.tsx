@@ -8,6 +8,8 @@ import { generateBlogSEO } from '@/lib/seo/helpers/blog';
 import { SEO_DEFAULTS } from '@/lib/seo/constants';
 import type { Metadata } from 'next';
 import { useMDXComponents } from '@/mdx-components';
+import RmaCta from "@/components/uiComponents/rma-cta";
+
 
 interface Blog {
     id: number;
@@ -113,6 +115,8 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
             <div className="ime-blog-page">
                 <MDXRemote source={normalizedBody} options={{ mdxOptions }} components={components} />
             </div>
+            <h2>Experience the benefits of working with a 'research-first' investments firm</h2>
+            <RmaCta />
         </div>
     );
     } catch (error) {

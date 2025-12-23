@@ -79,7 +79,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                 <h2>Recommended Funds</h2>
                 <FundPerformanceTable data={funds} />
                 <div className="py-12">
-                    <h2>Experience the Benefits of working with a 'research-first' investments firm</h2>
+                    <h2>Experience the benefits of working with a 'research-first' investments firm</h2>
                     <RmaCta />
                 </div>
             </div>
