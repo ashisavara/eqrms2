@@ -23,6 +23,7 @@ export default async function TicketsPage() {
     columns: "*",
     filters: [
       (query) => query.neq('status', 'Closed'),
+      (query) => query.order('created_at', { ascending: false }),
     ],
   }),
   supabaseListRead<AccountOnboarding>({

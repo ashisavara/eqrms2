@@ -548,3 +548,29 @@ export function ImportanceRating({ rating, children }: { rating: string; childre
     </div>
   );
 }
+
+
+/**
+ * Text-based rating container for Ticketing Importance stage
+ */
+export function StatusRating({ rating, children }: { rating: string; children: React.ReactNode }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'Not Started': 2,
+      'In Progress': 3,
+      'Asked Clarifications': 4,
+      'Waiting on Client': 4,
+      'Closed': 5,
+    };
+    
+    return ratingMap[textRating] || 3;
+  };
+
+  const numericRating = getNumericRating(rating);
+  
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {children}
+    </div>
+  );
+}

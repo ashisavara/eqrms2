@@ -28,7 +28,7 @@ export const columns: ColumnDef<RmsChangelog>[] = [
   },
   {
     accessorKey: "amc_name",
-    header: () => <div className="text-left">Fund</div>,
+    header: () => <div className="text-left">AMC</div>,
     cell: ({ row }) => {
       const amcSlug = row.original.amc_slug;
       const amcName = row.original.amc_name;
@@ -44,7 +44,21 @@ export const columns: ColumnDef<RmsChangelog>[] = [
   },      
   {
     accessorKey: "team_discussed",
-    header: "Team Discussed"
+    header: "Team Discussed",
+    cell: ({ getValue }) => {
+      const value = getValue();
+      const boolValue = value === true || value === "true" || value === 1;
+      return (
+        <span
+          className={
+            "px-2 py-1 rounded text-xs font-semibold " +
+            (boolValue ? "bg-green-200 text-green-900" : "bg-red-200 text-red-900")
+          }
+        >
+          {boolValue ? "Yes" : "No"}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "change_type",
