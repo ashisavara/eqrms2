@@ -1,25 +1,25 @@
 export type FavStructure = {
     fav_structure_id: number;
-    im_id: number;
+    group_id: number;
     structure_id: number;
     structure_name: string;
-    mandate_name: string;
+    group_name: string;
 }
 
 export type FavAssetClass = {
     fav_asset_class_id: number;
-    im_id: number;
+    group_id: number;
     asset_class_id: number;
     asset_class_name: string;
-    mandate_name: string;
+    group_name: string;
 }
 
 export type FavCategory = {
     fav_category_id: number;
-    im_id: number;
+    group_id: number;
     category_id: number;
     cat_name: string;
-    mandate_name: string;
+    group_name: string;
     one_yr: number;
     three_yr: number;
     five_yr: number;
@@ -37,10 +37,10 @@ export type FavCategory = {
 
 export type FavFunds = {
     fav_fund_id: number;    
-    im_id: number;
+    group_id: number;
     fund_id: number;
     fund_name: string;
-    mandate_name: string;
+    group_name: string;
     one_yr: number;
     three_yr: number;
     five_yr: number;

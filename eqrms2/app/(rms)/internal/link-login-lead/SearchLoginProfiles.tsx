@@ -7,7 +7,7 @@ import { Search, X, Plus, Trash2 } from 'lucide-react';
 import { LoginProfileWithRoles, SearchLoginProfilesRequest, UserRole } from './types';
 import { AddRoleSheet } from './AddRoleSheet';
 import { DeleteRoleConfirmation } from './DeleteRoleConfirmation';
-import { UpdateGroupNameButton, UpdateMandateNameButton } from '@/components/forms/UpdateGroupMandateNames';
+import { UpdateGroupNameButton } from '@/components/forms/UpdateGroupName';
 import { LinkLoginProfileGroupButton } from '@/components/forms/LinkLoginProfileGroup';
 
 interface SearchLoginProfilesProps {
@@ -158,8 +158,6 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">RM Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Group ID</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Group Name</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Mandate Id</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Mandate Name</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -233,22 +231,6 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
                     </UpdateGroupNameButton>
                   ) : (
                     <LinkLoginProfileGroupButton uuid={profile.uuid} />
-                  )}
-                </td>
-                
-                <td className="px-4 py-3 text-sm text-gray-600">
-                  {profile.mandate_id || '-'}
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-600">
-                  {profile.mandate_id && profile.mandate_name ? (
-                    <UpdateMandateNameButton 
-                      mandateId={profile.mandate_id} 
-                      currentMandateName={profile.mandate_name}
-                    >
-                      {profile.mandate_name}
-                    </UpdateMandateNameButton>
-                  ) : (
-                    '-'
                   )}
                 </td>
               </tr>
