@@ -158,7 +158,7 @@ export function PublicNavBar() {
 
             {/* Mobile Login Icon */}
             <Button variant="ghost" size="sm" asChild>
-              <Link href="#">
+              <Link href="/15-minute-introductory-call">
                 <User className="h-5 w-5" />
               </Link>
             </Button>
