@@ -206,7 +206,7 @@
     @apply text-xl text-center font-bold mt-2 mb-2 bg-blue-50 rounded-md text-gray-600 py-3;
   }
 
-  h3 {
+  div.ime-blog-page h3 {
     @apply text-base bg-gray-200 p-2 rounded-md mt-6;
   }
 
