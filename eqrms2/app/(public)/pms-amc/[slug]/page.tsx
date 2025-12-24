@@ -86,12 +86,9 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
         );
     } catch (error) {
         console.error('[PmsAmcPage] ERROR loading PMS AMC:', error);
-        return <div className="max-w-5xl mx-auto p-6">
-            <h1 className="text-2xl font-bold text-red-600">Error loading PMS AMC</h1>
-            <p>There was an error loading this PMS AMC. Please try again later.</p>
-            <pre className="mt-4 text-sm bg-gray-100 p-4 rounded overflow-auto">
-                {error instanceof Error ? error.message : JSON.stringify(error)}
-            </pre>
-        </div>;
+        // Log full error details for debugging
+        console.error('[PmsAmcPage] Error details:', error instanceof Error ? error.stack : JSON.stringify(error));
+        // Show 404 to user (cleaner UX, no technical details exposed)
+        notFound();
     }
 }

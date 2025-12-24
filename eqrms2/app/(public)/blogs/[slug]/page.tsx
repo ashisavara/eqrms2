@@ -121,19 +121,9 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
     );
     } catch (error) {
         console.error('[BlogPage] ERROR loading blog:', error);
-        console.error('[BlogPage] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-        return <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2xl font-bold text-red-600">Error loading blog</h1>
-            <p>There was an error loading this blog post. Please try again later.</p>
-            <pre className="mt-4 text-sm bg-gray-100 p-4 rounded overflow-auto">
-                {error instanceof Error ? error.message : JSON.stringify(error)}
-            </pre>
-            <details className="mt-4">
-                <summary className="cursor-pointer text-sm text-gray-600">Stack trace</summary>
-                <pre className="mt-2 text-xs bg-gray-100 p-4 rounded overflow-auto">
-                    {error instanceof Error ? error.stack : 'No stack trace available'}
-                </pre>
-            </details>
-        </div>;
+        // Log full error details for debugging
+        console.error('[BlogPage] Error details:', error instanceof Error ? error.stack : JSON.stringify(error));
+        // Show 404 to user (cleaner UX, no technical details exposed)
+        notFound();
     }
 }

@@ -61,12 +61,9 @@ export default async function InvestmentQueryPage({ params }: { params: Promise<
         );
     } catch (error) {
         console.error('[InvestmentQueryPage] ERROR loading investment query:', error);
-        return <div className="max-w-5xl mx-auto p-6">
-            <h1 className="text-2xl font-bold text-red-600">Error loading investment query</h1>
-            <p>There was an error loading this investment query. Please try again later.</p>
-            <pre className="mt-4 text-sm bg-gray-100 p-4 rounded overflow-auto">
-                {error instanceof Error ? error.message : JSON.stringify(error)}
-            </pre>
-        </div>;
+        // Log full error details for debugging
+        console.error('[InvestmentQueryPage] Error details:', error instanceof Error ? error.stack : JSON.stringify(error));
+        // Show 404 to user (cleaner UX, no technical details exposed)
+        notFound();
     }
 }

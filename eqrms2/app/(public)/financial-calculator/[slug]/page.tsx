@@ -20,7 +20,7 @@ export default async function FinCalculatPage({ params }: { params: Promise<{ sl
         <div className="p-5 max-w-5xl mx-auto">
             <h2>{finCalculator.title}</h2>
             <p className="mb-6">{finCalculator.summary }</p>
-            <div dangerouslySetInnerHTML={{ __html: finCalculator.calculator }} /> | 
+            <div dangerouslySetInnerHTML={{ __html: finCalculator.calculator }} /> 
         </div>  
     );
     

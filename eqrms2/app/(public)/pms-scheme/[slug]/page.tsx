@@ -93,12 +93,9 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
         );
     } catch (error) {
         console.error('[PmsSchemePage] ERROR loading PMS scheme:', error);
-        return <div className="max-w-5xl mx-auto p-6">
-            <h1 className="text-2xl font-bold text-red-600">Error loading PMS scheme</h1>
-            <p>There was an error loading this PMS scheme. Please try again later.</p>
-            <pre className="mt-4 text-sm bg-gray-100 p-4 rounded overflow-auto">
-                {error instanceof Error ? error.message : JSON.stringify(error)}
-            </pre>
-        </div>;
+        // Log full error details for debugging
+        console.error('[PmsSchemePage] Error details:', error instanceof Error ? error.stack : JSON.stringify(error));
+        // Show 404 to user (cleaner UX, no technical details exposed)
+        notFound();
     }
 }
