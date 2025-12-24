@@ -1,25 +1,12 @@
-import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import { PublicNavBar } from '@/components/ui/public-navbar';
 import { PublicFooter } from '@/components/ui/public-footer';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const headersList = await headers();
-  const host = headersList.get('host') || '';
-  
-  // Only apply noindex to RMS subdomain (private/authenticated content)
-  // public.imecapital.in now redirects to root domain via middleware
-  const isRMS = host.startsWith('rms.');
-
-  if (isRMS) {
-    return {
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
-  }
-
+  // Note: Removed headers() call to allow static generation of blog pages
+  // RMS subdomain protection is handled by:
+  // 1. Middleware (blocks RMS subdomain from accessing public routes)
+  // 2. Robots.txt (sets noindex for RMS subdomain)
   // Root domain (imecapital.in) - allow indexing
   return {};
 }
