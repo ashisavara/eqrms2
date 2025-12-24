@@ -329,9 +329,16 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
         // Save to localStorage for future use
         saveToStorage(groupInfo);
         
-        // Load favourites for the new group
-        const newFavourites = loadFromFavouritesStorage(groupInfo.id);
-        setFavourites(newFavourites);
+        // Load favourites for the new group from database (async - don't block)
+        loadGroupFavourites().then((newFavourites) => {
+          setFavourites(newFavourites);
+          saveToFavouritesStorage(groupInfo.id, newFavourites);
+        }).catch((error) => {
+          console.error('Failed to load favourites for default group:', error);
+          // Fallback to localStorage if database fetch fails
+          const fallbackFavourites = loadFromFavouritesStorage(groupInfo.id);
+          setFavourites(fallbackFavourites);
+        });
         
         return { success: true, group: groupInfo };
       } else {
