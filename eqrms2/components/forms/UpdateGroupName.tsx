@@ -83,11 +83,13 @@ function UpdateGroupNameForm({
 
 // Main component that exports the button and handles sheet state
 export function UpdateGroupNameButton({ 
-  groupName,
-  groupId
+  groupId,
+  currentGroupName,
+  children
 }: { 
-  groupName: string;
   groupId: number;
+  currentGroupName: string;
+  children?: React.ReactNode;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
@@ -97,16 +99,16 @@ export function UpdateGroupNameButton({
   }
 
   const groupUpdateData: GroupNameUpdateValues = {
-    group_name: groupName ?? ""
+    group_name: currentGroupName ?? ""
   };
 
   return (
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
       >
-        Update Group Name
+        {children || currentGroupName}
       </span>
 
       {/* Edit Sheet */}
