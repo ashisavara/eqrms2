@@ -11,7 +11,7 @@ import {
   MainContent,
 } from "@/components/ui/simple-sidebar";
 import {
-  TargetIcon,
+  RotateCcwIcon,
   LogOutIcon,
   ListCheckIcon,
   DollarSignIcon,
@@ -51,7 +51,7 @@ export default async function RmsLayout({
             <SidebarMenuItem href="/mandate" icon={<ListCheckIcon />}>Mandate</SidebarMenuItem>
             <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>RMS</SidebarMenuItem>
             {canViewInternal && (
-              <SidebarMenuItem icon={<TargetIcon />}>
+              <SidebarMenuItem icon={<RotateCcwIcon />}>
                 <ChangeGroupHandler />
               </SidebarMenuItem>
             )}

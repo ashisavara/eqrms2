@@ -29,19 +29,18 @@ export const getUserRoles = cache(async (): Promise<string[]> => {
 });
 
 /**
- * Extract group and mandate information from JWT token (server-side only)
+ * Extract group information from JWT token (server-side only)
  * Used for login initialization only - no caching needed since used once
  */
 export async function getJWTGroupMandate(): Promise<{
   groupInfo: { id: number; name: string } | null;
-  mandateInfo: { id: number; name: string } | null;
 }> {
   try {
     const supabase = await createClient();
     const { data: { session }, error } = await supabase.auth.getSession();
 
     if (error || !session?.access_token) {
-      return { groupInfo: null, mandateInfo: null };
+      return { groupInfo: null };
     }
 
     const payload = JSON.parse(atob(session.access_token.split('.')[1]));
@@ -50,15 +49,11 @@ export async function getJWTGroupMandate(): Promise<{
       groupInfo: payload.group_id && payload.group_name ? {
         id: payload.group_id,
         name: payload.group_name
-      } : null,
-      mandateInfo: payload.mandate_id && payload.mandate_name ? {
-        id: payload.mandate_id,
-        name: payload.mandate_name
       } : null
     };
   } catch (error) {
-    console.error('Error extracting group/mandate from JWT:', error);
-    return { groupInfo: null, mandateInfo: null };
+    console.error('Error extracting group from JWT:', error);
+    return { groupInfo: null };
   }
 }
 

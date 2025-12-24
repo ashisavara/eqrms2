@@ -571,4 +571,26 @@ export const InvestmentQuerySchema = z.object({
 
 export type InvestmentQueryValues = z.infer<typeof InvestmentQuerySchema>;
 
+// -------------------
+// Edit Group (formerly Edit Mandate)
+// -------------------
+export const EditGroupSchema = z.object({
+  mandate_name: z.string().nullable(),
+  inv_plan: z.string().nullable(),
+  other_mandate_details: z.string().nullable(),
+  one_line_objective: z.string().nullable(),
+  rp_override: z.string().nullable(),
+  last_review_date: z.coerce.date().nullable(),
+  investments_background: z.string().nullable(),
+  investments_purpose: z.string().nullable(),
+  investment_recommendations: z.string().nullable(),
+  background_done: z.boolean().nullable(),
+  risk_profile_done: z.boolean().nullable(),
+  fin_plan_done: z.boolean().nullable(),
+  inv_plan_done: z.boolean().nullable(),
+  shortlisting_done: z.boolean().nullable(),
+});
+
+export type EditGroupValues = z.infer<typeof EditGroupSchema>;
+
 

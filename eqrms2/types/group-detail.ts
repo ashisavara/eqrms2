@@ -1,0 +1,45 @@
+// Type definition for client_group table (formerly investment_mandate fields)
+export type GroupDetail = {
+  group_id: number;
+  created_at: string;
+  group_type: string | null;
+  no_of_investors: number | null;
+  group_name: string;
+  primary_inv_mandate: number | null;
+  created_by: string | null;
+  ime_emp: string | null;
+  rel_lead_id: number | null;
+  rt_score: number | null;
+  ra_score: number | null;
+  rp_score: number | null;
+  rp_override: string | null;
+  mandate_name: string | null;
+  inv_plan: string | null;
+  other_mandate_details: string | null;
+  mandate_tags: string[] | null;
+  rt1_score: number | null;
+  rt2_score: number | null;
+  rt3_score: number | null;
+  rt4_score: number | null;
+  rt5_score: number | null;
+  ra1_score: number | null;
+  ra2_score: number | null;
+  ra3_score: number | null;
+  ra4_score: number | null;
+  ra5_score: number | null;
+  one_line_objective: string | null;
+  portfolio_reallocation_thoughts: string | null;
+  risk_taking_ability: string | null;
+  risk_appetite: string | null;
+  risk_profile_calculated: string | null;
+  last_review_date: Date | string | null;
+  investments_background: string | null;
+  investments_purpose: string | null;
+  investment_recommendations: string | null;
+  background_done: boolean | null;
+  risk_profile_done: boolean | null;
+  fin_plan_done: boolean | null;
+  inv_plan_done: boolean | null;
+  shortlisting_done: boolean | null;
+};
+

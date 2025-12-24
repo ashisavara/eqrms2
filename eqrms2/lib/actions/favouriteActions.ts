@@ -1,18 +1,18 @@
 "use server";
 
-import { getCurrentMandateId } from "@/lib/auth/serverGroupMandate";
+import { getCurrentGroupId } from "@/lib/auth/serverGroupMandate";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { createClient } from "@/lib/supabase/server";
 import { EntityType, FavouritesData, FAVOURITES_CONFIG } from "@/types/favourites-detail";
 
 /**
- * Load all favourites for the current mandate
+ * Load all favourites for the current group
  */
-export async function loadMandateFavourites(): Promise<FavouritesData> {
-  const mandateId = await getCurrentMandateId();
+export async function loadGroupFavourites(): Promise<FavouritesData> {
+  const groupId = await getCurrentGroupId();
   
-  if (!mandateId) {
-    // Return empty favourites if no mandate selected
+  if (!groupId) {
+    // Return empty favourites if no group selected
     return {
       categories: [],
       funds: [],
@@ -27,22 +27,22 @@ export async function loadMandateFavourites(): Promise<FavouritesData> {
       supabaseListRead<{ cat_id: number }>({
         table: "im_fav_categories",
         columns: "cat_id",
-        filters: [(query) => query.eq("im_id", mandateId)]
+        filters: [(query) => query.eq("group_id", groupId)]
       }),
       supabaseListRead<{ fund_id: number }>({
         table: "im_fav_funds", 
         columns: "fund_id",
-        filters: [(query) => query.eq("im_id", mandateId)]
+        filters: [(query) => query.eq("group_id", groupId)]
       }),
       supabaseListRead<{ asset_class_id: number }>({
         table: "im_fav_assetclass",
         columns: "asset_class_id", 
-        filters: [(query) => query.eq("im_id", mandateId)]
+        filters: [(query) => query.eq("group_id", groupId)]
       }),
       supabaseListRead<{ structure_id: number }>({
         table: "im_fav_structure",
         columns: "structure_id",
-        filters: [(query) => query.eq("im_id", mandateId)]
+        filters: [(query) => query.eq("group_id", groupId)]
       })
     ]);
 
@@ -53,7 +53,7 @@ export async function loadMandateFavourites(): Promise<FavouritesData> {
       structure: structures.map(item => item.structure_id)
     };
   } catch (error) {
-    console.error("Error loading mandate favourites:", error);
+    console.error("Error loading group favourites:", error);
     // Return empty favourites on error
     return {
       categories: [],
@@ -65,20 +65,20 @@ export async function loadMandateFavourites(): Promise<FavouritesData> {
 }
 
 /**
- * Add a favourite for the current mandate
+ * Add a favourite for the current group
  */
 export async function addFavourite(entityType: EntityType, entityId: number): Promise<void> {
-  const mandateId = await getCurrentMandateId();
+  const groupId = await getCurrentGroupId();
   
-  if (!mandateId) {
-    throw new Error("No mandate selected");
+  if (!groupId) {
+    throw new Error("No group selected");
   }
 
   const config = FAVOURITES_CONFIG[entityType];
   const supabase = await createClient();
 
   const insertData = {
-    im_id: mandateId,
+    group_id: groupId,
     [config.column]: entityId
   };
 
@@ -98,13 +98,13 @@ export async function addFavourite(entityType: EntityType, entityId: number): Pr
 }
 
 /**
- * Remove a favourite for the current mandate  
+ * Remove a favourite for the current group  
  */
 export async function removeFavourite(entityType: EntityType, entityId: number): Promise<void> {
-  const mandateId = await getCurrentMandateId();
+  const groupId = await getCurrentGroupId();
   
-  if (!mandateId) {
-    throw new Error("No mandate selected");
+  if (!groupId) {
+    throw new Error("No group selected");
   }
 
   const config = FAVOURITES_CONFIG[entityType];
@@ -113,7 +113,7 @@ export async function removeFavourite(entityType: EntityType, entityId: number):
   const { error } = await supabase
     .from(config.table)
     .delete()
-    .eq("im_id", mandateId)
+    .eq("group_id", groupId)
     .eq(config.column, entityId);
 
   if (error) {
@@ -137,9 +137,9 @@ export async function toggleFavouriteServer(entityType: EntityType, entityId: nu
  * Check if a specific item is favourited (utility function)
  */
 export async function isFavouriteServer(entityType: EntityType, entityId: number): Promise<boolean> {
-  const mandateId = await getCurrentMandateId();
+  const groupId = await getCurrentGroupId();
   
-  if (!mandateId) {
+  if (!groupId) {
     return false;
   }
 
@@ -150,7 +150,7 @@ export async function isFavouriteServer(entityType: EntityType, entityId: number
       table: config.table,
       columns: config.column,
       filters: [
-        (query) => query.eq("im_id", mandateId),
+        (query) => query.eq("group_id", groupId),
         (query) => query.eq(config.column, entityId)
       ]
     });
@@ -161,3 +161,6 @@ export async function isFavouriteServer(entityType: EntityType, entityId: number
     return false;
   }
 }
+
+// Legacy function name for backward compatibility - will be removed
+export const loadMandateFavourites = loadGroupFavourites;

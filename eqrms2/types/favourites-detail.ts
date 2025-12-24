@@ -10,7 +10,6 @@ export type FavouritesData = {
 };
 
 export type FavouritesStorage = {
-  mandateId: number;
   groupId: number;
   favourites: FavouritesData;
   lastSync: string; // ISO date string

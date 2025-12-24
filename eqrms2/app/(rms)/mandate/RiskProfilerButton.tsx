@@ -7,10 +7,9 @@ import { useRouter } from "next/navigation";
 
 interface RiskProfilerButtonProps {
   groupId: number;
-  mandateId: number;
 }
 
-export function RiskProfilerButton({ groupId, mandateId }: RiskProfilerButtonProps) {
+export function RiskProfilerButton({ groupId }: RiskProfilerButtonProps) {
   const [showRiskProfiler, setShowRiskProfiler] = useState(false);
   const router = useRouter();
 
@@ -29,7 +28,7 @@ export function RiskProfilerButton({ groupId, mandateId }: RiskProfilerButtonPro
       </button>
 
       <RiskProfilerForm
-        mandateId={mandateId}
+        groupId={groupId}
         open={showRiskProfiler}
         onOpenChange={setShowRiskProfiler}
         onComplete={handleComplete}

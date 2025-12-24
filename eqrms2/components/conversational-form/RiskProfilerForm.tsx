@@ -25,14 +25,14 @@ import { FormNavigation } from "./FormNavigation";
 import { RiskProfilerSummary } from "./RiskProfilerSummary";
 
 interface RiskProfilerFormProps {
-  mandateId: number;
+  groupId: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onComplete?: () => void;
 }
 
 export function RiskProfilerForm({
-  mandateId,
+  groupId,
   open,
   onOpenChange,
   onComplete
@@ -60,13 +60,13 @@ export function RiskProfilerForm({
     mode: 'onSubmit'
   });
 
-  // Load existing mandate data when form opens
+  // Load existing group data when form opens
   useEffect(() => {
-    if (open && mandateId) {
+    if (open && groupId) {
       const loadExistingData = async () => {
         setIsInitializing(true);
         try {
-          const result = await loadMandateData(mandateId);
+          const result = await loadMandateData(groupId);
 
           if (result.success && result.data) {
             const formValues = parseFormData(result.data, riskProfilerFormConfig.questions);
@@ -97,7 +97,7 @@ export function RiskProfilerForm({
       setFormKey(0); // Reset form key
       setIsSubmitting(false); // Reset submitting state
     }
-  }, [open, mandateId, reset]);
+  }, [open, groupId, reset]);
 
   // Calculate visible questions based on current form values
   const formValues = getValues();
@@ -148,7 +148,7 @@ export function RiskProfilerForm({
     setIsSubmitting(true);
 
     try {
-      const result = await submitRiskProfiler(mandateId, answers, scores);
+      const result = await submitRiskProfiler(groupId, answers, scores);
 
       if (result.success) {
         toast.success('Risk profile saved successfully!');

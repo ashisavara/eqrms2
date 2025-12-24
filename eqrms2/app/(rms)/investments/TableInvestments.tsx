@@ -35,11 +35,11 @@ interface TableInvestmentsProps {
   investorOptions: { value: string; label: string }[];
   userRoles: string[];
   portfolioReallocationThoughts?: string;
-  mandateId: number | null;
+  groupId: number | null;
   favFunds?: RmsFundsScreener[];
 }
 
-export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, mandateId, favFunds = [] }: TableInvestmentsProps) {
+export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, groupId, favFunds = [] }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(createColumns(userRoles), 'fund_name');
   
@@ -354,7 +354,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 </div>
               </div>
             </ToggleVisibility>
-            <EditPortRecoButton portRecoData={portfolioReallocationThoughts} mandateId={mandateId} />
+            <EditPortRecoButton portRecoData={portfolioReallocationThoughts} groupId={groupId} />
             {portfolioReallocationThoughts && (
               <div className="bg-gray-100 rounded-md p-4 text-sm">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{portfolioReallocationThoughts}</ReactMarkdown>

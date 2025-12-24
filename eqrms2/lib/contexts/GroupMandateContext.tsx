@@ -1,57 +1,55 @@
-// Main File for dealing with group & mandate selection, saving them to cookies and local storage
-// user groupMandateServerActions to check initial auth state, get current user, get user default group & mandate
-// user groupMandateActions to load user groups, load group mandates
-// user favouriteActions to load favourite data, toggle favourite
-// user serverGroupMandate to get current group & mandate from cookies
+// Main File for dealing with group selection, saving to cookies and local storage
+// Uses groupMandateServerActions to check initial auth state, get current user
+// Uses groupMandateActions to load user groups
+// Uses favouriteActions to load favourite data, toggle favourite
+// Uses serverGroupMandate to get current group from cookies
 
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { toast } from "sonner";
-import { loadUserGroups, loadGroupMandates } from "@/lib/actions/groupMandateActions";
-import { loadMandateFavourites, toggleFavouriteServer } from "@/lib/actions/favouriteActions";
+import { loadUserGroups } from "@/lib/actions/groupMandateActions";
+import { loadGroupFavourites, toggleFavouriteServer } from "@/lib/actions/favouriteActions";
 import { EntityType, FavouritesData } from "@/types/favourites-detail";
 import { checkInitialAuthAction, getCurrentUserAction } from './groupMandateServerActions';
 import { getJWTGroupMandate } from "@/lib/auth/getUserRoles";
 
 // Constants
-const STORAGE_KEY = 'ime_group_mandate_selected';
+const STORAGE_KEY = 'ime_group_selected';
 const GROUP_COOKIE = 'ime_group_id';
-const MANDATE_COOKIE = 'ime_mandate_id';
-const FAVOURITES_STORAGE_PREFIX = 'ime_mandate_favourites_';
+const FAVOURITES_STORAGE_PREFIX = 'ime_group_favourites_';
 
 // Helper functions for localStorage + cookies
-const saveToStorage = (group: Group, mandate: Mandate) => {
+const saveToStorage = (group: Group) => {
   try {
     if (typeof window !== 'undefined') {
       // Save to localStorage (for fast client access)
-      const data = { group, mandate, timestamp: Date.now() };
+      const data = { group, timestamp: Date.now() };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       
       // Save to cookies (for server access)
       const cookieOptions = 'path=/; max-age=31536000; SameSite=Lax'; // 1 year expiry
       document.cookie = `${GROUP_COOKIE}=${group.id}; ${cookieOptions}`;
-      document.cookie = `${MANDATE_COOKIE}=${mandate.id}; ${cookieOptions}`;
     }
   } catch (error) {
-    console.warn('Failed to save group/mandate to storage:', error);
+    console.warn('Failed to save group to storage:', error);
   }
 };
 
-const loadFromStorage = (): { group: Group; mandate: Mandate } | null => {
+const loadFromStorage = (): Group | null => {
   try {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const data = JSON.parse(stored);
         // Validate the data structure
-        if (data.group?.id && data.group?.name && data.mandate?.id && data.mandate?.name) {
-          return { group: data.group, mandate: data.mandate };
+        if (data.group?.id && data.group?.name) {
+          return data.group;
         }
       }
     }
   } catch (error) {
-    console.warn('Failed to load group/mandate from localStorage:', error);
+    console.warn('Failed to load group from localStorage:', error);
   }
   return null;
 };
@@ -64,28 +62,26 @@ const clearStorage = () => {
       
       // Clear cookies by setting them to expire
       document.cookie = `${GROUP_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-      document.cookie = `${MANDATE_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     }
   } catch (error) {
-    console.warn('Failed to clear group/mandate from storage:', error);
+    console.warn('Failed to clear group from storage:', error);
   }
 };
 
 // Helper functions for favourites storage
-const getFavouritesStorageKey = (mandateId: number | undefined): string => {
-  return `${FAVOURITES_STORAGE_PREFIX}${mandateId || 'none'}`;
+const getFavouritesStorageKey = (groupId: number | undefined): string => {
+  return `${FAVOURITES_STORAGE_PREFIX}${groupId || 'none'}`;
 };
 
-const saveToFavouritesStorage = (mandateId: number, groupId: number, favourites: FavouritesData) => {
+const saveToFavouritesStorage = (groupId: number, favourites: FavouritesData) => {
   try {
-    if (typeof window !== 'undefined' && mandateId) {
+    if (typeof window !== 'undefined' && groupId) {
       const data = {
-        mandateId,
         groupId,
         favourites,
         lastSync: new Date().toISOString()
       };
-      const storageKey = getFavouritesStorageKey(mandateId);
+      const storageKey = getFavouritesStorageKey(groupId);
       localStorage.setItem(storageKey, JSON.stringify(data));
     }
   } catch (error) {
@@ -93,7 +89,7 @@ const saveToFavouritesStorage = (mandateId: number, groupId: number, favourites:
   }
 };
 
-const loadFromFavouritesStorage = (mandateId: number | undefined): FavouritesData => {
+const loadFromFavouritesStorage = (groupId: number | undefined): FavouritesData => {
   const emptyFavourites: FavouritesData = {
     categories: [],
     funds: [],
@@ -102,12 +98,12 @@ const loadFromFavouritesStorage = (mandateId: number | undefined): FavouritesDat
   };
 
   try {
-    if (typeof window !== 'undefined' && mandateId) {
-      const storageKey = getFavouritesStorageKey(mandateId);
+    if (typeof window !== 'undefined' && groupId) {
+      const storageKey = getFavouritesStorageKey(groupId);
       const stored = localStorage.getItem(storageKey);
       if (stored) {
         const data = JSON.parse(stored);
-        if (data.favourites && data.mandateId === mandateId) {
+        if (data.favourites && data.groupId === groupId) {
           return data.favourites;
         }
       }
@@ -118,10 +114,10 @@ const loadFromFavouritesStorage = (mandateId: number | undefined): FavouritesDat
   return emptyFavourites;
 };
 
-const clearFavouritesStorage = (mandateId: number | undefined) => {
+const clearFavouritesStorage = (groupId: number | undefined) => {
   try {
-    if (typeof window !== 'undefined' && mandateId) {
-      const storageKey = getFavouritesStorageKey(mandateId);
+    if (typeof window !== 'undefined' && groupId) {
+      const storageKey = getFavouritesStorageKey(groupId);
       localStorage.removeItem(storageKey);
     }
   } catch (error) {
@@ -135,23 +131,15 @@ export type Group = {
   name: string;
 };
 
-export type Mandate = {
-  id: number;
-  name: string;
-};
-
 export type GroupMandateContextType = {
-  // Current selections
+  // Current selection
   currentGroup: Group | null;
-  currentMandate: Mandate | null;
   
   // Available options
   availableGroups: Group[];
-  availableMandates: Mandate[];
   
   // Loading states
   isLoadingGroups: boolean;
-  isLoadingMandates: boolean;
   isLoadingFavourites: boolean;
   
   // Favourites
@@ -162,11 +150,10 @@ export type GroupMandateContextType = {
   
   // Actions
   setCurrentGroup: (group: Group | null) => void;
-  setCurrentMandate: (mandate: Mandate | null) => void;
-  setGroupAndMandate: (group: Group, mandate: Mandate) => void;
-  setDefaultGroupMandate: () => Promise<{ success: boolean; group?: Group; mandate?: Mandate; error?: any }>;
+  setGroup: (group: Group) => void;
+  setDefaultGroup: () => Promise<{ success: boolean; group?: Group; error?: any }>;
+  setDefaultGroupMandate: () => Promise<{ success: boolean; group?: Group; mandate?: Group; error?: any }>; // Legacy alias
   loadAvailableGroups: () => Promise<void>;
-  loadMandatesForGroup: (groupId: number) => Promise<void>;
   
   // Favourites actions
   toggleFavourite: (entityType: EntityType, entityId: number) => Promise<void>;
@@ -194,11 +181,8 @@ export function useGroupMandate() {
 export function GroupMandateProvider({ children }: { children: ReactNode }) {
   // State
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
-  const [currentMandate, setCurrentMandate] = useState<Mandate | null>(null);
   const [availableGroups, setAvailableGroups] = useState<Group[]>([]);
-  const [availableMandates, setAvailableMandates] = useState<Mandate[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState(false);
-  const [isLoadingMandates, setIsLoadingMandates] = useState(false);
   
   // Auth state tracking
   const [hasHadUser, setHasHadUser] = useState(false);
@@ -214,7 +198,7 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   });
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false);
 
-  // Initial auth state check - verify authentication AND restore saved group/mandate
+  // Initial auth state check - verify authentication AND restore saved group
   useEffect(() => {
     const checkInitialAuth = async () => {
       const { user, isAuthenticated, error } = await checkInitialAuthAction();
@@ -222,24 +206,23 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(true);
         setHasHadUser(true);
         setLastAuthCheck(Date.now());
-        console.log('🔄 Initial auth: User authenticated, checking for saved group/mandate');
+        console.log('🔄 Initial auth: User authenticated, checking for saved group');
         
-        // Load saved group/mandate from localStorage if none currently set
-        if (!currentGroup && !currentMandate) {
+        // Load saved group from localStorage if none currently set
+        if (!currentGroup) {
           const saved = loadFromStorage();
           if (saved) {
-            console.log('🔄 Initial auth: Restoring saved group/mandate from localStorage:', saved);
-            setCurrentGroup(saved.group);
-            setCurrentMandate(saved.mandate);
+            console.log('🔄 Initial auth: Restoring saved group from localStorage:', saved);
+            setCurrentGroup(saved);
             
-            // Load favourites for the restored mandate
-            const newFavourites = loadFromFavouritesStorage(saved.mandate.id);
+            // Load favourites for the restored group
+            const newFavourites = loadFromFavouritesStorage(saved.id);
             setFavourites(newFavourites);
           } else {
-            console.log('🔄 Initial auth: No saved group/mandate found in localStorage');
+            console.log('🔄 Initial auth: No saved group found in localStorage');
           }
         } else {
-          console.log('🔄 Initial auth: Group/mandate already set, keeping current selection');
+          console.log('🔄 Initial auth: Group already set, keeping current selection');
         }
       }
       if (error) {
@@ -249,7 +232,7 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     checkInitialAuth();
   }, []); // Remove dependencies to prevent loops
 
-  // Simple 5-minute interval auth checking (much simpler than event-based)
+  // Simple 5-minute interval auth checking
   useEffect(() => {
     const checkAuthState = async () => {
       try {
@@ -263,9 +246,8 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
           setHasHadUser(true);
           setLastAuthCheck(Date.now());
           
-          // 5-minute auth check: Only verify authentication, don't change group/mandate
-          // The group/mandate should only be set on initial login, not on every auth check
-          console.log('🔄 Auth check: User authenticated, keeping current group/mandate selection');
+          // 5-minute auth check: Only verify authentication, don't change group
+          console.log('🔄 Auth check: User authenticated, keeping current group selection');
         } else {
           console.log('❌ Auth state: User not authenticated');
           // User is not authenticated
@@ -282,7 +264,6 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
               console.log('🚪 Real logout detected, clearing selections');
               clearStorage();
               setCurrentGroup(null);
-              setCurrentMandate(null);
               setFavourites({
                 categories: [],
                 funds: [],
@@ -313,12 +294,12 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
   // Tab synchronization - listen for favourites changes in other tabs
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key && e.key.startsWith(FAVOURITES_STORAGE_PREFIX) && currentMandate) {
-        const expectedKey = getFavouritesStorageKey(currentMandate.id);
+      if (e.key && e.key.startsWith(FAVOURITES_STORAGE_PREFIX) && currentGroup) {
+        const expectedKey = getFavouritesStorageKey(currentGroup.id);
         if (e.key === expectedKey && e.newValue) {
           try {
             const data = JSON.parse(e.newValue);
-            if (data.favourites && data.mandateId === currentMandate.id) {
+            if (data.favourites && data.groupId === currentGroup.id) {
               setFavourites(data.favourites);
               console.log('Synced favourites from another tab');
             }
@@ -331,41 +312,40 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
 
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
-  }, [currentMandate?.id]);
+  }, [currentGroup?.id]);
 
-  // Set default group/mandate from JWT (called from OTP login success)
-  const setDefaultGroupMandate = useCallback(async () => {
+  // Set default group from JWT (called from OTP login success)
+  const setDefaultGroup = useCallback(async () => {
     try {
-      console.log('🔄 Setting default group/mandate from JWT...');
+      console.log('🔄 Setting default group from JWT...');
       
-      // Extract group/mandate from JWT using server action
-      const { groupInfo, mandateInfo } = await getJWTGroupMandate();
+      // Extract group from JWT using server action
+      const { groupInfo } = await getJWTGroupMandate();
 
-      if (groupInfo && mandateInfo) {
+      if (groupInfo) {
         setCurrentGroup(groupInfo);
-        setCurrentMandate(mandateInfo);
-        console.log('✅ Set default group/mandate from JWT:', { group: groupInfo, mandate: mandateInfo });
+        console.log('✅ Set default group from JWT:', groupInfo);
         
         // Save to localStorage for future use
-        saveToStorage(groupInfo, mandateInfo);
+        saveToStorage(groupInfo);
         
-        // Load favourites for the new mandate
-        const newFavourites = loadFromFavouritesStorage(mandateInfo.id);
+        // Load favourites for the new group
+        const newFavourites = loadFromFavouritesStorage(groupInfo.id);
         setFavourites(newFavourites);
         
-        return { success: true, group: groupInfo, mandate: mandateInfo };
+        return { success: true, group: groupInfo };
       } else {
-        console.log('ℹ️ No group/mandate in JWT - keeping as null (normal for new users)');
-        return { success: true, group: undefined, mandate: undefined };
+        console.log('ℹ️ No group in JWT - keeping as null (normal for new users)');
+        return { success: true, group: undefined };
       }
     } catch (error) {
-      console.error('❌ Error setting default group/mandate from JWT:', error);
+      console.error('❌ Error setting default group from JWT:', error);
       return { success: false, error };
     }
   }, []);
 
   // Actions - memoized to prevent infinite re-renders
-  const setGroupAndMandate = useCallback((group: Group, mandate: Mandate) => {
+  const setGroup = useCallback((group: Group) => {
     // Clear existing favourites
     setFavourites({
       categories: [],
@@ -375,32 +355,31 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     });
     
     // Clear old favourites storage
-    if (currentMandate) {
-      clearFavouritesStorage(currentMandate.id);
+    if (currentGroup) {
+      clearFavouritesStorage(currentGroup.id);
     }
     
     setCurrentGroup(group);
-    setCurrentMandate(mandate);
     
     // Save to localStorage for persistence
-    saveToStorage(group, mandate);
+    saveToStorage(group);
     
-    // Load favourites for new mandate (async - don't block)
-    loadMandateFavourites().then((newFavourites) => {
+    // Load favourites for new group (async - don't block)
+    loadGroupFavourites().then((newFavourites) => {
       setFavourites(newFavourites);
-      saveToFavouritesStorage(mandate.id, group.id, newFavourites);
+      saveToFavouritesStorage(group.id, newFavourites);
     }).catch((error) => {
-      console.error('Failed to load favourites for new mandate:', error);
+      console.error('Failed to load favourites for new group:', error);
     });
     
     // Toast success message and reload page
-    toast.success(`Group: ${group.name} | Mandate: ${mandate.name} set successfully!`);
+    toast.success(`Group: ${group.name} selected successfully!`);
     
     // Reload page to refresh all data
     setTimeout(() => {
       window.location.reload();
     }, 1000); // Small delay to show toast
-  }, [currentMandate]);
+  }, [currentGroup]);
 
   // Real Supabase data loading - RLS handles access control
   const loadAvailableGroups = useCallback(async (): Promise<void> => {
@@ -417,48 +396,32 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const loadMandatesForGroup = useCallback(async (groupId: number): Promise<void> => {
-    setIsLoadingMandates(true);
-    try {
-      const mandates = await loadGroupMandates(groupId);
-      setAvailableMandates(mandates);
-    } catch (error) {
-      console.error('Error loading mandates for group:', groupId, error);
-      toast.error("Error loading mandates. Please try again.");
-      setAvailableMandates([]); // Set empty array on error
-    } finally {
-      setIsLoadingMandates(false);
-    }
-  }, []);
-
   // Favourites functions
   const loadFavourites = useCallback(async (): Promise<void> => {
-    if (!currentMandate) return;
+    if (!currentGroup) return;
     
     setIsLoadingFavourites(true);
     try {
-      const newFavourites = await loadMandateFavourites();
+      const newFavourites = await loadGroupFavourites();
       setFavourites(newFavourites);
       
       // Save to localStorage
-      if (currentGroup) {
-        saveToFavouritesStorage(currentMandate.id, currentGroup.id, newFavourites);
-      }
+      saveToFavouritesStorage(currentGroup.id, newFavourites);
     } catch (error) {
       console.error('Error loading favourites:', error);
       toast.error("Error loading favourites. Please try again.");
     } finally {
       setIsLoadingFavourites(false);
     }
-  }, [currentMandate, currentGroup]);
+  }, [currentGroup]);
 
   const isFavourite = useCallback((entityType: EntityType, entityId: number): boolean => {
     return favourites[entityType]?.includes(entityId) || false;
   }, [favourites]);
 
   const toggleFavourite = useCallback(async (entityType: EntityType, entityId: number): Promise<void> => {
-    if (!currentMandate || !currentGroup) {
-      toast.error("Please select a group and mandate first");
+    if (!currentGroup) {
+      toast.error("Please select a group first");
       return;
     }
 
@@ -477,7 +440,7 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
         }
         
         // Save to localStorage
-        saveToFavouritesStorage(currentMandate.id, currentGroup.id, newFavourites);
+        saveToFavouritesStorage(currentGroup.id, newFavourites);
         return newFavourites;
       });
     };
@@ -494,28 +457,19 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
       console.error(`Error toggling favourite ${entityType}:`, error);
       toast.error("Failed to update favourite");
     }
-  }, [currentMandate, currentGroup, isFavourite]);
+  }, [currentGroup, isFavourite]);
 
   const handleSetCurrentGroup = useCallback((group: Group | null) => {
     setCurrentGroup(group);
-    // Clear mandate when group changes
-    setCurrentMandate(null);
-    setAvailableMandates([]);
-    
-    // Load mandates for new group
-    if (group) {
-      loadMandatesForGroup(group.id);
-    }
-  }, [loadMandatesForGroup]);
+  }, []);
 
   const clearSelection = useCallback(() => {
-    // Clear favourites storage for current mandate
-    if (currentMandate) {
-      clearFavouritesStorage(currentMandate.id);
+    // Clear favourites storage for current group
+    if (currentGroup) {
+      clearFavouritesStorage(currentGroup.id);
     }
     
     setCurrentGroup(null);
-    setCurrentMandate(null);
     setFavourites({
       categories: [],
       funds: [],
@@ -525,18 +479,16 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     
     // Clear localStorage
     clearStorage();
-  }, [currentMandate]);
+  }, [currentGroup]);
 
   const resetContext = useCallback(() => {
-    // Clear favourites storage for current mandate
-    if (currentMandate) {
-      clearFavouritesStorage(currentMandate.id);
+    // Clear favourites storage for current group
+    if (currentGroup) {
+      clearFavouritesStorage(currentGroup.id);
     }
     
     setCurrentGroup(null);
-    setCurrentMandate(null);
     setAvailableGroups([]);
-    setAvailableMandates([]);
     setFavourites({
       categories: [],
       funds: [],
@@ -546,20 +498,17 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     
     // Clear localStorage
     clearStorage();
-  }, [currentMandate]);
+  }, [currentGroup]);
 
   const value: GroupMandateContextType = {
-    // Current selections
+    // Current selection
     currentGroup,
-    currentMandate,
     
     // Available options
     availableGroups,
-    availableMandates,
     
     // Loading states
     isLoadingGroups,
-    isLoadingMandates,
     isLoadingFavourites,
     
     // Favourites
@@ -570,11 +519,10 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
     
     // Actions
     setCurrentGroup: handleSetCurrentGroup,
-    setCurrentMandate,
-    setGroupAndMandate,
-    setDefaultGroupMandate, // New function to set defaults from database
+    setGroup,
+    setDefaultGroup,
+    setDefaultGroupMandate: setDefaultGroup, // Legacy alias for backward compatibility
     loadAvailableGroups,
-    loadMandatesForGroup,
     
     // Favourites actions
     toggleFavourite,
@@ -591,4 +539,4 @@ export function GroupMandateProvider({ children }: { children: ReactNode }) {
       {children}
     </GroupMandateContext.Provider>
   );
-} 
+}

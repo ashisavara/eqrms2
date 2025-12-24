@@ -28,7 +28,7 @@ function EditPortRecoForm({initialData, id, onSuccess}: {initialData: EditPortRe
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await supabaseUpdateRow('investment_mandate', 'im_id', id, data);
+            await supabaseUpdateRow('client_group', 'group_id', id, data);
             
             if (typeof window !== "undefined") {
                 toast.success("Recommendations updated successfully!");
@@ -64,15 +64,15 @@ function EditPortRecoForm({initialData, id, onSuccess}: {initialData: EditPortRe
 // Main component that exports the button and handles sheet state
 export function EditPortRecoButton({ 
   portRecoData,
-  mandateId
+  groupId
 }: { 
   portRecoData: string | null | undefined;
-  mandateId: number | null;
+  groupId: number | null;
 }) {
   const [showEditSheet, setShowEditSheet] = useState(false);
 
-  if (!mandateId) {
-    console.error('Asset class data is missing asset_class_id:', portRecoData);
+  if (!groupId) {
+    console.error('Group ID is missing:', portRecoData);
   }
 
   // Convert string data to EditPortRecoValues format
@@ -97,10 +97,10 @@ export function EditPortRecoButton({
               <SheetTitle>Edit Recommendations</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
-              {mandateId && (
+              {groupId && (
                 <EditPortRecoForm
                   initialData={portRecoUpdateData}
-                  id={mandateId}
+                  id={groupId}
                   onSuccess={() => setShowEditSheet(false)}
                 />
               )}

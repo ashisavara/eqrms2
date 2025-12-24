@@ -6,10 +6,10 @@ import { RiskProfilerAnswers, RiskProfilerScores } from "./riskProfilerCalculati
 
 /**
  * Submit complete risk profiler data
- * Updates investment_mandate with all scores and calculated values in a single transaction
+ * Updates client_group with all scores and calculated values in a single transaction
  */
 export async function submitRiskProfiler(
-  mandateId: number,
+  groupId: number,
   answers: RiskProfilerAnswers,
   scores: RiskProfilerScores
 ): Promise<ServerActionResponse> {
@@ -39,7 +39,7 @@ export async function submitRiskProfiler(
       risk_profile_calculated: scores.risk_profile,
     };
 
-    await supabaseUpdateRow("investment_mandate", "im_id", mandateId, updateData);
+    await supabaseUpdateRow("client_group", "group_id", groupId, updateData);
     
     return {
       success: true

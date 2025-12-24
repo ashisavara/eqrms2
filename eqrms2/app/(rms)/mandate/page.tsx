@@ -1,10 +1,10 @@
 import { supabaseSingleRead, supabaseListRead, fetchOptions } from "@/lib/supabase/serverQueryHelper";
-import { getCurrentGroupId, getCurrentMandateId } from "@/lib/auth/serverGroupMandate";
+import { getCurrentGroupId } from "@/lib/auth/serverGroupMandate";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
-import { MandateDetail } from "@/types/mandate-detail";
+import { GroupDetail } from "@/types/group-detail";
 import { FavStructure, FavAssetClass, FavCategory, FavFunds } from "@/types/favourite-detail";
 import { TableCategories } from "@/app/(rms)/categories/TableCategories";
 import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
@@ -12,7 +12,7 @@ import { Category } from "@/types/category-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import FinPlanClientWrapper from "./FinPlanClientWrapper";
 import { GoalOptionsProvider } from "@/lib/contexts/GoalOptionsContext";
-import { EditMandateButton } from "@/components/forms/EditMandate";
+import { EditGroupButton } from "@/components/forms/EditGroup";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
@@ -28,58 +28,57 @@ export default async function MandatePage() {
   
   // Check permission first
   if (!can(userRoles, 'mandate', 'view_mandate')) {
-    redirect('/uservalidation'); // or wherever you want to send them
+    redirect('/uservalidation');
   }
 
     const groupId = await getCurrentGroupId();
-    const mandate = await getCurrentMandateId();
 
     // If no group selected, show message
-  if (!groupId || !mandate) {
+  if (!groupId) {
     return (
       <div>
-        <h1 className="text-2xl font-bold mb-4">Investments</h1>
+        <h1 className="text-2xl font-bold mb-4">Group Details</h1>
         <p className="text-muted-foreground">
-          Please select a group using the "Select Group & Mandate" button to view investments.
+          Please select a group using the "Select Group" button to view details.
         </p>
       </div>
     );
   }
 
-  const [invMandate, favStructure, favAssetClass, favCategory, catPerformance, finGoals, investmentFinPlan, sipFinGoals, meetingNotes, leadsData] = await Promise.all([ 
-    supabaseSingleRead<MandateDetail>({
-        table: "investment_mandate",
+  const [groupData, favStructure, favAssetClass, favCategory, catPerformance, finGoals, investmentFinPlan, sipFinGoals, meetingNotes, leadsData] = await Promise.all([ 
+    supabaseSingleRead<GroupDetail>({
+        table: "client_group",
         columns: "*",
         filters: [
-            (query) => query.eq("im_id", mandate)
+            (query) => query.eq("group_id", groupId)
         ],
     }),
     supabaseListRead<FavStructure>({
         table: "view_im_fav_structure",
         columns: "*",
         filters: [
-            (query) => query.eq("im_id", mandate)
+            (query) => query.eq("group_id", groupId)
         ],
     }),
     supabaseListRead<FavAssetClass>({
         table: "view_im_fav_assetclass",
         columns: "*",
         filters: [
-            (query) => query.eq("im_id", mandate)
+            (query) => query.eq("group_id", groupId)
         ],
     }),
     supabaseListRead<FavCategory>({
         table: "view_im_fav_categories",
         columns: "*",
         filters: [
-            (query) => query.eq("im_id", mandate)
+            (query) => query.eq("group_id", groupId)
         ],
     }),
     supabaseListRead<Category>({
         table: "view_im_fav_categories",
         columns: "*",
         filters: [
-            (query) => query.eq("im_id", mandate)
+            (query) => query.eq("group_id", groupId)
         ],
     }),
     supabaseListRead({
@@ -120,8 +119,8 @@ export default async function MandatePage() {
         })
   ])
 
-  if (!invMandate) {
-    return <div className="p-4">Mandate not found</div>;
+  if (!groupData) {
+    return <div className="p-4">Group not found</div>;
   }
 
   const goalOptionsForm = finGoals.map(goal => ({
@@ -132,78 +131,78 @@ export default async function MandatePage() {
   return (
     <GoalOptionsProvider goalOptions={goalOptionsForm}>
       <div className="mandatePage">
-        <div className="pageHeadingBox"><h1>Investment Mandate</h1></div>
+        <div className="pageHeadingBox"><h1>Group Details</h1></div>
           <Tabs defaultValue="mandate" className="w-full">
             <TabsList className="w-full">
-              <TabsTrigger value="mandate">Mandate</TabsTrigger>
+              <TabsTrigger value="mandate">Details</TabsTrigger>
               <TabsTrigger value="finplan">Fin Plan</TabsTrigger>
               <TabsTrigger value="meetingnotes">Meeting Notes</TabsTrigger>
             </TabsList>
             <TabsContent value="mandate">
               <div className="flex gap-2 mb-4">
                 { can(userRoles, 'mandate', 'edit_mandate') && (
-                  <EditMandateButton mandateData={invMandate} mandateId={mandate} />
+                  <EditGroupButton groupData={groupData} groupId={groupId} />
                 )}
               </div>
               <div className="border-box">
-                <h3>Mandate Progress</h3>
+                <h3>Progress</h3>
                 <MandateProgressBar
-                  background_done={invMandate.background_done}
-                  risk_profile_done={invMandate.risk_profile_done}
-                  fin_plan_done={invMandate.fin_plan_done}
-                  inv_plan_done={invMandate.inv_plan_done}
-                  shortlisting_done={invMandate.shortlisting_done}
+                  background_done={groupData.background_done}
+                  risk_profile_done={groupData.risk_profile_done}
+                  fin_plan_done={groupData.fin_plan_done}
+                  inv_plan_done={groupData.inv_plan_done}
+                  shortlisting_done={groupData.shortlisting_done}
                 />
               </div>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
                       <div className="border-box">
-                        <b>Last Review:</b><br/> {formatDate(invMandate.last_review_date)}
+                        <b>Last Review:</b><br/> {formatDate(groupData.last_review_date)}
                       </div>
                       <div className="border-box bg-green-50">
                           <p className="font-bold">Selected Risk Profile</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.rp_override || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.rp_override || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box bg-blue-50">
                           <div className="flex items-center gap-2">
                             <p className="font-bold">Calculated Risk Profile</p>
-                            { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} mandateId={mandate} />)}
+                            { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} />)}
                           </div>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.risk_profile_calculated || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_profile_calculated || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box bg-blue-50">
                           <p className="font-bold">Risk Taking Ability</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.risk_appetite || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_appetite || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box bg-blue-50">
                           <p className="font-bold">Risk Appetite</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.risk_taking_ability || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_taking_ability || ""}</ReactMarkdown>
                       </div>
                   </div>
                   <div className="border-box">
                           <p className="font-bold">One Line Objective</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.one_line_objective || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.one_line_objective || ""}</ReactMarkdown>
                       </div>
                   <div className="text-sm">
                       <div className="border-box">
                           <p className="font-bold">Investor Background</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investments_background || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_background || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box">
                           <p className="font-bold">Investments Purpose</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investments_purpose || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_purpose || ""}</ReactMarkdown>
                       </div>
                       
                       <div className="border-box">
                           <p className="font-bold">Investment Plan</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.inv_plan || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.inv_plan || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box">
                           <p className="font-bold">Investment Recommendations</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.investment_recommendations || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investment_recommendations || ""}</ReactMarkdown>
                       </div>
                       <div className="border-box">
                           <p className="font-bold">To-Dos</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{invMandate.other_mandate_details || ""}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.other_mandate_details || ""}</ReactMarkdown>
                       </div>
                   </div>
                   <div className="border-box">

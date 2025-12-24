@@ -1,5 +1,5 @@
 import { supabaseListRead, supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
-import { getCurrentGroupId, getCurrentMandateId } from "@/lib/auth/serverGroupMandate";
+import { getCurrentGroupId } from "@/lib/auth/serverGroupMandate";
 import TableInvestments  from "./TableInvestments";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
@@ -55,7 +55,6 @@ export default async function InvestmentsPage() {
 
   // Get current group ID from cookies (server-side)
   const groupId = await getCurrentGroupId();
-  const mandateId = await getCurrentMandateId();
   
   // If no group selected, show message
   if (!groupId) {
@@ -63,7 +62,7 @@ export default async function InvestmentsPage() {
       <div>
         <h1 className="text-2xl font-bold mb-4">Investments</h1>
         <p className="text-muted-foreground">
-          Please select a group using the "Select Group & Mandate" button to view investments.
+          Please select a group using the "Select Group" button to view investments.
         </p>
       </div>
     );
@@ -99,17 +98,17 @@ export default async function InvestmentsPage() {
       ], 
     }),
     supabaseSingleRead({
-      table: "investment_mandate",
+      table: "client_group",
       columns: "portfolio_reallocation_thoughts",
       filters: [
-        (query) => query.eq("im_id", mandateId)
+        (query) => query.eq("group_id", groupId)
       ],
     }),
     supabaseListRead<RmsFundsScreener>({
       table: "view_im_fav_funds",
       columns: "*",
       filters: [
-          (query) => query.eq("im_id", mandateId)
+          (query) => query.eq("group_id", groupId)
       ],
     })
   ]);
@@ -131,7 +130,7 @@ export default async function InvestmentsPage() {
             investorOptions={investorOptions} 
             userRoles={userRoles}
             portfolioReallocationThoughts={portfolioReallocationThoughts?.portfolio_reallocation_thoughts}
-            mandateId={mandateId}
+            groupId={groupId}
             favFunds={favFunds}
           />
 
