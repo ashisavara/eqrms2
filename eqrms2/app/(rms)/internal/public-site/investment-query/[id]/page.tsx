@@ -48,9 +48,7 @@ export default async function InvestmentQueryPage({ params }: { params: Promise<
                     <span className="text-sm text-gray-500 ml-2">| Created on {formatDate(investmentQuery.created_at)}</span>
                 </div>
 
-                <div className="prose max-w-none">
-                    <p className="whitespace-pre-wrap">{investmentQuery.body}</p>
-                </div>
+                <p><div dangerouslySetInnerHTML={{ __html: investmentQuery.body }} /></p>
             </div>
         );
     } catch (error) {
