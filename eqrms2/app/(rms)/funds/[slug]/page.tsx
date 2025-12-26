@@ -11,6 +11,8 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
+import { FlexRms2Col } from "@/components/grids/flex-rms-2col";
 
 export const dynamic = 'force-dynamic';
 
@@ -108,26 +110,24 @@ export default async function FundPage({ params }: PageProps) {
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
                   <div className="w-full mt-2 text-xs">
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Recommendation</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_rating ?? 0}>{fund.recommendation_tag}</RatingContainer></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Definition</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundStrategyDefRating rating={String(fund.strategy_tag ?? 0)} /></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">5yr Performance</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundFiveYrPerfRating rating={fund.perf_tag_5yr ?? ''} /></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">LT Performance</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundPerfConsistencyRating rating={fund.perf_tag_consistent ?? ''} /></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Strategy Desc</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.fund_strategy_rating ?? 0}>{fund.strategy_name}</RatingContainer></div>
-                      </div>
+                      <FlexRms2Col label="Recommendation">
+                          <RatingContainer rating={fund.fund_rating ?? 0}>{fund.recommendation_tag}</RatingContainer>
+                      </FlexRms2Col>
+                      <FlexRms2Col label="Strategy Definition">
+                          <RmsFundStrategyDefRating rating={String(fund.strategy_tag ?? 0)} />
+                      </FlexRms2Col>
+                      <FlexRms2Col label="5yr Performance">
+                          <RmsFundFiveYrPerfRating rating={fund.perf_tag_5yr ?? ''} />
+                      </FlexRms2Col>
+                      <FlexRms2Col label="LT Performance">
+                          <RmsFundPerfConsistencyRating rating={fund.perf_tag_consistent ?? ''} />
+                      </FlexRms2Col>
+                      <FlexRms2Col label="Strategy Desc">
+                          <RatingContainer rating={fund.fund_strategy_rating ?? 0}>{fund.strategy_name}</RatingContainer>
+                      </FlexRms2Col>
+                      <FlexRms2Col label="Strategy Desc">
+                        <UpgradeIcon clickThroughPath="create-account" />
+                      </FlexRms2Col>
                   </div>
                 </div>
                 <div className="text-sm">
@@ -138,34 +138,27 @@ export default async function FundPage({ params }: PageProps) {
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
                   <div className="w-full mt-2 text-xs">
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_rating ?? 0}>{fund.amc_pedigree}</RatingContainer></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Team Pedigree</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.team_pedigree}</RatingContainer></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">FM Churn Risk</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RmsFundFmChurnRiskRating rating={fund.inv_team_risk ?? ''} /></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">AMC Maturity</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RmsAmcMaturityRating rating={fund.amc_maturity ?? ''} /></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Philosphy Name</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_philosophy_rating ?? 0}>{fund.inv_phil_name}</RatingContainer></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Inv Philosophy</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_philosophy_rating ?? 0}>{fund.inv_philosophy_followed}</RatingContainer></div>
-                      </div>
-                      <div className="flex flex-col md:flex-row mb-2">
-                          <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0"><span className="font-bold">Investment Team</span></div>
-                          <div className="w-full md:flex-1 md:min-w-0"><RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.core_amc_team}</RatingContainer></div>
-                      </div>
+                      <FlexRms2Col label="AMC Pedigree">
+                          <RatingContainer rating={fund.amc_rating ?? 0}>{fund.amc_pedigree}</RatingContainer>
+                      </FlexRms2Col>
+                      <FlexRms2Col label="Team Pedigree">
+                          <RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.team_pedigree}</RatingContainer>
+                      </FlexRms2Col>
+                      <FlexRms2Col label="FM Churn Risk">
+                          <RmsFundFmChurnRiskRating rating={fund.inv_team_risk ?? ''} />
+                      </FlexRms2Col>
+                      <FlexRms2Col label="AMC Maturity">
+                          <RmsAmcMaturityRating rating={fund.amc_maturity ?? ''} />
+                      </FlexRms2Col>
+                      <FlexRms2Col label="Philosphy Name">
+                          <RatingContainer rating={fund.amc_philosophy_rating ?? 0}>{fund.inv_phil_name}</RatingContainer>
+                      </FlexRms2Col>
+                      <FlexRms2Col label="Inv Philosophy">
+                          <RatingContainer rating={fund.amc_philosophy_rating ?? 0}>{fund.inv_philosophy_followed}</RatingContainer>
+                      </FlexRms2Col>
+                      <FlexRms2Col label="Investment Team">
+                          <RatingContainer rating={fund.amc_team_rating ?? 0}>{fund.core_amc_team}</RatingContainer>
+                      </FlexRms2Col>
                   </div>
                 </div>
             </div>
@@ -182,61 +175,52 @@ export default async function FundPage({ params }: PageProps) {
             <div className="text-sm">
                   <h2 className="ime-basic-h3"> Rationale behind our fund rating</h2>
                   {fund.investment_view && fund.investment_view.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.investment_view}</div>
-                    </div>
+                    <FlexRms2Col label="Fund Recommendation">
+                        {fund.investment_view}
+                    </FlexRms2Col>
                   )}
                   {fund.strategy_view && fund.strategy_view.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund's Strategy</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_view}</div>
-                    </div>
+                    <FlexRms2Col label="Fund's Strategy">
+                        {fund.strategy_view}
+                    </FlexRms2Col>
                   )}
                   {((fund.performance_view && fund.performance_view.trim() !== "") || (fund.additional_performance_view && fund.additional_performance_view.trim() !== "")) && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Performance</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.performance_view}{fund.additional_performance_view}</div>
-                    </div>
+                    <FlexRms2Col label="Performance">
+                        {fund.performance_view}{fund.additional_performance_view}
+                    </FlexRms2Col>
                   )}
                   {fund.oth_salient_points && fund.oth_salient_points.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.oth_salient_points}</div>
-                    </div>
+                    <FlexRms2Col label="Other Salient Points">
+                        {fund.oth_salient_points}
+                    </FlexRms2Col>
                   )}
           </div>
           <div className="text-sm mt-6">
                   <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
                   {fund.amc_view && fund.amc_view.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.amc_view}</div>
-                    </div>
+                    <FlexRms2Col label="View on AMC">
+                        {fund.amc_view}
+                    </FlexRms2Col>
                   )}
                   {fund.amc_pedigree_desc && fund.amc_pedigree_desc.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Pedigree</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.amc_pedigree_desc}</div>
-                    </div>
+                    <FlexRms2Col label="AMC's Pedigree">
+                        {fund.amc_pedigree_desc}
+                    </FlexRms2Col>
                   )}
                   {fund.team_pedigree_desc && fund.team_pedigree_desc.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Team</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.team_pedigree_desc}</div>
-                    </div>
+                    <FlexRms2Col label="AMC's Team">
+                        {fund.team_pedigree_desc}
+                    </FlexRms2Col>
                   )}
                   {fund.inv_phil_desc && fund.inv_phil_desc.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.inv_phil_desc}</div>
-                    </div>
+                    <FlexRms2Col label="AMC's Philosophy">
+                        {fund.inv_phil_desc}
+                    </FlexRms2Col>
                   )}
                   {fund.salient_points && fund.salient_points.trim() !== "" && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
-                        <div className="w-full md:flex-1 md:min-w-0">{fund.salient_points}</div>
-                    </div>
+                    <FlexRms2Col label="Other Salient Points">
+                        {fund.salient_points}
+                    </FlexRms2Col>
                   )}
                   {fund.fund_body && (<>
                    <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_body }} /></>)}
