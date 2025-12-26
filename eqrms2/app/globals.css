@@ -218,6 +218,10 @@
     @apply text-lg font-bold mt-4 mb-2 border-b-2;
   }
 
+  div.rms-body h4 {
+    @apply text-base font-bold mt-4 mb-2;
+  }
+
 
   /* Ensure all unordered and ordered lists have bullets/numbers and indentation */
   

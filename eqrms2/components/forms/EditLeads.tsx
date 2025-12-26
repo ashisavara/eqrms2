@@ -31,7 +31,9 @@ function EditLeadsForm({
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
   // primaryRm is already in value-label format, no transformation needed
   const primaryRmOptions = masterOptions.primaryRm.map(item => ({ value: item.value, label: item.label }));
-  const router = useRouter();  
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  
   // Convert null values to empty strings/defaults for form inputs
   const cleanedData: LeadsTaggingValues = {
     lead_name: initialData.lead_name ?? "",
@@ -66,7 +68,65 @@ function EditLeadsForm({
     resolver: zodResolver(LeadsTaggingSchema),
   });
 
+  // Helper function to extract error message from Supabase errors
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) {
+      // Check if it's a Supabase error with a message
+      const supabaseError = error as any;
+      if (supabaseError.message) {
+        // Supabase errors often have detailed messages
+        return supabaseError.message;
+      }
+      // Generic Error object
+      return error.message;
+    }
+    // Fallback for unknown error types
+    return 'An unexpected error occurred. Please try again.';
+  };
+
+  // Helper function to format validation errors for display
+  const getValidationErrorMessage = (errors: Record<string, any>): string => {
+    const errorEntries = Object.entries(errors);
+    if (errorEntries.length === 0) {
+      return 'Please fix the form errors before submitting.';
+    }
+    
+    // Get the first error message
+    const firstError = errorEntries[0];
+    const fieldName = firstError[0].replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const errorMessage = firstError[1]?.message || 'Invalid value';
+    
+    // If there are multiple errors, mention the count
+    if (errorEntries.length > 1) {
+      return `${fieldName}: ${errorMessage} (and ${errorEntries.length - 1} other error${errorEntries.length > 2 ? 's' : ''})`;
+    }
+    
+    return `${fieldName}: ${errorMessage}`;
+  };
+
+  // Handle validation errors
+  const onError = (errors: Record<string, any>) => {
+    console.error('Form validation errors:', errors);
+    const errorMessage = getValidationErrorMessage(errors);
+    
+    if (typeof window !== "undefined") {
+      toast.error(`Validation failed: ${errorMessage}`);
+    }
+    
+    // Scroll to first error field
+    const firstErrorField = Object.keys(errors)[0];
+    if (firstErrorField) {
+      const errorElement = document.querySelector(`[name="${firstErrorField}"]`);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        (errorElement as HTMLElement).focus();
+      }
+    }
+  };
+
   const onSubmit = async (data: LeadsTaggingValues) => {
+    setIsLoading(true);
+    
     try {
       if (!id) {
         throw new Error('lead_id is required for updates');
@@ -104,6 +164,7 @@ function EditLeadsForm({
       await supabaseUpdateRow('leads_tagging', 'lead_id', id, processedData);
       
       if (typeof window !== "undefined") {
+        setIsLoading(false);
         toast.success("Lead updated successfully!");
         setTimeout(() => {
           onSuccess?.();
@@ -111,15 +172,18 @@ function EditLeadsForm({
         }, 1500);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error updating lead:', error);
+      const errorMessage = getErrorMessage(error);
+      
       if (typeof window !== "undefined") {
-        toast.error("Error updating lead");
+        toast.error(`Failed to update lead: ${errorMessage}`);
       }
+      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full px-4 pt-4 pb-2 space-y-3">
+    <form onSubmit={handleSubmit(onSubmit, onError)} className="w-full px-4 pt-4 pb-2 space-y-3">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
       
       {/* Basic Information */}
@@ -182,7 +246,9 @@ function EditLeadsForm({
         <BooleanToggleInput name="subs_imepms" label="Subs IME PMS" control={control} />
       </div>
       
-      <Button type="submit" className="w-full">Update Lead</Button>
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? 'Updating...' : 'Update Lead'}
+      </Button>
     </form>
   );
 }
