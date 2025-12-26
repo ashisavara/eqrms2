@@ -57,7 +57,7 @@ export default async function StructurePage({params}: PageProps) {
             </div>
             <div>
                 <h3>Recommended {structure.structure_name} Funds</h3>
-                <TableFundScreen data={funds}/>
+                <TableFundScreen data={funds} userRoles={userRoles} />
             </div>
         </div>
     );

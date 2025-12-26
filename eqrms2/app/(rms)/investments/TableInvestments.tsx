@@ -364,7 +364,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             <TableInvChange data={filteredData} userRoles={userRoles} />
           </TabsContent>
           <TabsContent value="shortlist">
-            <TableFundScreen data={favFunds}/>
+            <TableFundScreen data={favFunds} userRoles={userRoles} />
           </TabsContent>
         </Tabs>
       </div>

@@ -21,11 +21,6 @@ export const dynamic = 'force-dynamic';
 
 export default async function FundsPage() {
   const userRoles = await getUserRoles();
-  
-  // Check permission first
-  if (!can(userRoles, 'rms', 'view_detailed')) {
-    redirect('/uservalidation'); // or wherever you want to send them
-  }
 
   const [funds, mfAmc, pmsAmc, globalAmc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass, DomesticStructure, GlobalStructure] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({
@@ -165,7 +160,7 @@ export default async function FundsPage() {
                 <TabsTrigger value="global">Global</TabsTrigger>
           </TabsList>
                 <TabsContent value="funds">
-                    <TableFundScreen data={funds} />
+                    <TableFundScreen data={funds} userRoles={userRoles} />
                     <PerformanceFootnote />
                 </TabsContent>
                 <TabsContent value="amc">
@@ -176,14 +171,14 @@ export default async function FundsPage() {
                           <TabsTrigger value="Global">Global</TabsTrigger>
                       </TabsList>
                       <TabsContent value="MF">
-                        <TableAmcScreen data={mfAmc}/>
+                        <TableAmcScreen data={mfAmc} userRoles={userRoles} />
                       </TabsContent>
                       <TabsContent value="PMS/AIF">
                         <p className="text-sm text-gray-500 mt-0 mb-0">Note: Certain PMS AMCs also offer AIF's similar to their PMS offerings, that are managed by the same team. Prominent examples include Alfaccurate, Buoyant, Carnelian, Sameeksha, Abakkus, WhiteOak and others. </p>
-                        <TableAmcScreen data={pmsAmc}/>
+                        <TableAmcScreen data={pmsAmc} userRoles={userRoles} />
                       </TabsContent>
                       <TabsContent value="Global">
-                        <TableAmcScreen data={globalAmc}/>
+                        <TableAmcScreen data={globalAmc} userRoles={userRoles} />
                       </TabsContent>
                   </Tabs>
                 </TabsContent>
@@ -204,38 +199,38 @@ export default async function FundsPage() {
                         </TabsContent> 
                         <TabsContent value="Equity">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
-                            <TableCategories data={Eqcategory} columnType="summary"/>
+                            <TableCategories data={Eqcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
-                              <TableCategories data={Eqcategory} columnType="annual"/>
+                              <TableCategories data={Eqcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                         </TabsContent>  
                         <TabsContent value="Debt">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
-                            <TableCategories data={Debtcategory} columnType="summary"/>
+                            <TableCategories data={Debtcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
-                              <TableCategories data={Debtcategory} columnType="annual"/>
+                              <TableCategories data={Debtcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                         </TabsContent>
                         <TabsContent value="Hybrid">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
-                            <TableCategories data={Hybridcategory} columnType="summary"/>
+                            <TableCategories data={Hybridcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
-                              <TableCategories data={Hybridcategory} columnType="annual"/>
+                              <TableCategories data={Hybridcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                         </TabsContent>
                         <TabsContent value="Alternatives">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
-                            <TableCategories data={Altcategory} columnType="summary"/>
+                            <TableCategories data={Altcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
-                              <TableCategories data={Altcategory} columnType="annual"/>
+                              <TableCategories data={Altcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                         </TabsContent>
                     </Tabs>
@@ -255,23 +250,23 @@ export default async function FundsPage() {
                         </TabsContent>
                         <TabsContent value="Global-Equity">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
-                            <TableCategories data={GlobalEqcategory} columnType="summary"/>
+                            <TableCategories data={GlobalEqcategory} columnType="summary" userRoles={userRoles} />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
-                              <TableCategories data={GlobalEqcategory} columnType="annual"/>
+                              <TableCategories data={GlobalEqcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                         </TabsContent>
                         <TabsContent value="Global-Others">
                             <h3 className="text-base font-bold text-center text-gray-500 p-2">Global Debt</h3>
-                            <TableCategories data={GlobalDebtcategory} columnType="summary"/>
+                            <TableCategories data={GlobalDebtcategory} columnType="summary" userRoles={userRoles} />
                             <div className="hidden md:block mt-6">
-                              <TableCategories data={GlobalDebtcategory} columnType="annual"/>
+                              <TableCategories data={GlobalDebtcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                             <h3 className="text-base font-bold text-center text-gray-500 p-2 mt-6">Global Alternatives</h3>
-                            <TableCategories data={GlobalAltcategory} columnType="summary"/>
+                            <TableCategories data={GlobalAltcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
                             <div className="hidden md:block mt-6">
-                              <TableCategories data={GlobalAltcategory} columnType="annual"/>
+                              <TableCategories data={GlobalAltcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                         </TabsContent>
                     </Tabs>

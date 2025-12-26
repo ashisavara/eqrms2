@@ -5,8 +5,16 @@ import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { ComGrowthNumberRating, RmsCategoryStanceRating } from "@/components/conditional-formatting";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import SimpleTable from "@/components/tables/singleRowTable";
+import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
+import { can } from "@/lib/permissions";
 
-export const columns: ColumnDef<Category>[] = [
+// Create columns with permission-based rendering
+// Permission is checked ONCE when columns are created, not per cell
+export const createColumns = (userRoles: string[] | null): ColumnDef<Category>[] => {
+  // ✅ Check permission ONCE at the top
+  const hasDetailedAccess = can(userRoles, 'rms', 'view_detailed');
+
+  return [
   {
     id: "is_favourite",
     header: "♥",
@@ -108,7 +116,9 @@ export const columns: ColumnDef<Category>[] = [
     cell: ({ getValue }) => {
       const value = getValue();
       if (value == null) return null;
-      return <RmsCategoryStanceRating rating={value as string} />;
+      return hasDetailedAccess 
+        ? <RmsCategoryStanceRating rating={value as string} />
+        : <UpgradeIcon clickThroughPath="create-account" />;
     },
   },
   {
@@ -126,4 +136,5 @@ export const columns: ColumnDef<Category>[] = [
     header: "Summary",  
     size: 800,
   },
-];
+  ];
+};

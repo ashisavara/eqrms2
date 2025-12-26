@@ -5,29 +5,34 @@ import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { Category } from "@/types/category-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
+import { useMemo } from "react";
 
 // Import all column types
-import { columns as summaryColumns } from "./columns-categories";
+import { createColumns } from "./columns-categories";
 import { annualColumns } from "./columns-catannual";
 // import { performanceColumns } from "./columns-catperformance";
 // import { detailColumns } from "./columns-catdetail";
 
-// Create a mapping object
-const columnTypes = {
-  summary: summaryColumns,
-  annual: annualColumns,
-  // performance: performanceColumns,
-  // detail: detailColumns,
-} as const;
-
-type ColumnType = keyof typeof columnTypes;
+type ColumnType = "summary" | "annual";
 
 interface TableCategoryProps {
   data: Category[];
   columnType?: ColumnType; // Now supports multiple types
+  userRoles?: string[] | null;
 }
 
-export function TableCategories({ data, columnType = "summary" }: TableCategoryProps) {
+export function TableCategories({ data, columnType = "summary", userRoles = null }: TableCategoryProps) {
+  // ✅ Create columns with permission check (runs once per render)
+  const summaryColumns = useMemo(() => createColumns(userRoles), [userRoles]);
+  
+  // Create a mapping object
+  const columnTypes = useMemo(() => ({
+    summary: summaryColumns,
+    annual: annualColumns,
+    // performance: performanceColumns,
+    // detail: detailColumns,
+  }), [summaryColumns]);
+  
   // Select the appropriate column set from the mapping
   const selectedColumns = columnTypes[columnType];
   const { responsiveColumns } = useResponsiveColumns(selectedColumns, 'cat_name');

@@ -2,16 +2,25 @@
 
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
-import { columns } from "./columns-amcscreen";
+import { createColumns } from "./columns-amcscreen";
 import { AMC } from "@/types/amc-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
+import { useMemo } from "react";
+import { can } from "@/lib/permissions";
 
 interface TableAmcScreenProps {
   data: AMC[];
+  userRoles?: string[] | null;
 }
 
-export function TableAmcScreen({ data }: TableAmcScreenProps) {
+export function TableAmcScreen({ data, userRoles = null }: TableAmcScreenProps) {
+  // ✅ Check permission once
+  const hasDetailedAccess = can(userRoles, 'rms', 'view_detailed');
+  
+  // ✅ Create columns with permission check (runs once per render)
+  const columns = useMemo(() => createColumns(userRoles), [userRoles]);
+  
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'amc_name');
   
@@ -41,10 +50,15 @@ export function TableAmcScreen({ data }: TableAmcScreenProps) {
     },
   });
 
-  const filters = [
-    { column: "amc_rating", title: "Rating", placeholder: "Rating" },
+  // ✅ Base filters (always shown)
+  const baseFilters = [
     { column: "us_investor_tagging", title: "US Investor", placeholder: "US Investor" }
   ];
+
+  // ✅ Conditionally include rating filter based on permissions
+  const filters = hasDetailedAccess
+    ? [{ column: "amc_rating", title: "Rating", placeholder: "Rating" }, ...baseFilters]
+    : baseFilters;
 
   return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
 }

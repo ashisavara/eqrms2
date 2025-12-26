@@ -4,8 +4,16 @@ import Link from "next/link";
 import { RatingDisplay, RatingDisplayWithStar } from "@/components/conditional-formatting";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import SimpleTable from "@/components/tables/singleRowTable";
+import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
+import { can } from "@/lib/permissions";
 
-export const columns: ColumnDef<AMC>[] = [
+// Create columns with permission-based rendering
+// Permission is checked ONCE when columns are created, not per cell
+export const createColumns = (userRoles: string[] | null): ColumnDef<AMC>[] => {
+  // ✅ Check permission ONCE at the top
+  const hasDetailedAccess = can(userRoles, 'rms', 'view_detailed');
+
+  return [
   {
     accessorKey: "amc_name",
     header: () => <div className="text-left hidden md:block">AMC</div>,
@@ -26,7 +34,12 @@ export const columns: ColumnDef<AMC>[] = [
             </div>
             <SimpleTable 
               headers={[{ label: "Rating" }, { label: "Pedigree" }, { label: "Team" }, { label: "Philosophy" }]}
-              body={[{ value: <RatingDisplay rating={row.original.amc_rating} /> }, { value: <RatingDisplay rating={row.original.amc_pedigree_rating} /> }, { value: <RatingDisplay rating={row.original.amc_team_rating} /> }, { value: <RatingDisplay rating={row.original.amc_philosophy_rating} /> }]}
+              body={[
+                { value: hasDetailedAccess ? <RatingDisplay rating={row.original.amc_rating} /> : <UpgradeIcon clickThroughPath="create-account" text="" /> }, 
+                { value: hasDetailedAccess ? <RatingDisplay rating={row.original.amc_pedigree_rating} /> : <UpgradeIcon clickThroughPath="create-account" text="" /> }, 
+                { value: hasDetailedAccess ? <RatingDisplay rating={row.original.amc_team_rating} /> : <UpgradeIcon clickThroughPath="create-account" text="" /> }, 
+                { value: hasDetailedAccess ? <RatingDisplay rating={row.original.amc_philosophy_rating} /> : <UpgradeIcon clickThroughPath="create-account" text="" /> }
+              ]}
             />
           </div>
         );
@@ -53,32 +66,47 @@ export const columns: ColumnDef<AMC>[] = [
     header: "AMC",
     size: 100,
     filterFn: "arrIncludesSome",
-    cell: ({ getValue }) => <RatingDisplayWithStar rating={getValue() as number} />
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplayWithStar rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" text="" />
   },
   {
     accessorKey: "amc_pedigree_rating",
     header: "Pedigree",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplay rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" text="" />
   },
   {
     accessorKey: "amc_team_rating",
     header: "Team",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />,
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplay rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" text="" />,
     filterFn: "arrIncludesSome",
   },
   {
     accessorKey: "amc_philosophy_rating",
     header: "Philosophy",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplay rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" text="" />
   },
   {
     accessorKey: "amc_size_rating",
     header: "Size",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplay rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" text="" />
   },
   {
     accessorKey: "aum",
@@ -91,4 +119,5 @@ export const columns: ColumnDef<AMC>[] = [
     meta: { isFilterOnly: true },
     filterFn: "arrIncludesSome",
   }
-];
+  ];
+};

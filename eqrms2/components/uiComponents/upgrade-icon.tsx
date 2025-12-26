@@ -45,14 +45,15 @@ export function UpgradeIcon({
       <div
         onClick={() => setIsSheetOpen(true)}
         className={cn(
-          "flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-400 p-1 rounded-md w-full justify-center border border-gray-300",
+          "flex items-center cursor-pointer bg-gray-100 hover:bg-gray-400 p-1 rounded-md w-full justify-center border",
+          text && "gap-2", // Only add gap if text is present
           backgroundColor && `p-2 rounded`,
           className
         )}
         style={backgroundColor ? { backgroundColor } : undefined}
       >
         <Lock className="h-3 w-3 flex-shrink-0" />
-        <span>{text}</span>
+        {text && <span className="text-xs">{text}</span>}
       </div>
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>

@@ -18,11 +18,6 @@ export default async function AssetClassPage({params}: PageProps) {
     const {slug} = await params;
 
     const userRoles = await getUserRoles();
-  
-    // Check permission first
-    if (!can(userRoles, 'rms', 'view_detailed')) {
-        redirect('/uservalidation'); // or wherever you want to send them
-    }
 
     const [assetClass, catTrailing, catAnnual] = await Promise.all([
         supabaseSingleRead<AssetClass>({
@@ -32,7 +27,7 @@ export default async function AssetClassPage({params}: PageProps) {
         }),
         supabaseListRead<Category>({
             table: "view_rms_category",
-            columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show",
+            columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, category_stance, category_risk_profile",
             filters: [(query) => query.eq('asset_class_slug', slug)]
         }),
         supabaseListRead<Category>({
@@ -61,12 +56,12 @@ export default async function AssetClassPage({params}: PageProps) {
             <p className="text-sm">{assetClass.asset_class_desc}</p>
             <div>
                 <h2> Trailing Returns</h2>
-                <TableCategories data={catTrailing}/>
+                <TableCategories data={catTrailing} userRoles={userRoles} />
                 <PerformanceFootnote additionalText="Category returns are average returns for all funds in category." />
             </div>
             <div className="hidden md:block md:mt-6">
                 <h2> Annual Returns</h2>
-                <TableCategories data={catAnnual} columnType="annual"/>
+                <TableCategories data={catAnnual} columnType="annual" userRoles={userRoles} />
             </div>
         </div>
     );

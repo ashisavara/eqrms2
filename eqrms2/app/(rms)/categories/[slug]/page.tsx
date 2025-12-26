@@ -19,11 +19,6 @@ interface PageProps {
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
   const userRoles = await getUserRoles();
-  
-  // Check permission first
-  if (!can(userRoles, 'rms', 'view_detailed')) {
-    redirect('/uservalidation'); // or wherever you want to send them
-  }
 
   const [category, funds] = await Promise.all([
     supabaseSingleRead<Category>({
@@ -70,16 +65,16 @@ export default async function CategoryPage({ params }: PageProps) {
         </div>
             <div className="text-sm mt-8">
                 <h2>Trailing Returns</h2>
-                <TableCategories data={[category]} columnType="summary"/>
+                <TableCategories data={[category]} columnType="summary" userRoles={userRoles} />
                 <PerformanceFootnote additionalText="Category returns are average returns for all funds in category." />
             </div>
             <div className="text-sm mt-8 hidden md:block">  
                 <h2>Annual Returns</h2>
-                <TableCategories data={[category]} columnType="annual"/>
+                <TableCategories data={[category]} columnType="annual" userRoles={userRoles} />
             </div>
             <div className="text-sm mt-10">
                 <h2>Recommended Funds</h2>
-                <TableFundBasic data={funds}/>
+                <TableFundBasic data={funds} userRoles={userRoles} />
                 <PerformanceFootnote additionalText="| In recommended funds on the category page, we only show our 4 & 5-star rated funds, to focus on top recommendations & avoid overwhelming investors with too many options. You can use the category filter on the funds page in RMS, to see a larger list including 3-star rated funds. For 2-star and below funds, please connect with your IME Dedicated Private Banker." />
             </div>
     </div>

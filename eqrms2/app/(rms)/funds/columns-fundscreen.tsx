@@ -5,8 +5,16 @@ import { ComGrowthNumberRating, RatingDisplay, RatingDisplayWithStar } from "@/c
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import SimpleTable from "@/components/tables/singleRowTable";
+import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
+import { can } from "@/lib/permissions";
 
-export const columns: ColumnDef<RmsFundsScreener>[] = [
+// Create columns with permission-based rendering
+// Permission is checked ONCE when columns are created, not per cell
+export const createColumns = (userRoles: string[] | null): ColumnDef<RmsFundsScreener>[] => {
+  // ✅ Check permission ONCE at the top
+  const hasDetailedAccess = can(userRoles, 'rms', 'view_detailed');
+
+  return [
   {
     id: "is_favourite",
     header: "♥",
@@ -49,7 +57,12 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
             </div>
             <SimpleTable 
               headers={[{ label: "Rating" }, { label: "1yr" }, { label: "3yr" }, { label: "5yr" }]}
-              body={[{ value: <RatingDisplay rating={row.original.fund_rating} /> }, { value: <ComGrowthNumberRating rating={row.original.one_yr as number} /> }, { value: <ComGrowthNumberRating rating={row.original.three_yr as number} /> }, { value: <ComGrowthNumberRating rating={row.original.five_yr as number} /> }]}
+              body={[
+                { value: hasDetailedAccess ? <RatingDisplay rating={row.original.fund_rating} /> : <UpgradeIcon clickThroughPath="create-account" /> }, 
+                { value: <ComGrowthNumberRating rating={row.original.one_yr as number} /> }, 
+                { value: <ComGrowthNumberRating rating={row.original.three_yr as number} /> }, 
+                { value: <ComGrowthNumberRating rating={row.original.five_yr as number} /> }
+              ]}
             />
           </div>
         );
@@ -70,13 +83,19 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
     header: "Fund",
     filterFn: "arrIncludesSome",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplayWithStar rating={getValue() as number} />
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplayWithStar rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" />
   },
   {
     accessorKey: "fund_performance_rating",
     header: "Perf",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplay rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" />
   },
   {
     accessorKey: "amc_name",
@@ -88,7 +107,10 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
     accessorKey: "amc_rating",
     header: "AMC",
     size: 100,
-    cell: ({ getValue }) => <RatingDisplay rating={getValue() as number} />
+    cell: ({ getValue }) => 
+      hasDetailedAccess 
+        ? <RatingDisplay rating={getValue() as number} />
+        : <UpgradeIcon clickThroughPath="create-account" />
   },
   {
     accessorKey: "asset_class_name",
@@ -153,4 +175,5 @@ export const columns: ColumnDef<RmsFundsScreener>[] = [
     size: 100,
     cell: ({ getValue }) => <ComGrowthNumberRating rating={getValue() as number} />
   },
-];
+  ];
+};
