@@ -181,45 +181,66 @@ export default async function FundPage({ params }: PageProps) {
           <TabsContent value="rating_rationale">
             <div className="text-sm">
                   <h2 className="ime-basic-h3"> Rationale behind our fund rating</h2>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.investment_view}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund's Strategy</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_view}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Performance</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.performance_view}{fund.additional_performance_view}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.oth_salient_points}</div>
-                  </div>
+                  {fund.investment_view && fund.investment_view.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund Recommendation</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.investment_view}</div>
+                    </div>
+                  )}
+                  {fund.strategy_view && fund.strategy_view.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Fund's Strategy</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.strategy_view}</div>
+                    </div>
+                  )}
+                  {((fund.performance_view && fund.performance_view.trim() !== "") || (fund.additional_performance_view && fund.additional_performance_view.trim() !== "")) && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Performance</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.performance_view}{fund.additional_performance_view}</div>
+                    </div>
+                  )}
+                  {fund.oth_salient_points && fund.oth_salient_points.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.oth_salient_points}</div>
+                    </div>
+                  )}
           </div>
           <div className="text-sm mt-6">
                   <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.amc_view}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Pedigree</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.amc_pedigree_desc}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Team</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.team_pedigree_desc}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.inv_phil_desc}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                      <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
-                      <div className="w-full md:flex-1 md:min-w-0">{fund.salient_points}</div>
-                  </div>
+                  {fund.amc_view && fund.amc_view.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.amc_view}</div>
+                    </div>
+                  )}
+                  {fund.amc_pedigree_desc && fund.amc_pedigree_desc.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Pedigree</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.amc_pedigree_desc}</div>
+                    </div>
+                  )}
+                  {fund.team_pedigree_desc && fund.team_pedigree_desc.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Team</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.team_pedigree_desc}</div>
+                    </div>
+                  )}
+                  {fund.inv_phil_desc && fund.inv_phil_desc.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.inv_phil_desc}</div>
+                    </div>
+                  )}
+                  {fund.salient_points && fund.salient_points.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                        <div className="w-full md:w-[200px] md:min-w-[200px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
+                        <div className="w-full md:flex-1 md:min-w-0">{fund.salient_points}</div>
+                    </div>
+                  )}
+                  {fund.fund_body && (<>
+                   <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_body }} /></>)}
+                   {fund.amc_body && <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_body }} />}
             </div>
           </TabsContent>
           <TabsContent value="investment_team">

@@ -210,6 +210,14 @@
     @apply text-base bg-gray-200 p-2 rounded-md mt-6;
   }
 
+  div.rms-body {
+    @apply text-sm mt-4;
+  }
+
+  div.rms-body h3 {
+    @apply text-lg font-bold mt-4 mb-2 border-b-2;
+  }
+
 
   /* Ensure all unordered and ordered lists have bullets/numbers and indentation */
   

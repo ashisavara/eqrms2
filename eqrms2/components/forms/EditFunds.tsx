@@ -37,6 +37,7 @@ function EditFundsForm({
     strategy_view: initialData.strategy_view ?? "",
     additional_performance_view: initialData.additional_performance_view ?? "",
     oth_salient_points: initialData.oth_salient_points ?? "",
+    fund_body: initialData.fund_body ?? "",
   };
 
   const { control, handleSubmit } = useForm<FundsUpdateValues>({
@@ -106,6 +107,7 @@ function EditFundsForm({
         <ResizableTextArea name="strategy_view" label="Strategy View" control={control} />
         <ResizableTextArea name="additional_performance_view" label="Additional Performance View" control={control} />
         <ResizableTextArea name="oth_salient_points" label="Other Salient Points" control={control} />
+        <ResizableTextArea name="fund_body" label="Fund Body" control={control} />
       </div>
       
       <Button type="submit" className="w-full">Update Fund</Button>
@@ -137,6 +139,7 @@ export function EditFundsButton({
     strategy_view: fundData.strategy_view ?? "",
     additional_performance_view: fundData.additional_performance_view ?? "",
     oth_salient_points: fundData.oth_salient_points ?? "",
+    fund_body: fundData.fund_body ?? "",
   };
 
   return (

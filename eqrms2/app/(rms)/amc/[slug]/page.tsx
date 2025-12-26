@@ -143,27 +143,38 @@ export default async function AmcPage({ params }: PageProps) {
               <TabsContent value="rating_rationale">
                 <div className="flex-col gap-y-5 text-sm">
                   <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
-                  <div className="flex flex-col md:flex-row mb-4">
-                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
-                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.amc_view}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
-                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.amc_pedigree_desc}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Team</span></div>
-                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.team_pedigree_desc}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
-                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.inv_phil_desc}</div>
-                  </div>
-                  <div className="flex flex-col md:flex-row mb-4">
-                    <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
-                    <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.salient_points}</div>
-                  </div>
+                  {AMC.amc_view && AMC.amc_view.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">View on AMC</span></div>
+                      <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.amc_view}</div>
+                    </div>
+                  )}
+                  {AMC.amc_pedigree_desc && AMC.amc_pedigree_desc.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Pedigree</span></div>
+                      <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.amc_pedigree_desc}</div>
+                    </div>
+                  )}
+                  {AMC.team_pedigree_desc && AMC.team_pedigree_desc.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC Team</span></div>
+                      <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.team_pedigree_desc}</div>
+                    </div>
+                  )}
+                  {AMC.inv_phil_desc && AMC.inv_phil_desc.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">AMC's Philosophy</span></div>
+                      <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.inv_phil_desc}</div>
+                    </div>
+                  )}
+                  {AMC.salient_points && AMC.salient_points.trim() !== "" && (
+                    <div className="flex flex-col md:flex-row mb-4">
+                      <div className="w-full md:w-[160px] md:min-w-[160px] md:flex-shrink-0"><span className="font-bold">Other Salient Points</span></div>
+                      <div className="w-full pr-4 md:flex-1 md:min-w-0">{AMC.salient_points}</div>
+                    </div>
+                  )}
                 </div>
+                {AMC.amc_body && <div className="rms-body" dangerouslySetInnerHTML={{ __html: AMC.amc_body }} />}
               </TabsContent>
               <TabsContent value="funds">
                   

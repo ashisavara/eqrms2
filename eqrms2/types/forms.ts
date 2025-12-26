@@ -62,6 +62,7 @@ export const fundsUpdateSchema = z.object({
   strategy_view: z.string().nullable(),
   additional_performance_view: z.string().nullable(),
   oth_salient_points: z.string().nullable(),
+  fund_body: z.string().nullable(),
 });
 
 export type FundsUpdateValues = z.infer<typeof fundsUpdateSchema>;
@@ -84,6 +85,7 @@ export const amcUpdateSchema = z.object({
   team_pedigree_desc: z.string().nullable(),
   inv_phil_desc: z.string().nullable(),
   salient_points: z.string().nullable(),
+  amc_body: z.string().nullable(),
 });
 
 export type AmcUpdateValues = z.infer<typeof amcUpdateSchema>;

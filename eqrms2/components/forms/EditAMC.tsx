@@ -43,7 +43,8 @@ function EditAmcForm({
     team_pedigree_desc: initialData.team_pedigree_desc ?? "",
     salient_points: initialData.salient_points ?? "",
     inv_phil_desc: initialData.inv_phil_desc ?? "",
-    inv_philosophy_followed: initialData.inv_philosophy_followed ?? ""
+    inv_philosophy_followed: initialData.inv_philosophy_followed ?? "",
+    amc_body: initialData.amc_body ?? ""
   };
 
   const { control, handleSubmit } = useForm<AmcUpdateValues>({
@@ -140,6 +141,7 @@ function EditAmcForm({
         <ResizableTextArea name="inv_phil_desc" label="Inv Philosophy Description" control={control} />
         <TextInput name="inv_phil_name" label="Inv Philosophy Name" control={control} />
         <ResizableTextArea name="salient_points" label="Salient Points" control={control} />
+        <ResizableTextArea name="amc_body" label="AMC Body" control={control} />
       </div>
       
       <Button type="submit" className="w-full">Update AMC</Button>
@@ -175,7 +177,8 @@ export function EditAMCButton({
     team_pedigree_desc: amcData.team_pedigree_desc ?? "",
     inv_phil_desc: amcData.inv_phil_desc ?? "",
     salient_points: amcData.salient_points ?? "",
-    inv_philosophy_followed: amcData.inv_philosophy_followed ?? ""
+    inv_philosophy_followed: amcData.inv_philosophy_followed ?? "",
+    amc_body: amcData.amc_body ?? ""
   };
 
   return (

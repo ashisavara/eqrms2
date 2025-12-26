@@ -52,6 +52,7 @@ export type RmsFundAmc = {
     inv_phil_name: string | null;
     core_amc_team: string | null;
     amc_view: string | null;
+    amc_body: string | null;
     amc_pedigree_desc: string | null;
     team_pedigree_desc: string | null;
     inv_phil_desc: string | null;
