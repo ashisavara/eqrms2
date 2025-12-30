@@ -7,7 +7,7 @@ import { Investments } from "@/types/investment-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 
-export default function TableInvChange({ data, userRoles }: { data: Investments[], userRoles: string[] }) {
+export default function TableInvChange({ data, userRoles }: { data: Investments[], userRoles: string }) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(createColumns(userRoles), 'fund_name');
   

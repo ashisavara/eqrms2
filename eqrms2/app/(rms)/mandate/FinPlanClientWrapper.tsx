@@ -18,7 +18,7 @@ interface FinPlanClientWrapperProps {
   finGoalsData: FinGoalsDetail[];
   investmentFinPlanData: Investments[];
   sipFinGoalsData: SipDetail[];
-  userRoles: string[];
+  userRoles: string;
 }
 
 export default function FinPlanClientWrapper({ 

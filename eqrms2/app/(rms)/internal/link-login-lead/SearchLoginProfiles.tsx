@@ -57,9 +57,9 @@ export function SearchLoginProfiles({ onResults }: SearchLoginProfilesProps) {
     onResults([]);
   };
 
-  const formatRoles = (roles: UserRole[]) => {
-    if (!roles || roles.length === 0) return 'No roles';
-    return roles.map(role => role.role_name).join(', ');
+  const formatRoles = (role: string | null) => {
+    if (!role || role === 'no_role') return 'No role';
+    return role;
   };
 
   return (
@@ -122,24 +122,22 @@ interface SearchResultsTableProps {
 }
 
 export function SearchResultsTable({ results, onRefresh }: SearchResultsTableProps) {
-  const [addRoleSheet, setAddRoleSheet] = useState<{
-    isOpen: boolean;
-    profile: LoginProfileWithRoles | null;
-  }>({ isOpen: false, profile: null });
-
-  const [deleteRoleSheet, setDeleteRoleSheet] = useState<{
-    isOpen: boolean;
-    profile: LoginProfileWithRoles | null;
-    role: UserRole | null;
-  }>({ isOpen: false, profile: null, role: null });
+  const [addRoleSheet, setAddRoleSheet] = useState<{ isOpen: boolean; profile: LoginProfileWithRoles | null }>({ isOpen: false, profile: null });
+  const [deleteRoleSheet, setDeleteRoleSheet] = useState<{ isOpen: boolean; profile: LoginProfileWithRoles | null; role: UserRole | null }>({ isOpen: false, profile: null, role: null });
 
   const handleAddRole = (profile: LoginProfileWithRoles) => {
     setAddRoleSheet({ isOpen: true, profile });
   };
 
-  const handleDeleteRole = (profile: LoginProfileWithRoles, role: UserRole) => {
-    setDeleteRoleSheet({ isOpen: true, profile, role });
+  const handleDeleteRole = (profile: LoginProfileWithRoles) => {
+    if (!profile.user_roles) return;
+    setDeleteRoleSheet({ 
+      isOpen: true, 
+      profile, 
+      role: { role_id: 0, role_name: profile.user_roles } 
+    });
   };
+
   if (results.length === 0) return null;
 
   return (
@@ -150,9 +148,10 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
+              {/* ... headers ... */}
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Phone Number</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Lead Name</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">User Roles</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">User Role</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Lead ID</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">CRM Lead Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">RM Name</th>
@@ -180,24 +179,28 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
                       <Plus className="h-3 w-3" />
                     </Button>
                     <div className="flex flex-wrap gap-1">
-                      {profile.user_roles.map((role, index) => (
-                        <div key={index} className="flex items-center gap-1">
+                      {profile.user_roles && profile.user_roles !== 'no_role' && (
+                        <div className="flex items-center gap-1">
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {role.role_name}
+                            {profile.user_roles}
                           </span>
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => handleDeleteRole(profile, role)}
+                            onClick={() => handleDeleteRole(profile)}
                             className="h-4 w-4 p-0 text-red-600 hover:text-red-800 hover:bg-red-100"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
-                      ))}
+                      )}
+                      {(!profile.user_roles || profile.user_roles === 'no_role') && (
+                        <span className="text-gray-400 italic text-xs">No role</span>
+                      )}
                     </div>
                   </div>
                 </td>
+                {/* ... other cells ... */}
                 <td className="px-4 py-3 text-sm text-gray-600">
                   {profile.lead_id || '-'}
                 </td>
@@ -247,7 +250,7 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
             phone_number: addRoleSheet.profile.phone_number,
             lead_name: addRoleSheet.profile.lead_name,
             created_at: '', // Not needed for this context
-            user_roles: []
+            user_roles: addRoleSheet.profile.user_roles || 'no_role'
           }}
           isOpen={addRoleSheet.isOpen}
           onClose={() => setAddRoleSheet({ isOpen: false, profile: null })}
@@ -274,8 +277,8 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
     </div>
   );
 
-  function formatRoles(roles: UserRole[]) {
-    if (!roles || roles.length === 0) return 'No roles';
-    return roles.map(role => role.role_name).join(', ');
+  function formatRoles(role: string | null) {
+    if (!role || role === 'no_role') return 'No role';
+    return role;
   }
 }

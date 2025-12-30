@@ -6,7 +6,7 @@ import UserValidationClient from './UserValidationClient';
 
 export default async function UserValidation() {
   const userRoles = await getUserRoles();
-  const isTrialEnded = userRoles.includes('trial_ended');
+  const isTrialEnded = userRoles === 'trial_ended';
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">

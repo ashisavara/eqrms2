@@ -18,7 +18,7 @@ type ColumnType = "summary" | "annual";
 interface TableCategoryProps {
   data: Category[];
   columnType?: ColumnType; // Now supports multiple types
-  userRoles?: string[] | null;
+  userRoles?: string | null;
 }
 
 export function TableCategories({ data, columnType = "summary", userRoles = null }: TableCategoryProps) {

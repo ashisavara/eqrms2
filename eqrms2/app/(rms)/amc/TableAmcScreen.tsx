@@ -11,7 +11,7 @@ import { can } from "@/lib/permissions";
 
 interface TableAmcScreenProps {
   data: AMC[];
-  userRoles?: string[] | null;
+  userRoles?: string | null;
 }
 
 export function TableAmcScreen({ data, userRoles = null }: TableAmcScreenProps) {

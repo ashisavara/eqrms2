@@ -8,7 +8,7 @@ import { DeleteInvestmentButton } from "@/components/forms/DeleteInvestmentButto
 import SimpleTable from "@/components/tables/singleRowTable";
 import { can } from '@/lib/permissions';
 
-export const createColumns = (userRoles: string[]): ColumnDef<Investments>[] => {
+export const createColumns = (userRoles: string): ColumnDef<Investments>[] => {
   const canEditInvestments = can(userRoles, 'investments', 'add_edit_held_away');
 
   return [
@@ -107,4 +107,4 @@ export const createColumns = (userRoles: string[]): ColumnDef<Investments>[] => 
 };
 
 // Export the default columns for backward compatibility (without permissions)
-export const columns = createColumns([]);
+export const columns = createColumns('guest');

@@ -55,9 +55,9 @@ async function ProfilesWithoutRolesData() {
       filters: []
     });
 
-    // Filter for profiles with empty user_roles arrays
+    // Filter for profiles without roles or with 'no_role'
     const profilesWithoutRoles = allProfiles.filter(profile => 
-      !profile.user_roles || profile.user_roles.length === 0
+      !profile.user_roles || profile.user_roles === 'no_role'
     );
 
     return <ProfilesWithoutRolesTableClient data={profilesWithoutRoles || []} />;

@@ -10,7 +10,7 @@ import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 import { useMemo } from "react";
 
-export default function TableFundScreen({ data, userRoles }: { data: RmsFundsScreener[]; userRoles: string[] | null }) {
+export default function TableFundScreen({ data, userRoles }: { data: RmsFundsScreener[]; userRoles: string | null }) {
   // ✅ Create columns with permission check (runs once per render)
   const columns = useMemo(() => createColumns(userRoles), [userRoles]);
 

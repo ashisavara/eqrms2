@@ -9,7 +9,7 @@ import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
 import { useMemo } from "react";
 import { can } from "@/lib/permissions";
 
-export default function TableFundScreen({ data, userRoles }: { data: RmsFundsScreener[]; userRoles: string[] | null }) {
+export default function TableFundScreen({ data, userRoles }: { data: RmsFundsScreener[]; userRoles: string | null }) {
   // ✅ Check permission once
   const hasDetailedAccess = can(userRoles, 'rms', 'view_detailed');
   

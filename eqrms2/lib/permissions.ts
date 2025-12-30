@@ -7,7 +7,7 @@ import { getUserRoles } from './auth/getUserRoles';
 export const PERMISSION_GROUPS = {
   rms: {
     view_basic: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'guest'],
-    view_detailed: ['client', 'lead', 'guest'],
+    view_detailed: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'lead', 'guest'],
     view_due_diligence: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
     view_all_funds: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
     view_changelog: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
@@ -68,18 +68,18 @@ export const PERMISSION_GROUPS = {
 
 /**
  * Check if user has permission for a specific action on a business area
- * Now supports guest users (empty roles array)
+ * Strict single role check
  */
-export function can(userRoles: string[] | null, group: keyof typeof PERMISSION_GROUPS, action: string): boolean {
+export function can(userRoles: string | null, group: keyof typeof PERMISSION_GROUPS, action: string): boolean {
   const groupPermissions = PERMISSION_GROUPS[group];
   if (!groupPermissions) return false;
   
   const allowedRoles = (groupPermissions[action as keyof typeof groupPermissions] as string[]) || [];
   
-  // Handle null/undefined userRoles by treating as guest
-  const roles = userRoles || ['guest'];
+  // Strict string check
+  const role = userRoles || 'guest';
   
-  return roles.some(role => allowedRoles.includes(role));
+  return allowedRoles.includes(role);
 }
 
 /**
@@ -92,11 +92,11 @@ export async function canWithAuth(group: keyof typeof PERMISSION_GROUPS, action:
 }
 
 /**
- * Check if user is authenticated (has any roles)
+ * Check if user is authenticated (has a valid role)
  */
 export async function isAuthenticated(): Promise<boolean> {
   const userRoles = await getUserRoles();
-  return userRoles.length > 0;
+  return userRoles !== 'guest' && userRoles !== 'no_role';
 }
 
 /**
@@ -105,11 +105,11 @@ export async function isAuthenticated(): Promise<boolean> {
 export async function getUserStatus() {
   const userRoles = await getUserRoles();
   return {
-    isAuthenticated: userRoles.length > 0,
-    isGuest: userRoles.length === 0,
-    roles: userRoles,
-    isAdmin: userRoles.includes('admin') || userRoles.includes('super_admin'),
-    isSuperAdmin: userRoles.includes('super_admin')
+    isAuthenticated: userRoles !== 'guest' && userRoles !== 'no_role',
+    isGuest: userRoles === 'guest' || userRoles === 'no_role',
+    role: userRoles,
+    isAdmin: userRoles === 'admin' || userRoles === 'super_admin',
+    isSuperAdmin: userRoles === 'super_admin'
   };
 }
 

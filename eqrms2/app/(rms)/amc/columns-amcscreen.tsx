@@ -9,7 +9,7 @@ import { can } from "@/lib/permissions";
 
 // Create columns with permission-based rendering
 // Permission is checked ONCE when columns are created, not per cell
-export const createColumns = (userRoles: string[] | null): ColumnDef<AMC>[] => {
+export const createColumns = (userRoles: string | null): ColumnDef<AMC>[] => {
   // ✅ Check permission ONCE at the top
   const hasDetailedAccess = can(userRoles, 'rms', 'view_detailed');
 

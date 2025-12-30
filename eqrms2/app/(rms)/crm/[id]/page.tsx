@@ -211,8 +211,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                                 <span>
                                     {loginProfile.phone_number} | <span className="font-bold">Role:</span>    
                                     <span className="text-green-700 font-semibold">
-                                        {loginProfile.user_roles && loginProfile.user_roles.length > 0 
-                                            ? loginProfile.user_roles.map(role => role.role_name).join(', ')
+                                        {loginProfile.user_roles && loginProfile.user_roles !== 'no_role'
+                                            ? loginProfile.user_roles
                                             : 'No roles'
                                         }
                                     </span>

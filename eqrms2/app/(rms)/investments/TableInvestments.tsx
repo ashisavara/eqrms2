@@ -33,7 +33,7 @@ interface TableInvestmentsProps {
   sipData?: SipDetail[];
   stpData?: StpDetails[];
   investorOptions: { value: string; label: string }[];
-  userRoles: string[];
+  userRoles: string;
   portfolioReallocationThoughts?: string;
   groupId: number | null;
   favFunds?: RmsFundsScreener[];

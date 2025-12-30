@@ -66,7 +66,7 @@ export async function ProgressiveContent({
   const userRoles = await getUserRoles();
   
   // Guest user (not authenticated)
-  if (userRoles.length === 0) {
+  if (userRoles === 'guest' || userRoles === 'no_role') {
     return guestFallback || <DefaultLoginPrompt />;
   }
   
@@ -196,7 +196,7 @@ export function LoginPrompt({ message = "Login to see more details" }: { message
  *   {({ userRoles, isAuthenticated, isGuest }) => (
  *     <div>
  *       {isGuest && <p>Welcome! Create an account to unlock more features.</p>}
- *       {isAuthenticated && <p>Welcome back, {userRoles.join(', ')} user!</p>}
+ *       {isAuthenticated && <p>Welcome back, {userRoles} user!</p>}
  *     </div>
  *   )}
  * </AuthWrapper>
@@ -255,15 +255,16 @@ export function LoginPrompt({ message = "Login to see more details" }: { message
  * </AuthWrapper>
  */
 export async function AuthWrapper({ children }: { children: (props: {
-  userRoles: string[];
+  userRoles: string;
   isAuthenticated: boolean;
   isGuest: boolean;
 }) => React.ReactNode }) {
   const userRoles = await getUserRoles();
+  const isGuest = userRoles === 'guest' || userRoles === 'no_role';
   
   return children({
     userRoles,
-    isAuthenticated: userRoles.length > 0,
-    isGuest: userRoles.length === 0
+    isAuthenticated: !isGuest,
+    isGuest
   });
 } 

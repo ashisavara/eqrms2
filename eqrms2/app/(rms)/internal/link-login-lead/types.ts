@@ -17,7 +17,7 @@ export interface LoginProfileWithoutRoles {
   lead_id?: number | null;
   rm_name?: string | null;
   created_at: string;
-  user_roles: any[]; // Empty array when no roles
+  user_roles: string; // Will be actual role name or 'no_role'
 }
 
 export interface UserRole {
@@ -29,7 +29,7 @@ export interface LoginProfileWithRoles {
   uuid: string;
   phone_number: string;
   lead_name?: string | null;
-  user_roles: UserRole[]; // Array of role objects
+  user_roles: string; // Will be actual role name or 'no_role'
   lead_id?: number | null;
   crm_lead_name?: string | null;
   group_id?: number | null;
