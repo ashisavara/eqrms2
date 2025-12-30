@@ -3,12 +3,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, X, Plus, Trash2 } from 'lucide-react';
-import { LoginProfileWithRoles, SearchLoginProfilesRequest, UserRole } from './types';
-import { AddRoleSheet } from './AddRoleSheet';
-import { DeleteRoleConfirmation } from './DeleteRoleConfirmation';
+import { Search, X } from 'lucide-react';
+import { LoginProfileWithRoles, SearchLoginProfilesRequest } from './types';
 import { UpdateGroupNameButton } from '@/components/forms/UpdateGroupName';
 import { LinkLoginProfileGroupButton } from '@/components/forms/LinkLoginProfileGroup';
+import { EditLoginRoleButton } from '@/components/forms/EditLoginRole';
 
 interface SearchLoginProfilesProps {
   onResults: (results: LoginProfileWithRoles[]) => void;
@@ -57,10 +56,6 @@ export function SearchLoginProfiles({ onResults }: SearchLoginProfilesProps) {
     onResults([]);
   };
 
-  const formatRoles = (role: string | null) => {
-    if (!role || role === 'no_role') return 'No role';
-    return role;
-  };
 
   return (
     <div className="space-y-4">
@@ -122,22 +117,6 @@ interface SearchResultsTableProps {
 }
 
 export function SearchResultsTable({ results, onRefresh }: SearchResultsTableProps) {
-  const [addRoleSheet, setAddRoleSheet] = useState<{ isOpen: boolean; profile: LoginProfileWithRoles | null }>({ isOpen: false, profile: null });
-  const [deleteRoleSheet, setDeleteRoleSheet] = useState<{ isOpen: boolean; profile: LoginProfileWithRoles | null; role: UserRole | null }>({ isOpen: false, profile: null, role: null });
-
-  const handleAddRole = (profile: LoginProfileWithRoles) => {
-    setAddRoleSheet({ isOpen: true, profile });
-  };
-
-  const handleDeleteRole = (profile: LoginProfileWithRoles) => {
-    if (!profile.user_roles) return;
-    setDeleteRoleSheet({ 
-      isOpen: true, 
-      profile, 
-      role: { role_id: 0, role_name: profile.user_roles } 
-    });
-  };
-
   if (results.length === 0) return null;
 
   return (
@@ -170,34 +149,17 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
                 </td>
                 <td className="px-4 py-3 text-sm">
                   <div className="flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleAddRole(profile)}
-                      className="h-6 w-6 p-0"
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                    <div className="flex flex-wrap gap-1">
-                      {profile.user_roles && profile.user_roles !== 'no_role' && (
-                        <div className="flex items-center gap-1">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {profile.user_roles}
-                          </span>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleDeleteRole(profile)}
-                            className="h-4 w-4 p-0 text-red-600 hover:text-red-800 hover:bg-red-100"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      )}
-                      {(!profile.user_roles || profile.user_roles === 'no_role') && (
-                        <span className="text-gray-400 italic text-xs">No role</span>
-                      )}
-                    </div>
+                    {profile.user_role_name ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {profile.user_role_name}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400 italic text-xs">No role</span>
+                    )}
+                    <EditLoginRoleButton 
+                      uuid={profile.uuid} 
+                      initialRoleId={profile.user_role_name_id}
+                    />
                   </div>
                 </td>
                 {/* ... other cells ... */}
@@ -241,44 +203,6 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
           </tbody>
         </table>
       </div>
-
-      {/* Add Role Sheet */}
-      {addRoleSheet.profile && (
-        <AddRoleSheet
-          profile={{
-            uuid: addRoleSheet.profile.uuid,
-            phone_number: addRoleSheet.profile.phone_number,
-            lead_name: addRoleSheet.profile.lead_name,
-            created_at: '', // Not needed for this context
-            user_roles: addRoleSheet.profile.user_roles || 'no_role'
-          }}
-          isOpen={addRoleSheet.isOpen}
-          onClose={() => setAddRoleSheet({ isOpen: false, profile: null })}
-          onSuccess={() => {
-            setAddRoleSheet({ isOpen: false, profile: null });
-            onRefresh?.();
-          }}
-        />
-      )}
-
-      {/* Delete Role Confirmation Sheet */}
-      {deleteRoleSheet.profile && deleteRoleSheet.role && (
-        <DeleteRoleConfirmation
-          profileUuid={deleteRoleSheet.profile.uuid}
-          role={deleteRoleSheet.role}
-          isOpen={deleteRoleSheet.isOpen}
-          onClose={() => setDeleteRoleSheet({ isOpen: false, profile: null, role: null })}
-          onSuccess={() => {
-            setDeleteRoleSheet({ isOpen: false, profile: null, role: null });
-            onRefresh?.();
-          }}
-        />
-      )}
     </div>
   );
-
-  function formatRoles(role: string | null) {
-    if (!role || role === 'no_role') return 'No role';
-    return role;
-  }
 }

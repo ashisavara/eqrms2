@@ -8,6 +8,7 @@ export interface LoginProfile {
   lead_id?: number | null;
   rm_name?: string | null;
   affiliate_lead_id?: number | null;
+  user_role_name?: string | null;
 }
 
 export interface LoginProfileWithoutRoles {
@@ -29,7 +30,8 @@ export interface LoginProfileWithRoles {
   uuid: string;
   phone_number: string;
   lead_name?: string | null;
-  user_roles: string; // Will be actual role name or 'no_role'
+  user_role_name?: string | null;
+  user_role_name_id?: number | null;
   lead_id?: number | null;
   crm_lead_name?: string | null;
   group_id?: number | null;

@@ -118,7 +118,7 @@ export function SearchResultsSheet({
           <div className="text-sm text-gray-600">
             <p>Searching for matches with:</p>
             <p><strong>Phone:</strong> {loginProfile.phone_number}</p>
-            <p><strong>Name:</strong> {loginProfile.lead_name}</p>
+            <p><strong>Name:</strong> {loginProfile.lead_name} </p>
           </div>
 
           {confirmLink.show && confirmLink.selectedLead && (
