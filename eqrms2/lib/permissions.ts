@@ -6,8 +6,8 @@ import { getUserRoles } from './auth/getUserRoles';
  */
 export const PERMISSION_GROUPS = {
   rms: {
-    view_basic: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'trial', 'guest'],
-    view_detailed: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'trial', 'guest'],
+    view_basic: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'trial'],
+    view_detailed: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'trial'],
     view_due_diligence: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
     view_all_funds: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
     view_changelog: ['admin', 'super_admin', 'research', 'inv_desk', 'rm'],
@@ -15,7 +15,7 @@ export const PERMISSION_GROUPS = {
   },
 
   investments: {
-    view_investments: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'trial', 'guest'],
+    view_investments: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'trial'],
     add_edit_held_away: ['admin', 'super_admin', 'inv_desk', 'rm'],
     add_edit_financial_goals: ['admin', 'super_admin', 'inv_desk', 'rm'],
     add_edit_goal_inv_linking: ['admin', 'super_admin', 'inv_desk', 'rm'],
@@ -23,7 +23,7 @@ export const PERMISSION_GROUPS = {
   },
 
   mandate: {
-    view_mandate: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'trial', 'guest'],
+    view_mandate: ['admin', 'super_admin', 'inv_desk', 'rm', 'client', 'trial'],
     edit_mandate: ['admin', 'super_admin', 'inv_desk', 'rm'],
     favouriting: ['admin', 'super_admin', 'inv_desk', 'rm']
   },
@@ -60,7 +60,7 @@ export const PERMISSION_GROUPS = {
   },
   
   blogs: {
-    view: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'trial', 'guest'],
+    view: ['admin', 'super_admin', 'research', 'inv_desk', 'rm', 'client', 'trial'],
     edit: ['admin', 'super_admin', 'inv_desk'],
   }
 };

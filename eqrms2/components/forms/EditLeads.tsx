@@ -56,6 +56,7 @@ function EditLeadsForm({
     lead_summary: initialData.lead_summary ?? "",
     lead_background: initialData.lead_background ?? "",
     primary_rm_uuid: initialData.primary_rm_uuid ?? "",
+    service_rm_uuid: initialData.service_rm_uuid ?? "",
     subs_email: initialData.subs_email ?? false,
     subs_whatsapp: initialData.subs_whatsapp ?? false,
     subs_imecapital: initialData.subs_imecapital ?? false,
@@ -152,6 +153,7 @@ function EditLeadsForm({
         lead_summary: data.lead_summary,
         lead_background: data.lead_background,
         primary_rm_uuid: data.primary_rm_uuid || null, // Convert empty string to null for UUID field
+        service_rm_uuid: data.service_rm_uuid || null,
         phone_validated: data.phone_validated,
         email_validated: data.email_validated,
         subs_email: data.subs_email,
@@ -215,6 +217,10 @@ function EditLeadsForm({
             toggleGroupClassName="gap-2 flex-wrap"
             itemClassName="ime-choice-chips"
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SelectInput name="primary_rm_uuid" label="Primary Responsibility" control={control} options={primaryRmOptions} />
+            <SelectInput name="service_rm_uuid" label="Secondary Responsibility" control={control} options={primaryRmOptions} />
+          </div>
       </div>
       {/* Categorization Fields with Options */}
       
@@ -289,6 +295,7 @@ export function EditLeadsButton({
     lead_summary: leadData.lead_summary ?? "",
     lead_background: leadData.lead_background ?? "",
     primary_rm_uuid: leadData.primary_rm_uuid ?? "",
+    service_rm_uuid: leadData.service_rm_uuid ?? "",
     subs_email: leadData.subs_email ?? false,
     subs_whatsapp: leadData.subs_whatsapp ?? false,
     subs_imecapital: leadData.subs_imecapital ?? false,

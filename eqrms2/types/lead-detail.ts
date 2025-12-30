@@ -31,6 +31,9 @@ export type LeadsTagging = {
     primary_rm?: string;
     created_by?: string;
     rm_name: string;
+    service_rm_name?: string;
+    user_role_name?: string;
+    expires_on?: Date;
     group_name: string;
     subs_email?: boolean;
     subs_whatsapp?: boolean;
@@ -40,4 +43,5 @@ export type LeadsTagging = {
     custom_tag?: string;
     referral_partner?: string;
     phone_e164?: string;
+    login_phone_number?: string;
 };

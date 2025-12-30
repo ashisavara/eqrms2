@@ -146,11 +146,17 @@ export const MASTER_OPTIONS = {
     { value: "d096fae3-6fd4-4294-8f3f-f1d13f7720e6", label: "Paresh Vaish" },
     { value: "53ed22d1-c0fe-4978-9df4-72f3a934cc0a", label: "Ankita Singh" },
     { value: "bceeb088-265d-434c-870a-c2752e60ef47", label: "Ashi Anand" },
-    { value: "8b4d186e-6ab3-43ae-b719-034f6ea50f82", label: "Manisha Ravindran" },
-    { value: "bccf827f-03c9-4472-94cb-bc4ee094463f", label: "Shagun Luthra" },
     { value: "44db20a2-71de-41ae-ac72-36612d96235f", label: "Aravind Kodipaka" },
     { value: "ad0a0c17-21f4-4d2f-b87d-b9534c22a205", label: "Chittaranjan" },
+    { value: "8b4d186e-6ab3-43ae-b719-034f6ea50f82", label: "Manisha Ravindran" },
+    { value: "bccf827f-03c9-4472-94cb-bc4ee094463f", label: "Shagun Luthra" },
+    { value: "7b679d91-fea4-4dca-b6b6-ba513529af07", label: "Ananya Bhadauria" },
   ] as const,
+
+  primaryResonsibility: [
+    "Pvt Banker",
+    "Service RM",
+  ],
   
   issueResponsibility: [
     "Hritwik",
@@ -356,7 +362,7 @@ export const MASTER_OPTIONS = {
   // User Role Options
   userRoles: [
     { id: 6, name: "client" },
-    { id: 7, name: "lead" },
+    { id: 7, name: "trial" },
     { id: 8, name: "trial_ended" },
     { id: 9, name: "ban" }, 
     { id: 12, name: "not_validated" }

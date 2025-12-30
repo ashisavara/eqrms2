@@ -21,14 +21,13 @@ import { AddLeadRole } from "@/components/forms/AddLeadRole";
 import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 import { AclLeadsDetail } from "@/types/acl-leads-detail";
 import { AclGroupDetail } from "@/types/acl-group-detail";
-import { AddAclLeadButton } from "@/components/forms/AddAclLeads";
 import { LoginProfileWithRoles } from "@/app/(rms)/internal/link-login-lead/types";
 import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions, rmOptions, aclLead, aclGroup, loginProfile] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -80,30 +79,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         }),
         fetchOptions<string,string>("lead_tag_custom_tags","id","custom_tag"),
         fetchOptions<string,string>("lead_roles","lead_role_id","lead_role"),
-        fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign"),
-        fetchOptions<string, string>("view_referral_partner","lead_name","lead_name"),
-        fetchOptions<string, string>("ime_emp","auth_id", "name"),
-        supabaseListRead<AclLeadsDetail>({
-            table: "view_acl_leads",
-            columns: "*",  
-            filters: [
-                (query) => query.eq('lead_id', id)
-            ]
-        }),
-        supabaseListRead<AclGroupDetail>({
-            table:"view_acl_group",
-            columns: "*",
-            filters: [
-                (query) => query.eq('lead_id', id)
-            ]
-        }),
-        supabaseSingleRead<LoginProfileWithRoles>({
-            table: "v_login_profile_with_roles",
-            columns: "phone_number, user_roles",
-            filters: [
-                (query) => query.eq('lead_id', id)
-            ]
-        })
+        fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign")
     ]);
 
     if (!lead) {
@@ -180,9 +156,9 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             {lead.linkedin_url ? <a href={lead.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 hover:font-bold hover:underline">Linkedin</a> : ""}
                         </p>
                         <p className="text-sm">
-                            <span className="font-bold">ACCESS:</span> {aclLead.map((acll) => acll.name).join(", ")} 
+                            <span className="font-bold">Primary RM:</span> {lead.rm_name} | 
+                            <span className="font-bold">Secondary RM:</span> {lead.service_rm_name} 
                         </p>
-                        <AddAclLeadButton leadId={lead.lead_id} rmOptions={rmOptions} />
                     </div>
                     <div className="text-sm flex flex-col">
                         <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
@@ -206,20 +182,8 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             {lead.referral_partner ? <span className="font-bold">Referral Partner: {lead.referral_partner} </span> :""}
                         </p>
                         <p>
-                            <span className="font-bold">Login Profile:</span> 
-                            {loginProfile ? (
-                                <span>
-                                    {loginProfile.phone_number} | <span className="font-bold">Role:</span>    
-                                    <span className="text-green-700 font-semibold">
-                                        {loginProfile.user_roles && loginProfile.user_roles !== 'no_role'
-                                            ? loginProfile.user_roles
-                                            : 'No roles'
-                                        }
-                                    </span>
-                                </span>
-                            ) : (
-                                <span className="text-red-600">No Linked Login</span>
-                            )}
+                            <span className="font-bold">Login Profile:</span><span> {lead.login_phone_number} | {lead.user_role_name} |  {formatDate(lead.expires_on)} </span> 
+                            
                             
                         </p>
                         <p className="text-sm italic">{lead.lead_summary}</p>
