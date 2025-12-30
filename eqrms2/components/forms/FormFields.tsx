@@ -300,7 +300,7 @@ export function MultiToggleGroupInput({
                 type="multiple"
                 value={field.value || []}
                 onValueChange={(values) => field.onChange(values)}
-                className={cn(toggleGroupClassName || "justify-start", hasError && "outline outline-1 outline-red-500 rounded-md")}
+                className={cn(toggleGroupClassName || "justify-start gap-2 flex-wrap", hasError && "outline outline-1 outline-red-500 rounded-md")}
                 aria-invalid={hasError}
                 aria-describedby={hasError ? errId : undefined}
               >
@@ -718,10 +718,13 @@ export function SwitchInput({
                   disabled={disabled}
                   aria-invalid={hasError}
                   aria-describedby={hasError ? errId : undefined}
-                  className={cn(hasError && "ring-2 ring-red-500")}
+                  className={cn(
+                    "data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-600",
+                    hasError && "ring-2 ring-red-500"
+                  )}
                 />
                 <div className="flex flex-col">
-                  <Label htmlFor={name} className="font-bold">{label}</Label>
+                  <Label htmlFor={name} className="font-normal">{label}</Label>
                   {helperText && (
                     <p className="helper-text">{helperText}</p>
                   )}

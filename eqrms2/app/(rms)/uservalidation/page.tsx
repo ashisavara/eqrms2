@@ -1,39 +1,102 @@
-import { Button } from '@/components/ui/button';
+import { EditLoginProfile } from '@/components/forms/EditLoginProfile';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MessageCircle, Shield } from 'lucide-react';
-import { getUserRoles } from '@/lib/auth/getUserRoles';
-import UserValidationClient from './UserValidationClient';
+import { getCurrentUser, supabaseSingleRead } from '@/lib/supabase/serverQueryHelper';
+import { EditLoginProfileValues } from '@/types/forms';
+import { redirect } from 'next/navigation';
+import { WhatsAppButton } from './WhatsAppButton';
 
 export default async function UserValidation() {
-  const userRoles = await getUserRoles();
-  const isTrialEnded = userRoles === 'trial_ended';
+  // Get current user UUID
+  const currentUser = await getCurrentUser();
+  const uuid = currentUser?.id;
+
+  if (!uuid) {
+    redirect('/investments');
+  }
+
+  // Fetch login_profile data including user_role_name_id
+  const loginProfile = await supabaseSingleRead<{
+    first_name?: string | null;
+    last_name?: string | null;
+    email?: string | null;
+    client_confirmation?: boolean | null;
+    finacial_pdts_invested_in?: string[] | null;
+    existing_advisor?: boolean | null;
+    existing_financial_plan?: boolean | null;
+    existing_inv_mandate?: boolean | null;
+    net_worth?: string | null;
+    hear_ime_capital?: string | null;
+    user_role_name_id?: number | null;
+  }>({
+    table: 'login_profile',
+    columns: '*',
+    filters: [
+      (query) => query.eq('uuid', uuid)
+    ]
+  });
+
+  if (!loginProfile) {
+    redirect('/app');
+  }
+
+  const userRoleNameId = loginProfile.user_role_name_id;
+
+  // Handle different user_role_name_id cases
+  if (userRoleNameId === 9) {
+    // Show validation failed message with WhatsApp button
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="container mx-auto max-w-md">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center text-red-600">Account Validation Failed</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-center text-gray-600">
+                Your account could not be successfully validated.
+              </p>
+              <WhatsAppButton />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (userRoleNameId !== 12) {
+    // Redirect to investments for any other role
+    redirect('/investments');
+  }
+
+  // user_role_name_id = 12: Show the form
+  const initialData: EditLoginProfileValues = {
+    first_name: loginProfile.first_name || '',
+    last_name: loginProfile.last_name || '',
+    email: loginProfile.email || '',
+    client_confirmation: loginProfile.client_confirmation || false,
+    finacial_pdts_invested_in: loginProfile.finacial_pdts_invested_in || [],
+    existing_advisor: loginProfile.existing_advisor || false,
+    existing_financial_plan: loginProfile.existing_financial_plan || false,
+    existing_inv_mandate: loginProfile.existing_inv_mandate || false,
+    net_worth: loginProfile.net_worth || '',
+    hear_ime_capital: loginProfile.hear_ime_capital || '',
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <Card className="max-w-md w-full">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-100">
-            <Shield className="h-8 w-8 text-yellow-600" />
-          </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">
-            {isTrialEnded ? 'Trial Ended - Request Extension' : 'Account Validation Required'}
-          </CardTitle>
-        </CardHeader>
-        
-        <CardContent className="space-y-6">
-          <div className="text-center">
-            <p className="text-gray-600 mb-4">
-              {isTrialEnded 
-                ? 'Your trial period has ended. Please request an extension to continue accessing the IME RMS.' 
-                : 'Your account is not yet validated. You need to be validated to access key features of the IME RMS.'}
-            </p>
-            
-          </div>
-          
-          <UserValidationClient isTrialEnded={isTrialEnded} />
-          
-        </CardContent>
-      </Card>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto max-w-4xl py-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="bg-gray-200 rounded-md my-0 p-2 text-base font-bold text-center text-gray-600">Complete Profile to Activate Account</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EditLoginProfile 
+              initialData={initialData}
+              uuid={uuid}
+            />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

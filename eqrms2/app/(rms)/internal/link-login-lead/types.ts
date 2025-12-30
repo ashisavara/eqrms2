@@ -32,6 +32,7 @@ export interface LoginProfileWithRoles {
   lead_name?: string | null;
   user_role_name?: string | null;
   user_role_name_id?: number | null;
+  expires_on?: string | Date | null;
   lead_id?: number | null;
   crm_lead_name?: string | null;
   group_id?: number | null;

@@ -159,6 +159,7 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
                     <EditLoginRoleButton 
                       uuid={profile.uuid} 
                       initialRoleId={profile.user_role_name_id}
+                      initialExpiresOn={profile.expires_on}
                     />
                   </div>
                 </td>

@@ -399,6 +399,12 @@ export const MASTER_OPTIONS = {
     "Business Today"
   ], 
 
+  financialProductsInvestedIn: ["FD","Bonds","MF","PMS","AIF","Global","Real Estate","Insurance"],
+
+  netWorth: ["0-50 lakhs","50 lakhs - 2 cr","2 - 10 cr",">10 cr"],
+
+  hearImeCapital: ["IME Employee","IME Client","FB/Instagram","LinkedIn","YouTube","IME Website","Others"],
+
   investmentQuery:[
     "International","Fixed Income","NRI","Equity","Fixed Income","Alternatives","Unlisted","IME","Advice"
   ]

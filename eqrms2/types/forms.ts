@@ -597,3 +597,30 @@ export const EditGroupSchema = z.object({
 export type EditGroupValues = z.infer<typeof EditGroupSchema>;
 
 
+// -------------------
+// Edit LoginProfile
+// -------------------
+export const EditLoginProfileSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  email: z.string().email("Invalid email address"),
+  client_confirmation: z.coerce.boolean(),
+  finacial_pdts_invested_in: z.array(z.string()),
+  existing_advisor: z.coerce.boolean(),
+  existing_financial_plan: z.coerce.boolean(),
+  existing_inv_mandate: z.coerce.boolean(),
+  net_worth: z.string(),
+  hear_ime_capital: z.string(),
+});
+
+export type EditLoginProfileValues = z.infer<typeof EditLoginProfileSchema>;
+
+// Type for the update payload sent to Supabase
+// Includes form values + calculated hidden fields
+export type EditLoginProfileUpdatePayload = EditLoginProfileValues & {
+  user_role_name_id: number;
+  expires_on: string | null;
+  inv_desk_notes: string | null;
+};
+
+
