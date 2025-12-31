@@ -236,14 +236,6 @@ export default async function MandatePage() {
                       ))}
                   </div>
                   </div>
-                  <div>
-                      <h3 className="mt-4">Trailing Performance</h3>
-                      <TableCategories data={catPerformance} columnType="summary" userRoles={userRoles} />
-                      <div className="hidden md:block">
-                        <h3 className="mt-4">Annual Performance</h3>
-                        <TableCategories data={catPerformance} columnType="annual" userRoles={userRoles} />
-                      </div>
-                  </div>
             </TabsContent>
             
             <TabsContent value="finplan">

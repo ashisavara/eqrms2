@@ -27,6 +27,10 @@ import { EditPortRecoButton } from "@/components/forms/EditPortRecommendation";
 import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import { AddGroupInvestorButton } from "@/components/forms/AddGroupInvestor";
+import { FavCategory, FavStructure, FavAssetClass } from "@/types/favourite-detail";
+import { Category } from "@/types/category-detail";
+import { TableCategories } from "@/app/(rms)/categories/TableCategories";
+import Link from "next/link";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -37,9 +41,13 @@ interface TableInvestmentsProps {
   portfolioReallocationThoughts?: string;
   groupId: number | null;
   favFunds?: RmsFundsScreener[];
+  favStructure?: FavStructure[];
+  favAssetClass?: FavAssetClass[];
+  favCategory?: FavCategory[];
+  catPerformance?: Category[];
 }
 
-export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, groupId, favFunds = [] }: TableInvestmentsProps) {
+export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, groupId, favFunds = [], favStructure = [], favAssetClass = [], favCategory = [], catPerformance = [] }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(createColumns(userRoles), 'fund_name');
   
@@ -156,7 +164,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
           <TabsList className="w-full">
             <TabsTrigger value="investments">Investments</TabsTrigger>
             <TabsTrigger value="reallocations">Reallocation</TabsTrigger>
-            <TabsTrigger value="shortlist">Shortlisted</TabsTrigger>
+            <TabsTrigger value="shortlist">Shortlist</TabsTrigger>
           </TabsList>
           
           <TabsContent value="investments">
@@ -364,7 +372,57 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             <TableInvChange data={filteredData} userRoles={userRoles} />
           </TabsContent>
           <TabsContent value="shortlist">
-            <TableFundScreen data={favFunds} userRoles={userRoles} />
+
+            <Tabs defaultValue="categories" className="ime-tabs mt-6">
+              <TabsList className="w-full">
+                    <TabsTrigger value="categories">Categories</TabsTrigger>
+                    <TabsTrigger value="funds">Funds</TabsTrigger>
+            </TabsList>
+                  <TabsContent value="categories">
+                    <div className="border-box">
+                      <div>
+                        <span className="font-bold">Shortlisted Universe: </span>
+                        <span>Use the <Link href="/funds" className="blue-hyperlink">RMS</Link> to add your favourite structures, asset classes, and categories.</span><br/><br/>
+                        <span className="font-bold">Favourite Structures: </span>
+                        {favStructure.map((structure, idx) => (
+                          <span key={structure.fav_structure_id}>
+                            {structure.structure_name}
+                            {idx < favStructure.length - 1 && " | "}
+                          </span>
+                        ))}
+                      </div>
+                      <div>
+                        <span className="font-bold">Favourite Asset Classes: </span>
+                        {favAssetClass.map((assetClass, idx) => (
+                          <span key={assetClass.fav_asset_class_id}>
+                            {assetClass.asset_class_name}
+                            {idx < favAssetClass.length - 1 && " | "}
+                          </span>
+                        ))}
+                      </div>
+                      <div>
+                        <span className="font-bold">Favourite Categories: </span>
+                        {favCategory.map((category, idx) => (
+                          <span key={category.fav_category_id}>
+                            {category.cat_name}
+                            {idx < favCategory.length - 1 && " | "}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="mt-8">Trailing Performance</h3>
+                      <TableCategories data={catPerformance} columnType="summary" userRoles={userRoles} />
+                      <div className="hidden md:block">
+                        <h3 className="mt-8">Annual Performance</h3>
+                        <TableCategories data={catPerformance} columnType="annual" userRoles={userRoles} />
+                      </div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="funds">
+                  <TableFundScreen data={favFunds} userRoles={userRoles} />
+                  </TabsContent>
+            </Tabs>   
           </TabsContent>
         </Tabs>
       </div>

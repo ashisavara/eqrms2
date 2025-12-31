@@ -4,8 +4,9 @@ import TableInvestments  from "./TableInvestments";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
-import { FavFunds } from "@/types/favourite-detail";
+import { FavFunds, FavCategory, FavStructure, FavAssetClass } from "@/types/favourite-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
+import { Category } from "@/types/category-detail";
 
 
 // Function to process raw investment data and update existing fields with calculated values
@@ -68,7 +69,7 @@ export default async function InvestmentsPage() {
     );
   }
   // Fetch investments for the selected group (server-side)
-  const [rawInvestments, sip, stp, investor, portfolioReallocationThoughts, favFunds] = await Promise.all([
+  const [rawInvestments, sip, stp, investor, portfolioReallocationThoughts, favFunds, favStructure, favAssetClass, favCategory, catPerformance] = await Promise.all([
     supabaseListRead({
       table: "view_investments_details",
       columns: "fund_name, fund_rating, investor_name, pur_amt, cur_amt, gain_loss, abs_ret, cagr, cat_long_name, fund_rms_name, asset_class_name, cat_name, structure_name, slug, one_yr,three_yr,five_yr, advisor_name, investment_id, amt_change, new_amt, recommendation, asset_class_id, category_id, structure_id, rms_fund_id",
@@ -110,6 +111,34 @@ export default async function InvestmentsPage() {
       filters: [
           (query) => query.eq("group_id", groupId)
       ],
+    }),
+    supabaseListRead<FavStructure>({
+      table: "view_im_fav_structure",
+      columns: "*",
+      filters: [
+        (query) => query.eq("group_id", groupId)
+      ],
+    }),
+    supabaseListRead<FavAssetClass>({
+      table: "view_im_fav_assetclass",
+      columns: "*",
+      filters: [
+        (query) => query.eq("group_id", groupId)
+      ],
+    }),
+    supabaseListRead<FavCategory>({
+      table: "view_im_fav_categories",
+      columns: "*",
+      filters: [
+        (query) => query.eq("group_id", groupId)
+      ],
+    }),
+    supabaseListRead<Category>({
+      table: "view_im_fav_categories",
+      columns: "*",
+      filters: [
+        (query) => query.eq("group_id", groupId)
+      ],
     })
   ]);
 
@@ -132,6 +161,10 @@ export default async function InvestmentsPage() {
             portfolioReallocationThoughts={portfolioReallocationThoughts?.portfolio_reallocation_thoughts}
             groupId={groupId}
             favFunds={favFunds}
+            favStructure={favStructure}
+            favAssetClass={favAssetClass}
+            favCategory={favCategory}
+            catPerformance={catPerformance}
           />
 
     </div>
