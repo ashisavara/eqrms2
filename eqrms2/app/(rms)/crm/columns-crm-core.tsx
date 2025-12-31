@@ -18,8 +18,6 @@ export const createColumns = (
     interactionTypeOptions: { value: string; label: string }[],
     interactionTagOptions: { value: string; label: string }[],
     interactionChannelOptions: { value: string; label: string }[],
-    customTagOptions: { value: string; label: string }[],
-    leadRoleOptions: { value: string; label: string }[],
     digitalAdOptions: { value: string; label: string }[],
     leadSourceOptions: { value: string; label: string }[],
     leadTypeOptions: { value: string; label: string }[],

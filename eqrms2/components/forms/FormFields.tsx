@@ -325,7 +325,7 @@ export function MultiToggleGroupInput({
 }
 
 // Select option field with search functionality for long lists
-export function SelectInput({ name, label, control, options, valueType = "string" }: { name: string; label: string; control: Control<any>; options: { value: string; label: string }[]; valueType?: "string" | "number"; }) {
+export function SelectInput({ name, label, control, options, valueType = "string" }: { name: string; label: string; control: Control<any>; options: { value: string | number; label: string }[]; valueType?: "string" | "number"; }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -338,7 +338,7 @@ export function SelectInput({ name, label, control, options, valueType = "string
     );
   }, [options, searchTerm]);
 
-  // Determine if we should show search (more than 7 options)
+  // Determine if we should show search (more than 5 options)
   const shouldShowSearch = options.length > 5;
 
   const handleDropdownOpenChange = (open: boolean) => {
@@ -349,7 +349,7 @@ export function SelectInput({ name, label, control, options, valueType = "string
     }
   };
 
-  // If 7 or fewer options, use the original simple select
+  // If 5 or fewer options, use the original simple select
   if (!shouldShowSearch) {
     return (
       <div>
@@ -364,7 +364,7 @@ export function SelectInput({ name, label, control, options, valueType = "string
               <>
                 <select 
                   id={name} 
-                  value={field.value?.toString() || ""}
+                  value={field.value !== null && field.value !== undefined ? field.value.toString() : ""}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (valueType === "number") {
@@ -379,7 +379,7 @@ export function SelectInput({ name, label, control, options, valueType = "string
                 >
                   <option value="">Select option...</option>
                   {options.map((option) => (
-                    <option key={option.value} value={option.value}>
+                    <option key={option.value.toString()} value={option.value.toString()}>
                       {option.label}
                     </option>
                   ))}
@@ -393,7 +393,7 @@ export function SelectInput({ name, label, control, options, valueType = "string
     );
   }
 
-  // For more than 7 options, use enhanced dropdown with search
+  // For more than 5 options, use enhanced dropdown with search
   return (
     <div>
       <Label className="font-bold">{label}</Label>
@@ -414,8 +414,8 @@ export function SelectInput({ name, label, control, options, valueType = "string
                     aria-describedby={hasError ? errId : undefined}
                   >
                     <span className="truncate">
-                      {field.value 
-                        ? options.find(opt => opt.value === field.value?.toString())?.label || "Select option..."
+                      {field.value !== null && field.value !== undefined
+                        ? options.find(opt => String(opt.value) === String(field.value))?.label || "Select option..."
                         : "Select option..."}
                     </span>
                     <ChevronDown className="h-4 w-4 opacity-50" />
@@ -454,7 +454,7 @@ export function SelectInput({ name, label, control, options, valueType = "string
                   <div className="max-h-48 overflow-y-auto">
                     <DropdownMenuItem
                       onClick={() => {
-                        field.onChange("");
+                        field.onChange(valueType === "number" ? 0 : "");
                         setIsOpen(false);
                       }}
                     >
@@ -463,12 +463,13 @@ export function SelectInput({ name, label, control, options, valueType = "string
                     {filteredOptions.length > 0 ? (
                       filteredOptions.map((option) => (
                         <DropdownMenuItem
-                          key={option.value}
+                          key={option.value.toString()}
                           onClick={() => {
                             if (valueType === "number") {
-                              field.onChange(option.value ? parseInt(option.value) : 0);
+                              const numValue = typeof option.value === 'number' ? option.value : parseInt(String(option.value));
+                              field.onChange(isNaN(numValue) ? 0 : numValue);
                             } else {
-                              field.onChange(option.value || "");
+                              field.onChange(String(option.value) || "");
                             }
                             setIsOpen(false);
                           }}

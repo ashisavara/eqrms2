@@ -20,7 +20,7 @@ export default async function CrmPage() {
     }
 
 
-    const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions, customTagOptions, leadRoleOptions, digitalAdOptions, referralPartnerOptions] = await Promise.all([
+    const [leads, interactions, deals, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, dealEstClousureOptions, dealStageOptions, dealSegmentOptions, importanceOptions, leadProgressionOptions, wealthLevelOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions, digitalAdOptions, referralPartnerOptions] = await Promise.all([
         supabaseListRead<LeadsTagging>({
             table:"view_leads_tagcrm", 
             columns:"*",
@@ -56,8 +56,6 @@ export default async function CrmPage() {
         fetchOptions<string, string>("master","lead_source", "lead_source"),
         fetchOptions<string, string>("master","lead_type", "lead_type"),
         fetchOptions<string, string>("ime_emp","auth_id", "name"),
-        fetchStringOptions("lead_tag_custom_tags","id","custom_tag"),
-        fetchStringOptions("lead_roles","lead_role_id","lead_role"),
         fetchStringOptions("lead_tag_digital_ads","id","digital_campaign"),
         fetchOptions<string, string>("view_referral_partner","lead_name","lead_name"),
     ]);
@@ -77,8 +75,7 @@ export default async function CrmPage() {
                         <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} 
                         wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} 
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 
-                        interactionTagOptions={interactionTagOptions} interactionTypeOptions={interactionTypeOptions} customTagOptions={customTagOptions} 
-                        leadRoleOptions={leadRoleOptions} digitalAdOptions={digitalAdOptions} leadSourceOptions={leadSourceOptions} 
+                        interactionTagOptions={interactionTagOptions} interactionTypeOptions={interactionTypeOptions} digitalAdOptions={digitalAdOptions} leadSourceOptions={leadSourceOptions} 
                         leadTypeOptions={leadTypeOptions} primaryRmOptions={primaryRmOptions} />
                     </TabsContent>
                     <TabsContent value="interactions">

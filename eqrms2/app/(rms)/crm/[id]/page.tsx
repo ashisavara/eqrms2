@@ -13,21 +13,14 @@ import TableInteractions from "../TableInteractions";
 import { LeadRoleDetail } from "@/types/lead-role-detail";
 import { DigitalAdsDetail } from "@/types/digital-ads-detail";
 import { CustomTagDetail } from "@/types/custom-tag";
-import { CustomTagValues, LeadRoleValues, DigitalAdValues } from "@/types/forms";
-import { AddLeadTags } from "@/components/forms/AddLeadTags";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
-import { AddCustomTag } from "@/components/forms/AddCustomTag";
-import { AddLeadRole } from "@/components/forms/AddLeadRole";
 import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
-import { AclLeadsDetail } from "@/types/acl-leads-detail";
-import { AclGroupDetail } from "@/types/acl-group-detail";
-import { LoginProfileWithRoles } from "@/app/(rms)/internal/link-login-lead/types";
 import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadRoles, leadDigitalAds, leadCustomTags, customTagOptions, leadRoleOptions, digitalAdOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadDigitalAds, digitalAdOptions] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -56,13 +49,6 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                 (query) => query.eq('rel_lead_id', id)
             ]
         }),
-        supabaseListRead<LeadRoleDetail>({
-            table: "view_lead_roles",
-            columns: "*",  
-            filters: [
-                (query) => query.eq('lead_id', id)
-            ]
-        }),
         supabaseListRead<DigitalAdsDetail>({
             table: "view_lead_digital_ads",
             columns: "*",  
@@ -70,15 +56,6 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                 (query) => query.eq('lead_id', id)
             ]
         }),
-        supabaseListRead<CustomTagDetail>({
-            table: "view_lead_custom_tags",
-            columns: "*",  
-            filters: [
-                (query) => query.eq('lead_id', id)
-            ]
-        }),
-        fetchOptions<string,string>("lead_tag_custom_tags","id","custom_tag"),
-        fetchOptions<string,string>("lead_roles","lead_role_id","lead_role"),
         fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign")
     ]);
 
@@ -86,10 +63,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
         return <div>Lead not found</div>;
     }
 
-    const hasLeadCustomTags = leadCustomTags.length > 0;
-    const hasLeadRoles = leadRoles.length > 0;
     const hasLeadDigitalAds = leadDigitalAds.length > 0;
-    const hasAnyTags = hasLeadCustomTags || hasLeadRoles || hasLeadDigitalAds;
 
     // Convert lead data to LeadsTaggingValues format for AddLeadTags component
     const leadForForm = {
@@ -134,14 +108,6 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                                 <AddDealButton relLeadId={lead.lead_id} initialLeadData={lead} />
                                 <AddInteractionButton relLeadId={lead.lead_id} initialLeadData={lead} />
                                 <AddFollowUpButton relLeadId={lead.lead_id} initialLeadData={lead} />
-                                <AddCustomTag 
-                                    leadId={lead.lead_id} 
-                                    customTagOptions={customTagOptions} 
-                                />
-                                <AddLeadRole 
-                                leadId={lead.lead_id} 
-                                leadRoleOptions={leadRoleOptions} 
-                                />
                                 <AddDigitalAd 
                                 leadId={lead.lead_id} 
                                 digitalAdOptions={digitalAdOptions} 
@@ -161,21 +127,15 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         </p>
                     </div>
                     <div className="text-sm flex flex-col">
-                        <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} | {lead.rm_name} | </p>
-                        {hasAnyTags && (
-                            <p>
+                        <p><CrmImportanceRating rating={lead.importance ?? ""} /> | <CrmWealthRating rating={lead.wealth_level ?? ""} /> | <CrmProgressionRating rating={lead.lead_progression ?? ""} /> | <CrmLeadSourceRating rating={lead.lead_source ?? ""} /> | {lead.lead_type} </p>
+
+                            <div className="flex flex-wrap items-center gap-0 mt-1">
                                 <span className="font-bold">Tags:</span>
-                                {hasLeadCustomTags && (
-                                    <span className="ime-tags">{leadCustomTags.map((tag) => tag.custom_tag).join(", ")}</span>
-                                )}
-                                {hasLeadRoles && (
-                                    <span className="ime-tags">{leadRoles.map((role) => role.lead_role).join(", ")}</span>
-                                )}
-                                {hasLeadDigitalAds && (
-                                    <span className="ime-tags">{leadDigitalAds.map((ad) => `${ad.digital_channel} - ${ad.digital_campaign}`).join(", ")}</span>
-                                )}
-                            </p>
-                        )}
+                                {hasLeadDigitalAds && leadDigitalAds.map((ad, idx) => (
+                                    <span key={`digital-${idx}`} className="ime-tags !mx-1">{ad.digital_campaign}</span>
+                                ))}
+                            </div>
+
                         <p>
                             <span className="font-bold">Client Group:</span> {lead.group_name} | 
                             <span className="font-bold">Subscribed to:</span> <span className="text-blue-500">{lead.subs_email ? "Email | " : ""} {lead.subs_whatsapp ? "Whatsapp | " : ""} {lead.subs_imecapital ? "IME Capital | " : ""} {lead.subs_imepms ? "IME PMS" : ""}</span>

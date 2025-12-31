@@ -1,3 +1,5 @@
+// PLEASE NOTE ,THIS IS NOW A MORE GENERIC TAGGING THAN JUST DIGITAL ADS
+
 'use client';
 
 import { useState } from "react";
@@ -7,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { DigitalAdSchema, DigitalAdValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ToggleGroupInput } from "./FormFields";
+import { SelectInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 import { Zap } from "lucide-react";
@@ -20,7 +22,7 @@ function AddDigitalAdForm({
 }: {
   onSuccess: () => void; 
   leadId: number;
-  digitalAdOptions: { value: string; label: string }[];
+  digitalAdOptions: { value: string | number; label: string }[];
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,7 @@ function AddDigitalAdForm({
       await supabaseInsertRow('rel_lead_digital_ads', insertData);
       
       if (typeof window !== "undefined") {
-        toast.success("Digital ad added successfully!");
+        toast.success("Tag added successfully!");
         setTimeout(() => {
           onSuccess?.();
           router.refresh();
@@ -56,9 +58,9 @@ function AddDigitalAdForm({
       }
       
     } catch (error) {
-      console.error('Error adding digital ad:', error);
+      console.error('Error adding Tag:', error);
       if (typeof window !== "undefined") {
-        toast.error("Failed to add digital ad. Please try again.");
+        toast.error("Failed to add Tag. Please try again.");
       }
       setIsLoading(false);
     }
@@ -69,21 +71,20 @@ function AddDigitalAdForm({
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
 
       <div className="space-y-4">
-        <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Add Digital Ad</h3>
+        <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Add Tags</h3>
         
-        <ToggleGroupInput 
+        <SelectInput 
           name="digital_id" 
           label="Select Digital Channel/Campaign" 
           control={control} 
           options={digitalAdOptions} 
           valueType="number"
-          itemClassName="ime-choice-chips"
         />
       </div>
 
       <div className="flex justify-end">
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Adding...' : 'Add Digital Ad'}
+          {isLoading ? 'Adding...' : 'Add Tag'}
         </Button>
       </div>
     </form>
@@ -96,7 +97,7 @@ export function AddDigitalAd({
   digitalAdOptions
 }: { 
   leadId: number;
-  digitalAdOptions: { value: string; label: string }[];
+  digitalAdOptions: { value: string | number; label: string }[];
 }) {
   const [showAddSheet, setShowAddSheet] = useState(false);
 
@@ -107,7 +108,7 @@ export function AddDigitalAd({
         className="cursor-pointer flex items-center w-full p-2 hover:bg-gray-100 rounded"
       >
         <Zap className="w-4 h-4 mr-2" />
-        Add Digital Ad
+        Add Tags
       </span>
 
       {/* Add Sheet */}
@@ -115,7 +116,7 @@ export function AddDigitalAd({
         <Sheet open={true} onOpenChange={() => setShowAddSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Add Digital Ad</SheetTitle>
+              <SheetTitle>Add Tags</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <AddDigitalAdForm

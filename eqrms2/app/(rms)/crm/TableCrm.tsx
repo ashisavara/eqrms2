@@ -24,8 +24,6 @@ export default function TableCrm({
   interactionTypeOptions = [],
   interactionTagOptions = [],
   interactionChannelOptions = [],
-  customTagOptions = [],
-  leadRoleOptions = [],
   digitalAdOptions = [],
   leadSourceOptions = [],
   leadTypeOptions = [],
@@ -41,15 +39,13 @@ export default function TableCrm({
   interactionTypeOptions?: { value: string; label: string }[];
   interactionTagOptions?: { value: string; label: string }[];
   interactionChannelOptions?: { value: string; label: string }[];
-  customTagOptions?: { value: string; label: string }[];
-  leadRoleOptions?: { value: string; label: string }[];
   digitalAdOptions?: { value: string; label: string }[];
   leadSourceOptions?: { value: string; label: string }[];
   leadTypeOptions?: { value: string; label: string }[];
   primaryRmOptions?: { value: string; label: string }[];
 }) {
 
-  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, customTagOptions, leadRoleOptions, digitalAdOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions);
+  const columns = createColumns(importanceOptions, leadProgressionOptions, wealthLevelOptions, dealEstClosureOptions, dealStageOptions, dealSegmentOptions, interactionTypeOptions, interactionTagOptions, interactionChannelOptions, digitalAdOptions, leadSourceOptions, leadTypeOptions, primaryRmOptions);
   
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'lead_name');
