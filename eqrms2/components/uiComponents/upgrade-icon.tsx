@@ -17,8 +17,8 @@ interface UpgradeIconProps {
 // Content mapping for different upgrade paths
 const upgradePathContent: Record<UpgradePath, { title: string; content: string }> = {
   "create-account": {
-    title: "Create Account",
-    content: "To access this content, please create an account. Creating an account will give you access to premium features and content."
+    title: "Reactivate Premium Features",
+    content: ""
   },
   "validate-account": {
     title: "Validate Account",
@@ -59,18 +59,11 @@ export function UpgradeIcon({
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent className="w-full sm:max-w-lg">
           <SheetHeader>
-            <SheetTitle>{upgradeContent.title}</SheetTitle>
+            <SheetTitle>Reactivate Premium Features</SheetTitle>
           </SheetHeader>
           
-          <div className="mt-6">
-            <p>{upgradeContent.content}</p>
-            
-            {/* Placeholder for upgrade path options */}
-            <div className="mt-6 space-y-2">
-              <div>Create Account</div>
-              <div>Validate Account</div>
-              <div>Free 30-Day Trial</div>
-            </div>
+          <div className="mt-6 p-4">
+            <p>Premium Services of the IME RMS (access to IME Ratings, a dedicated private banker, editing of investments & financial plans and more) are available to clients of IME Capital.</p><p> If you would like to evaluate becoming an IME Client, or would like to request an extension of you trial of the IME RMS, please WhatsApp us at <a href="https://wa.me/918088770050" className="text-blue-500 font-bold" target="_blank">+918088770050</a>.</p>
           </div>
         </SheetContent>
       </Sheet>

@@ -56,7 +56,7 @@ export const PERMISSION_GROUPS = {
   },
 
   expiring: {
-    view_expiring: ['guest','trial'],
+    view_expiring: ['trial'],
   },
   
   blogs: {
