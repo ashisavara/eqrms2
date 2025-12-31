@@ -2,7 +2,7 @@ import SimpleTable from "@/components/tables/singleRowTable";
 import { supabaseSingleRead, supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { Category } from "@/types/category-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
-import TableFundBasic from "@/app/(rms)/funds/TableFundBasic";
+import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
 import { EditCatButton } from "@/components/forms/EditCategory";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { TableCategories } from "@/app/(rms)/categories/TableCategories";
@@ -33,7 +33,7 @@ export default async function CategoryPage({ params }: PageProps) {
         columns: "*",
         filters: [
         (query) => query.eq('category_slug', slug),
-        (query) => query.gt('fund_rating', 3),
+        (query) => query.gt('fund_rating', 2),
         (query) => query.eq('open_for_subscription', 'Y'),
         (query) => query.order('fund_rating', {ascending: false})
         ]
@@ -64,17 +64,18 @@ export default async function CategoryPage({ params }: PageProps) {
             )}
         </div>
             <div className="text-sm mt-8">
-                <h2>Trailing Returns</h2>
+                <h2>Trailing & Annual Category Returns</h2>
+                <h3>Category Trailing Returns</h3>
                 <TableCategories data={[category]} columnType="summary" userRoles={userRoles} />
                 <PerformanceFootnote additionalText="Category returns are average returns for all funds in category." />
             </div>
             <div className="text-sm mt-8 hidden md:block">  
-                <h2>Annual Returns</h2>
+                <h3>Category Annual Returns</h3>
                 <TableCategories data={[category]} columnType="annual" userRoles={userRoles} />
             </div>
             <div className="text-sm mt-10">
                 <h2>Recommended Funds</h2>
-                <TableFundBasic data={funds} userRoles={userRoles} />
+                <TableFundScreen data={funds} userRoles={userRoles} />
                 <PerformanceFootnote additionalText="| In recommended funds on the category page, we only show our 4 & 5-star rated funds, to focus on top recommendations & avoid overwhelming investors with too many options. You can use the category filter on the funds page in RMS, to see a larger list including 3-star rated funds. For 2-star and below funds, please connect with your IME Dedicated Private Banker." />
             </div>
     </div>

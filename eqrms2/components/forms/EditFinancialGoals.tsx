@@ -161,12 +161,14 @@ function EditFinGoalsForm({initialData, id, onSuccess}: {initialData: FinGoalsVa
                 </div>
                 <TextArea name="goal_description" label="Goal Description" control={control} />
 
-                <div className="flex justify-end">
+                <div className="flex justify-center">
                     <Button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Saving...' : 'Save'}
+                        {isLoading ? 'Saving...' : 'Update Goal'}
                     </Button>
                 </div>
             </form>
+            <h2 className="mt-6">Goal Calculator Helpers</h2>
+            <p className="text-sm text-center mb-0 mt-0"><b>Useful Links: </b> <a href="https://imecapital.in/financial-calculator/retirement-corpus-required" className="blue-hyperlink" target="_blank">Retirement Corpus </a>| <a href="https://imecapital.in/financial-calculator/annual-expense-calculator" className="blue-hyperlink" target="_blank">Annual Expenses</a> </p>
             <div className="bg-gray-50 m-5 p-4 rounded-lg border">
                 <p className="text-sm text-center"><span className="font-semibold">Future Value Goal Calculator: </span>Calculate future value of goal, based on current cost and the goal date & inflation rate entered above.</p>
                 <div className="grid grid-cols-2 gap-4 mt-2">
