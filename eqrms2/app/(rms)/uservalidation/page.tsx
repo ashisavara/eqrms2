@@ -4,14 +4,19 @@ import { getCurrentUser, supabaseSingleRead } from '@/lib/supabase/serverQueryHe
 import { EditLoginProfileValues } from '@/types/forms';
 import { redirect } from 'next/navigation';
 import { WhatsAppButton } from './WhatsAppButton';
+import { getUserRoles } from '@/lib/auth/getUserRoles';
 
 export default async function UserValidation() {
   // Get current user UUID
   const currentUser = await getCurrentUser();
   const uuid = currentUser?.id;
 
+  // Get user roles for permission checking
+  const userRoles = await getUserRoles();
+
   if (!uuid) {
-    redirect('/investments');
+    console.log('No UUID found');
+    redirect('/app');
   }
 
   // Fetch login_profile data including user_role_name_id
@@ -26,6 +31,7 @@ export default async function UserValidation() {
     existing_inv_mandate?: boolean | null;
     net_worth?: string | null;
     hear_ime_capital?: string | null;
+    internal_notes?: string | null;
     user_role_name_id?: number | null;
   }>({
     table: 'login_profile',
@@ -36,6 +42,7 @@ export default async function UserValidation() {
   });
 
   if (!loginProfile) {
+    console.log('No UUID found');
     redirect('/app');
   }
 
@@ -80,6 +87,7 @@ export default async function UserValidation() {
     existing_inv_mandate: loginProfile.existing_inv_mandate || false,
     net_worth: loginProfile.net_worth || '',
     hear_ime_capital: loginProfile.hear_ime_capital || '',
+    internal_notes: loginProfile.internal_notes || null,
   };
 
   return (
@@ -93,6 +101,7 @@ export default async function UserValidation() {
             <EditLoginProfile 
               initialData={initialData}
               uuid={uuid}
+              userRoles={userRoles}
             />
           </CardContent>
         </Card>

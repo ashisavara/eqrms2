@@ -94,7 +94,7 @@ export default async function LinkLoginLeadPage() {
 
           </TabsContent>
           <TabsContent value="search_login">
-            <SearchLoginProfilesClient />
+            <SearchLoginProfilesClient userRoles={userRoles} />
           </TabsContent>
           <TabsContent value="search_leads">
             <SearchLeadsClient />

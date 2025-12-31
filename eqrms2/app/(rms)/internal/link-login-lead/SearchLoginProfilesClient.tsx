@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { SearchLoginProfiles, SearchResultsTable } from './SearchLoginProfiles';
 import { LoginProfileWithRoles } from './types';
 
-export function SearchLoginProfilesClient() {
+interface SearchLoginProfilesClientProps {
+  userRoles?: string | null;
+}
+
+export function SearchLoginProfilesClient({ userRoles }: SearchLoginProfilesClientProps) {
   const [searchResults, setSearchResults] = useState<LoginProfileWithRoles[]>([]);
 
   const handleResults = (results: LoginProfileWithRoles[]) => {
@@ -26,7 +30,7 @@ export function SearchLoginProfilesClient() {
       
       {searchResults.length > 0 && (
         <div className="bg-white p-4 rounded-lg border">
-          <SearchResultsTable results={searchResults} onRefresh={handleRefresh} />
+          <SearchResultsTable results={searchResults} onRefresh={handleRefresh} userRoles={userRoles} />
         </div>
       )}
     </div>

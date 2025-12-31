@@ -8,6 +8,7 @@ import { LoginProfileWithRoles, SearchLoginProfilesRequest } from './types';
 import { UpdateGroupNameButton } from '@/components/forms/UpdateGroupName';
 import { LinkLoginProfileGroupButton } from '@/components/forms/LinkLoginProfileGroup';
 import { EditLoginRoleButton } from '@/components/forms/EditLoginRole';
+import { EditLoginProfileButton } from '@/components/forms/EditLoginProfileButton';
 
 interface SearchLoginProfilesProps {
   onResults: (results: LoginProfileWithRoles[]) => void;
@@ -114,9 +115,10 @@ export function SearchLoginProfiles({ onResults }: SearchLoginProfilesProps) {
 interface SearchResultsTableProps {
   results: LoginProfileWithRoles[];
   onRefresh?: () => void;
+  userRoles?: string | null;
 }
 
-export function SearchResultsTable({ results, onRefresh }: SearchResultsTableProps) {
+export function SearchResultsTable({ results, onRefresh, userRoles = 'no_role' }: SearchResultsTableProps) {
   if (results.length === 0) return null;
 
   return (
@@ -141,7 +143,16 @@ export function SearchResultsTable({ results, onRefresh }: SearchResultsTablePro
           <tbody className="divide-y divide-gray-200">
             {results.map((profile) => (
               <tr key={profile.uuid} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm">{profile.phone_number}</td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    {profile.phone_number}
+                    <EditLoginProfileButton 
+                      profile={profile} 
+                      userRoles={userRoles}
+                      onSuccess={onRefresh}
+                    />
+                  </div>
+                </td>
                 <td className="px-4 py-3 text-sm">
                   {profile.lead_name || (
                     <span className="text-gray-400 italic">Not set</span>

@@ -11,17 +11,22 @@ import { EditLoginProfileSchema, EditLoginProfileValues, EditLoginProfileUpdateP
 import { MASTER_OPTIONS } from "@/lib/constants";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { logoutServerAction } from "@/app/(rms)/app/otpServerActions";
+import { can } from '@/lib/permissions';
 
 interface EditLoginProfileProps {
   initialData?: EditLoginProfileValues | null;
   uuid?: string;
   onSuccess?: () => void;
+  userRoles?: string | null;
+  skipLogout?: boolean;
 }
 
 export function EditLoginProfile({ 
   initialData, 
   uuid,
-  onSuccess 
+  onSuccess,
+  userRoles = 'no_role',
+  skipLogout = false
 }: EditLoginProfileProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +59,7 @@ export function EditLoginProfile({
     existing_inv_mandate: false,
     net_worth: "",
     hear_ime_capital: "",
+    internal_notes: null,
   };
 
   const { control, handleSubmit, reset } = useForm<EditLoginProfileValues>({
@@ -105,12 +111,16 @@ export function EditLoginProfile({
         expires_on = expiryDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
       }
       
+      // Calculate investor_name from first_name + last_name
+      const lead_name = `${data.first_name} ${data.last_name}`.trim();
+      
       // Prepare update data with form data + calculated fields
       const updateData: EditLoginProfileUpdatePayload = {
         ...data,
         user_role_name_id,
         expires_on,
         inv_desk_notes,
+        lead_name,
       };
       
       await supabaseUpdateRow(
@@ -119,30 +129,61 @@ export function EditLoginProfile({
         uuid,
         updateData
       );
+
+      // Call RPC function to create group only if user_role_name_id is 7
+      if (user_role_name_id === 7) {
+        try {
+          const rpcResponse = await fetch('/api/create-group-on-validation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              uuid,
+              lead_name
+            })
+          });
+
+          const rpcResult = await rpcResponse.json();
+
+          if (!rpcResponse.ok) {
+            console.error('Error creating group:', rpcResult.error);
+            // Don't fail the entire submission if group creation fails
+            // The user has already updated their profile successfully
+          }
+        } catch (rpcError) {
+          console.error('Error calling create group RPC:', rpcError);
+          // Don't fail the entire submission if group creation fails
+        }
+      }
       
       if (typeof window !== "undefined") {
-        // Show explicit success message that stays longer
-        toast.success(
-          "Account submitted successfully! You will be logged out. Please re-login to access your account with updated permissions.",
-          {
-            duration: 8000, // 8 seconds - longer than default
-          }
-        );
-        
-        // Wait a bit longer so user can read the message, then logout and redirect
-        setTimeout(async () => {
-          try {
-            // Logout from Supabase
-            await logoutServerAction();
-            
-            // Redirect to app landing page for re-login
-            window.location.href = '/app';
-          } catch (error) {
-            console.error('Error during logout:', error);
-            // Still redirect even if logout fails
-            window.location.href = '/app';
-          }
-        }, 4000); // 4 seconds - gives time to read the message
+        if (skipLogout) {
+          // For admin/inv_desk editing other users - just show success and call onSuccess
+          toast.success("Profile updated successfully!");
+          onSuccess?.();
+        } else {
+          // For users editing their own profile - logout to update JWT with new role
+          toast.success(
+            "Account submitted successfully! You will be logged out. Please re-login to access your account with updated permissions.",
+            {
+              duration: 8000, // 8 seconds - longer than default
+            }
+          );
+          
+          // Wait a bit longer so user can read the message, then logout and redirect
+          setTimeout(async () => {
+            try {
+              // Logout from Supabase
+              await logoutServerAction();
+              
+              // Redirect to app landing page for re-login
+              window.location.href = '/app';
+            } catch (error) {
+              console.error('Error during logout:', error);
+              // Still redirect even if logout fails
+              window.location.href = '/app';
+            }
+          }, 4000); // 4 seconds - gives time to read the message
+        }
       }
     } catch (error) {
       console.error('Error updating login profile:', error);
@@ -238,6 +279,17 @@ export function EditLoginProfile({
         label="I confirm that I am not a financial advisor, and I am willing to be contacted by IME to understand their services." 
         control={control} 
       />
+
+      {can(userRoles, 'internal', 'link_login_lead') && (
+        <div className="border-b border-gray-200 pb-6">
+          <TextInput 
+            name="internal_notes" 
+            label="Internal Notes" 
+            control={control} 
+            placeholder="Enter internal notes"
+          />
+        </div>
+      )}
 
       <div className="flex justify-end pt-4">
         <Button type="submit" disabled={isLoading}>

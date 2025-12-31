@@ -601,16 +601,17 @@ export type EditGroupValues = z.infer<typeof EditGroupSchema>;
 // Edit LoginProfile
 // -------------------
 export const EditLoginProfileSchema = z.object({
-  first_name: z.string(),
-  last_name: z.string(),
-  email: z.string().email("Invalid email address"),
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
   client_confirmation: z.coerce.boolean(),
   finacial_pdts_invested_in: z.array(z.string()),
   existing_advisor: z.coerce.boolean(),
   existing_financial_plan: z.coerce.boolean(),
   existing_inv_mandate: z.coerce.boolean(),
-  net_worth: z.string(),
-  hear_ime_capital: z.string(),
+  net_worth: z.string().min(1, "Net worth is required"),
+  hear_ime_capital: z.string().min(1, "How you heard about IME Capital is required"),
+  internal_notes: z.string().nullable().optional(),
 });
 
 export type EditLoginProfileValues = z.infer<typeof EditLoginProfileSchema>;
@@ -621,6 +622,7 @@ export type EditLoginProfileUpdatePayload = EditLoginProfileValues & {
   user_role_name_id: number;
   expires_on: string | null;
   inv_desk_notes: string | null;
+  lead_name: string;
 };
 
 
