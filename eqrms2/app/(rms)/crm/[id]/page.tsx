@@ -10,9 +10,7 @@ import { AddInteractionButton } from "@/components/forms/AddInteractions";
 import { EditInteractionButton } from "@/components/forms/EditInteractions";
 import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating } from "@/components/conditional-formatting";
 import TableInteractions from "../TableInteractions";
-import { LeadRoleDetail } from "@/types/lead-role-detail";
 import { DigitalAdsDetail } from "@/types/digital-ads-detail";
-import { CustomTagDetail } from "@/types/custom-tag";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
@@ -65,7 +63,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
 
     const hasLeadDigitalAds = leadDigitalAds.length > 0;
 
-    // Convert lead data to LeadsTaggingValues format for AddLeadTags component
+    // Convert lead data to LeadsTaggingValues format
     const leadForForm = {
         lead_name: lead.lead_name ?? "",
         last_contact_date: lead.last_contact_date ? new Date(lead.last_contact_date) : null,
