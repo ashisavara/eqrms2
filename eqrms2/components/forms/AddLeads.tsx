@@ -109,7 +109,7 @@ function AddLeadForm({
     } catch (error) {
       console.error('Error creating lead:', error);
       if (typeof window !== "undefined") {
-        toast.error("Failed to create lead. Please try again.");
+        toast.error("Failed to create lead - likely duplicate name or phone number issue. Please try again or contact Inv Desk.");
       }
       setIsLoading(false);
     }

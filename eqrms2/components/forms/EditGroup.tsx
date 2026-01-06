@@ -32,7 +32,8 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
         risk_profile_done: initialData?.risk_profile_done ?? null,
         fin_plan_done: initialData?.fin_plan_done ?? null,
         inv_plan_done: initialData?.inv_plan_done ?? null,
-        shortlisting_done: initialData?.shortlisting_done ?? null
+        shortlisting_done: initialData?.shortlisting_done ?? null,
+        google_sheet_link: initialData?.google_sheet_link ?? null
     };
 
     const { control, handleSubmit} = useForm<EditGroupValues>({
@@ -97,6 +98,7 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
               helperText="Core Investment Recommendations"/>
             <ResizableTextArea name="other_mandate_details" label="To Dos" control={control} 
              helperText="Action Plan & Tasks"/>
+             <TextInput name="google_sheet_link" label="Google Sheet Link" control={control} />
             
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
@@ -136,7 +138,8 @@ export function EditGroupButton({
     risk_profile_done: groupData.risk_profile_done ?? null,
     fin_plan_done: groupData.fin_plan_done ?? null,
     inv_plan_done: groupData.inv_plan_done ?? null,
-    shortlisting_done: groupData.shortlisting_done ?? null
+    shortlisting_done: groupData.shortlisting_done ?? null,
+    google_sheet_link: groupData.google_sheet_link ?? null
   };
 
   return (
@@ -145,7 +148,7 @@ export function EditGroupButton({
         onClick={() => setShowEditSheet(true)}
         className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
       >
-        Edit Group Details
+        Edit Group
       </span>
 
       {/* Edit Sheet */}

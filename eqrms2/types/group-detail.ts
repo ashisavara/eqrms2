@@ -41,5 +41,6 @@ export type GroupDetail = {
   fin_plan_done: boolean | null;
   inv_plan_done: boolean | null;
   shortlisting_done: boolean | null;
+  google_sheet_link: string | null;
 };
 

@@ -142,6 +142,9 @@ export default async function MandatePage() {
               <div className="flex gap-2 mb-4">
                 { can(userRoles, 'mandate', 'edit_mandate') && (
                   <EditGroupButton groupData={groupData} groupId={groupId} />
+                )} |
+                  { groupData.google_sheet_link && (<a href={groupData.google_sheet_link} target="_blank" rel="noopener noreferrer" className="blue-hyperlink"> Google Sheet Link
+                  </a>
                 )}
               </div>
               <div className="border-box">

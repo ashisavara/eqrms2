@@ -34,6 +34,16 @@ export default function IMEFounderAshiAnandPage() {
                 <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/Ashi%20Anand%20Performance%20TrackRecord.jpeg" alt="Ashi - Performance Track Record" />
                 </div>
 
+                <AlertBox color="blue" heading="Performance highlights">
+                    <ul>
+                    <li> Consistent outperformance across 2 decades (across different AMCs, fund strategies & market conditions)</li>
+                    <li>ICICI Pru PMS Deep Value  (#3 out of 127 funds)</li>
+                    <li>Allegro Healthcare (strong outperformance when most PMS firms struggled to perform)</li>
+                    <li>Valcreate IME Digital Disruption (#4 out of 379 PMS schemes)</li>
+                    <li>Responsible for the launch of India's first Arbitrage Fund (2003) & Capital Guaranteed Fund - CPPI (2004)</li>
+                    </ul>
+                </AlertBox>
+
                 <AlertBox color="gray" heading="Founders Note">
                     <div className="text-sm">
                     <p>For me, investments have always been my passion, more than a job. It has never been the money that the profession offers, but the sheer joy of studying the interactions between economics, trends, sectors & companies and how it relates to investments that has been the driving force through my professional journey. For someone who loves dealing with ever-changing information, numbers and analysis, I feel truly lucky to be able to work in a field that challenges, excites and rewards me.</p>

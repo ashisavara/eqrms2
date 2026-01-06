@@ -592,6 +592,7 @@ export const EditGroupSchema = z.object({
   fin_plan_done: z.boolean().nullable(),
   inv_plan_done: z.boolean().nullable(),
   shortlisting_done: z.boolean().nullable(),
+  google_sheet_link: z.string().nullable(),
 });
 
 export type EditGroupValues = z.infer<typeof EditGroupSchema>;
