@@ -7,7 +7,7 @@ export function PublicFooter() {
         <div className="max-w-5xl mx-auto text-center">
           <div className="flex flex-row items-center justify-center gap-x-5 text-sm border-b-2 border-gray-200 pb-8">
                 <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-logo.png" alt="IME Capital Logo" className="w-[60px] h-[45px]" />
-                <p className="font-semibold italic">IME Capital is a research-first investments firm. We aim to disrupt the wealth management industry, by shrinking the gap in investment insights between central research teams & RMs/Clients.</p>
+                <p className="font-semibold text-gray-900">IME Capital is a research-first investments firm. We aim to disrupt the wealth management industry, by shrinking the gap in investment insights between central research teams & RMs/Clients.</p>
           </div>
         <div className="ime-grid-2col mb-8 border-b-2 border-gray-200 pb-4 pt-4">
             <div className='flex flex-row items-center justify-center gap-x-5 text-sm'>

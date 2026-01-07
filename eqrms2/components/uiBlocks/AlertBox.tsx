@@ -9,25 +9,25 @@ interface AlertBoxProps {
 export default function AlertBox({ color, heading, children }: AlertBoxProps) {
   const colorStyles = {
     blue: {
-      background: 'bg-blue-50',
-      headingbg: 'bg-blue-800',
+      background: 'bg-gray-50',
+      headingbg: 'bg-blue-900',
       heading: 'text-blue-50',
-      border: 'border-blue-800'
+      border: 'border-blue-900'
     },
     green: {
-      background: 'bg-green-50',
-      headingbg: 'bg-green-800',
+      background: 'bg-gray-50',
+      headingbg: 'bg-green-900',
       heading: 'text-green-50',
-      border: 'border-green-800'
+      border: 'border-green-900'
     },
     red: {
-      background: 'bg-red-50',
-      headingbg: 'bg-red-700',
+      background: 'bg-gray-50',
+      headingbg: 'bg-red-900',
       heading: 'text-red-50',
-      border: 'border-red-700'
+      border: 'border-red-900'
     },
     yellow: {
-      background: 'bg-yellow-50',
+      background: 'bg-gray-50',
       headingbg: 'bg-yellow-800',
       heading: 'text-yellow-50',
       border: 'border-yellow-200'
@@ -43,7 +43,7 @@ export default function AlertBox({ color, heading, children }: AlertBoxProps) {
   const styles = colorStyles[color];
 
   return (
-    <div className={`${styles.background} ${styles.border} border rounded-lg my-4`}>
+    <div className={`${styles.background} ${styles.border} border rounded-lg my-8`}>
       <div className={`${styles.headingbg} w-full px-4 py-3`}>
         <h4 className={`${styles.heading} text-center font-bold text-lg`}>
           {heading}

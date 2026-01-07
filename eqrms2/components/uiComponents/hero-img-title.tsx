@@ -29,12 +29,12 @@ const HeroImgTitle: React.FC<HeroImgTitleProps> = ({
   caption,
   imgSrc,
   imgAlt,
-  className = 'flex flex-col md:flex-row bg-blue-800',
+  className = 'flex flex-col md:flex-row bg-blue-950',
 }) => {
   return (
     <div className={className}>
       <div className="min-w-[400px] w-full md:w-1/4 px-6">
-        <h2 className="bg-blue-50 mt-12 text-blue-800 text-center'">{title}</h2>
+        <h2 className="bg-gray-200 mt-12 text-blue-950 text-center'">{title}</h2>
         {caption ? <p className="text-white text-center">{caption}</p> : null}
       </div>
       <div className="w-full">

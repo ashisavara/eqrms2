@@ -19,23 +19,23 @@
   }
 
   p {
-    @apply mt-6 mb-6;
+    @apply mt-6 mb-6 text-gray-900;
   }
 
   div.ime-accordion p, div.ime-headline-text-box p, div.ime-team-profile-box p {
-    @apply text-base mt-3 mb-3;
+    @apply text-base mt-3 mb-3 text-gray-900;
   }
 
   div.mandatePage p, div.ime-crm-detail-page p, div.ime-fund-view-box p {
-    @apply text-sm mt-1 mb-1;
+    @apply text-sm mt-1 mb-1 text-gray-900;
   }
 
   p.table-footer-note {
-    @apply text-xs text-gray-500 mt-2 mb-2;
+    @apply text-xs text-gray-500 mt-2 mb-2 text-gray-900;
   }
 
   table td p, table td {
-    @apply mt-1 mb-1;
+    @apply mt-1 mb-1 text-gray-900;
   }
 
 
@@ -95,15 +95,15 @@
  /* for ime-blog-page */
 
   div.ime-blog-page h2 {
-    @apply text-2xl font-bold mb-4 border-y-2 border-gray-500 py-2 mt-12 mb-4 text-center text-gray-500;
+    @apply text-2xl font-bold mb-4 border-y-2 border-gray-200 px-6 py-4 mt-12 text-center text-gray-500;
   }
 
   div.ime-blog-page p {
-    @apply mt-4;
+    @apply mt-4 text-gray-900;
   }
 
   div.ime-blog-page ul li p, div.ime-company-page ul li p {
-    @apply mt-0 mb-0 inline;
+    @apply mt-0 mb-0 inline text-gray-900;
   }
 
 
@@ -211,7 +211,7 @@
   }
 
   div.rms-body {
-    @apply text-sm mt-4;
+    @apply text-sm mt-4 text-gray-900;
   }
 
   div.rms-body h3 {
@@ -321,6 +321,7 @@ div.ime-fm p.ime-fm-details {
   font-size: 0.8em;
   margin-bottom: 0;
   margin-top: 0;
+  color: rgb(33, 33, 33);
 }
 
 div.ime-fm p {
@@ -328,6 +329,7 @@ div.ime-fm p {
   font-size: 0.85em;
   margin-bottom: 10px;
   margin-top: 5px;
+  color: rgb(33, 33, 33);
 }
 
 /* for responsive iframes */
