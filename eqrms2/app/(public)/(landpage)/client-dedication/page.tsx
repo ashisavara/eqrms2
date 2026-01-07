@@ -2,6 +2,8 @@ import Section from "@/components/uiComponents/section";
 import PageTitle from "@/components/uiComponents/page-title";
 import ImageTextBox from "@/components/uiComponents/image-text-box";
 import AlertBox from "@/components/uiBlocks/AlertBox";
+import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
+import TextHighlight from "@/components/uiBlocks/TextHighlight";
 
 export default function RMSPage() {
     return (
@@ -11,12 +13,15 @@ export default function RMSPage() {
                 caption="Truly tailor-made Investment Advice" 
             />
 
-            <Section className="bg-green-50 py-12 text-green-900 text-center">
+            <Section className="py-12">
+            <TextHighlight>
                 <p>We operate on the principle that every investor is unique. Much like thumbprints, it is impossible that any two people are identical. They have differences in goals, wealth levels, risk-profiles, investment experience and many other factors. Thus, there can be no ‘one size fits all’ when it comes to investment advice.</p>
                 <p>Our focus is on long term relationship building and to that end, we spend a substantial amount of time upfront getting to know you and understanding your specific requirements. Only after this comprehensive process of defining your investment mandate, do we get into portfolio construction & fund selection.</p>
+            </TextHighlight>
+
             </Section>
 
-            <Section className="py-12 bg-gray-50">
+            <Section className="py-12 bg-gray-100">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
                 heading="IME Investment Mandate"
@@ -46,9 +51,9 @@ export default function RMSPage() {
                 </div>
             </Section>
        
-            <Section className="bg-green-900 py-12 text-white text-center">
+            <SectionTextHighlight>
                 <p>By ensuring documentation of core qualitative factors that drive your wealth management decisions, the IME client portal provides a more holistic view on your investments, keeping you and your relationship managers on the same page and protecting against the risk of RM churn.  </p>
-            </Section>
+            </SectionTextHighlight>
             
 
 

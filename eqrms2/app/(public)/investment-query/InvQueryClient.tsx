@@ -83,18 +83,22 @@ export default function InvQueryClient({ invQuery }: InvQueryClientProps) {
               className="group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
             >
               {/* Card Content */}
-              <div className="p-4">
-                {/* Title */}
-                <h3 className="text-base text-center font-semibold text-blue-800 mb-2 group-hover:text-blue-600 group-hover:underline transition-colors duration-200 line-clamp-3">
-                  {query.title}
-                </h3>
+              <div className="p-4 group-hover:bg-gray-200 ">
+            {/* Query Categories Badge */}
+            <div className="flex flex-row justify-center ">
+                <span className="inline-block bg-blue-800 text-white text-xs font-medium px-2.5 py-0.5 rounded-full mb-2">
+                                {query.query_categories}
+                              </span>
+                            </div>
 
-                {/* Query Categories Badge */}
-                <div className="flex flex-row justify-center">
-                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {query.query_categories}
-                  </span>
+                {/* Title */}
+                <div className="flex justify-center items-center">
+                  <h3 className="text-sm !text-center font-semibold blue-hyperlink">
+                    {query.title}
+                  </h3>
                 </div>
+
+                
               </div>
             </Link>
           ))}

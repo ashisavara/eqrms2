@@ -14,9 +14,9 @@ const images = [
 export default function HomePage() {
     return (
         <div>
-            <div className="flex flex-col md:flex-row bg-blue-800">
-                <div className="min-w-[400px] w-full md:w-1/4 px-6">
-                    <h2 className="bg-blue-50 mt-12 text-blue-800 text-center'">A research-first Investments Firm</h2>
+            <div className="flex flex-col md:flex-row bg-blue-950">
+                <div className="min-w-[400px] w-full md:w-1/4 px-6 flex flex-col justify-center">
+                    <h2 className="bg-blue-50 mt-12 text-blue-950 text-center'">A research-first Investments Firm</h2>
                     <p className="text-white text-center">
                         Specialised Investment Solutions for Families, Retirees, NRIs, Ultra-HNIs, Family Offices and Corporate Treasuries.
                     </p> 

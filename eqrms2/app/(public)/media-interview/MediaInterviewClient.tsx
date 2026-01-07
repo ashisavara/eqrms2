@@ -5,6 +5,7 @@ import { MediaInterviewDetail } from "@/types/media-interview-detail";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import PageTitle from "@/components/uiComponents/page-title";
+import YouTube from "@/components/uiComponents/youtube";
 
 interface MediaInterviewClientProps {
   mediaInterview: MediaInterviewDetail[];
@@ -85,20 +86,33 @@ export default function MediaInterviewClient({ mediaInterview }: MediaInterviewC
             >
               {/* Card Content */}
               <div className="p-4">
-                {/* Title */}
-                <h3 className="text-base text-center font-semibold text-blue-800 mb-2 group-hover:text-blue-600 group-hover:underline transition-colors duration-200 line-clamp-3">
-                  {interview.title}
-                </h3>
+                {interview.youtube_url ? (
+                  <YouTube url={interview.youtube_url} />
+                ) : (
+                  <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                    <div className="absolute inset-0 h-full w-full rounded-md bg-black flex items-center justify-center">
+                      <span className="text-red-400 text-2xl font-semibold text-center px-4">
+                        Media Article <br/> {interview.publication}
+                      </span>
+                    </div>
+                  </div>
+                )}
 
                 {/* Publication Badge */}
-                <div className="flex flex-row justify-center">
-                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                <div className="flex flex-row justify-center mt-4">
+                  <span className="inline-block bg-blue-800 text-white text-xs font-medium px-2.5 py-0.5 rounded-full">
                     {interview.publication}
                   </span>
                     <span className="text-sm text-gray-500 pl-3"> 
                     {formatDate(interview.publication_date)}
                   </span>
                 </div>
+                {/* Title */}
+                <h3 className="text-base !text-center font-semibold blue-hyperlink mt-2 mb-2">
+                  {interview.title}
+                </h3>
+
+                
               </div>
             </Link>
           ))}

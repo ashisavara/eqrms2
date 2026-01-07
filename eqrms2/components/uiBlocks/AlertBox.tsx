@@ -12,31 +12,31 @@ export default function AlertBox({ color, heading, children }: AlertBoxProps) {
       background: 'bg-gray-50',
       headingbg: 'bg-blue-900',
       heading: 'text-blue-50',
-      border: 'border-blue-900'
+      border: 'border-gray-400'
     },
     green: {
       background: 'bg-gray-50',
       headingbg: 'bg-green-900',
       heading: 'text-green-50',
-      border: 'border-green-900'
+      border: 'border-gray-400'
     },
     red: {
       background: 'bg-gray-50',
       headingbg: 'bg-red-900',
       heading: 'text-red-50',
-      border: 'border-red-900'
+      border: 'border-gray-400'
     },
     yellow: {
       background: 'bg-gray-50',
       headingbg: 'bg-yellow-800',
       heading: 'text-yellow-50',
-      border: 'border-yellow-200'
+      border: 'border-gray-400'
     }, 
     gray: {
       background: 'bg-gray-50',
-      headingbg: 'bg-gray-800',
+      headingbg: 'bg-gray-600',
       heading: 'text-gray-50',
-      border: 'border-gray-800'
+      border: 'border-gray-400'
     }
   };
 

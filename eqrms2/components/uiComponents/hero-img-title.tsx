@@ -33,8 +33,8 @@ const HeroImgTitle: React.FC<HeroImgTitleProps> = ({
 }) => {
   return (
     <div className={className}>
-      <div className="min-w-[400px] w-full md:w-1/4 px-6">
-        <h2 className="bg-gray-200 mt-12 text-blue-950 text-center'">{title}</h2>
+      <div className="min-w-[400px] w-full md:w-1/4 px-6 flex flex-col justify-center">
+        <h2 className="bg-gray-200 text-blue-950 text-center">{title}</h2>
         {caption ? <p className="text-white text-center">{caption}</p> : null}
       </div>
       <div className="w-full">

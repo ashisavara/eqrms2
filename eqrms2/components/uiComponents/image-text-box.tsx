@@ -23,8 +23,8 @@ const ImageTextBox: React.FC<ImageTextBoxProps> = ({
   children,
   imgSide = 'left',
   className = '',
-  headingClassName = 'text-2xl font-bold',
-  subHeadingClassName = 'font-bold',
+  headingClassName = 'text-2xl font-bold text-gray-800',
+  subHeadingClassName = 'font-bold text-gray-800',
   contentClassName = 'space-y-4',
   imageColClassName = 'w-full',
 }) => {
@@ -35,7 +35,7 @@ const ImageTextBox: React.FC<ImageTextBoxProps> = ({
   );
 
   const TextCol = (
-    <div className="text-lg text-left md:text-center space-y-4 first:mt-0 last:mb-0">
+    <div className="text-base text-left md:text-center space-y-4 first:mt-0 last:mb-0 text-gray-800">
       <h4 className={headingClassName}>{heading}</h4>
       {subHeading ? <p className={subHeadingClassName}>{subHeading}</p> : null}
       <div className={contentClassName}>{children}</div>

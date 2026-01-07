@@ -2,6 +2,7 @@ import Section from "@/components/uiComponents/section";
 import PageTitle from "@/components/uiComponents/page-title";
 import ImageTextBox from "@/components/uiComponents/image-text-box";
 import AlertBox from "@/components/uiBlocks/AlertBox";
+import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
 
 export default function RMSPage() {
     return (
@@ -43,9 +44,9 @@ export default function RMSPage() {
             </AlertBox>
         </Section>
 
-        <Section className="bg-green-900 py-12 text-white text-center text-lg">
+        <SectionTextHighlight>
             <p>A combination of our greater depth of investment expertise & the ability to share this directly with you – our end investor, results in superior portfolio construction. </p>
-        </Section>
+        </SectionTextHighlight>
 
         
         </div>

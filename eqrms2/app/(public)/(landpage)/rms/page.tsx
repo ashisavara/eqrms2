@@ -48,7 +48,7 @@ export default function RMSPage() {
         </div>
       </Section>
 
-      <Section className="py-12 bg-green-50">
+      <Section className="py-12 bg-gray-100">
         <ImageTextBox
           imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
           heading="Fully Customisable"

@@ -19,19 +19,19 @@
   }
 
   p {
-    @apply mt-6 mb-6 text-gray-900;
+    @apply mt-6 mb-6;
   }
 
   div.ime-accordion p, div.ime-headline-text-box p, div.ime-team-profile-box p {
-    @apply text-base mt-3 mb-3 text-gray-900;
+    @apply text-base mt-3 mb-3 text-gray-800;
   }
 
   div.mandatePage p, div.ime-crm-detail-page p, div.ime-fund-view-box p {
-    @apply text-sm mt-1 mb-1 text-gray-900;
+    @apply text-sm mt-1 mb-1 text-gray-800;
   }
 
   p.table-footer-note {
-    @apply text-xs text-gray-500 mt-2 mb-2 text-gray-900;
+    @apply text-xs mt-2 mb-2 text-gray-800;
   }
 
   table td p, table td {
@@ -77,7 +77,7 @@
   }
 
   div.border-box {
-    @apply border-2 border-gray-200 rounded-md my-2 p-2 text-sm;
+    @apply border-2 border-gray-200 rounded-md my-2 p-6 text-sm;
   }
 
   div.mobile-card {
@@ -99,14 +99,17 @@
   }
 
   div.ime-blog-page p {
-    @apply mt-4 text-gray-900;
+    @apply mt-4 text-gray-800;
   }
 
   div.ime-blog-page ul li p, div.ime-company-page ul li p {
-    @apply mt-0 mb-0 inline text-gray-900;
+    @apply mt-0 mb-0 inline text-gray-800;
   }
 
-
+  /* sections with specific styling */
+  section.ime-gray-text {
+    @apply bg-gray-100 py-12 text-center text-gray-500 font-semibold py-8 text-lg;
+  }
 
 }
 
@@ -195,7 +198,7 @@
   }
 
   h1,h2,h3,h4,h5,h6 {
-    @apply font-bold;
+    @apply font-bold text-gray-700;
   }
 
   h1 {
@@ -240,7 +243,7 @@
   }
 
   .blue-hyperlink {
-    @apply text-blue-600 font-bold !text-left hover:underline hover:text-blue-800 cursor-pointer
+    @apply text-blue-800 font-bold !text-left hover:underline hover:text-blue-600 cursor-pointer
   }
 }
 

@@ -7,6 +7,7 @@ import HeadlineTextBox from "@/components/uiComponents/headline-text-box";
 import InfoCard from "@/components/uiBlocks/InfoCard";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import HeroImgTitle from "@/components/uiComponents/hero-img-title";
+import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
 
 export default function RetireeSolutionsPage() {
     return (
@@ -40,10 +41,10 @@ export default function RetireeSolutionsPage() {
                 </AlertBox>
             </Section>
 
-            <Section className="bg-green-900 py-12 text-white text-center">
-                <p>However unless people have sought out specialised financial advice, too often, advisors offer templated solutions to retirees, for instance: bank fixed deposits but these are taxable, or annuity plans but these are locked in or non flexible, and don’t let you access your money in an emergency. </p>
+            <SectionTextHighlight>
+            <p>However unless people have sought out specialised financial advice, too often, advisors offer templated solutions to retirees, for instance: bank fixed deposits but these are taxable, or annuity plans but these are locked in or non flexible, and don’t let you access your money in an emergency. </p>
                 <p>While the focus around retirement may always have been “when” to retire; but at IME, we understand that the “how” is important – how your quality of life is important once you stop earning, how to make the most of your corpus, how to make that corpus last longer. </p>
-            </Section>
+                </SectionTextHighlight>
 
             <Section className="py-12">
                 <h2>FAQs on IME Retiree Solutions</h2>

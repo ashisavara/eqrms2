@@ -6,6 +6,7 @@ import { getPublicPmsAmcSlugs, getStaticPmsAmc, getStaticPmsAmcFunds } from '@/l
 import { generateAmcSEO } from '@/lib/seo/helpers/amc';
 import type { Metadata } from 'next';
 import RmaCta from "@/components/uiComponents/rma-cta";
+import PageTitle from "@/components/uiComponents/page-title";
 
 
 // Generate static params for all published PMS AMCs
@@ -52,21 +53,20 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
         console.log('[PmsAmcPage] PMS AMC found:', amc.amc_name);
 
         return (
+            <div>
+            <PageTitle title={amc.amc_name} caption="Our view on their team, the pedigree, the funds & investment philosophy followed." />
             <div className="p-5 max-w-5xl mx-auto">
-                <div className="pageHeadingBox">
-                    <h1>{amc.amc_name}</h1>
-                    <span>{amc.structure} </span>
-                </div>
-                <div className="border-box ime-fund-view-box">
-                    <h2>IME's View on {amc.amc_name}</h2>
-                    <p className="font-semibold">AMC View</p>
+            <h2 className="mt-6 mb-0">IME's View on {amc.amc_name}</h2>
+                <div className="border-box !mt-0 ime-fund-view-box">
+                    
+                    <p className="font-semibold border-b border-gray-300">AMC View</p>
                     <p>{amc.amc_view}</p>
-                    <p className="font-semibold pt-6">AMC Pedigree</p>
+                    <p className="font-semibold pt-6 border-b border-gray-300">AMC Pedigree</p>
                     <p>{amc.amc_pedigree_desc}</p>
-                    <p className="font-semibold pt-6">Team Pedigree</p>
+                    <p className="font-semibold pt-6 border-b border-gray-300">Team Pedigree</p>
                     <p>{amc.team_pedigree_desc}</p>
                     {amc.inv_phil_desc && (<>
-                    <p className="font-semibold pt-6">Investment Philosophy</p>
+                    <p className="font-semibold pt-6 border-b border-gray-300">Investment Philosophy</p>
                     <p>{amc.inv_phil_desc}</p>
                     </>
                     )}
@@ -74,7 +74,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
 
                 {amc.amc_body && <div className="rms-body" dangerouslySetInnerHTML={{ __html: amc.amc_body }} />}
                 <h2>Investment team</h2>
-                {amc.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: amc.amc_fm_html }} />}
+                {amc.amc_fm_html && <div className="px-6" dangerouslySetInnerHTML={{ __html: amc.amc_fm_html }} />}
 
                 <h2>Recommended Funds</h2>
                 <FundPerformanceTable data={funds} />
@@ -82,6 +82,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                     <h2>Experience the benefits of working with a 'research-first' investments firm</h2>
                     <RmaCta />
                 </div>
+            </div>
             </div>
         );
     } catch (error) {
