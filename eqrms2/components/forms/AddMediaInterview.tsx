@@ -22,7 +22,8 @@ export function AddMediaInterviewForm() {
         publication_date: null,
         youtube_url: "",
         summary: "",
-        slug: ""
+        slug: "",
+        article_link: ""
     };
 
     const { control, handleSubmit } = useForm<MediaInterviewValues>({
@@ -91,8 +92,14 @@ export function AddMediaInterviewForm() {
                     placeholder="Enter slug" 
                 />
             </div>
-            
+            <TextInput 
+                name="article_link" 
+                label="Article Link" 
+                control={control} 
+                placeholder="Enter article link" 
+            />
             <ResizableTextArea name="summary" label="Summary" control={control} />
+            
 
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>

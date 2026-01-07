@@ -26,7 +26,7 @@ export default async function EditCompanyPage({ params }: Props) {
   const companyData = await supabaseSingleRead<CompanySnapshotFormValues>({
     table: "eq_rms_company",
     filters: [(query: any) => query.eq("company_id", id)],
-    columns: "snapshot,positive,negative,outlook,inv_view,positive_snapshot,negative_snapshot,watch_for, business_mix, catalysts, hidden, coverage, stock_score, quality",
+    columns: "snapshot,positive,negative,outlook,inv_view,positive_snapshot,negative_snapshot,watch_for, business_mix, catalysts, hidden, coverage, stock_score, quality, financials",
   });
 
   if (!companyData) return notFound(); // Show 404 if company doesn't exist

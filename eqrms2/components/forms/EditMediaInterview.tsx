@@ -35,7 +35,8 @@ export function EditMediaInterviewForm({
         publication_date: getDateValue(initialData?.publication_date),
         youtube_url: initialData?.youtube_url || "",
         summary: initialData?.summary || "",
-        slug: initialData?.slug || ""
+        slug: initialData?.slug || "",
+        article_link: initialData?.article_link || ""
     };
 
     const { control, handleSubmit } = useForm<MediaInterviewValues>({
@@ -104,6 +105,12 @@ export function EditMediaInterviewForm({
                     placeholder="Enter slug" 
                 />
             </div>
+            <TextInput 
+                name="article_link" 
+                label="Article Link" 
+                control={control} 
+                placeholder="Enter article link" 
+            />
             
             <ResizableTextArea name="summary" label="Summary" control={control} />
 

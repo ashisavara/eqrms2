@@ -13,4 +13,5 @@ export type MediaInterviewDetail = {
     og_title?: string | null;
     og_description?: string | null;
     og_image?: string | null;
+    article_link: string | null;
 };

@@ -146,6 +146,13 @@ export const columns: ColumnDef<Company>[] = [
   { 
     accessorKey: "coverage", 
     header: "Coverage ", 
+    filterFn: "arrIncludesSome",
+    meta: { isFilterOnly: true }
+  },
+  { 
+    accessorKey: "mkt_cap_cat", 
+    header: "Market Cap", 
+    filterFn: "arrIncludesSome",
     meta: { isFilterOnly: true }
   },
 ];

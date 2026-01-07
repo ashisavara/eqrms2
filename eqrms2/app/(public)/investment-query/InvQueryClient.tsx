@@ -30,7 +30,7 @@ export default function InvQueryClient({ invQuery }: InvQueryClientProps) {
 
   return (
     <div>
-      <PageTitle title="Investment Queries" />
+      <PageTitle title="Investment Queries" caption="Answers to common investor queries responded by IME Capital's Central Investment Team"/>
     <div className="p-5 max-w-7xl mx-auto">
       
       {/* Filters */}

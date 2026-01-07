@@ -61,6 +61,7 @@ export function TableValscreen({ data }: TableValscreenProps) {
     { column: "mt_growth", title: "Growth", placeholder: "Growth" },
     { column: "market_momentum", title: "Momentum", placeholder: "Momentum" },
     { column: "coverage", title: "Coverage", placeholder: "Coverage" },
+    { column: "mkt_cap_cat", title: "Market Cap", placeholder: "Market Cap" },
   ];
 
   return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;

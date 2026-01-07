@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { getPublicMediaInterviewSlugs, getStaticMediaInterview } from '@/lib/supabase/serverQueryHelper';
 import { generateMediaInterviewSEO } from '@/lib/seo/helpers/media-interview';
 import type { Metadata } from 'next';
+import { Button } from "@/components/ui/button";
 
 // Generate static params for all published media interviews
 export async function generateStaticParams() {
@@ -55,7 +56,16 @@ export default async function MediaInterviewPage({ params }: { params: Promise<{
                 </div>
                 <p className="mb-6">{mediaInterview.summary }</p>
                 <YouTube url={mediaInterview.youtube_url} />
-                
+                {mediaInterview.article_link && (
+                    <a 
+                        href={mediaInterview.article_link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 font-bold hover:underline"
+                    >
+                        <Button>View Article</Button> 
+                    </a>
+                )}
             </div>
         );
     } catch (error) {

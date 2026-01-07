@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import PageTitle from "@/components/uiComponents/page-title";
 import YouTube from "@/components/uiComponents/youtube";
+import { Button } from "@/components/ui/button";
 
 interface MediaInterviewClientProps {
   mediaInterview: MediaInterviewDetail[];
@@ -32,7 +33,7 @@ export default function MediaInterviewClient({ mediaInterview }: MediaInterviewC
 
   return (
     <div>
-      <PageTitle title="Media Interviews" />
+      <PageTitle title="Media Interviews" caption="Our founders interviews on news media channels & leading media publications"/>
     <div className="p-5 max-w-7xl mx-auto">
       
       {/* Filters */}
@@ -79,15 +80,29 @@ export default function MediaInterviewClient({ mediaInterview }: MediaInterviewC
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 center-items">
           {filteredInterviews.map((interview) => (
-            <Link 
+            <div 
               key={interview.interview_id} 
-              href={`/media-interview/${interview.slug}`}
               className="group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
             >
               {/* Card Content */}
               <div className="p-4">
                 {interview.youtube_url ? (
                   <YouTube url={interview.youtube_url} />
+                ) : interview.article_link ? (
+                  <a 
+                    href={interview.article_link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                      <div className="absolute inset-0 h-full w-full rounded-md bg-black flex items-center justify-center">
+                        <span className="text-red-400 text-2xl font-semibold text-center px-4">
+                          Media Article <br/> {interview.publication}
+                        </span>
+                      </div>
+                    </div>
+                  </a>
                 ) : (
                   <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
                     <div className="absolute inset-0 h-full w-full rounded-md bg-black flex items-center justify-center">
@@ -108,13 +123,14 @@ export default function MediaInterviewClient({ mediaInterview }: MediaInterviewC
                   </span>
                 </div>
                 {/* Title */}
-                <h3 className="text-base !text-center font-semibold blue-hyperlink mt-2 mb-2">
-                  {interview.title}
-                </h3>
-
+                <Link href={`/media-interview/${interview.slug}`}>
+                  <h3 className="text-base !text-center font-semibold blue-hyperlink mt-2 mb-2">
+                    {interview.title}
+                  </h3>
+                </Link>
                 
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}

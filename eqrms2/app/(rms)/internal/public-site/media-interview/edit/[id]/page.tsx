@@ -37,7 +37,8 @@ export default async function EditMediaInterviewPage({ params }: { params: Promi
         publication_date: getDateValue(mediaInterviewData.publication_date),
         youtube_url: mediaInterviewData.youtube_url || "",
         summary: mediaInterviewData.summary || "",
-        slug: mediaInterviewData.slug || ""
+        slug: mediaInterviewData.slug || "",
+        article_link: mediaInterviewData.article_link || ""
     };
 
     return (

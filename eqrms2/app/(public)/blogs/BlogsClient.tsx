@@ -43,7 +43,7 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
 
   return (
     <div>
-      <PageTitle title="Blogs" />
+      <PageTitle title="Blog" caption="Thoughts & insights across various investment topics & themes." />
    
     <div className="p-5 max-w-7xl mx-auto">
       

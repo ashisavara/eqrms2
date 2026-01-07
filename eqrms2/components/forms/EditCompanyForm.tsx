@@ -7,7 +7,7 @@ import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOp
 import { zodResolver } from "@hookform/resolvers/zod"; // Bridge between react-hook-form and zod
 import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./FormFields"; // Our reusable field components
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
-
+import { ImageUpload } from "./ImageUpload";
 // 3️⃣ Define the props that this form component expects
 type Props = {
   companyId: string;
@@ -61,7 +61,10 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
         <TextInput name="negative_snapshot" label="Negative Snapshot" control={control} />
         <TextInput name="watch_for" label="Watch For" control={control} />
       </div>
-      
+      <div className="grid grid-cols-2 gap-4">
+        <div><span className="text-sm font-semibold">Img Uploader <br/><ImageUpload /></span></div>
+        <TextInput name="financials" label="Financials" control={control} />
+      </div>
       <ResizableTextArea name="inv_view" label="Investment View" control={control} />
       <ResizableTextArea name="positive" label="Positive" control={control} />
       <ResizableTextArea name="negative" label="Negative" control={control} />

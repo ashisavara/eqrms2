@@ -65,6 +65,16 @@ export default async function MediaInterviewPage({ params }: { params: Promise<{
 
                 <div className="prose max-w-none">
                     <p className="whitespace-pre-wrap">{mediaInterview.summary}</p>
+                    {mediaInterview.article_link && (
+                        <a 
+                            href={mediaInterview.article_link} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 font-bold hover:underline"
+                        >
+                           <Button>View Article</Button> 
+                        </a>
+                    )}
                 </div>
             </div>
         );

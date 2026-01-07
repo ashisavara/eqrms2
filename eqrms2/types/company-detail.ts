@@ -77,4 +77,5 @@ export type Company = {
   business_mix: string;
   catalysts: string;
   hidden: string;
+  financials: string;
 };

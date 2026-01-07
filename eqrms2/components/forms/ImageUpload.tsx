@@ -16,14 +16,14 @@ export function ImageUpload({ onImageUploaded }: ImageUploadProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copiedType, setCopiedType] = useState<'MDX' | 'HTML' | null>(null);
   
   // Image props state
   const [imageProps, setImageProps] = useState({
-    alt: 'Description',
+    alt: '',
     caption: '',
-    width: 400,
-    height: 300
+    width: '',
+    height: ''
   });
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,23 +63,45 @@ export function ImageUpload({ onImageUploaded }: ImageUploadProps) {
     if (!uploadedPath) return '';
     
     const props = [];
-    if (imageProps.alt) props.push(`alt="${imageProps.alt}"`);
-    if (imageProps.caption) props.push(`caption="${imageProps.caption}"`);
-    if (imageProps.width) props.push(`width={${imageProps.width}}`);
-    if (imageProps.height) props.push(`height={${imageProps.height}}`);
+    if (imageProps.alt && imageProps.alt.trim()) props.push(`alt="${imageProps.alt}"`);
+    if (imageProps.caption && imageProps.caption.trim()) props.push(`caption="${imageProps.caption}"`);
+    const widthNum = imageProps.width ? Number(imageProps.width) : NaN;
+    if (!isNaN(widthNum) && widthNum > 0) props.push(`width={${widthNum}}`);
+    const heightNum = imageProps.height ? Number(imageProps.height) : NaN;
+    if (!isNaN(heightNum) && heightNum > 0) props.push(`height={${heightNum}}`);
     
-    return `<Image src="${uploadedPath}" ${props.join(' ')} />`;
+    return props.length > 0 
+      ? `<Image src="${uploadedPath}" ${props.join(' ')} />`
+      : `<Image src="${uploadedPath}" />`;
   };
 
-  const copyToClipboard = async () => {
-    if (!uploadedPath) return;
+  const generateHTMLCode = () => {
+    if (!uploadedPath) return '';
     
-    const mdxCode = generateMDXCode();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const imageUrl = `${supabaseUrl}/storage/v1/object/public/blog${uploadedPath}`;
+    
+    const attrs = [];
+    attrs.push(`src="${imageUrl}"`);
+    if (imageProps.alt && imageProps.alt.trim()) {
+      attrs.push(`alt="${imageProps.alt}"`);
+    }
+    const widthNum = imageProps.width ? Number(imageProps.width) : NaN;
+    if (!isNaN(widthNum) && widthNum > 0) attrs.push(`width="${widthNum}"`);
+    const heightNum = imageProps.height ? Number(imageProps.height) : NaN;
+    if (!isNaN(heightNum) && heightNum > 0) attrs.push(`height="${heightNum}"`);
+    
+    return `<img ${attrs.join(' ')} />`;
+  };
+
+  const copyToClipboard = async (code: string, type: 'MDX' | 'HTML') => {
+    if (!code) return;
+    
     try {
-      await navigator.clipboard.writeText(mdxCode);
-      setCopied(true);
-      toast.success('MDX code copied to clipboard!');
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(code);
+      setCopiedType(type);
+      toast.success(`${type} code copied to clipboard!`);
+      setTimeout(() => setCopiedType(null), 2000);
       setIsOpen(false); // Close sheet after copying
     } catch (error) {
       toast.error('Failed to copy code');
@@ -88,12 +110,12 @@ export function ImageUpload({ onImageUploaded }: ImageUploadProps) {
 
   const resetUpload = () => {
     setUploadedPath(null);
-    setCopied(false);
+    setCopiedType(null);
     setImageProps({
-      alt: 'Description',
+      alt: '',
       caption: '',
-      width: 400,
-      height: 300
+      width: '',
+      height: ''
     });
   };
 
@@ -163,7 +185,7 @@ export function ImageUpload({ onImageUploaded }: ImageUploadProps) {
                     value={imageProps.alt}
                     onChange={(e) => setImageProps(prev => ({ ...prev, alt: e.target.value }))}
                     className="flex-1"
-                    placeholder="Image description"
+                    placeholder="Optional alt text"
                   />
                 </div>
                 
@@ -182,8 +204,9 @@ export function ImageUpload({ onImageUploaded }: ImageUploadProps) {
                   <Input
                     type="number"
                     value={imageProps.width}
-                    onChange={(e) => setImageProps(prev => ({ ...prev, width: parseInt(e.target.value) || 0 }))}
+                    onChange={(e) => setImageProps(prev => ({ ...prev, width: e.target.value }))}
                     className="flex-1"
+                    placeholder="Optional width"
                   />
                 </div>
                 
@@ -192,28 +215,49 @@ export function ImageUpload({ onImageUploaded }: ImageUploadProps) {
                   <Input
                     type="number"
                     value={imageProps.height}
-                    onChange={(e) => setImageProps(prev => ({ ...prev, height: parseInt(e.target.value) || 0 }))}
+                    onChange={(e) => setImageProps(prev => ({ ...prev, height: e.target.value }))}
                     className="flex-1"
+                    placeholder="Optional height"
                   />
                 </div>
               </div>
               
               {/* Generated MDX Code */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Generated MDX Code:</span>
-                  <Button
-                    onClick={copyToClipboard}
-                    className="gap-2 bg-green-700 hover:bg-green-800 text-white"
-                    size="sm"
-                  >
-                    {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                    {copied ? 'Copied!' : 'Copy'}
-                  </Button>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">MDX Code (for blogs):</span>
+                    <Button
+                      onClick={() => copyToClipboard(generateMDXCode(), 'MDX')}
+                      className="gap-2 bg-green-700 hover:bg-green-800 text-white"
+                      size="sm"
+                    >
+                      {copiedType === 'MDX' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                      {copiedType === 'MDX' ? 'Copied!' : 'Copy MDX'}
+                    </Button>
+                  </div>
+                  <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs overflow-x-auto">
+                    <code>{generateMDXCode()}</code>
+                  </pre>
                 </div>
-                <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs overflow-x-auto">
-                  <code>{generateMDXCode()}</code>
-                </pre>
+
+                {/* Generated HTML Code */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">HTML Code (for financials):</span>
+                    <Button
+                      onClick={() => copyToClipboard(generateHTMLCode(), 'HTML')}
+                      className="gap-2 bg-blue-700 hover:bg-blue-800 text-white"
+                      size="sm"
+                    >
+                      {copiedType === 'HTML' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                      {copiedType === 'HTML' ? 'Copied!' : 'Copy HTML'}
+                    </Button>
+                  </div>
+                  <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs overflow-x-auto">
+                    <code>{generateHTMLCode()}</code>
+                  </pre>
+                </div>
               </div>
             </div>
           )}

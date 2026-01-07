@@ -21,6 +21,7 @@ export const companySnapshotFormSchema = z.object({
   coverage: z.string().nullable(),
   quality: z.string().nullable(),
   stock_score: z.coerce.number().nullable(),
+  financials: z.string().nullable(),
 });
 
 // TypeScript type inferred from the schema. It defines the shape of actual data
@@ -558,6 +559,7 @@ export const MediaInterviewSchema = z.object({
   youtube_url: z.string().nullable(),
   summary: z.string().min(1, "Summary is required"),
   slug: z.string().nullable(),
+  article_link: z.string().nullable(),
 })
 
 export type MediaInterviewValues = z.infer<typeof MediaInterviewSchema>;

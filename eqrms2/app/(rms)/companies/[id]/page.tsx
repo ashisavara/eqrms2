@@ -162,7 +162,14 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             />
           </div>
 
-        </div>
-  );
-}
+          {company.financials && (
+            <div 
+              className="text-blue-800 mb-5 bg-blue-50 rounded-md p-2"
+              dangerouslySetInnerHTML={{ __html: company.financials || "" }}
+            />
+          )}
+          
 
+        </div>
+      );
+}
