@@ -7,7 +7,7 @@ export default function InvestorComplaintsPage() {
         <PageTitle 
             title="Investor Complaints"
         />
-        <h2 className="mt-10">Data for month ending Nov-25</h2>
+        <h2 className="mt-10">Data for month ending Dec-25</h2>
         <table className="w-full border-collapse border border-gray-300 mt-6">
           <thead>
             <tr className="bg-gray-100">
@@ -104,14 +104,22 @@ export default function InvestorComplaintsPage() {
               <td className="border border-gray-300 p-2">0</td>
               <td className="border border-gray-300 p-2">0</td>
             </tr>
-            <tr>
-                <td className="border border-gray-300 p-2">5</td>
-                <td className="border border-gray-300 p-2">Nov-25</td>
-                <td className="border border-gray-300 p-2">0</td>
-                <td className="border border-gray-300 p-2">0</td>
-                <td className="border border-gray-300 p-2">0</td>
-                <td className="border border-gray-300 p-2">0</td>
-            </tr>
+              <tr>
+                  <td className="border border-gray-300 p-2">5</td>
+                  <td className="border border-gray-300 p-2">Nov-25</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+              </tr>
+              <tr>
+                  <td className="border border-gray-300 p-2">6</td>
+                  <td className="border border-gray-300 p-2">Dec-25</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+              </tr>
            
           </tbody>
         </table>
