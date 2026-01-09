@@ -109,7 +109,7 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
               {/* Card Content */}
               <div className="p-4">
                 {/* Title */}
-                <h3 className="text-base font-semibold text-blue-800 mb-2 group-hover:text-blue-600 group-hover:underline transition-colors duration-200 line-clamp-2">
+                <h3 className="text-base text-center font-semibold text-blue-800 mb-2 group-hover:text-blue-600 group-hover:underline transition-colors duration-200 line-clamp-2">
                   {blog.title}
                 </h3>
                 
@@ -122,7 +122,7 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
                 </div>
                 
                 {/* Body Preview */}
-                <p className="text-sm text-gray-600 line-clamp-3 mt-2">
+                <p className="text-sm text-center text-gray-600 line-clamp-3 mt-2">
                   {truncateText(blog.body)}
                 </p>
               </div>

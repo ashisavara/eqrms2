@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function AboutUsPage() {
   return (
-    <div className="prose">
+    <div>
         <PageTitle 
                 title="About us" 
                 caption="Learn more about our firm, our values and our mission." 
@@ -18,10 +18,12 @@ export default function AboutUsPage() {
             
             <p>IME (Investments made Easy) Capital is a boutique investments firm that provides end to end services to investors, families and corporates about all their investments, customised to their unique financial needs.</p> 
             <p>What you can expect at IME is the best of two worlds – the DNA, ethos and personal attention of a boutique firm combined with institutional practices and research methodologies of a global asset management firm. </p>
+            </Section>
             <h2>Our Genesis</h2>
-            <div className="ime-grid-2col flex">
-                <div>
-                    <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ashi-profile.jpg" alt="Ashi Anand" className="w-[500px] rounded-full" />
+            <Section>
+            <div className="flex flex-col md:flex-row gap-4 text-center md:text-left">
+                <div className="mx-auto mt-4">
+                    <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ashi-profile.jpg" alt="Ashi Anand" className="w-[150px] md:w-[300px] border border-gray-600" />
                 </div>
                 <div>
                     <p>IME was founded by Ashi Anand – in his career of over 20 years as a fund manager, Ashi found structural flaws in the workings of the wealth management industry. He used his experience, knowledge and instinct to found IME Capital – a firm free of conventional restraints; one that focuses on research, expertise and innovation, and can do this with integrity.</p>
@@ -34,8 +36,9 @@ export default function AboutUsPage() {
 
         </Section>
 
+        <h2>Our Values</h2>
         <Section className="py-12">
-            <h2>Our Values</h2>
+            
             <HeadlineTextBox headline="Our Vision">
                 <p>To bring the research process rigour of institutional asset management firms, to the management of individual investor portfolios.</p>
             </HeadlineTextBox>

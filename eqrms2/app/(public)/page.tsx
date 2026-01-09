@@ -16,7 +16,7 @@ export default function HomePage() {
         <div>
             <div className="flex flex-col md:flex-row bg-blue-950">
                 <div className="min-w-[400px] w-full md:w-1/4 px-6 flex flex-col justify-center">
-                    <h2 className="bg-blue-50 mt-12 text-blue-950 text-center'">A research-first Investments Firm</h2>
+                    <h2 className="bg-blue-50 mt-12 text-blue-950 text-center'">A Research-First Investments Firm</h2>
                     <p className="text-white text-center">
                         Specialised Investment Solutions for Families, Retirees, NRIs, Ultra-HNIs, Family Offices and Corporate Treasuries.
                     </p> 
@@ -30,7 +30,7 @@ export default function HomePage() {
                 </div>  
             </div>
 
-        <Section className="py-12 bg-gray-50">
+        <Section className="py-12">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME%20Capital%203%20Differentiators%20light.png"
                 heading="3 Core Differentiators"
@@ -41,7 +41,7 @@ export default function HomePage() {
             </ImageTextBox>
         </Section>
 
-        <Section>
+        <Section className="bg-gray-100">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/depth-of-expertise.png"
                 heading="Depth of our Expertise"
@@ -52,7 +52,7 @@ export default function HomePage() {
             </ImageTextBox>
         </Section>
 
-        <Section className="bg-gray-50">
+        <Section>
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/weak-flow-down-insights.png"
                 heading="Unmatched Transparency"
@@ -63,7 +63,7 @@ export default function HomePage() {
             </ImageTextBox>
         </Section>
 
-        <Section>
+        <Section className="bg-gray-100">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
                 heading="Client Centricity"

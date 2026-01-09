@@ -23,7 +23,7 @@ export default function FamilySolutionsPage() {
             
             <Section className="py-12">
                 <TextHighlight>
-                    <p>So far, the industry focuses on “Which fund / investment is right for you?”.</p>
+                    <p>So far, the industry focuses on “Which fund/investment is right for you?”.</p>
                     <p>At IME, our question is “What do you want from your life and when would you like to achieve it? What will free you from your worries?” </p>
                 </TextHighlight>
             </Section>
@@ -33,9 +33,9 @@ export default function FamilySolutionsPage() {
                 <p>While from a technical perspective, this means we will find the right investment category and asset class that fits your needs, what it actually means is that we make your money for you. </p>
             </SectionTextHighlight>
 
-            <h2 className="my-12">The Benefits of a Clear Financial Plan</h2>
-            <Section className="pt-1">
-                <div className="ime-grid-2col pb-6">
+            <h2 className="mt-12">The Benefits of a Clear Financial Plan</h2>
+            <Section className="pt-4">
+                <div className="ime-grid-2col">
                     <AlertBox color="green" heading="Visibility of Fund Requirements">
                         <p>Clarity on funding of large & lumpy longer-term life goals. Gain confidence on being able to meet all your families core desires. </p>
                     </AlertBox>

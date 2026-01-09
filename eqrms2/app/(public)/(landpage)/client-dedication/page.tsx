@@ -13,7 +13,7 @@ export default function RMSPage() {
                 caption="Truly tailor-made Investment Advice" 
             />
 
-            <Section className="py-12">
+            <Section className="!py-4">
             <TextHighlight>
                 <p>We operate on the principle that every investor is unique. Much like thumbprints, it is impossible that any two people are identical. They have differences in goals, wealth levels, risk-profiles, investment experience and many other factors. Thus, there can be no ‘one size fits all’ when it comes to investment advice.</p>
                 <p>Our focus is on long term relationship building and to that end, we spend a substantial amount of time upfront getting to know you and understanding your specific requirements. Only after this comprehensive process of defining your investment mandate, do we get into portfolio construction & fund selection.</p>

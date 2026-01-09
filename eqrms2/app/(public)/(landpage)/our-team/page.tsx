@@ -13,7 +13,7 @@ export default function OurTeamPage() {
                 caption="Learn more about IME's leadership team." 
             />
             <h2>Research</h2>
-            <Section>
+            <Section className="py-0">
             <TeamProfileBox 
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ashi-profile.jpg"
                 name="Ashi Anand"
@@ -43,7 +43,7 @@ export default function OurTeamPage() {
             </TeamProfileBox>
             </Section>
             <h2>Business Development</h2>
-            <Section>
+            <Section className="py-0">
             <TeamProfileBox 
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/Paresh%20Vaish%20Profile.jpg"
                 name="Paresh Vaish"
@@ -83,7 +83,7 @@ export default function OurTeamPage() {
             </TeamProfileBox>
             </Section>
             <h2>Communication & Marketing</h2>
-            <Section>
+            <Section className="py-0">
             <TeamProfileBox 
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/shagun-profile.jpeg"
                 name="Shagun Luthra"

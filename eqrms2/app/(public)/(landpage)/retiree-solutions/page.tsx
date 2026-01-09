@@ -30,13 +30,13 @@ export default function RetireeSolutionsPage() {
             <Section className="py-12 bg-gray-50">
                 <AlertBox color="blue" heading="Retirement-focused Investment Solutions">
                 <ul>
-                    <li>Increasing tax efficiency by&nbsp;<strong>drastically</strong>&nbsp;<strong>reducing the tax</strong>&nbsp;you pay on your existing investments</li>
-                    <li>Creating a &ldquo;<strong>monthly income</strong>&rdquo; without impacting your capital</li>
+                    <li>Increasing tax efficiency by<strong>drastically reducing the tax</strong> you pay on your existing investments</li>
+                    <li>Creating a <strong>monthly income</strong> without impacting your capital</li>
                     <li>Ensuring this income grows with inflation to help maintain your purchasing power</li>
-                    <li>Keeping your&nbsp;<strong>capital safe&nbsp;</strong>to fund living expenses</li>
-                    <li>Keeping an eye on how long the&nbsp;<strong>corpus will last</strong></li>
-                    <li>Ensuring you have some&nbsp;<strong>liquidity</strong>&nbsp;to help fund unplanned expenses</li>
-                    <li>Customising your<strong>&nbsp;asset allocation</strong>&nbsp;to meet all your current and future needs, given your risk profile and risk appetite&nbsp;</li>
+                    <li>Keeping your <strong>capital safe</strong> to fund living expenses</li>
+                    <li>Keeping an eye on how long the <strong>corpus will last</strong></li>
+                    <li>Ensuring you have some <strong>liquidity</strong> to help fund unplanned expenses</li>
+                    <li>Customising your <strong>asset allocation</strong> to meet all your current and future needs, given your risk profile and risk appetite</li>
                     </ul>
                 </AlertBox>
             </Section>

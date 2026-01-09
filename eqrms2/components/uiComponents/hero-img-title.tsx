@@ -34,8 +34,8 @@ const HeroImgTitle: React.FC<HeroImgTitleProps> = ({
   return (
     <div className={className}>
       <div className="min-w-[400px] w-full md:w-1/4 px-6 flex flex-col justify-center">
-        <h2 className="bg-gray-200 text-blue-950 text-center">{title}</h2>
-        {caption ? <p className="text-white text-center">{caption}</p> : null}
+        <h2 className="bg-gray-200 text-blue-950 text-center mt-6 md:mt-0">{title}</h2>
+        {caption ? <p className="text-white text-center mb-4 md:mb-0">{caption}</p> : null}
       </div>
       <div className="w-full">
         <img src={imgSrc} alt={imgAlt} className="w-full mx-auto"></img>

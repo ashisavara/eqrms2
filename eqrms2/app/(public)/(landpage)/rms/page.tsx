@@ -60,7 +60,7 @@ export default function RMSPage() {
       </Section>
 
       <SectionTextHighlight color="blue">
-        <p>We offer a no-commitment free 30-Day Trial of the IME RMS, which includes access to a Dedicated Private Banker who can help build your customised Financial Plan & Investment Mandate, and review your existing portfolio. </p>
+        <p>We offer a no-commitment free 15-Day Trial of the IME RMS, which includes access to a Dedicated Private Banker who can help build your customised Financial Plan & Investment Mandate, and review your existing portfolio. </p>
         <p>Sign-up today to experience the difference of direct access to central research insights makes (as compared to depending solely on Relationship Managers/Sales People for your investment advice). </p>
         <Button variant="outline"><Link href="https://rms.imecapital.in">Free Trial</Link></Button>
       </SectionTextHighlight>

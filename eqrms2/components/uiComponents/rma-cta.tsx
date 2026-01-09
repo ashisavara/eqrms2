@@ -16,7 +16,7 @@ const RmaCta = () => {
         <div>
           <AlertBox color="green" heading="Free 15-Day Trial of IME RMS">
           <div className="ime-grid-2col pb-6">
-            <div className="flex flex-col justify-center items-center px-6 text-gray-700">
+            <div className="flex flex-col justify-center items-center px-0 md:px-6 text-gray-700">
               <p className="text-center mb-0"> Get <b> complimentary access</b> to the <b>revolutionary IME RMS</b> (direct access to IME's central team insights across 1000's of MFs, PMSs, AIFs & Global funds - a first in the industry). </p>
                 <p className="text-center">Additionally, a <b>dedicated private banker</b> will help build your <b>financial plan, investment mandate & undertake a comprehensive portfolio review</b> for free. </p>
               <Button className="w-full">

@@ -25,7 +25,7 @@ const TeamProfileBox: React.FC<TeamProfileBoxProps> = ({
     <div className={`py-8 border-b-2 border-gray-200 ime-team-profile-box ${className}`}>
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,250px)_1fr] gap-4">
         {/* Image Section */}
-        <div className="pt-10 pr-12 text-center">
+        <div className="pt-4 md:pr-12 text-center">
           <div className="w-[150px] h-[150px] mx-auto rounded-3xl overflow-hidden shadow-sm">
           <img 
             src={imgSrc} 
@@ -40,7 +40,7 @@ const TeamProfileBox: React.FC<TeamProfileBoxProps> = ({
         </div>
         
         {/* Content Section */}
-        <div className="text-base">
+        <div className="text-base text-center md:text-left">
           {children}
         </div>
       </div>

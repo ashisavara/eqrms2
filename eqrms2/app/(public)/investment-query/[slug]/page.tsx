@@ -49,8 +49,8 @@ export default async function InvestmentQueryPage({ params }: { params: Promise<
         return (
             <div className="p-5 max-w-5xl mx-auto">
                 <h2>{investmentQuery.title}</h2>
-                <div className="flex flex-wrap gap-2 justify-center mb-6">
-                <span className="text-sm text-gray-600">Written by <b>IME Capital's Investor Desk</b> on <b>{formatDate(investmentQuery.created_at)} | Categories: </b></span>
+                <div className="flex flex-wrap gap-2 justify-center mb-6 text-center">
+                <span className="text-sm text-gray-600">Written by <b>IME Capital's Investor Desk</b> on <b>{formatDate(investmentQuery.created_at)} | </b></span>
                 <Badge>{investmentQuery.query_categories}</Badge>
                 </div>
                 <p><div dangerouslySetInnerHTML={{ __html: investmentQuery.body }} /></p>

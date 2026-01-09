@@ -16,7 +16,7 @@ const Section: React.FC<SectionProps> = ({
   contentClassName = ''
 }) => {
   return (
-    <div className="ime-section">
+    <div className="px-2 md:px-0">
     <section className={`w-full py-8 ${className}`}>
       <div className={`max-w-5xl mx-auto px-4 ${contentClassName}`}>
         {children}
