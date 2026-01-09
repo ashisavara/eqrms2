@@ -236,7 +236,7 @@ export async function MainNavigation() {
                 ) : (
                   <>
                     <span className="text-sm text-gray-600">
-                      {userRoles.includes('admin') ? '👑' : '👤'} {userRoles.join(', ')}
+                      {userRoles === 'admin' ? '👑' : '👤'} {userRoles}
                     </span>
                     <Link href="/profile" className="hover:text-blue-600">
                       Profile

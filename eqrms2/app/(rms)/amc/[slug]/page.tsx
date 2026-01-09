@@ -40,7 +40,7 @@ export default async function AmcPage({ params }: PageProps) {
       columns: "*",
       filters: [
         (query) => query.eq('amc_slug', slug),
-        (query) => query.gt('fund_rating', 3),
+        (query) => query.gt('fund_rating', 2),
         (query) => query.eq('open_for_subscription', 'Y'),
         (query) => query.order('fund_rating', {ascending: false})
       ]
