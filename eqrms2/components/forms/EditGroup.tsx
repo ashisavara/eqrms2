@@ -146,7 +146,7 @@ export function EditGroupButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        className="blue-hyperlink"
       >
         Edit Group
       </span>

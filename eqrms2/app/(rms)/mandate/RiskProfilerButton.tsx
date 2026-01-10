@@ -19,13 +19,9 @@ export function RiskProfilerButton({ groupId }: RiskProfilerButtonProps) {
 
   return (
     <>
-      <button
-        onClick={() => setShowRiskProfiler(true)}
-        className="p-1 hover:bg-gray-100 rounded transition-colors"
-        title="Edit Risk Profile"
-      >
-        <Pencil className="w-4 h-4 text-gray-600 hover:text-gray-800" />
-      </button>
+      <span className="blue-hyperlink" onClick={() => setShowRiskProfiler(true)}>
+        Risk-Profiler
+      </span>
 
       <RiskProfilerForm
         groupId={groupId}

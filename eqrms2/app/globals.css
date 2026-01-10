@@ -84,6 +84,10 @@
     @apply border-2 border-gray-200 rounded-md my-2 p-6 text-sm;
   }
 
+  div.mandatePage div.border-box {
+    @apply p-2;
+  }
+
   div.mobile-card {
     @apply p-2 border border-gray-300 rounded-lg space-y-2 py-2;
   }

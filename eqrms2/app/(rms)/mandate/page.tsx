@@ -22,6 +22,7 @@ import { LeadsTagging } from "@/types/lead-detail";
 import { RiskProfilerButton } from "./RiskProfilerButton";
 import { formatDate } from "@/lib/utils";
 import { MandateProgressBar } from "@/components/mandate/MandateProgressBar";
+import MandateBox from "@/components/uiComponents/mandate-box";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -142,13 +143,12 @@ export default async function MandatePage() {
               <div className="flex gap-2 mb-4">
                 { can(userRoles, 'mandate', 'edit_mandate') && (
                   <EditGroupButton groupData={groupData} groupId={groupId} />
-                )} |
+                )} | { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} />)} |
                   { groupData.google_sheet_link && (<a href={groupData.google_sheet_link} target="_blank" rel="noopener noreferrer" className="blue-hyperlink"> Google Sheet Link
                   </a>
                 )}
               </div>
-              <div className="border-box">
-                <h3>Progress</h3>
+              <MandateBox heading="Progress">
                 <MandateProgressBar
                   background_done={groupData.background_done}
                   risk_profile_done={groupData.risk_profile_done}
@@ -156,89 +156,82 @@ export default async function MandatePage() {
                   inv_plan_done={groupData.inv_plan_done}
                   shortlisting_done={groupData.shortlisting_done}
                 />
-              </div>
+              </MandateBox>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-                      <div className="border-box">
-                        <b>Last Review:</b><br/> {formatDate(groupData.last_review_date)}
-                      </div>
-                      <div className="border-box bg-green-50">
-                          <p className="font-bold">Selected Risk Profile</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.rp_override || ""}</ReactMarkdown>
-                      </div>
-                      <div className="border-box bg-blue-50">
-                          <div className="flex items-center gap-2">
-                            <p className="font-bold">Calculated Risk Profile</p>
-                            { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} />)}
-                          </div>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_profile_calculated || ""}</ReactMarkdown>
-                      </div>
-                      <div className="border-box bg-blue-50">
-                          <p className="font-bold">Risk Taking Ability</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_appetite || ""}</ReactMarkdown>
-                      </div>
-                      <div className="border-box bg-blue-50">
-                          <p className="font-bold">Risk Appetite</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_taking_ability || ""}</ReactMarkdown>
-                      </div>
-                  </div>
-                  <div className="border-box">
-                          <p className="font-bold">One Line Objective</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.one_line_objective || ""}</ReactMarkdown>
-                      </div>
-                  <div className="text-sm">
-                      <div className="border-box">
-                          <p className="font-bold">Investor Background</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_background || ""}</ReactMarkdown>
-                      </div>
-                      <div className="border-box">
-                          <p className="font-bold">Investments Purpose</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_purpose || ""}</ReactMarkdown>
-                      </div>
+                      <MandateBox heading="Last Review">
+                        {formatDate(groupData.last_review_date)}
+                      </MandateBox>
                       
-                      <div className="border-box">
-                          <p className="font-bold">Investment Plan</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.inv_plan || ""}</ReactMarkdown>
-                      </div>
-                      <div className="border-box">
-                          <p className="font-bold">Investment Recommendations</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investment_recommendations || ""}</ReactMarkdown>
-                      </div>
-                      <div className="border-box">
-                          <p className="font-bold">To-Dos</p>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.other_mandate_details || ""}</ReactMarkdown>
-                      </div>
+                      <MandateBox heading="Selected Risk Profile">
+                        <div className="font-bold"><ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.rp_override || ""}</ReactMarkdown></div>
+                      </MandateBox>
+                      
+                      <MandateBox heading="Calculated Risk Profile">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_profile_calculated || ""}</ReactMarkdown>
+                      </MandateBox>
+                      
+                      <MandateBox heading="Risk Taking Ability">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_appetite || ""}</ReactMarkdown>
+                      </MandateBox>
+                      
+                      <MandateBox heading="Risk Appetite">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.risk_taking_ability || ""}</ReactMarkdown>
+                      </MandateBox>
                   </div>
-                  <div className="border-box">
-                  <div>
-                  <p className="font-bold">Shortlisted Universe</p>
-                  <p>Use the <Link href="/funds" className="blue-hyperlink">RMS</Link> to add your favourite structures, asset classes, and categories.</p>
-                  <span className="font-bold">Favourite Structures: </span>
+                  <MandateBox heading="One Line Objective">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.one_line_objective || ""}</ReactMarkdown>
+                  </MandateBox>
+                  
+                  <MandateBox heading="Investor Background">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_background || ""}</ReactMarkdown>
+                  </MandateBox>
+                  
+                  <MandateBox heading="Investments Purpose">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_purpose || ""}</ReactMarkdown>
+                  </MandateBox>
+                      
+                  <MandateBox heading="Investment Plan">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.inv_plan || ""}</ReactMarkdown>
+                  </MandateBox>
+                  
+                  <MandateBox heading="Investment Recommendations">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investment_recommendations || ""}</ReactMarkdown>
+                  </MandateBox>
+                  
+                  <MandateBox heading="To-Dos">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.other_mandate_details || ""}</ReactMarkdown>
+                  </MandateBox>
+                  
+                  <MandateBox heading="Shortlisted Universe">
+                    <div>
+                      <p>Use the <Link href="/funds" className="blue-hyperlink">RMS</Link> to add your favourite structures, asset classes, and categories.</p>
+                      <span className="font-bold">Favourite Structures: </span>
                       {favStructure.map((structure, idx) => (
                           <span key={structure.fav_structure_id}>
                               {structure.structure_name}
                               {idx < favStructure.length - 1 && " | "}
                           </span>
                       ))}
-                  </div>
-                  <div>
-                  <span className="font-bold">Favourite Asset Classes: </span>
+                    </div>
+                    <div>
+                      <span className="font-bold">Favourite Asset Classes: </span>
                       {favAssetClass.map((assetClass, idx) => (
                           <span key={assetClass.fav_asset_class_id}>
                               {assetClass.asset_class_name}
                               {idx < favAssetClass.length - 1 && " | "}
                           </span>
                       ))}
-                  </div>
-                  <div>
-                  <span className="font-bold">Favourite Categories: </span>
+                    </div>
+                    <div>
+                      <span className="font-bold">Favourite Categories: </span>
                       {favCategory.map((category, idx) => (
                           <span key={category.fav_category_id}>
                               {category.cat_name}
                               {idx < favCategory.length - 1 && " | "}
                           </span>
                       ))}
-                  </div>
-                  </div>
+                    </div>
+                  </MandateBox>
             </TabsContent>
             
             <TabsContent value="finplan">
