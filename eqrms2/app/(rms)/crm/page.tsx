@@ -61,7 +61,7 @@ export default async function CrmPage() {
     ]);
 
     return (
-        <div>
+        <div className="px-4 py-0">
             
             <Tabs defaultValue="crm" className="w-full mx-auto mt-6 text-sm">
                 <TabsList className="w-full">

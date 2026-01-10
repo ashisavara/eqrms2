@@ -258,6 +258,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
               className="text-xs text-center" 
               filters={[]} 
               showSearch={true}
+              emptyText="No investments found. You can upload your existing investments to the portal to view IME's Ratings on the same. Connect with your dedicated Private Banker or reach out to us using the WhatsApp button below to get started."
               aggregations={['pur_amt', 'cur_amt', 'gain_loss']}
               aggregationFormat={{
                 formatter: (value) => value.toFixed(1)

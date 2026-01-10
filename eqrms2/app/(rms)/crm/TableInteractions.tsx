@@ -133,7 +133,7 @@ export default function TableInteractions({
     
     return (
       <div className="space-y-4">
-        <div className="pageHeadingBox"><h1>CRM - Interactions</h1></div>
+        <div className="pageHeadingBox"><h1 className="text-gray-50">CRM - Interactions</h1></div>
         
         {/* ✅ Top-level filters */}
         <div className="flex flex-wrap gap-4">
