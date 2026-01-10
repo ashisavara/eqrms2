@@ -48,7 +48,7 @@ export default async function CategoryPage({ params }: PageProps) {
     <div>
         <div className="pageHeadingBox">
             <div className="flex items-center justify-center gap-4 mb-4">
-                <h1>{category.cat_name}</h1>
+                <h1 className="text-gray-50">{category.cat_name}</h1>
                 <FavouriteHeart 
                     entityType="categories" 
                     entityId={category.category_id} 
@@ -57,12 +57,13 @@ export default async function CategoryPage({ params }: PageProps) {
                 <span><b>IME Stance: </b><RmsCategoryStanceRating rating={category.category_stance} /></span> |
                 <span><b>Risk Profile: </b><RmsCategoryStanceRating rating={category.category_risk_profile} /></span>
             </div>
-            <p className="text-sm font-bold my-2 italic bg-gray-50 p-1 rounded-md">{category.cat_summary}</p>
+            <p className="text-sm font-bold my-2 italic bg-blue-950 text-gray-50 border-t border-gray-50 p-1">{category.cat_summary}</p>
             <span className="text-sm">{category.cat_description} | </span>
             {(can(userRoles, 'rms', 'edit_rms')) && (
                 <EditCatButton categoryData={category} categoryId={category.category_id} />
             )}
         </div>
+        <div className="px-4 py-0">
             <div className="text-sm mt-8">
                 <h2>Trailing & Annual Category Returns</h2>
                 <h3>Category Trailing Returns</h3>
@@ -78,6 +79,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <TableFundScreen data={funds} userRoles={userRoles} />
                 <PerformanceFootnote additionalText="| In recommended funds on the category page, we only show our 4 & 5-star rated funds, to focus on top recommendations & avoid overwhelming investors with too many options. You can use the category filter on the funds page in RMS, to see a larger list including 3-star rated funds. For 2-star and below funds, please connect with your IME Dedicated Private Banker." />
             </div>
+    </div>
     </div>
   );
 }

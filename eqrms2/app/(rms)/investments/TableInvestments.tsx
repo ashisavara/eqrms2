@@ -177,18 +177,19 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
               <AggregateCard 
                 title="Total Purchase" 
                 value={aggregations.pur_amt || 0}
-                formatter={(value) => `${value.toFixed(1)}`}
+                formatter={(value) => `Rs. ${value.toFixed(1)} lakh`}
               />
               <AggregateCard 
-                title="Total Value" 
+                title="Current Value" 
                 value={aggregations.cur_amt || 0}
-                formatter={(value) => `${value.toFixed(1)}`}
+                formatter={(value) => `Rs. ${value.toFixed(1)} lakh`}
+                className="bg-blue-100"
               />
               <AggregateCard 
                 title="Total Gain/Loss" 
                 value={aggregations.gain_loss || 0}
-                formatter={(value) => `${value.toFixed(1)}`}
-                className={aggregations.gain_loss >= 0 ? "border-green-200" : "border-red-200"}
+                formatter={(value) => `Rs. ${value.toFixed(1)} lakh`}
+                className={aggregations.gain_loss >= 0 ? "bg-green-200" : "bg-red-200"}
               />
               <AggregateCard 
                   title="Total SIP" 

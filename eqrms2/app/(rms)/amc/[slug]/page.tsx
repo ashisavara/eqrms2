@@ -54,7 +54,7 @@ export default async function AmcPage({ params }: PageProps) {
   return (
     <div>
         <div className="pageHeadingBox">
-          <h1>{AMC.amc_name}</h1>
+          <h1 className="text-gray-50">{AMC.amc_name}</h1>
           {AMC.structure}
           {AMC.aum != null && (
             <>
@@ -80,7 +80,7 @@ export default async function AmcPage({ params }: PageProps) {
           )}
         </div>
 
-      <div>
+      <div className="px-4 py-0">
           <Tabs defaultValue="rating_snapshot" className="ime-tabs">
           <TabsList className="w-full">
                 <TabsTrigger value="rating_snapshot">Snapshot</TabsTrigger>

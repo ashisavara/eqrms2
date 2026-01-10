@@ -41,14 +41,15 @@ export default async function FundPage({ params }: PageProps) {
   return (
     <div className="ime-funds-page">
       <div>
-        <div className="flex items-center justify-center gap-4 p-4 bg-gray-100 rounded">
-          <h1 className="text-2xl font-bold">{fund.fund_name}</h1>
+        <div className="flex items-center justify-center gap-4 p-4 bg-blue-950">
+          <h1 className="text-2xl font-bold text-white">{fund.fund_name}</h1>
           <FavouriteHeart 
             entityType="funds" 
             entityId={fund.fund_id} 
             size="lg"
           />
         </div>
+        <div className="px-4 py-0">
         <div className="flex flex-wrap gap-2 justify-center mt-2 text-sm">
             <Link href={`/amc/${fund.amc_slug}`} className="whitespace-nowrap blue-hyperlink"> {fund.amc_name} |  </Link>
              {fund.structure_name} -  
@@ -130,6 +131,7 @@ export default async function FundPage({ params }: PageProps) {
             </div>
           </TabsContent>
         </Tabs>
+      </div>
       </div>
       </div>
     </div>

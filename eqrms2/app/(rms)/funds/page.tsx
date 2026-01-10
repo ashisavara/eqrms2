@@ -154,7 +154,7 @@ export default async function FundsPage() {
     <div>
       <RmsPageTitle 
                 title="IME RMS" 
-                caption="Direct access to our Central Research Team's insights across funds, AMC's, asset classes, categories & more." 
+                caption="Direct access to IME Central Research Team's insights across funds, AMC's, asset classes, categories & more." 
             />
         {/* ✅ Top-level filters */}
         <div className="px-4 py-0">

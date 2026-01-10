@@ -80,12 +80,12 @@ export const CONTENT_TYPE_CONFIG = {
   },
   fund: {
     type: 'website' as const,
-    titleTemplate: "IME's View on {title}",
+    titleTemplate: "IME's Rating & Review of {title} | IME RMS - Direct Access to Expert Insights",
     descriptionPrefix: 'Expert analysis of ',
   },
   amc: {
     type: 'website' as const,
-    titleTemplate: "IME's View on {title}",
+    titleTemplate: "IME's Rating & Review of {title} | IME RMS - Direct Access to Expert Insights",
     descriptionPrefix: 'Expert analysis of ',
   },
   investmentQuery: {

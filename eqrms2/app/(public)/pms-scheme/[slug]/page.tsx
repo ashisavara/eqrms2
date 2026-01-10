@@ -51,7 +51,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                 <PageTitle title={pmsScheme.fund_name} caption="Our view on the fund, the AMC, the strategy, the performance & the investment team." />
             <div className="p-5 max-w-5xl mx-auto">
                 
-                <h2 className="mt-6 mb-0">IME's View on {pmsScheme.fund_name}</h2>
+                <h2 className="mt-6 mb-0">IME's Review of {pmsScheme.fund_name}</h2>
                 <div className="border-box !mt-0 ime-fund-view-box">
                     <p className="font-semibold border-b border-gray-300">View on the Fund</p>
                     <p>{pmsScheme.investment_view}</p>
@@ -66,7 +66,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                     )}
                 </div>
 
-                <h2 className="mt-6 mb-0">IME's View on {pmsScheme.amc_name}</h2>
+                <h2 className="mt-6 mb-0">IME's Review of {pmsScheme.amc_name}</h2>
                 <div className="border-box !mt-0 ime-fund-view-box">
                     
                     <p className="font-semibold border-b border-gray-300">View on AMC</p>
