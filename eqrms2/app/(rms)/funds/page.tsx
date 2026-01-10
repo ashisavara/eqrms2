@@ -15,6 +15,7 @@ import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 import { TableStructure } from "../structure/TableStructure";
+import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
@@ -151,7 +152,12 @@ export default async function FundsPage() {
 
   return (
     <div>
-      <div className="pageHeadingBox"><h1>IME RMS</h1></div>
+      <RmsPageTitle 
+                title="IME RMS" 
+                caption="Direct access to our Central Research Team's insights across funds, AMC's, asset classes, categories & more." 
+            />
+        {/* ✅ Top-level filters */}
+        <div className="px-4 py-0">
         <Tabs defaultValue="funds" className="w-full mx-auto mt-6 text-sm">
             <TabsList className="w-full">
                 <TabsTrigger value="funds">Funds</TabsTrigger>
@@ -276,7 +282,7 @@ export default async function FundsPage() {
 
 
 
-
+    </div>
      
     </div>
   );

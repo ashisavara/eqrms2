@@ -23,6 +23,7 @@ import { RiskProfilerButton } from "./RiskProfilerButton";
 import { formatDate } from "@/lib/utils";
 import { MandateProgressBar } from "@/components/mandate/MandateProgressBar";
 import MandateBox from "@/components/uiComponents/mandate-box";
+import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -132,10 +133,15 @@ export default async function MandatePage() {
   return (
     <GoalOptionsProvider goalOptions={goalOptionsForm}>
       <div className="mandatePage">
-        <div className="pageHeadingBox"><h1>Group Details</h1></div>
+      <RmsPageTitle 
+                title="Investment Mandate" 
+                caption="Your strategic investment plan, to help identify the right investments & help you meet your goals" 
+            />
+        {/* ✅ Top-level filters */}
+        <div className="px-4 py-0">
           <Tabs defaultValue="mandate" className="w-full">
             <TabsList className="w-full">
-              <TabsTrigger value="mandate">Details</TabsTrigger>
+              <TabsTrigger value="mandate">Mandate</TabsTrigger>
               <TabsTrigger value="finplan">Fin Plan</TabsTrigger>
               <TabsTrigger value="meetingnotes">Meeting Notes</TabsTrigger>
             </TabsList>
@@ -269,7 +275,7 @@ export default async function MandatePage() {
           </Tabs>
 
           
-          
+          </div>
       </div>
     </GoalOptionsProvider>
   )

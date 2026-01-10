@@ -31,6 +31,7 @@ import { FavCategory, FavStructure, FavAssetClass } from "@/types/favourite-deta
 import { Category } from "@/types/category-detail";
 import { TableCategories } from "@/app/(rms)/categories/TableCategories";
 import Link from "next/link";
+import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -143,9 +144,13 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
     
     return (
       <div className="space-y-4">
-        <div className="pageHeadingBox"><h1>Investments</h1></div>
+        <RmsPageTitle 
+                title="Investments" 
+                caption="View your investments, with handy filtering, sorting & access to IME ratings." 
+            />
         {/* ✅ Top-level filters */}
-        <div className="flex flex-wrap gap-4">
+        <div className="px-4 py-2">
+        <div className="flex flex-wrap gap-4 mb-4">
           {filters.map((filter) => (
             <div key={filter.column} className="min-w-[150px]">
               <MultiSelectFilter
@@ -425,6 +430,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             </Tabs>   
           </TabsContent>
         </Tabs>
+      </div>
       </div>
     );
     }

@@ -63,7 +63,7 @@ export default async function RmsLayout({
         </SidebarContent>
       </Sidebar>
       <MainContent>
-        <div className="px-4 pt-8 pb-4 md:px-6 md:py-4">
+        <div>
           {can(userRoles, 'expiring', 'view_expiring') && (
           <RoleExpiring />)}
           {children}

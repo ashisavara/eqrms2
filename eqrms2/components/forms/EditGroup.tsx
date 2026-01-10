@@ -148,7 +148,7 @@ export function EditGroupButton({
         onClick={() => setShowEditSheet(true)}
         className="blue-hyperlink"
       >
-        Edit Group
+        Edit Mandate
       </span>
 
       {/* Edit Sheet */}
