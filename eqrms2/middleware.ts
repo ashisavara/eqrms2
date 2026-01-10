@@ -54,11 +54,19 @@ function getDomainInfo(host: string): DomainInfo {
 type RouteGroup = 'rms' | 'public' | 'canvas' | 'static';
 
 function getRouteGroup(pathname: string): RouteGroup {
+  // PWA files (manifest, service worker) - must be served on all subdomains
+  if (
+    pathname === '/manifest.json' ||
+    pathname === '/sw.js'
+  ) {
+    return 'static';
+  }
+
   // Static assets and Next.js internals
   if (
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/favicon.ico') ||
-    pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico)$/)
+    pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|json)$/)
   ) {
     return 'static';
   }
