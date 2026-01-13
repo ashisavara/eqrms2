@@ -7,7 +7,7 @@ interface FlexRms2ColProps {
 
 export function FlexRms2Col({ label, children }: FlexRms2ColProps) {
   return (
-    <div className="flex flex-col md:flex-row mb-6">
+    <div className="flex flex-col md:flex-row mb-4">
       <div className="w-full md:w-[200px] md:min-w-[180px] md:flex-shrink-0">
         <span className="font-bold">{label}</span>
       </div>

@@ -94,7 +94,6 @@ export default async function FundPage({ params }: PageProps) {
             <TabsTrigger value="rating_snapshot">Snapshot</TabsTrigger>
             <TabsTrigger value="rating_rationale">Rationale</TabsTrigger>
             <TabsTrigger value="investment_team">Team</TabsTrigger>
-            <TabsTrigger value="fund_details">Details</TabsTrigger>
           </TabsList>
           <TabsContent value="rating_snapshot">
             {hasDetailedAccess ? (
@@ -109,6 +108,8 @@ export default async function FundPage({ params }: PageProps) {
               {fund.ann_perf_html && <div dangerouslySetInnerHTML={{ __html: fund.ann_perf_html }} />}
               <h2 className="ime-basic-h mt-6"> Portfolio Composition </h2>
               {fund.port_comp_html && <div className="text-sm"><div dangerouslySetInnerHTML={{ __html: fund.port_comp_html }} /></div>}
+              <h2 className="ime-basic-h3"> Fee Structure </h2>
+              {fund.fee_structure_html && <div dangerouslySetInnerHTML={{ __html: fund.fee_structure_html }} />}
             </div>
           </TabsContent>
           <TabsContent value="rating_rationale">
@@ -117,30 +118,12 @@ export default async function FundPage({ params }: PageProps) {
             ) : (
               <FundRatingRationaleUpgrade />
             )}
-                    {fund.amc_body && (
-                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_body }} />
-                    )}
-                     {fund.amc_private_body && (
-                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_private_body }} />
-                    )}
-                    {fund.fund_body && (
-                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_body }} />
-                    )}
-                     {fund.fund_private_body && (
-                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_private_body }} />
-                    )}
 
           </TabsContent>
           <TabsContent value="investment_team">
             <div className="text-base">
               <h2 className="ime-basic-h3"> Investment Team </h2>
               {fund.amc_fm_html && <div dangerouslySetInnerHTML={{ __html: fund.amc_fm_html }} />}
-            </div>
-          </TabsContent>
-          <TabsContent value="fund_details">
-            <div className="text-base">
-              <h2 className="ime-basic-h3"> Fee Structure </h2>
-              {fund.fee_structure_html && <div dangerouslySetInnerHTML={{ __html: fund.fee_structure_html }} />}
             </div>
           </TabsContent>
         </Tabs>
