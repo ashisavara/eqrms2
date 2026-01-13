@@ -53,6 +53,12 @@ const mdxComponents = [
     props: [
       { name: 'Full accordion tree with 2 items', required: true }
     ]
+  },
+  {
+    name: 'TopFundListPublic',
+    props: [
+      { name: 'fundIds', required: true, description: 'Comma-separated fund IDs (e.g., "123,456,789")' }
+    ]
   }
 ];
 

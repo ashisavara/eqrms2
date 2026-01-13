@@ -5,6 +5,7 @@ import HTML from '@/components/uiBlocks/HTML'
 import Image from '@/components/uiBlocks/Image'
 import InfoCard from '@/components/uiBlocks/InfoCard'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
+import TopFundListPublic from '@/components/uiBlocks/TopFundListPublic'
  
 const components: MDXComponents = {
   AlertBox,
@@ -16,6 +17,7 @@ const components: MDXComponents = {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
+  TopFundListPublic,
   // Add more global MDX components here
 }
  
