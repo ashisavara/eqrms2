@@ -117,6 +117,19 @@ export default async function FundPage({ params }: PageProps) {
             ) : (
               <FundRatingRationaleUpgrade />
             )}
+                    {fund.amc_body && (
+                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_body }} />
+                    )}
+                     {fund.amc_private_body && (
+                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_private_body }} />
+                    )}
+                    {fund.fund_body && (
+                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_body }} />
+                    )}
+                     {fund.fund_private_body && (
+                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_private_body }} />
+                    )}
+
           </TabsContent>
           <TabsContent value="investment_team">
             <div className="text-base">

@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./F
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
+import { ImageUpload } from "./ImageUpload";
 
 // Internal form component
 function EditFundsForm({ 
@@ -38,6 +39,7 @@ function EditFundsForm({
     additional_performance_view: initialData.additional_performance_view ?? "",
     oth_salient_points: initialData.oth_salient_points ?? "",
     fund_body: initialData.fund_body ?? "",
+    fund_private_body: initialData.fund_private_body ?? ""
   };
 
   const { control, handleSubmit } = useForm<FundsUpdateValues>({
@@ -107,7 +109,9 @@ function EditFundsForm({
         <ResizableTextArea name="strategy_view" label="Strategy View" control={control} />
         <ResizableTextArea name="additional_performance_view" label="Additional Performance View" control={control} />
         <ResizableTextArea name="oth_salient_points" label="Other Salient Points" control={control} />
+        <div><span className="text-sm font-semibold">Img Uploader <br/><ImageUpload /></span></div>
         <ResizableTextArea name="fund_body" label="Fund Body" control={control} />
+        <ResizableTextArea name="fund_private_body" label="Fund Private Body" control={control} />
       </div>
       
       <Button type="submit" className="w-full">Update Fund</Button>
@@ -140,6 +144,7 @@ export function EditFundsButton({
     additional_performance_view: fundData.additional_performance_view ?? "",
     oth_salient_points: fundData.oth_salient_points ?? "",
     fund_body: fundData.fund_body ?? "",
+    fund_private_body: fundData.fund_private_body ?? ""
   };
 
   return (

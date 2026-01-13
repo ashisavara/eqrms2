@@ -11,6 +11,7 @@ import { ResizableTextArea, TextInput, ToggleGroupInput, SelectInput } from "./F
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
+import { ImageUpload } from "./ImageUpload";
 
 // Internal form component
 function EditAmcForm({ 
@@ -44,7 +45,8 @@ function EditAmcForm({
     salient_points: initialData.salient_points ?? "",
     inv_phil_desc: initialData.inv_phil_desc ?? "",
     inv_philosophy_followed: initialData.inv_philosophy_followed ?? "",
-    amc_body: initialData.amc_body ?? ""
+    amc_body: initialData.amc_body ?? "",
+    amc_private_body: initialData.amc_private_body ?? ""
   };
 
   const { control, handleSubmit } = useForm<AmcUpdateValues>({
@@ -141,7 +143,9 @@ function EditAmcForm({
         <ResizableTextArea name="inv_phil_desc" label="Inv Philosophy Description" control={control} />
         <TextInput name="inv_phil_name" label="Inv Philosophy Name" control={control} />
         <ResizableTextArea name="salient_points" label="Salient Points" control={control} />
+        <div><span className="text-sm font-semibold">Img Uploader <br/><ImageUpload /></span></div>
         <ResizableTextArea name="amc_body" label="AMC Body" control={control} />
+        <ResizableTextArea name="amc_private_body" label="AMC Private Body" control={control} />
       </div>
       
       <Button type="submit" className="w-full">Update AMC</Button>
@@ -178,7 +182,8 @@ export function EditAMCButton({
     inv_phil_desc: amcData.inv_phil_desc ?? "",
     salient_points: amcData.salient_points ?? "",
     inv_philosophy_followed: amcData.inv_philosophy_followed ?? "",
-    amc_body: amcData.amc_body ?? ""
+    amc_body: amcData.amc_body ?? "",
+    amc_private_body: amcData.amc_private_body ?? ""
   };
 
   return (

@@ -66,13 +66,13 @@ export function EditCompanyForm({ companyId, defaultValues }: Props) {
         <TextInput name="financials" label="Financials" control={control} />
       </div>
       <ResizableTextArea name="inv_view" label="Investment View" control={control} />
+      <ResizableTextArea name="business_mix" label="Business Mix" control={control} />
+      <ResizableTextArea name="catalysts" label="Catalysts" control={control} />
       <ResizableTextArea name="positive" label="Positive" control={control} />
       <ResizableTextArea name="negative" label="Negative" control={control} />
       <ResizableTextArea name="outlook" label="Outlook" control={control} />
-      <ResizableTextArea name="snapshot" label="Snapshot" control={control} />
-      <ResizableTextArea name="business_mix" label="Business Mix" control={control} />
-      <ResizableTextArea name="catalysts" label="Catalysts" control={control} />
-      <ResizableTextArea name="hidden" label="Hidden" control={control} />
+      <ResizableTextArea name="snapshot" label="Company Notes" control={control} />
+      <ResizableTextArea name="hidden" label="Questions to Answer" control={control} />
       {/* Submit button */}
       {Object.keys(errors).length > 0 && (
         <div className="text-red-500">

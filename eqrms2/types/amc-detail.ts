@@ -67,6 +67,7 @@ export type AMC = {
     amc_fm_html: string,
     mkt_material_link: string,
     amc_body: string,
+    amc_private_body:string,
     // Optional SEO fields
     seo_title?: string | null;
     seo_description?: string | null;

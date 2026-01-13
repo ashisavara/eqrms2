@@ -4,6 +4,8 @@ import { AMC } from "@/types/amc-detail";
 import { RatingDisplayWithStar, RatingContainer, RmsFundFiveYrPerfRating, RmsFundPerfConsistencyRating, RmsAmcMaturityRating, RmsFundStrategyDefRating, RmsFundFmChurnRiskRating } from "@/components/conditional-formatting";
 import { FlexRms2Col } from "@/components/grids/flex-rms-2col";
 import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
+import remarkGfm from "remark-gfm";
+import ReactMarkdown from "react-markdown";
 
 // Component for users WITH permissions - Rating Snapshot
 export function FundRatingSnapshot({ fund }: { fund: RmsFundAmc }) {
@@ -156,54 +158,55 @@ export function FundRatingSnapshotUpgrade() {
 export function FundRatingRationale({ fund }: { fund: RmsFundAmc }) {
   return (
     <>
-      <div className="text-sm">
+      <div className="text-sm ime-rating-rationale">
         <h2 className="ime-basic-h3"> Rationale behind our fund rating</h2>
         {fund.investment_view && fund.investment_view.trim() !== "" && (
           <FlexRms2Col label="Fund Recommendation">
-            {fund.investment_view}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.investment_view}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {fund.strategy_view && fund.strategy_view.trim() !== "" && (
           <FlexRms2Col label="Fund's Strategy">
-            {fund.strategy_view}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.strategy_view}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {((fund.performance_view && fund.performance_view.trim() !== "") || (fund.additional_performance_view && fund.additional_performance_view.trim() !== "")) && (
           <FlexRms2Col label="Performance">
-            {fund.performance_view}{fund.additional_performance_view}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.performance_view}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.additional_performance_view}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {fund.oth_salient_points && fund.oth_salient_points.trim() !== "" && (
           <FlexRms2Col label="Other Salient Points">
-            {fund.oth_salient_points}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.oth_salient_points}</ReactMarkdown>
           </FlexRms2Col>
         )}
       </div>
-      <div className="text-sm mt-6">
+      <div className="text-sm mt-6 ime-rating-rationale">
         <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
         {fund.amc_view && fund.amc_view.trim() !== "" && (
           <FlexRms2Col label="View on AMC">
-            {fund.amc_view}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.amc_view}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {fund.amc_pedigree_desc && fund.amc_pedigree_desc.trim() !== "" && (
           <FlexRms2Col label="AMC's Pedigree">
-            {fund.amc_pedigree_desc}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.amc_pedigree_desc}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {fund.team_pedigree_desc && fund.team_pedigree_desc.trim() !== "" && (
           <FlexRms2Col label="AMC's Team">
-            {fund.team_pedigree_desc}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.team_pedigree_desc}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {fund.inv_phil_desc && fund.inv_phil_desc.trim() !== "" && (
           <FlexRms2Col label="AMC's Philosophy">
-            {fund.inv_phil_desc}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.inv_phil_desc}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {fund.salient_points && fund.salient_points.trim() !== "" && (
           <FlexRms2Col label="Other Salient Points">
-            {fund.salient_points}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.salient_points}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {fund.fund_body && (
@@ -358,31 +361,31 @@ export function AmcRatingSnapshotUpgrade() {
 export function AmcRatingRationale({ amc }: { amc: AMC }) {
   return (
     <>
-      <div className="flex-col gap-y-5 text-sm">
+      <div className="flex-col gap-y-5 text-sm ime-rating-rationale">
         <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
         {amc.amc_view && amc.amc_view.trim() !== "" && (
           <FlexRms2Col label="View on AMC">
-            {amc.amc_view}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{amc.amc_view}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {amc.amc_pedigree_desc && amc.amc_pedigree_desc.trim() !== "" && (
           <FlexRms2Col label="AMC Pedigree">
-            {amc.amc_pedigree_desc}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{amc.amc_pedigree_desc}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {amc.team_pedigree_desc && amc.team_pedigree_desc.trim() !== "" && (
           <FlexRms2Col label="AMC Team">
-            {amc.team_pedigree_desc}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{amc.team_pedigree_desc}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {amc.inv_phil_desc && amc.inv_phil_desc.trim() !== "" && (
           <FlexRms2Col label="AMC's Philosophy">
-            {amc.inv_phil_desc}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{amc.inv_phil_desc}</ReactMarkdown>
           </FlexRms2Col>
         )}
         {amc.salient_points && amc.salient_points.trim() !== "" && (
           <FlexRms2Col label="Other Salient Points">
-            {amc.salient_points}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{amc.salient_points}</ReactMarkdown>
           </FlexRms2Col>
         )}
       </div>

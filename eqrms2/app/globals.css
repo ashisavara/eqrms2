@@ -114,6 +114,18 @@
     @apply mt-0 mb-0 inline text-gray-800;
   }
 
+  div.ime-rating-rationale p {
+    @apply mt-0 mb-0 text-gray-800;
+  }
+
+  div.ime-rating-rationale ul {
+    @apply ml-0 pl-0 list-disc list-inside text-gray-800;
+  }
+
+  div.ime-rating-rationale ul li {
+    @apply mt-0 mb-0 list-item text-gray-800;
+  }
+
   /* sections with specific styling */
   section.ime-gray-text {
     @apply bg-gray-100 py-12 text-center text-gray-500 font-semibold py-8 text-lg;

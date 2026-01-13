@@ -36,6 +36,7 @@ export type RmsFundAmc = {
     since_inception: number | null;
     fund_commission: number | null;
     fund_body: string | null;
+    fund_private_body: string | null;
   
     amc_name: string | null;
     amc_rating: number | null;
@@ -53,6 +54,7 @@ export type RmsFundAmc = {
     core_amc_team: string | null;
     amc_view: string | null;
     amc_body: string | null;
+    amc_private_body: string | null;
     amc_pedigree_desc: string | null;
     team_pedigree_desc: string | null;
     inv_phil_desc: string | null;

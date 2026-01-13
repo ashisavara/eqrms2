@@ -67,7 +67,7 @@ export default async function AmcPage({ params }: PageProps) {
           )}
           {(can(userRoles, 'rms', 'edit_rms')) && (
           <>
-              <EditAMCButton amcData={AMC} amcId={AMC.id} />
+              <span> | </span><EditAMCButton amcData={AMC} amcId={AMC.id} />
               <EditAmcDueDilButton amcData={AMC} amcId={AMC.id} />
           </>
           )}
@@ -106,6 +106,9 @@ export default async function AmcPage({ params }: PageProps) {
                 )}
                       {AMC.amc_body && (
                       <div className="rms-body" dangerouslySetInnerHTML={{ __html: AMC.amc_body }} />
+                    )}
+                     {AMC.amc_private_body && (
+                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: AMC.amc_private_body }} />
                     )}
               </TabsContent>
               <TabsContent value="funds">
