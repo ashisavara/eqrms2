@@ -484,6 +484,8 @@ export const HeldAwayAssetsSchema = z.object({
   pur_amt: z.coerce.number(),
   cur_amt: z.coerce.number(),
   rms_fund_id: z.coerce.number().nullable(),
+  amt_change: z.coerce.number().nullable(),
+  recommendation: z.string().nullable(),
 });
 
 export type HeldAwayAssetsValues = z.infer<typeof HeldAwayAssetsSchema>;

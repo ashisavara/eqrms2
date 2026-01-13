@@ -21,5 +21,5 @@ export default function TableInvChange({ data, userRoles }: { data: Investments[
     enableSortingRemoval: false,
     });
 
-      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false}/>;
+      return <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false} emptyText="No portfolio reallocation changes are currently recommended. Please connect with your private banker if you would like some recommendations on any portfolio optimisations." />;
     }

@@ -11,6 +11,7 @@ import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
+import { Pencil } from "lucide-react";
 
 // Internal form component
 function EditInvAmtForm({initialData, id, onSuccess}: {initialData: EditInvNewAmtValues | null, id: number, onSuccess: () => void}) {
@@ -92,9 +93,9 @@ export function EditInvAmtButton({
     <>
       <span 
         onClick={() => setShowEditSheet(true)}
-        className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+        className="text-blue-500 hover:text-blue-700 underline cursor-pointer ml-2"
       >
-        Edit 
+       <Pencil className="h-3 w-3" />
       </span>
 
       {/* Edit Sheet */}

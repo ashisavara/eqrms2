@@ -52,12 +52,6 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(createColumns(userRoles), 'fund_name');
   
-  // Filter data to only show investments with changes (for TableInvChange) ... we have stopped using this since needed access to be able to change amount on fund
-  const changedInvestments = useMemo(() => 
-    data.filter(item => item.amt_change && item.amt_change !== 0), 
-    [data]
-  );
-  
   const autoSortedColumns = useAutoSorting(data, responsiveColumns);
 
   const table = useReactTable({
@@ -141,6 +135,12 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
       const filteredRows = table.getFilteredRowModel().rows;
       return filteredRows.map(row => row.original);
     }, [table.getFilteredRowModel().rows]);
+    
+    // Filter data to only show investments with changes (for TableInvChange)
+    const changedInvestments = useMemo(() => 
+      filteredData.filter(item => item.amt_change != null && item.amt_change !== 0), 
+      [filteredData]
+    );
     
     return (
       <div className="space-y-4">
@@ -376,7 +376,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
               </div>
             )}
             <p className="helper-text"><span className="font-bold">Note: </span> You can sort on the Change Amt column by clicking on it, to see the key changes being recommended</p>
-            <TableInvChange data={filteredData} userRoles={userRoles} />
+            <TableInvChange data={changedInvestments} userRoles={userRoles} />
           </TabsContent>
           <TabsContent value="shortlist">
 

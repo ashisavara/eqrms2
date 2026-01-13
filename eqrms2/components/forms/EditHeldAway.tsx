@@ -13,6 +13,8 @@ import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
 import { Pencil } from "lucide-react";
+import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
+import { EditInvAmtButton } from "./EditInvNewAmt";
 
 // Fund details type
 type FundDetails = {
@@ -34,6 +36,10 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
     const [selectedRmsFund, setSelectedRmsFund] = useState<FundDetails | null>(null);
     const [originallyHadRmsFund, setOriginallyHadRmsFund] = useState(hasRmsFund);
     const router = useRouter();
+    
+    // Get options from context (static options)
+    const masterOptions = useMasterOptions();
+    const recommendationOptions = transformToValueLabel(masterOptions.invRecommendation);
 
     const cleanedData: HeldAwayAssetsValues = {
         fund_name: initialData?.fund_name || "",
@@ -43,7 +49,9 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
         advisor_name: initialData?.advisor_name || "",
         pur_amt: initialData?.pur_amt || 0,
         cur_amt: initialData?.cur_amt || 0,
-        rms_fund_id: initialData?.rms_fund_id || null
+        rms_fund_id: initialData?.rms_fund_id || null,
+        amt_change: initialData?.amt_change ?? 0,
+        recommendation: initialData?.recommendation ?? ""
     };
 
 
@@ -212,6 +220,11 @@ function EditHeldAwayAssetsForm({initialData, id, onSuccess}: {initialData: Held
             {/* Hidden asset class field that gets auto-populated */}
             <input type="hidden" {...control.register("asset_class_id")} />
 
+            <h2>Realloction Changes Recommended</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TextInput name="amt_change" label="Change Amount" control={control} type="number" />
+                <ToggleGroupInput name="recommendation" label="Recommendation" control={control} options={recommendationOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+            </div>
             <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
                     {isLoading ? 'Saving...' : 'Save'}
@@ -235,9 +248,14 @@ export function EditHeldAwayAssetsButton({
     console.error('Investments data is missing investment_id:', investmentData);
   }
 
-  // Don't render for IME Capital advisor
+  // For IME Capital advisor, show EditInvAmtButton instead
   if (investmentData.advisor_name === "IME Capital") {
-    return null;
+    return (
+      <EditInvAmtButton
+        investmentData={investmentData}
+        investmentId={investmentId}
+      />
+    );
   }
 
   // Convert category data to HeldAwayAssetsValues format
@@ -250,6 +268,8 @@ export function EditHeldAwayAssetsButton({
     pur_amt: investmentData.pur_amt ?? 0,
     cur_amt: investmentData.cur_amt ?? 0,
     rms_fund_id: investmentData.rms_fund_id ?? null,
+    amt_change: investmentData.amt_change ?? 0,
+    recommendation: investmentData.recommendation ?? ""
   };
 
   return (
