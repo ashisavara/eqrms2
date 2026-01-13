@@ -104,12 +104,6 @@ export default async function AmcPage({ params }: PageProps) {
                 ) : (
                   <AmcRatingRationaleUpgrade />
                 )}
-                      {AMC.amc_body && (
-                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: AMC.amc_body }} />
-                    )}
-                     {AMC.amc_private_body && (
-                      <div className="rms-body" dangerouslySetInnerHTML={{ __html: AMC.amc_private_body }} />
-                    )}
               </TabsContent>
               <TabsContent value="funds">
                   

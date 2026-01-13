@@ -212,8 +212,14 @@ export function FundRatingRationale({ fund }: { fund: RmsFundAmc }) {
         {fund.fund_body && (
           <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_body }} />
         )}
+        {fund.fund_private_body && (
+          <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_private_body }} />
+        )}
         {fund.amc_body && (
           <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_body }} />
+        )}
+        {fund.amc_private_body && (
+          <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_private_body }} />
         )}
       </div>
     </>
@@ -387,6 +393,12 @@ export function AmcRatingRationale({ amc }: { amc: AMC }) {
           <FlexRms2Col label="Other Salient Points">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{amc.salient_points}</ReactMarkdown>
           </FlexRms2Col>
+        )}
+        {amc.amc_body && (
+          <div className="rms-body" dangerouslySetInnerHTML={{ __html: amc.amc_body }} />
+        )}
+        {amc.amc_private_body && (
+          <div className="rms-body" dangerouslySetInnerHTML={{ __html: amc.amc_private_body }} />
         )}
       </div>
     </>
