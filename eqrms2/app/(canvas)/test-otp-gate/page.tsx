@@ -10,7 +10,7 @@ export default function TestOtpGatePage() {
         The content below is protected and will only be visible after OTP verification.
       </p>
 
-      <OtpConditionalVisibility>
+      <OtpConditionalVisibility hvoc="test-page">
         <div className="p-6 bg-green-50 border border-green-200 rounded-lg">
           <h2 className="text-2xl font-bold text-green-800 mb-4">
             🎉 Protected Content Unlocked!

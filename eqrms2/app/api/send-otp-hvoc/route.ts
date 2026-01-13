@@ -98,12 +98,18 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const inputPhone = String(body?.phone_number || '')
     const lead_name = String(body?.lead_name || '')
+    const hvoc = String(body?.hvoc || '')
     const device_id = String(body?.device_id || '')
     const trigger_source = String(body?.trigger_source || 'form')
 
     // Validate lead_name is provided
     if (!lead_name.trim()) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 })
+    }
+
+    // Validate hvoc is provided
+    if (!hvoc.trim()) {
+      return NextResponse.json({ error: 'HVOC value is required' }, { status: 400 })
     }
 
     // Optional: shared-secret if called by an external system like AI Sensy
@@ -146,7 +152,7 @@ export async function POST(req: NextRequest) {
     const otp = randomInt(min, max).toString()
     const expires_at = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000).toISOString()
 
-    // Persist OTP to database with otp_lead_name
+    // Persist OTP to database with otp_lead_name and hvoc
     const { error: insertErr } = await supabaseAdmin.from('otp_hvoc').insert({
       phone_number,
       otp_code: otp,
@@ -155,6 +161,7 @@ export async function POST(req: NextRequest) {
       ip_address,
       device_id,
       otp_lead_name: lead_name,
+      hvoc: hvoc,
     })
     if (insertErr) {
       console.error(insertErr)

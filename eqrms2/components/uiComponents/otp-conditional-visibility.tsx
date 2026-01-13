@@ -1,3 +1,8 @@
+// <OtpConditionalVisibility hvoc="test-page"> </OtpConditionalVisibility>
+// this component is used to conditionally show content based on the OTP verification
+// the hvoc is the hvoc of the content to be shown
+// the children is the content to be shown
+
 'use client'
 
 import { useState } from 'react'
@@ -7,9 +12,10 @@ import { Label } from '@/components/ui/label'
 
 interface OtpConditionalVisibilityProps {
   children: React.ReactNode;
+  hvoc: string;
 }
 
-export function OtpConditionalVisibility({ children }: OtpConditionalVisibilityProps) {
+export function OtpConditionalVisibility({ children, hvoc }: OtpConditionalVisibilityProps) {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [otp, setOtp] = useState('')
@@ -51,7 +57,8 @@ export function OtpConditionalVisibility({ children }: OtpConditionalVisibilityP
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           phone_number: phone,
-          lead_name: name.trim()
+          lead_name: name.trim(),
+          hvoc: hvoc
         }),
       })
       

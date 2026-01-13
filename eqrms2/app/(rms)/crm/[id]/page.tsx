@@ -96,7 +96,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
     
     return (
         <div className="ime-crm-detail-page px-4 py-2">
-            <div className="pageHeadingBox">
+            <div className="bg-gray-200 p-4">
                 <div className="grid grid-cols-2 gap-4 text-left">
                     <div className="text-left">
                         <div className="flex flex-row gap-2">
