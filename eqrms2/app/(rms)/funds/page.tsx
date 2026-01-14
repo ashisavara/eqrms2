@@ -23,7 +23,7 @@ export const dynamic = 'force-dynamic';
 export default async function FundsPage() {
   const userRoles = await getUserRoles();
 
-  const [funds, mfAmc, pmsAmc, globalAmc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, GlobalAltcategory, DomesticAssetClass, GlobalAssetClass, DomesticStructure, GlobalStructure] = await Promise.all([
+  const [funds, mfAmc, pmsAmc, globalAmc, Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, DomesticAssetClass, GlobalAssetClass, DomesticStructure, GlobalStructure] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({
       table: "view_rms_funds_screener",
       columns: "fund_id,fund_name,fund_rating,fund_performance_rating,amc_name,amc_rating,asset_class_name,category_name,cat_long_name,structure_name,open_for_subscription, estate_duty_exposure,us_investors,one_yr,three_yr,five_yr,since_inception,slug",
@@ -69,7 +69,7 @@ export default async function FundsPage() {
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Equity'),  
-        (query) => query.order('five_yr', { ascending: false }),
+        (query) => query.order('category_stance', { ascending: false }),
       ]
     }),
     supabaseListRead<Category>({
@@ -78,7 +78,7 @@ export default async function FundsPage() {
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Debt'),  
-        (query) => query.order('five_yr', { ascending: false }),
+        (query) => query.order('category_stance', { ascending: false }),
       ]
     }),
     supabaseListRead<Category>({
@@ -87,7 +87,7 @@ export default async function FundsPage() {
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Hybrid'),  
-        (query) => query.order('five_yr', { ascending: false }),
+        (query) => query.order('category_stance', { ascending: false }),
       ]
     }),
     supabaseListRead<Category>({
@@ -96,7 +96,7 @@ export default async function FundsPage() {
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Alternatives'),  
-        (query) => query.order('five_yr', { ascending: false }),
+        (query) => query.order('category_stance', { ascending: false }),
       ]
     }),
     supabaseListRead<Category>({
@@ -105,7 +105,7 @@ export default async function FundsPage() {
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Global - Equity'),  
-        (query) => query.order('five_yr', { ascending: false }),
+        (query) => query.order('category_stance', { ascending: false }),
       ]
     }),
     supabaseListRead<Category>({
@@ -113,17 +113,8 @@ export default async function FundsPage() {
       columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
       filters: [
         (query) => query.eq('rms_show', true),
-        (query) => query.eq('asset_class_name', 'Global - Debt'),  
-        (query) => query.order('five_yr', { ascending: false }),
-      ]
-    }),
-    supabaseListRead<Category>({
-      table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
-      filters: [
-        (query) => query.eq('rms_show', true),
-        (query) => query.eq('asset_class_name', 'Global - Alt'),  
-        (query) => query.order('five_yr', { ascending: false }),
+        (query) => query.in('asset_class_name', ['Global - Debt', 'Global - Alt']),  
+        (query) => query.order('category_stance', { ascending: false }),
       ]
     }),
     supabaseListRead<AssetClass>({
@@ -263,16 +254,11 @@ export default async function FundsPage() {
                             </div>
                         </TabsContent>
                         <TabsContent value="Global-Others">
-                            <h3 className="text-base font-bold text-center text-gray-500 p-2">Global Debt</h3>
+                        <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={GlobalDebtcategory} columnType="summary" userRoles={userRoles} />
                             <div className="hidden md:block mt-6">
+                            <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={GlobalDebtcategory} columnType="annual" userRoles={userRoles} />
-                            </div>
-                            <h3 className="text-base font-bold text-center text-gray-500 p-2 mt-6">Global Alternatives</h3>
-                            <TableCategories data={GlobalAltcategory} columnType="summary" userRoles={userRoles} />
-                            <PerformanceFootnote />
-                            <div className="hidden md:block mt-6">
-                              <TableCategories data={GlobalAltcategory} columnType="annual" userRoles={userRoles} />
                             </div>
                         </TabsContent>
                     </Tabs>
