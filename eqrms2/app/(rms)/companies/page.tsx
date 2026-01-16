@@ -37,7 +37,7 @@ export default async function CompaniesPage() {
 ]);
 
   return (
-    <div>
+    <div className="px-6">
       <Tabs defaultValue="companies" className="w-full mx-auto mt-6 text-sm">
             <TabsList className="w-full">
                   <TabsTrigger value="companies">ValScreen</TabsTrigger>

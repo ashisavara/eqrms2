@@ -1,7 +1,7 @@
 import SimpleTable from "@/components/tables/singleRowTable";
 import { RmsFundAmc } from "@/types/funds-detail";
 import { AMC } from "@/types/amc-detail";
-import { RatingDisplayWithStar, RatingContainer, RmsFundFiveYrPerfRating, RmsFundPerfConsistencyRating, RmsAmcMaturityRating, RmsFundStrategyDefRating, RmsFundFmChurnRiskRating } from "@/components/conditional-formatting";
+import { RatingDisplayWithStar, RatingContainer, RmsFundFiveYrPerfRating, RmsFundPerfConsistencyRating, RmsAmcMaturityRating, RmsFundStrategyDefRating, RmsFundFmChurnRiskRating, RmsCategoryStanceRating } from "@/components/conditional-formatting";
 import { FlexRms2Col } from "@/components/grids/flex-rms-2col";
 import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
 import remarkGfm from "remark-gfm";
@@ -183,6 +183,15 @@ export function FundRatingRationale({ fund }: { fund: RmsFundAmc }) {
         )}
       </div>
       <div className="text-sm mt-6 ime-rating-rationale">
+        <h2 className="ime-basic-h3"> IME's Stance on the {fund.category_name} Category</h2>
+          <FlexRms2Col label="Category View">
+          <span><b>Stance: </b><RmsCategoryStanceRating rating={fund.category_stance ?? ''} /></span> | 
+          <span><b> Risk Profile: </b><RmsCategoryStanceRating rating={fund.category_risk_profile ?? ''} /></span>
+          </FlexRms2Col>
+          <FlexRms2Col label="Category Description">
+            <p className="!mb-4">{fund.cat_summary}</p>
+            <p>{fund.cat_description}</p>
+          </FlexRms2Col>
         <h2 className="ime-basic-h3"> Rationale behind our AMC rating</h2>
         {fund.amc_view && fund.amc_view.trim() !== "" && (
           <FlexRms2Col label="View on AMC">
@@ -209,17 +218,24 @@ export function FundRatingRationale({ fund }: { fund: RmsFundAmc }) {
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{fund.salient_points}</ReactMarkdown>
           </FlexRms2Col>
         )}
-        {fund.fund_body && (
-          <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_body }} />
-        )}
-        {fund.fund_private_body && (
-          <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_private_body }} />
-        )}
-        {fund.amc_body && (
-          <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_body }} />
-        )}
-        {fund.amc_private_body && (
-          <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_private_body }} />
+        
+        
+        {(fund.fund_body || fund.fund_private_body || fund.amc_body || fund.amc_private_body) && (
+          <>
+            <h2 className="ime-basic-h3"> Other Details</h2>
+            {fund.fund_body && (
+              <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_body }} />
+            )}
+            {fund.fund_private_body && (
+              <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.fund_private_body }} />
+            )}
+            {fund.amc_body && (
+              <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_body }} />
+            )}
+            {fund.amc_private_body && (
+              <div className="rms-body" dangerouslySetInnerHTML={{ __html: fund.amc_private_body }} />
+            )}
+          </>
         )}
       </div>
     </>

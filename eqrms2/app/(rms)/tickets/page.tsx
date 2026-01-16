@@ -47,13 +47,13 @@ export default async function TicketsPage() {
 
   return (
     <div>
-        <div className="pageHeadingBox"><h1>Ticketing</h1></div>
+        <div className="pageHeadingBox"><h1 className="text-white">Ticketing</h1></div>
+        <div className="px-6">
         <Tabs defaultValue="tickets" className="w-full mx-auto mt-6 text-sm">
           <TabsList className="w-full">
             <TabsTrigger value="tickets">Tickets</TabsTrigger>
             <TabsTrigger value="accountonboard">Ac Onboarding</TabsTrigger>
-            <TabsTrigger value="appbugs">App Bugs</TabsTrigger>
-            <TabsTrigger value="content">Content Pipeline</TabsTrigger>
+            <TabsTrigger value="appbugs">Trackers</TabsTrigger>
           </TabsList>
           <TabsContent value="tickets">
             <AddTicketButton/>
@@ -67,26 +67,14 @@ export default async function TicketsPage() {
             <TableAccOnboard data={waitingFunding} />
           </TabsContent>
           <TabsContent value="appbugs">
-            <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
-                <iframe 
-                src="https://coda.io/embed/s248BHCxNm/_su6BtulV?viewMode=embedplay&hideSections=true" 
-                style={{ width:1800, height:1000, maxWidth: '100%' }} 
-                allow="fullscreen"
-                />
+            <div className="w-full mx-auto" style={{ aspectRatio: '16 / 9' }}>
+            <iframe src="https://bush-juniper-c4a.notion.site/ebd//2e455ec789e180e4a8f6e0242dbfe4a9?v=2e455ec789e180c2ad89000c007f1b05" width="100%" height="800"/>
+                
             </div>
-          </TabsContent>
-          <TabsContent value="content">
-            <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
-                <iframe 
-                src="https://coda.io/embed/s248BHCxNm/_suL6Fxu3?viewMode=embedplay&hideSections=true" 
-                style={{ width:1800, height:1000, maxWidth: '100%' }} 
-                allow="fullscreen"
-                />
-            </div>
-
           </TabsContent>
 
         </Tabs>
+    </div>
     </div>
   );
 }

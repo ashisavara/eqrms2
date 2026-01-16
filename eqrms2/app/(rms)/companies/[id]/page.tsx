@@ -53,10 +53,10 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
   return (
         <div className="ime-company-page">
           <div className="pageHeadingBox">
-            <h1>{company.ime_name}</h1>
+            <h1 className="text-white">{company.ime_name}</h1>
           </div>
 
-          <div className="mb-5 text-xs grid grid-cols-2 gap-x-6 gap-y-8">
+          <div className="mb-5 text-xs grid grid-cols-2 gap-x-6 gap-y-8 px-6">
             <div>
               <SimpleTable 
                 headers = {[{label:"CMP"},{label:"Target"},{label:"TP Multiple"},{label:"Upside"}]}
@@ -95,7 +95,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             </div>
           </div>
 
-          <div className="text-sm">
+          <div className="max-w-4xl mx-auto text-sm">
           {company.inv_view && (
             <div className=" text-blue-800 mb-5 bg-blue-50 rounded-md p-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{company.inv_view || ""}</ReactMarkdown>
@@ -145,6 +145,8 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             )}
           </div>
 
+
+          <div className="px-4 w-full text-xs text-center">
           <ToggleVisibility toggleText="Add quarter notes">
             <QtrNotesForm
               company_id={Number(id)} // Use `id` instead of `params.id`
@@ -153,7 +155,6 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             />
           </ToggleVisibility>
         
-          <div className="flex w-full text-xs text-center">
             <TableQuarterlyNotes 
               data={qtrNotes} 
               qtrOptions={qtrOptions}
@@ -164,7 +165,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
 
           {company.financials && (
             <div 
-              className="text-blue-800 mb-5 bg-blue-50 rounded-md p-2"
+              className="p-6"
               dangerouslySetInnerHTML={{ __html: company.financials || "" }}
             />
           )}

@@ -59,6 +59,12 @@ const mdxComponents = [
     props: [
       { name: 'fundIds', required: true, description: 'Comma-separated fund IDs (e.g., "123,456,789")' }
     ]
+  },
+  {
+    name: 'TopFundAutoPublic',
+    props: [
+      { name: 'filters', required: true, description: 'Array of filter functions for querying funds' }
+    ]
   }
 ];
 
@@ -84,6 +90,11 @@ export function ComponentDirectorySheet() {
     </AccordionContent>
   </AccordionItem>
 </Accordion>`;
+    }
+
+    // Special case for TopFundAutoPublic
+    if (component.name === 'TopFundAutoPublic') {
+      return `<TopFundAutoPublic filters={[(query) => query.eq('cat_name', 'Mid Cap'), (query) => query.eq('structure_name', 'PMS'), (query) => query.gt('fund_rating', 3)]} />`;
     }
 
     const propsString = component.props

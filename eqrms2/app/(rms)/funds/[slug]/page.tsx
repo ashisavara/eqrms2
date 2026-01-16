@@ -38,6 +38,7 @@ export default async function FundPage({ params }: PageProps) {
     return <div>Fund not found</div>;
   }
 
+
   return (
     <div className="ime-funds-page">
       <div>

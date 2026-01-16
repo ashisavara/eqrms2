@@ -62,6 +62,10 @@ export type RmsFundAmc = {
   
     category_name: string | null;
     category_long_name: string | null;
+    category_risk_profile: string | null;
+    category_stance: string | null;
+    cat_summary: string | null;
+    cat_description: string | null;
     asset_class_name: string | null;
     structure_name: string | null;
   

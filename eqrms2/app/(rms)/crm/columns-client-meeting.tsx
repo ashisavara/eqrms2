@@ -12,13 +12,13 @@ export const columns: ColumnDef<InteractionDetail>[] = [
   },
   { 
     accessorKey: "meeting_name", 
-    header: "Meeting Name", 
-    size: 200, 
+    header: () => <div className="text-left">Meeting Name</div>,
+    size: 250, 
     cell: ({ row }) => {
       const meetingName = row.getValue("meeting_name") as string;
       return meetingName == null ? null : (
         <MeetingDetailsSheet meetingData={row.original}>
-          <p className="text-left">{meetingName}</p>
+          <p className="text-left !text-xs">{meetingName}</p>
         </MeetingDetailsSheet>
       );
     }
@@ -27,6 +27,6 @@ export const columns: ColumnDef<InteractionDetail>[] = [
     accessorKey: "meeting_summary", 
     header: "Summary", 
     size: 1200, 
-    cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>
+    cell: ({ getValue }) => getValue() == null ? null : <p className="text-left !text-xs">{getValue() as string}</p>
   },    
 ];
