@@ -130,6 +130,8 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
   // The client component handles all the render functions and UI configuration
   // while the server component handles data fetching and URL parsing
   return (
+    <div className="p-6">
+    <h1>All Fund Screener</h1>
     <FundsTableClient
       data={tableData.data}
       pagination={{
@@ -152,6 +154,7 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
       filterConfig={filterConfig}
       searchColumns={['fund_name', 'amc_name', 'category_name', 'structure_name']}
     />
+    </div>
   );
 }
 

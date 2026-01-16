@@ -114,6 +114,10 @@
     @apply mt-0 mb-0 inline text-gray-800;
   }
 
+  div.ime-rating-rationale {
+    @apply max-w-5xl mx-auto;
+  }
+
   div.ime-rating-rationale p {
     @apply mt-0 mb-0 text-gray-800;
   }
