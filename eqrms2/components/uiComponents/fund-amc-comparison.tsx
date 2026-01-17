@@ -1,3 +1,9 @@
+// how to use 
+// import { FundAmcComparison } from "@/components/uiComponents/fund-amc-comparison";
+// <FundAmcComparison fundIds={[1, 2, 3]}>
+//   <p>This is a comparison of the funds</p> ... this is optional
+//
+
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { RmsFundAmc } from "@/types/funds-detail";
 import { getUserRoles } from '@/lib/auth/getUserRoles';

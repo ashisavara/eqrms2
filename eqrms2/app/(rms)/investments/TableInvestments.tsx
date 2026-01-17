@@ -32,6 +32,7 @@ import { Category } from "@/types/category-detail";
 import { TableCategories } from "@/app/(rms)/categories/TableCategories";
 import Link from "next/link";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
+import { FundAmcComparison } from "@/components/uiComponents/fund-amc-comparison";
 
 interface TableInvestmentsProps {
   data: Investments[];
@@ -165,14 +166,13 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
         </div>
 
         {/* ✅ Tabs for table and cards */}
-        <Tabs defaultValue="investments" className="w-full">
+        <Tabs defaultValue="allocations" className="w-full">
           <TabsList className="w-full">
+            <TabsTrigger value="allocations">Allocation</TabsTrigger>
             <TabsTrigger value="investments">Investments</TabsTrigger>
             <TabsTrigger value="reallocations">Reallocation</TabsTrigger>
-            <TabsTrigger value="shortlist">Shortlist</TabsTrigger>
           </TabsList>
-          
-          <TabsContent value="investments">
+          <TabsContent value="allocations">
           <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
               <AggregateCard 
                 title="Total Purchase" 
@@ -203,7 +203,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 />
             </div>
             <div className="flex">
-            <div className="mt-2"><ToggleVisibility toggleText="Show Allocation">
+            <div className="mt-2">
               
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <PieChart 
@@ -244,15 +244,19 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 title="Advisor"
               />
             </div>
-          </ToggleVisibility>
           </div>
+          </div>
+
+          </TabsContent>
+          
+          <TabsContent value="investments">
+          
           {can(userRoles, 'investments', 'add_edit_held_away') && (
             <div className="flex">
               <AddHeldAwayButton investorOptions={investorOptions}><CirclePlusIcon className="w-6 h-6 m-4" /></AddHeldAwayButton>
               <AddGroupInvestorButton><UserRoundPlusIcon className="w-6 h-6" /></AddGroupInvestorButton>
             </div>
           )}
-          </div>
             <ReactTableWrapper 
               table={table} 
               className="text-xs text-center" 
@@ -371,65 +375,12 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             </ToggleVisibility>
             <EditPortRecoButton portRecoData={portfolioReallocationThoughts} groupId={groupId} />
             {portfolioReallocationThoughts && (
-              <div className="bg-gray-100 rounded-md p-4 text-sm">
+              <div className="border-box text-sm !py-4">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{portfolioReallocationThoughts}</ReactMarkdown>
               </div>
             )}
             <p className="helper-text"><span className="font-bold">Note: </span> You can sort on the Change Amt column by clicking on it, to see the key changes being recommended</p>
             <TableInvChange data={changedInvestments} userRoles={userRoles} />
-          </TabsContent>
-          <TabsContent value="shortlist">
-
-            <Tabs defaultValue="categories" className="ime-tabs mt-6">
-              <TabsList className="w-full">
-                    <TabsTrigger value="categories">Categories</TabsTrigger>
-                    <TabsTrigger value="funds">Funds</TabsTrigger>
-            </TabsList>
-                  <TabsContent value="categories">
-                    <div className="border-box">
-                      <div>
-                        <span className="font-bold">Shortlisted Universe: </span>
-                        <span>Use the <Link href="/funds" className="blue-hyperlink">RMS</Link> to add your favourite structures, asset classes, and categories.</span><br/><br/>
-                        <span className="font-bold">Favourite Structures: </span>
-                        {favStructure.map((structure, idx) => (
-                          <span key={structure.fav_structure_id}>
-                            {structure.structure_name}
-                            {idx < favStructure.length - 1 && " | "}
-                          </span>
-                        ))}
-                      </div>
-                      <div>
-                        <span className="font-bold">Favourite Asset Classes: </span>
-                        {favAssetClass.map((assetClass, idx) => (
-                          <span key={assetClass.fav_asset_class_id}>
-                            {assetClass.asset_class_name}
-                            {idx < favAssetClass.length - 1 && " | "}
-                          </span>
-                        ))}
-                      </div>
-                      <div>
-                        <span className="font-bold">Favourite Categories: </span>
-                        {favCategory.map((category, idx) => (
-                          <span key={category.fav_category_id}>
-                            {category.cat_name}
-                            {idx < favCategory.length - 1 && " | "}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="mt-8">Trailing Performance</h3>
-                      <TableCategories data={catPerformance} columnType="summary" userRoles={userRoles} />
-                      <div className="hidden md:block">
-                        <h3 className="mt-8">Annual Performance</h3>
-                        <TableCategories data={catPerformance} columnType="annual" userRoles={userRoles} />
-                      </div>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="funds">
-                  <TableFundScreen data={favFunds} userRoles={userRoles} />
-                  </TabsContent>
-            </Tabs>   
           </TabsContent>
         </Tabs>
       </div>

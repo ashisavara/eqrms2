@@ -15,6 +15,7 @@ import {
   LogOutIcon,
   ListCheckIcon,
   DollarSignIcon,
+  StarIcon,
   FileChartColumnIncreasingIcon
 } from "lucide-react";
 import { LogoutHandler } from "@/components/ui/logout-handler";
@@ -48,8 +49,10 @@ export default async function RmsLayout({
           <div className="md:hidden h-12"></div>
           <SidebarMenu>
             <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
+            <SidebarMenuItem href="/shortlist" icon={<StarIcon />}>Shortlist</SidebarMenuItem>
             <SidebarMenuItem href="/mandate" icon={<ListCheckIcon />}>Mandate</SidebarMenuItem>
-            <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>RMS</SidebarMenuItem>
+            <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>Funds</SidebarMenuItem>
+            <SidebarMenuItem href="/categories" icon={<FileChartColumnIncreasingIcon />}>Categories</SidebarMenuItem>
             {canViewInternal && (
               <SidebarMenuItem icon={<RotateCcwIcon />}>
                 <ChangeGroupHandler />

@@ -60,7 +60,7 @@ export function AddToComparison({
       onClick={handleClick}
       disabled={isLoading}
       className={cn(
-        'inline-flex items-center justify-center rounded-full transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1',
+        'inline-flex items-center justify-center rounded-full transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         className
       )}
@@ -70,7 +70,7 @@ export function AddToComparison({
       <Plus
         className={cn(
           sizeConfig[size],
-          'transition-all duration-200 text-blue-600 hover:text-blue-800',
+          'transition-all duration-200 text-green-700 hover:text-green-900',
           isLoading && 'animate-pulse'
         )}
       />

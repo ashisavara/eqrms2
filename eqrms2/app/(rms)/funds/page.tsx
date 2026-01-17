@@ -30,7 +30,9 @@ export default async function FundsPage() {
       filters: [
         (query) => query.eq('open_for_subscription', 'Y'),
         (query) => query.gte('fund_rating', 3), 
-        (query) => query.order('fund_rating', { ascending: false })
+        (query) => query.order('fund_rating', { ascending: false }),
+        (query) => query.order('structure_name', { ascending: false }),
+        (query) => query.order('asset_class_id', { ascending: true }),
       ]
     }),
     supabaseListRead<AMC>({
