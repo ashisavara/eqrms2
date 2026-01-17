@@ -3,14 +3,18 @@ import { RmsFundAmc } from "@/types/funds-detail";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { FundAmcComparisonTables, FundAmcComparisonTablesUpgrade } from './fund-amc-comparison-tables';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { ReactNode } from 'react';
 
 export const dynamic = 'force-dynamic';
 
 interface FundAmcComparisonProps {
   fundIds: number[]; // Array of fund IDs, max 10
+  children?: ReactNode; // Optional markdown content to display before tables
 }
 
-export async function FundAmcComparison({ fundIds }: FundAmcComparisonProps) {
+export async function FundAmcComparison({ fundIds, children }: FundAmcComparisonProps) {
   // Validate and limit fundIds
   const validFundIds = fundIds.filter(id => !isNaN(id) && id > 0).slice(0, 10);
 
@@ -35,10 +39,16 @@ export async function FundAmcComparison({ fundIds }: FundAmcComparisonProps) {
   const userRoles = await getUserRoles();
   const hasDetailedAccess = can(userRoles, 'rms', 'view_detailed');
 
-  // Render appropriate version based on permissions
-  if (hasDetailedAccess) {
-    return <FundAmcComparisonTables data={funds} />;
-  } else {
-    return <FundAmcComparisonTablesUpgrade data={funds} />;
-  }
+  // Render children first (if provided), then appropriate version based on permissions
+  const comparisonTables = hasDetailedAccess 
+    ? <FundAmcComparisonTables data={funds} />
+    : <FundAmcComparisonTablesUpgrade data={funds} />;
+
+ 
+  return (
+    <div>
+      {children && (<> {children}</>)}
+      {comparisonTables}
+    </div>
+  );
 }

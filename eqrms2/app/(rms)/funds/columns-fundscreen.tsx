@@ -3,6 +3,7 @@ import { RmsFundsScreener } from "@/types/funds-detail";
 import Link from "next/link";
 import { ComGrowthNumberRating, RatingDisplay, RatingDisplayWithStar } from "@/components/conditional-formatting";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
+import { AddToComparison } from "@/components/ui/add-to-comparison";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import SimpleTable from "@/components/tables/singleRowTable";
 import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
@@ -18,13 +19,19 @@ export const createColumns = (userRoles: string | null): ColumnDef<RmsFundsScree
   {
     id: "is_favourite",
     header: "♥",
-    size: 40,
+    size: 60,
     cell: ({ row }) => (
-      <FavouriteHeart 
-        entityType="funds" 
-        entityId={row.original.fund_id} 
-        size="sm"
-      />
+      <div className="flex items-center gap-2">
+        <FavouriteHeart 
+          entityType="funds" 
+          entityId={row.original.fund_id} 
+          size="sm"
+        />
+        <AddToComparison 
+          fundId={row.original.fund_id} 
+          size="sm"
+        />
+      </div>
     ),
     enableSorting: true,
     meta: { isFilterOnly: false }
@@ -49,11 +56,17 @@ export const createColumns = (userRoles: string | null): ColumnDef<RmsFundsScree
                 <div className="text-xs text-gray-600">{row.original.structure_name} - {row.original.cat_long_name}</div>
               </div>
               
-              <FavouriteHeart 
-                entityType="funds" 
-                entityId={row.original.fund_id} 
-                size="sm"
-              />
+              <div className="flex gap-2">
+                <FavouriteHeart 
+                  entityType="funds" 
+                  entityId={row.original.fund_id} 
+                  size="sm"
+                />
+                <AddToComparison 
+                  fundId={row.original.fund_id} 
+                  size="sm"
+                />
+              </div>
             </div>
             <SimpleTable 
               headers={[{ label: "Rating" }, { label: "1yr" }, { label: "3yr" }, { label: "5yr" }]}

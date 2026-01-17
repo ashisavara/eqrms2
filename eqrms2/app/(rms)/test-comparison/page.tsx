@@ -11,7 +11,10 @@ export default async function TestComparisonPage() {
       <p className="text-gray-600 mb-8">
         Testing comparison component with fund IDs: {testFundIds.join(', ')}
       </p>
-      <FundAmcComparison fundIds={testFundIds} />
+      <FundAmcComparison fundIds={testFundIds}>
+        <h3 className="text-red-500">Test</h3>
+        <p>This is a <b>test comparison</b> of the funds.</p>
+      </FundAmcComparison>
     </div>
   );
 }

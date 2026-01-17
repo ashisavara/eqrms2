@@ -98,7 +98,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <MasterOptionsProvider>
             <GroupMandateProvider>
               {children}
-              <Toaster />
+              <Toaster position="top-center" />
               <PWARegister />
             </GroupMandateProvider>
           </MasterOptionsProvider>

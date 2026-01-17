@@ -2,7 +2,7 @@
 
 import { RmsFundAmc } from "@/types/funds-detail";
 import Link from 'next/link';
-import { useReactTable, getCoreRowModel, ColumnDef } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, getSortedRowModel, ColumnDef } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
 import { useMemo } from "react";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
@@ -20,6 +20,8 @@ import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
 import SimpleTable from "@/components/tables/singleRowTable";
 import { FlexRms2Col } from "@/components/grids/flex-rms-2col";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
+import { FavouriteHeart } from "@/components/ui/favourite-heart";
+import { AddToComparison } from "@/components/ui/add-to-comparison";
 
 interface ComparisonTablesProps {
   data: RmsFundAmc[];
@@ -30,6 +32,25 @@ interface ComparisonTablesProps {
 // 1. Fund Ratings Columns (Regular)
 const createFundRatingsColumns = (): ColumnDef<RmsFundAmc>[] => [
   {
+    id: "is_favourite",
+    header: "♥",
+    size: 60,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <FavouriteHeart 
+          entityType="funds" 
+          entityId={row.original.fund_id} 
+          size="sm"
+        />
+        <AddToComparison 
+          fundId={row.original.fund_id} 
+          size="sm"
+        />
+      </div>
+    ),
+    enableSorting: false,
+  },
+  {
     accessorKey: "fund_name",
     header: () => <div className="text-left">Fund Name</div>,
     cell: ({ row, table }) => {
@@ -37,10 +58,23 @@ const createFundRatingsColumns = (): ColumnDef<RmsFundAmc>[] => [
       if (isMobileView(table)) {
         return (
           <div className="mobile-card">
-            <div className="font-semibold text-left mb-2">
-              <Link href={`/funds/${fund.slug}`} className="blue-hyperlink font-bold">
-                {fund.fund_name}
-              </Link>
+            <div className="flex flex-row flex-wrap justify-between mb-2">
+              <div className="font-semibold text-left shrink">
+                <Link href={`/funds/${fund.slug}`} className="blue-hyperlink font-bold">
+                  {fund.fund_name}
+                </Link>
+              </div>
+              <div className="flex gap-2">
+                <FavouriteHeart 
+                  entityType="funds" 
+                  entityId={fund.fund_id} 
+                  size="sm"
+                />
+                <AddToComparison 
+                  fundId={fund.fund_id} 
+                  size="sm"
+                />
+              </div>
             </div>
             <div className="text-xs text-gray-600 mb-2">
               {fund.structure_name} - {fund.category_long_name}
@@ -368,6 +402,25 @@ const createAmcSnapshotColumns2 = (): ColumnDef<RmsFundAmc>[] => [
 // 1. Fund Ratings Columns (Upgrade)
 const createFundRatingsColumnsUpgrade = (): ColumnDef<RmsFundAmc>[] => [
   {
+    id: "is_favourite",
+    header: "♥",
+    size: 80,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <FavouriteHeart 
+          entityType="funds" 
+          entityId={row.original.fund_id} 
+          size="sm"
+        />
+        <AddToComparison 
+          fundId={row.original.fund_id} 
+          size="sm"
+        />
+      </div>
+    ),
+    enableSorting: false,
+  },
+  {
     accessorKey: "fund_name",
     header: () => <div className="text-left">Fund Name</div>,
     size: 200,
@@ -376,10 +429,23 @@ const createFundRatingsColumnsUpgrade = (): ColumnDef<RmsFundAmc>[] => [
       if (isMobileView(table)) {
         return (
           <div className="mobile-card">
-            <div className="font-semibold text-left mb-2">
-              <Link href={`/funds/${fund.slug}`} className="blue-hyperlink font-bold">
-                {fund.fund_name}
-              </Link>
+            <div className="flex flex-row flex-wrap justify-between mb-2">
+              <div className="font-semibold text-left shrink">
+                <Link href={`/funds/${fund.slug}`} className="blue-hyperlink font-bold">
+                  {fund.fund_name}
+                </Link>
+              </div>
+              <div className="flex gap-2">
+                <FavouriteHeart 
+                  entityType="funds" 
+                  entityId={fund.fund_id} 
+                  size="sm"
+                />
+                <AddToComparison 
+                  fundId={fund.fund_id} 
+                  size="sm"
+                />
+              </div>
             </div>
             <div className="text-xs text-gray-600 mb-2">
               {fund.structure_name} - {fund.category_long_name}
@@ -967,12 +1033,13 @@ function PerformanceComparisonTable({ funds }: { funds: RmsFundAmc[] }) {
     data: funds,
     columns: responsiveColumns,
     getCoreRowModel: getCoreRowModel(),
-    enableSorting: false,
+    getSortedRowModel: getSortedRowModel(),
+    enableSortingRemoval: false,
   });
 
   return (
     <div className="mb-8">
-      <h2 className="text-lg font-bold mb-4">Performance Comparison</h2>
+      <h3>Performance Comparison</h3>
       <ReactTableWrapper table={table} className="text-xs text-center" showPagination={false} showSearch={false} />
     </div>
   );
@@ -987,7 +1054,8 @@ function PerformanceComparisonTableUpgrade({ funds }: { funds: RmsFundAmc[] }) {
     data: funds,
     columns: responsiveColumns,
     getCoreRowModel: getCoreRowModel(),
-    enableSorting: false,
+    getSortedRowModel: getSortedRowModel(),
+    enableSortingRemoval: false,
   });
 
   return (
@@ -1034,35 +1102,35 @@ const createPerformanceComparisonColumns = (): ColumnDef<RmsFundAmc>[] => [
         </Link>
       );
     },
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "fund_rating",
     header: () => <div className="text-center">Fund Rating</div>,
     size: 120,
     cell: ({ row }) => <div className="text-center"><RatingDisplayWithStar rating={row.original.fund_rating} /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "one_yr",
     header: () => <div className="text-center">1 Year</div>,
     size: 120,
     cell: ({ row }) => <div className="text-center"><ComGrowthNumberRating rating={row.original.one_yr as number} /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "three_yr",
     header: () => <div className="text-center">3 Year</div>,
     size: 120,
     cell: ({ row }) => <div className="text-center"><ComGrowthNumberRating rating={row.original.three_yr as number} /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "five_yr",
     header: () => <div className="text-center">5 Year</div>,
     size: 120,
     cell: ({ row }) => <div className="text-center"><ComGrowthNumberRating rating={row.original.five_yr as number} /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
 ];
 
@@ -1100,35 +1168,35 @@ const createPerformanceComparisonColumnsUpgrade = (): ColumnDef<RmsFundAmc>[] =>
         </Link>
       );
     },
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "fund_rating",
     header: () => <div className="text-center">Fund Rating</div>,
     size: 120,
     cell: () => <div className="text-center"><UpgradeIcon clickThroughPath="create-account" /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "one_yr",
     header: () => <div className="text-center">1 Year</div>,
     size: 120,
     cell: () => <div className="text-center"><UpgradeIcon clickThroughPath="create-account" /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "three_yr",
     header: () => <div className="text-center">3 Year</div>,
     size: 120,
     cell: () => <div className="text-center"><UpgradeIcon clickThroughPath="create-account" /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "five_yr",
     header: () => <div className="text-center">5 Year</div>,
     size: 120,
     cell: () => <div className="text-center"><UpgradeIcon clickThroughPath="create-account" /></div>,
-    enableSorting: false,
+    enableSorting: true,
   },
 ];
 
@@ -1139,11 +1207,12 @@ export function FundAmcComparisonTables({ data }: ComparisonTablesProps) {
   return (
     <div className="space-y-16">
       <FundRatingsComparisonTable funds={data} />
+      <PerformanceComparisonTable funds={data} />
       <FundSnapshotComparisonTable funds={data} />
       <AmcRatingsComparisonTable funds={data} />
       <AmcSnapshotComparisonTable1 funds={data} />
       <AmcSnapshotComparisonTable2 funds={data} />
-      <PerformanceComparisonTable funds={data} />
+      
     </div>
   );
 }
@@ -1153,11 +1222,12 @@ export function FundAmcComparisonTablesUpgrade({ data }: ComparisonTablesProps) 
   return (
     <div className="space-y-6">
       <FundRatingsComparisonTableUpgrade funds={data} />
+      <PerformanceComparisonTableUpgrade funds={data} />
       <FundSnapshotComparisonTableUpgrade funds={data} />
       <AmcRatingsComparisonTableUpgrade funds={data} />
       <AmcSnapshotComparisonTableUpgrade1 funds={data} />
       <AmcSnapshotComparisonTableUpgrade2 funds={data} />
-      <PerformanceComparisonTableUpgrade funds={data} />
+      
     </div>
   );
 }
