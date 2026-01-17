@@ -38,7 +38,7 @@ export default async function InvestmentsPage() {
     );
   }
   // Fetch investments for the selected group (server-side)
-  const [favFunds, favStructure, favAssetClass, favCategory, catPerformance] = await Promise.all([
+  const [favFunds, favStructure, favAssetClass, favCategory, catPerformance, fundComparisons] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({
       table: "view_im_fav_funds",
       columns: "*",
@@ -73,8 +73,19 @@ export default async function InvestmentsPage() {
       filters: [
         (query) => query.eq("group_id", groupId)
       ],
+    }),
+    supabaseListRead<{ fund_id: number | null }>({
+      table: "im_fund_comparison",
+      columns: "fund_id",
+      filters: [
+        (query) => query.eq("group_id", groupId)
+      ],
     })
   ]);
+
+  const fundComparisonIds = fundComparisons
+    .map((item) => item.fund_id)
+    .filter((fundId): fundId is number => Number.isFinite(fundId));
 
   return (
     <div>
@@ -135,7 +146,7 @@ export default async function InvestmentsPage() {
                   <TableFundScreen data={favFunds} userRoles={userRoles} />
                   </TabsContent>
                   <TabsContent value="comparisons">
-                  <FundAmcComparison fundIds={[2500, 2501, 2502, 2503, 2504]} />
+                  <FundAmcComparison fundIds={fundComparisonIds} />
                   </TabsContent>
             </Tabs>   
 

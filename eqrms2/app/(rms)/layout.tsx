@@ -16,7 +16,9 @@ import {
   ListCheckIcon,
   DollarSignIcon,
   StarIcon,
-  FileChartColumnIncreasingIcon
+  BlocksIcon,
+  FileChartColumnIncreasingIcon,
+  ShieldCheckIcon
 } from "lucide-react";
 import { LogoutHandler } from "@/components/ui/logout-handler";
 import { ChangeGroupHandler } from "@/components/ui/change-group-handler";
@@ -50,9 +52,9 @@ export default async function RmsLayout({
           <SidebarMenu>
             <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
             <SidebarMenuItem href="/shortlist" icon={<StarIcon />}>Shortlist</SidebarMenuItem>
-            <SidebarMenuItem href="/mandate" icon={<ListCheckIcon />}>Mandate</SidebarMenuItem>
+            <SidebarMenuItem href="/mandate" icon={<ShieldCheckIcon />}>Mandate</SidebarMenuItem>
             <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>Funds</SidebarMenuItem>
-            <SidebarMenuItem href="/categories" icon={<FileChartColumnIncreasingIcon />}>Categories</SidebarMenuItem>
+            <SidebarMenuItem href="/categories" icon={<BlocksIcon />}>Categories</SidebarMenuItem>
             {canViewInternal && (
               <SidebarMenuItem icon={<RotateCcwIcon />}>
                 <ChangeGroupHandler />
