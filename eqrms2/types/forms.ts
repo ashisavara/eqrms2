@@ -661,3 +661,16 @@ export const AcademyWebinarSchema = z.object({
 });
 
 export type AcademyWebinarValues = z.infer<typeof AcademyWebinarSchema>;
+
+// -------------------
+// Academy Whitepaper
+// -------------------
+export const AcademyWhitepaperSchema = z.object({
+  whitepaper_name: z.string().min(1, "Whitepaper name is required"),
+  whitepaper_date: z.date().nullable(),
+  whitepaper_summary: z.string().min(1, "Summary is required"),
+  whitepaper_url: z.string().min(1, "Whitepaper URL is required"),
+  whitepaper_body: z.string().min(1, "Whitepaper body is required"),
+});
+
+export type AcademyWhitepaperValues = z.infer<typeof AcademyWhitepaperSchema>;

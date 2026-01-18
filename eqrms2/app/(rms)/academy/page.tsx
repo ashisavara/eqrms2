@@ -1,11 +1,14 @@
 import TableAcademyLessons from "./TableAcademyLessons";
 import TableAcademyWebinars from "./TableAcademyWebinars";
+import TableAcademyWhitepapers from "./TableAcademyWhitepapers";
 import { AcademyLessonDetail } from "@/types/academy-lesson-detail";
 import { AcademyWebinarDetail } from "@/types/academy-webinar-detail";
+import { AcademyWhitepaperDetail } from "@/types/academy-whitepaper-detail";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { AddAcademyLessonButton } from "@/components/forms/AddAcademyLesson";
 import { AddAcademyWebinarButton } from "@/components/forms/AddAcademyWebinar";
+import { AddAcademyWhitepaperButton } from "@/components/forms/AddAcademyWhitepaper";
 import { can } from '@/lib/permissions';
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,7 +17,7 @@ export default async function AcademyPage() {
   const userRoles = await getUserRoles();
   const canEdit = can(userRoles, 'blogs', 'edit');
 
-  const [lessons, webinars] = await Promise.all([
+  const [lessons, webinars, whitepapers] = await Promise.all([
     supabaseListRead<AcademyLessonDetail>({
       table: "v_academy_lessons",
       columns: "*",
@@ -27,6 +30,13 @@ export default async function AcademyPage() {
       columns: "*",
       filters: [
         (query) => query.order('webinar_date', { ascending: false }),
+      ],
+    }),
+    supabaseListRead<AcademyWhitepaperDetail>({
+      table: "academy_whitepapers",
+      columns: "*",
+      filters: [
+        (query) => query.order('whitepaper_date', { ascending: false }),
       ],
     })
   ]);
@@ -56,7 +66,8 @@ export default async function AcademyPage() {
                 <TableAcademyWebinars data={webinars} canEdit={canEdit} />
             </TabsContent>
             <TabsContent value="whitepapers">
-                Team
+                {canEdit && <AddAcademyWhitepaperButton />}
+                <TableAcademyWhitepapers data={whitepapers} canEdit={canEdit} />
             </TabsContent>  
             </Tabs>
       </div>
