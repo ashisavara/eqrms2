@@ -633,3 +633,31 @@ export type EditLoginProfileUpdatePayload = EditLoginProfileValues & {
 };
 
 
+// -------------------
+// Academy Lesson
+// -------------------
+export const AcademyLessonSchema = z.object({
+  lesson_name: z.string().min(1, "Lesson name is required"),
+  summary: z.string().min(1, "Summary is required"),
+  youtube_url: z.string().min(1, "Youtube URL is required"),
+  lesson_body: z.string().min(1, "Lesson body is required"),
+  difficulty: z.string().min(1, "Difficulty is required"),
+  course: z.string().min(1, "Course is required"),
+  sort_order: z.number(),
+  time: z.number(),
+});
+
+export type AcademyLessonValues = z.infer<typeof AcademyLessonSchema>;
+
+// -------------------
+// Academy Webinar
+// -------------------
+export const AcademyWebinarSchema = z.object({
+  webinar_name: z.string().min(1, "Webinar name is required"),
+  webinar_date: z.date().nullable(),
+  webinar_summary: z.string().min(1, "Summary is required"),
+  youtube_url: z.string().min(1, "Youtube URL is required"),
+  webinar_body: z.string().min(1, "Webinar body is required"),
+});
+
+export type AcademyWebinarValues = z.infer<typeof AcademyWebinarSchema>;

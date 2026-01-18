@@ -407,7 +407,14 @@ export const MASTER_OPTIONS = {
 
   investmentQuery:[
     "International","Fixed Income","NRI","Equity","Fixed Income","Alternatives","Unlisted","IME","Advice"
-  ]
+  ],
+
+  // Academy Lesson
+  lessonDifficulty: ["Beginner","Intermediate","Advanced"],
+
+  course: [
+    "Financial Planning",
+    "Investment Mandate",],
 } as const;
 
 // Type definitions for TypeScript support

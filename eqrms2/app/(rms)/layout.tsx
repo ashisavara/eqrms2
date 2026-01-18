@@ -18,7 +18,8 @@ import {
   StarIcon,
   BlocksIcon,
   FileChartColumnIncreasingIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  BookIcon
 } from "lucide-react";
 import { LogoutHandler } from "@/components/ui/logout-handler";
 import { ChangeGroupHandler } from "@/components/ui/change-group-handler";
@@ -32,6 +33,7 @@ export default async function RmsLayout({
   // Get user roles for conditional rendering
   const userRoles = await getUserRoles();
   const canViewInternal = can(userRoles, 'internal', 'view');
+  const canViewAcademy = can(userRoles, 'blogs', 'edit');
 
   return (
     <SidebarProvider>
@@ -55,6 +57,9 @@ export default async function RmsLayout({
             <SidebarMenuItem href="/mandate" icon={<ShieldCheckIcon />}>Mandate</SidebarMenuItem>
             <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>Funds</SidebarMenuItem>
             <SidebarMenuItem href="/categories" icon={<BlocksIcon />}>Categories</SidebarMenuItem>
+            {canViewAcademy && (
+              <SidebarMenuItem href="/academy" icon={<BookIcon />}>Academy</SidebarMenuItem>
+            )}
             {canViewInternal && (
               <SidebarMenuItem icon={<RotateCcwIcon />}>
                 <ChangeGroupHandler />
