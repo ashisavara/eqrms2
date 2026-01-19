@@ -55,8 +55,8 @@ export default async function RmsLayout({
             <SidebarMenuItem href="/investments" icon={<DollarSignIcon />}>Investments</SidebarMenuItem>
             <SidebarMenuItem href="/shortlist" icon={<StarIcon />}>Shortlist</SidebarMenuItem>
             <SidebarMenuItem href="/mandate" icon={<ShieldCheckIcon />}>Mandate</SidebarMenuItem>
-            <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>Funds</SidebarMenuItem>
             <SidebarMenuItem href="/categories" icon={<BlocksIcon />}>Categories</SidebarMenuItem>
+            <SidebarMenuItem href="/funds" icon={<FileChartColumnIncreasingIcon />}>Funds</SidebarMenuItem>
             {canViewAcademy && (
               <SidebarMenuItem href="/academy" icon={<BookIcon />}>Academy</SidebarMenuItem>
             )}

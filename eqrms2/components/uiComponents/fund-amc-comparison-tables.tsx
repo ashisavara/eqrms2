@@ -21,7 +21,7 @@ import SimpleTable from "@/components/tables/singleRowTable";
 import { FlexRms2Col } from "@/components/grids/flex-rms-2col";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { FavouriteHeart } from "@/components/ui/favourite-heart";
-import { AddToComparison } from "@/components/ui/add-to-comparison";
+import { DeleteFromComparison } from "@/components/ui/delete-from-comparison";
 
 interface ComparisonTablesProps {
   data: RmsFundAmc[];
@@ -42,7 +42,7 @@ const createFundRatingsColumns = (): ColumnDef<RmsFundAmc>[] => [
           entityId={row.original.fund_id} 
           size="sm"
         />
-        <AddToComparison 
+        <DeleteFromComparison 
           fundId={row.original.fund_id} 
           size="sm"
         />
@@ -70,7 +70,7 @@ const createFundRatingsColumns = (): ColumnDef<RmsFundAmc>[] => [
                   entityId={fund.fund_id} 
                   size="sm"
                 />
-                <AddToComparison 
+                <DeleteFromComparison 
                   fundId={fund.fund_id} 
                   size="sm"
                 />
@@ -412,7 +412,7 @@ const createFundRatingsColumnsUpgrade = (): ColumnDef<RmsFundAmc>[] => [
           entityId={row.original.fund_id} 
           size="sm"
         />
-        <AddToComparison 
+        <DeleteFromComparison 
           fundId={row.original.fund_id} 
           size="sm"
         />
@@ -441,7 +441,7 @@ const createFundRatingsColumnsUpgrade = (): ColumnDef<RmsFundAmc>[] => [
                   entityId={fund.fund_id} 
                   size="sm"
                 />
-                <AddToComparison 
+                <DeleteFromComparison 
                   fundId={fund.fund_id} 
                   size="sm"
                 />

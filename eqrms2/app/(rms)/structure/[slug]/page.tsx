@@ -36,9 +36,9 @@ export default async function StructurePage({params}: PageProps) {
     // Then fetch funds for this structure
     const funds = await supabaseListRead<RmsFundsScreener>({
         table: "view_rms_funds_screener",
-        columns: "fund_id, fund_name, slug, asset_class_name, category_name, structure_name, fund_rating, fund_strategy_rating, fund_performance_rating, one_yr, three_yr, five_yr, since_inception, amc_rating",
+        columns: "fund_id, fund_name, slug, asset_class_name, category_name, structure_name, fund_rating, fund_strategy_rating, fund_performance_rating, one_yr, three_yr, five_yr, since_inception, amc_rating,cat_long_name",
         filters: [(query) => query.eq('structure_id', structure.structure_id),
-            (query) => query.gt('fund_rating', 3),
+            (query) => query.gt('fund_rating', 2),
             (query) => query.eq('open_for_subscription', 'Y'),
             (query) => query.order('fund_rating', {ascending: false})]
     });
@@ -47,16 +47,18 @@ export default async function StructurePage({params}: PageProps) {
         <div>
             <div className="pageHeadingBox">
                 <div className="flex flex-col items-center">
-                    <div className="flex items-center gap-4">
-                        <h1>{structure.structure_name}</h1>
+                    <div className="flex items-center gap-4 mt-4">
+                        <h1 className="text-gray-50">{structure.structure_name}</h1>
                         <FavouriteHeart entityType="structure" entityId={structure.structure_id}  size="lg" />
                     </div>
                 </div>
-                <p className="font-bold">{structure.structure_summary}</p>
-                <p className="text-sm">{structure.structure_desc}</p>
+                <p className="font-bold max-w-6xl mx-auto border-b border-t border-gray-300 p-2">{structure.structure_summary}</p>
             </div>
-            <div>
-                <h3>Recommended {structure.structure_name} Funds</h3>
+            <div className="px-6">
+                <div className="border-box max-w-6xl mx-auto mb-6 text-center">
+                    <p className="text-sm">{structure.structure_desc}</p>
+                    </div>
+                <h2>Recommended {structure.structure_name} Funds</h2>
                 <TableFundScreen data={funds} userRoles={userRoles} />
             </div>
         </div>

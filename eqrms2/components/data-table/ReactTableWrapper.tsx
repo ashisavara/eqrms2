@@ -244,7 +244,7 @@ export function ReactTableWrapper<TData>({
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       {/* ✅ Header content with sort indicators */}
-                      <div className="flex flex-col items-center justify-center gap-0.5">
+                      <div className="flex items-center justify-center gap-1">
                         <span>
                           {header.isPlaceholder
                             ? null

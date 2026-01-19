@@ -84,7 +84,7 @@ export default async function FundsPage() {
     supabaseListRead<Structure>({
       table: "rms_structure",
       columns: "structure_id, structure_name, structure_summary, structure_desc, structure_slug",
-      filters: [(query) => query.in('structure_id', [1, 2, 3, 5])]
+      filters: [(query) => query.in('structure_id', [1, 2, 3, 5,6,7,8])]
     }),
     supabaseListRead<Structure>({
       table: "rms_structure",
