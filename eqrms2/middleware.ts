@@ -78,7 +78,7 @@ function getRouteGroup(pathname: string): RouteGroup {
   const rmsRoutes = [
     '/investments', '/mandate', '/funds', '/companies', '/categories',
     '/amc', '/assetclass', '/sectors', '/structure', '/crm',
-    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/app', '/ime-view'
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/app', '/ime-view', '/shortlist', '/academy'
   ];
   
   if (rmsRoutes.some(r => pathname === r || pathname.startsWith(r + '/'))) {
@@ -239,7 +239,7 @@ export async function middleware(request: NextRequest) {
     // All RMS routes
     '/investments', '/mandate', '/funds', '/companies', '/categories',
     '/amc', '/assetclass', '/sectors', '/structure', '/crm',
-    '/tickets', '/internal', '/uservalidation', '/survey', '/protected'
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/shortlist', '/academy'
     // Note: /blogs/edit moved to (rms)/internal/edit/blog/[slug]
   ];
 

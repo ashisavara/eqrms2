@@ -12,10 +12,17 @@ import { AddAcademyWhitepaperButton } from "@/components/forms/AddAcademyWhitepa
 import { can } from '@/lib/permissions';
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { redirect } from "next/navigation";
 
 export default async function AcademyPage() {
   const userRoles = await getUserRoles();
   const canEdit = can(userRoles, 'blogs', 'edit');
+
+    // Check permission first
+    if (!canEdit) {
+      redirect('/uservalidation'); // or wherever you want to send them
+    }
+
 
   const [lessons, webinars, whitepapers] = await Promise.all([
     supabaseListRead<AcademyLessonDetail>({
