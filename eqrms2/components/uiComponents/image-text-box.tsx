@@ -38,7 +38,12 @@ const ImageTextBox: React.FC<ImageTextBoxProps> = ({
     <div className={imageOrderClass}>
       {/* Heading shown on mobile, hidden on md and above */}
       <h4 className={`${headingClassName} block md:hidden text-center mb-4`}>{heading}</h4>
-      <img src={imgSrc} alt={heading} className="{imageColClassName} shadow-sm px-5"/>
+      <img 
+        src={imgSrc} 
+        alt={heading} 
+        className={`${imageColClassName} shadow-sm px-5`} 
+        style={{ width: '85%', maxWidth: '85%' }}
+      />
     </div>
   );
 

@@ -1,7 +1,8 @@
 import Section from "@/components/uiComponents/section";
-import PageTitle from "@/components/uiComponents/page-title";
 import ImageTextBox from "@/components/uiComponents/image-text-box";
 import ImageCarousel from "@/components/uiComponents/image-carousel";
+import TextHighlight from "@/components/uiBlocks/TextHighlight";
+import RmaCta from "@/components/uiComponents/rma-cta";
 
 const images = [
     { src: "https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/landing-page-carousel/family-inv-solutions.jpg", alt: "Individual and Family Investment Solutions" },
@@ -30,64 +31,61 @@ export default function HomePage() {
                 </div>  
             </div>
 
-        <Section className="py-12">
-            <ImageTextBox
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME%20Capital%203%20Differentiators%20light.png"
-                heading="3 Core Differentiators"
-                imgSide="right"
-            >
-                <p> These differentiators are not just empty promises, but lay the foundation of our entire business. </p>
-                <p>On each of these core differentiators, we can demonstrate the extra-mile we go as compared to any other wealth management firm in India.  </p>
-            </ImageTextBox>
-        </Section>
+            <Section className="py-12">
+                <TextHighlight>
+                    <p>IME Capital is a <b>‘research-first’</b> investments firm, with <b>3 core differentiators</b> - <br/> the<b> Depth of our Expertise, <br/>Unmatched Transparency</b> <br/>and our <b>Levels of Portfolio Customisation</b>. </p>
+                </TextHighlight>
+            </Section>
 
-        <Section className="bg-gray-100">
+        <Section className="bg-blue-50">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/depth-of-expertise.png"
                 heading="Depth of our Expertise"
                 
             >
-                <p>IME is the only wealth manager in India to be founded & run by an institutional fund manager.</p>
-                <p>This gives us unprecedented access to unique insider insights, critical for fund selection & portfolio construction.</p>
+                <p>IME is the one of the only wealth managers in India to be founded & run by an institutional fund manager. </p><p> Our founder Ashi Anand, has over 25 years of experience at some of India's largest AMCs (including ICICI Pru & Kotak), and is responsible for the launch of India's first Arbitrage (2003) & Capital Guaranteed funds (2004).</p>
+                <p>This gives us access to unique insider insights, critical for superior fund selection & portfolio construction.</p>
             </ImageTextBox>
         </Section>
 
         <Section>
-            <ImageTextBox
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/weak-flow-down-insights.png"
-                heading="Unmatched Transparency"
-                imgSide="right"
-            >
-                <p>As a 100% founder-owned company, we have no external shareholders to please and that frees us from many of the short-term growth pressures common with larger firms.</p>
-                <p> Our revolutionary <b>Research Management Solution (IME RMS)</b> allows you to directly access the insights of our unbiased central research team, as compared to the chinese-whispers, conflicts, biases and shielded information common in the current industry structure.</p>
-            </ImageTextBox>
+       <div className="flex flex-col md:flex-row max-w-7xl mx-auto gap-12 py-12">
+        <div className="w-full md:w-[400px] md:min-w-[200px] md:flex-shrink-0 text-center my-auto"> 
+            <h2 className="bg-white">Unmatched Transparency</h2>
+            <p>Via our proprietary <b>IME RMS,</b> you gain <b>direct access</b> to our <b>detailed rating rationales</b> across MFs, PMSs, AIFs & Global Funds. <br /><br /> This is the <b>first-time ever</b> an investments firm is making available the thoughts behind fund recommendations - ensuring a <b>single-point-of truth</b> and that <b>advice is driven by research, not sales.</b></p>
+            
+           
+        </div>
+        <div className="w-full md:flex-1">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-auto rounded-lg shadow-lg"
+          >
+            <source src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME%20RMS%20Rating%20Demo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>        
+        </div>
         </Section>
 
-        <Section className="bg-gray-100">
+        <Section className="bg-gray-50">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
-                heading="Client Centricity"
+                heading="Levels of Portfolio Customisation"
                 
             >
-                <p>The value of any investment portfolio comes down to how well it meets your specific requirements (driven by your risk-profile, your financial goals, investments beliefs, preferences and understanding). </p>
-                <p>Our superior process for developing an Investment mandate combined with our cutting edge Interactive Client Portfolio  reflects our level of dedication to the clients needs.</p>
+                <p>The IME Investment Mandate helps you move from the <b>confusion of too many investment options </b>to <b>clarity on the specific categories</b> that are <b>tailor-made to your unique needs.</b></p>
+                <p>Your Mandate is developed in consultation with an IME Private Banker, on the basis of a detailed evaluation of your risk-profile, financial plan, preferences, beliefs, and other needs.</p>
             </ImageTextBox>
         </Section>
 
-        <Section className=" bg-gray-50">
-            <ImageTextBox
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME%2030-day%20Free%20Trial.png"
-                heading="Free 30-Day Trial"
-                imgSide="right"
-            >
-                <p> We are so confident on the value of our services that we offer you a completely free, no-commitement 30-day trial of our entire range of services. </p>
-                <p> You get to experience first hand, just how different it is interacting with a research-first investments firm, and the value it adds to your investments - prior to commiting a single rupee.</p>
-            </ImageTextBox>
-        </Section>
+        <div className="max-w-5xl mx-auto pt-8"><RmaCta /></div>
 
+      </div>
        
 
-        
-        </div>
     );
 }
