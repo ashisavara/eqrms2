@@ -335,7 +335,7 @@ export default function RMSLandingPage() {
         </div>
         </Section>
 
-        <Section className="bg-gray-50">
+        <Section className="bg-gray-100">
        <div className="flex flex-col md:flex-row max-w-7xl mx-auto gap-12 py-12">
         <div className="w-full md:flex-1">
           <video 
@@ -350,7 +350,7 @@ export default function RMSLandingPage() {
           </video>
         </div>  
         <div className="w-full md:w-[400px] md:min-w-[200px] md:flex-shrink-0 text-center my-auto"> 
-            <h2 className="bg-gray-50">True Customisation</h2>
+            <h2 className="bg-gray-100">True Customisation</h2>
             <p>The <b>IME Investment Mandate </b> helps you move <b>from the confusion</b> of too many investment option <b>to clarity </b>on the specific categories  that are tailor-made to your unique needs. <br/><br/> Your Mandate is developed in consultation with an <b>IME Private Banker</b>, on the basis of a <b>detailed evaluation</b> of your risk-profile, financial plan, preferences, beliefs, and other needs.</p>
         </div>      
         </div>

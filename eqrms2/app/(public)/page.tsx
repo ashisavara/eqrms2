@@ -37,14 +37,14 @@ export default function HomePage() {
                 </TextHighlight>
             </Section>
 
-        <Section className="bg-blue-50">
+        <Section className="bg-blue-50 !py-12">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/depth-of-expertise.png"
                 heading="Depth of our Expertise"
                 
             >
-                <p>IME is the one of the only wealth managers in India to be founded & run by an institutional fund manager. </p><p> Our founder Ashi Anand, has over 25 years of experience at some of India's largest AMCs (including ICICI Pru & Kotak), and is responsible for the launch of India's first Arbitrage (2003) & Capital Guaranteed funds (2004).</p>
-                <p>This gives us access to unique insider insights, critical for superior fund selection & portfolio construction.</p>
+                <p>IME is the one of the only wealth managers in India to be <b>founded & run by an institutional fund manager</b>. </p><p> Our founder Ashi Anand, has over <b>25 years of experience</b> at some of India's largest AMCs (including ICICI Pru & Kotak), and is responsible for the launch of India's first Arbitrage (2003) & Capital Guaranteed funds (2004).</p>
+                <p>This gives us access to <b>unique insider insights</b>, critical for <b>superior fund selection & portfolio construction</b>.</p>
             </ImageTextBox>
         </Section>
 
@@ -71,7 +71,7 @@ export default function HomePage() {
         </div>
         </Section>
 
-        <Section className="bg-gray-50">
+        <Section className="bg-gray-100 !py-12">
             <ImageTextBox
                 imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
                 heading="Levels of Portfolio Customisation"
