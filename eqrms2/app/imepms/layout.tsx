@@ -12,7 +12,7 @@ export default function ImepmsLayout({ children }: { children: React.ReactNode }
       <header className="bg-blue-800 text-white p-4">
         <h1 className="text-2xl font-bold"><Link href="https://imepms.in" className="text-white">IME PMS</Link></h1>
       </header>
-      <main className="flex-1 p-8">
+      <main className="flex-1">
         {children}
       </main>
       <footer className="bg-gray-800 text-white p-4 text-center">

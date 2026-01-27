@@ -39,7 +39,7 @@ export default function HomePage() {
 
         <Section className="bg-blue-50 !py-12">
             <ImageTextBox
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/depth-of-expertise.png"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-expertise-full.png"
                 heading="Depth of our Expertise"
                 
             >
@@ -73,7 +73,7 @@ export default function HomePage() {
 
         <Section className="bg-gray-100 !py-12">
             <ImageTextBox
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-mandate-full.png"
                 heading="Levels of Portfolio Customisation"
                 
             >

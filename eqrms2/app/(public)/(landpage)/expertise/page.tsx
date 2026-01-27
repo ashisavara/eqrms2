@@ -14,7 +14,7 @@ export default function RMSPage() {
 
         <Section className="py-12 bg-gray-50">
             <ImageTextBox
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/depth-of-expertise.png"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-expertise-full.png"
                 heading="Fund Manager Insights"
             >
                 <p>All investment firms claim to have great depth of expertise. What makes our expertise in understanding the investment ecosystem stand out? </p>

@@ -23,7 +23,7 @@ export default function RMSPage() {
 
             <Section className="py-12 bg-gray-100">
             <ImageTextBox
-                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/IME-Investment-Mandate.png"
+                imgSrc="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-mandate-full.png"
                 heading="IME Investment Mandate"
                 subHeading="Strategic Blueprint for Your Investments"
             >
