@@ -10,6 +10,7 @@ import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
 import { MASTER_OPTIONS } from "@/lib/constants";
+import { ImageUpload } from "@/components/forms/ImageUpload";
 
 export function AddInvestmentQueryForm() {
     const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +80,7 @@ export function AddInvestmentQueryForm() {
                     placeholder="Enter slug" 
                 />
             </div>
-            
+            <div><span className="text-sm font-semibold">Img Uploader <br/><ImageUpload /></span></div>
             <ResizableTextArea name="body" label="Body" control={control} />
 
             <div className="flex justify-end">

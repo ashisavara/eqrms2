@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { PublicNavBarPms } from '@/components/ui/public-navbar-pms';
 
 export const metadata: Metadata = {
   title: "IME PMS",
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
 export default function ImepmsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-800 text-white p-4">
-        <h1 className="text-2xl font-bold"><Link href="https://imepms.in" className="text-white">IME PMS</Link></h1>
+      <header>
+        <PublicNavBarPms />
       </header>
       <main className="flex-1">
         {children}
