@@ -22,12 +22,13 @@ export function LessonDetailSheet({
 
       {isOpen && (
         <Sheet open={true} onOpenChange={() => setIsOpen(false)}>
-          <SheetContent className="!w-400px md:!w-900px !max-w-[90vw]">
-            <SheetHeader>
+          <SheetContent className="!w-400px md:!w-900px !max-w-[90vw] flex flex-col overflow-hidden">
+            <SheetHeader className="flex-shrink-0">
               <SheetTitle>{lesson.lesson_name}</SheetTitle>
             </SheetHeader>
-            <div className="p-4">
-                <div className="bg-gray-200 p-2 rounded-md">{lesson.course} | {lesson.difficulty} | {lesson.time} min | {lesson.summary}</div>
+            <div className="flex-1 overflow-y-auto p-6">
+                <div className="bg-gray-200 p-2 rounded-md text-center">{lesson.course} | {lesson.difficulty} | {lesson.time} min </div>
+                <div className="text-center"><p>{lesson.summary}</p></div>
 
 
             {lesson.youtube_url && (
@@ -36,7 +37,7 @@ export function LessonDetailSheet({
                 </div>
               )}
             
-            {lesson.lesson_body}
+            <div><p dangerouslySetInnerHTML={{__html: lesson.lesson_body ?? ''}} /></div>
 
               </div>
           </SheetContent>

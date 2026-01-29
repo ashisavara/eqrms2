@@ -24,6 +24,7 @@ import { formatDate } from "@/lib/utils";
 import { MandateProgressBar } from "@/components/mandate/MandateProgressBar";
 import MandateBox from "@/components/uiComponents/mandate-box";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
+import { LessonSheet } from "@/app/(rms)/academy/LessonSheet";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -147,6 +148,7 @@ export default async function MandatePage() {
             </TabsList>
             <TabsContent value="mandate">
               <div className="flex gap-2 mb-4">
+              <LessonSheet lessonId={2} lessonName="Importance of your Investment Mandate" courseTitle="Investment Mandate" />
                 { can(userRoles, 'mandate', 'edit_mandate') && (
                   <EditGroupButton groupData={groupData} groupId={groupId} />
                 )} | { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} />)} |

@@ -31,19 +31,19 @@ export function getColumns(canEdit: boolean): ColumnDef<AcademyLessonDetail>[] {
     {
       accessorKey: "time",
       header: "Time (min)",
-      size: 100,
+      size: 60,
       cell: ({ getValue }) => getValue() as number
     },
     {
       accessorKey: "difficulty",
       header: "Difficulty",
-      size: 120,
+      size: 60,
       cell: ({ getValue }) => getValue() as string
     },
     {
       accessorKey: "summary",
       header: "Summary",
-      size: 250,
+      size: 600,
       cell: ({ getValue }) => getValue() as string
     }
   ];

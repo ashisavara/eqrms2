@@ -59,9 +59,11 @@ export default function YouTube({
   if (!id) return null;
 
   const params = new URLSearchParams({
-    rel: '0',
-    modestbranding: '1',
-    playsinline: '1',
+    rel: '0', // Show only videos from the same channel (minimizes related videos from other channels)
+    modestbranding: '1', // Reduces YouTube logo visibility in the control bar
+    playsinline: '1', // Allows inline playback on mobile devices
+    iv_load_policy: '3', // Hide video annotations
+    cc_load_policy: '0', // Don't show captions by default
     ...(start ? { start: String(start) } : {}),
   });
 

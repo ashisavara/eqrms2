@@ -9,6 +9,7 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 import { TableStructure } from "../structure/TableStructure";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
+import { LessonSheet } from "@/app/(rms)/academy/LessonSheet";
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
@@ -110,9 +111,11 @@ export default async function FundsPage() {
                 <TabsTrigger value="global">Global</TabsTrigger>
           </TabsList>
                 <TabsContent value="assetclass">
+                <LessonSheet lessonId={2} lessonName="Importance of your Investment Mandate" courseTitle="Investment Mandate" />
                     <h3>Asset Classes</h3>
                     <TableAssetClass data={DomesticAssetClass}/>
                     <h3 className="mt-6">Structures</h3>
+                    <LessonSheet lessonId={7} lessonName="MF vs PMS vs AIF" courseTitle="Investment Mandate" />
                     <TableStructure data={DomesticStructure}/>
                             
 
@@ -126,6 +129,10 @@ export default async function FundsPage() {
                             <TabsTrigger value="Alternatives">Altenatives</TabsTrigger>
                         </TabsList>
                         <TabsContent value="Equity">
+                           <div className="flex flex-wrap gap-3 mb-4">
+                             <LessonSheet lessonId={3} lessonName="Why risk in equity reduces over time" courseTitle="Investment Mandate" />
+                             <LessonSheet lessonId={4} lessonName="Equity MF Categories" courseTitle="Investment Mandate" />
+                           </div>
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Eqcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
@@ -135,6 +142,7 @@ export default async function FundsPage() {
                             </div>
                         </TabsContent>  
                         <TabsContent value="Debt">
+                        <LessonSheet lessonId={5} lessonName="Debt MF Categories" courseTitle="Investment Mandate" />
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Debtcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
@@ -144,6 +152,7 @@ export default async function FundsPage() {
                             </div>
                         </TabsContent>
                         <TabsContent value="Hybrid">
+                        <LessonSheet lessonId={6} lessonName="Hybrid MF Categories" courseTitle="Investment Mandate" />
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Hybridcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
@@ -153,6 +162,7 @@ export default async function FundsPage() {
                             </div>
                         </TabsContent>
                         <TabsContent value="Alternatives">
+                        <LessonSheet lessonId={8} lessonName="Alternative AIF Categories" courseTitle="Investment Mandate" />
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={Altcategory} columnType="summary" userRoles={userRoles} />
                             <PerformanceFootnote />
