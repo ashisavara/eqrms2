@@ -1,100 +1,63 @@
-create or replace function public.rpc_create_group_on_login_form_validation(
-  p_uuid uuid,
-  p_lead_name text
+CREATE OR REPLACE FUNCTION public.link_login_to_lead(
+  p_login_uuid uuid,
+  p_lead_id    bigint
 )
-returns text
-language plpgsql
-security definer
-set search_path = public
-as $$
-declare
-  v_group_id integer;
-  v_base_name text;
-  v_final_name text;
-  v_suffix text;
-  v_attempt int := 0;
-  v_existing_group_id integer;
-begin
-  -- Validate inputs
-  if p_uuid is null then
-    raise exception 'p_uuid cannot be null';
-  end if;
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  claims          jsonb;
+  v_exists        boolean;
+  v_lead_in_use   boolean;
+  v_current_lead  bigint;
+BEGIN
+  -- Require inv_desk in JWT user_roles
+  claims := nullif(current_setting('request.jwt.claims', true), '')::jsonb;
+  IF claims IS NULL OR NOT ((claims->'user_roles') @> '["inv_desk"]'::jsonb) THEN
+    RAISE EXCEPTION 'not authorized: inv_desk role required' USING ERRCODE = '28000';
+  END IF;
 
-  v_base_name := nullif(trim(p_lead_name), '');
-  if v_base_name is null then
-    raise exception 'p_lead_name cannot be empty';
-  end if;
+  -- Validate login_profile exists
+  SELECT true INTO v_exists
+  FROM public.login_profile
+  WHERE uuid = p_login_uuid;
+  IF NOT v_exists THEN
+    RAISE EXCEPTION 'login_profile % not found', p_login_uuid;
+  END IF;
 
-  -- Ensure user is authenticated (allows team members to submit on behalf of users)
-  if auth.uid() is null then
-    raise exception 'Not authenticated';
-  end if;
+  -- Ensure login_profile is currently unlinked
+  SELECT lead_id INTO v_current_lead
+  FROM public.login_profile
+  WHERE uuid = p_login_uuid;
+  IF v_current_lead IS NOT NULL THEN
+    RAISE EXCEPTION 'login_profile % is already linked to lead %', p_login_uuid, v_current_lead;
+  END IF;
 
-  -- Check login_profile exists and has no existing group (single query for both checks)
-  select lp.group_id into v_existing_group_id
-  from public.login_profile lp
-  where lp.uuid = p_uuid;
+  -- Validate lead exists and fetch its group
+  SELECT true INTO v_exists
+  FROM public.leads_tagging
+  WHERE lead_id = p_lead_id;
+  IF NOT v_exists THEN
+    RAISE EXCEPTION 'lead % not found', p_lead_id;
+  END IF;
 
-  if not found then
-    raise exception 'No login_profile row found for uuid=%', p_uuid;
-  end if;
+  -- Ensure the lead is not already linked elsewhere (1:1)
+  SELECT EXISTS (
+    SELECT 1 FROM public.login_profile WHERE lead_id = p_lead_id
+  ) INTO v_lead_in_use;
+  IF v_lead_in_use THEN
+    RAISE EXCEPTION 'lead % is already linked to a login_profile', p_lead_id;
+  END IF;
 
-  if v_existing_group_id is not null then
-    raise exception 'Group already exists for this user';
-  end if;
+  -- Perform the link (set lead_id only; group_id is managed separately)
+  UPDATE public.login_profile
+  SET lead_id = p_lead_id
+  WHERE uuid = p_login_uuid;
 
-
-  -- Create client_group with unique group_name (retry on unique violation)
-  v_final_name := v_base_name;
-
-  loop
-    begin
-      insert into public.client_group (
-        group_name
-      )
-      values (
-        v_final_name
-      )
-      returning client_group.group_id
-      into v_group_id;
-
-      exit; -- success
-    exception
-      when unique_violation then
-        v_attempt := v_attempt + 1;
-        if v_attempt > 10 then
-          raise exception 'Could not generate a unique group_name after % attempts for base "%"', v_attempt, v_base_name;
-        end if;
-
-        -- Random 3-letter suffix: ABC..XYZ
-        v_suffix :=
-          chr(65 + floor(random() * 26)::int) ||
-          chr(65 + floor(random() * 26)::int) ||
-          chr(65 + floor(random() * 26)::int);
-
-        v_final_name := v_base_name || '-' || v_suffix;
-    end;
-  end loop;
-
-  -- Update login_profile with the new group_id (primary link between user and group)
-  update public.login_profile
-    set group_id = v_group_id
-  where uuid = p_uuid;
-
-  -- Create group investor linked to this group_id
-  -- Use original p_lead_name (not the final name with suffix) for investor_name
-  insert into public.group_investors (
-    group_id,
-    investor_name
-  )
-  values (
-    v_group_id,
-    v_base_name
-  );
-
-  -- Return final group name
-  return v_final_name;
-end;
+END;
 $$;
 
-grant execute on function public.rpc_create_group_on_login_form_validation(uuid, text) to authenticated;
+-- Lock down who can call it (same as before)
+REVOKE ALL ON FUNCTION public.link_login_to_lead(uuid, bigint) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.link_login_to_lead(uuid, bigint) TO authenticated;

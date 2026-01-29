@@ -396,7 +396,8 @@ export const MASTER_OPTIONS = {
     "Moneycontrol",
     "CNBC-TV18",
     "The Ken",
-    "Business Today"
+    "Business Today",
+    "Fortune India",
   ], 
 
   financialProductsInvestedIn: ["FD","Bonds","MF","PMS","AIF","Global","Real Estate","Insurance"],
