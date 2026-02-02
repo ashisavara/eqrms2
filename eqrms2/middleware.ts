@@ -239,7 +239,7 @@ export async function middleware(request: NextRequest) {
     // All RMS routes
     '/investments', '/mandate', '/funds', '/companies', '/categories',
     '/amc', '/assetclass', '/sectors', '/structure', '/crm',
-    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/shortlist', '/academy'
+    '/tickets', '/internal', '/uservalidation', '/survey', '/protected', '/shortlist', '/academy', '/recommendations'
     // Note: /blogs/edit moved to (rms)/internal/edit/blog/[slug]
   ];
 
