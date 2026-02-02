@@ -549,6 +549,7 @@ export const BlogSchema = z.object({
   featured_image: z.string().nullable(),
   status: z.string().min(1, "Status is required"),
   category: z.string().min(1, "Category is required"),
+  slug: z.string().min(1, "Slug is required"),
 })
 
 export type BlogValues = z.infer<typeof BlogSchema>;

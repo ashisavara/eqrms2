@@ -28,6 +28,7 @@ interface BlogFormData {
   featured_image: string;
   status: string;
   body: string;
+  slug: string;
 }
 
 export function EditBlogForm({ initialData }: EditBlogFormProps) {
@@ -47,7 +48,8 @@ export function EditBlogForm({ initialData }: EditBlogFormProps) {
       title: initialData.title || '',
       featured_image: initialData.featured_image || '',
       status: initialData.status || 'draft',
-      body: initialData.body || ''
+      body: initialData.body || '',
+      slug: initialData.slug || '',
     }
   });
 

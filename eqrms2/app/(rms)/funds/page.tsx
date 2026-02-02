@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
+import { blogDetail } from "@/types/blog-detail";
+import TableRecommendationBlog from "../recommendations/RecommendationTable";
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
@@ -15,7 +17,7 @@ export const dynamic = 'force-dynamic';
 export default async function FundsPage() {
   const userRoles = await getUserRoles();
 
-  const [funds, mfAmc, pmsAmc, globalAmc] = await Promise.all([
+  const [funds, mfAmc, pmsAmc, globalAmc, blogs] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({
       table: "view_rms_funds_screener",
       columns: "fund_id,fund_name,fund_rating,fund_performance_rating,amc_name,amc_rating,asset_class_name,category_name,cat_long_name,structure_name,open_for_subscription, estate_duty_exposure,us_investors,one_yr,three_yr,five_yr,since_inception,slug",
@@ -57,6 +59,14 @@ export default async function FundsPage() {
         (query) => query.order('amc_rating', { ascending: false })
       ]
     }),
+    supabaseListRead<blogDetail>({
+      table: "blogs",
+      columns: "*",
+      filters: [
+        (query) => query.order('created_at', { ascending: false }),
+        (query) => query.eq('rms_show', 'focus')
+      ],
+    }),
   ]);
 
 
@@ -72,6 +82,7 @@ export default async function FundsPage() {
             <TabsList className="w-full">
                 <TabsTrigger value="funds">Funds</TabsTrigger>
                 <TabsTrigger value="amc">AMCs</TabsTrigger>
+                <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
           </TabsList>
                 <TabsContent value="funds">
                     <TableFundScreen data={funds} userRoles={userRoles} />
@@ -96,6 +107,9 @@ export default async function FundsPage() {
                       </TabsContent>
                   </Tabs>
                 </TabsContent>
+                <TabsContent value="recommendations">
+                  <TableRecommendationBlog data={blogs} />
+                </TabsContent>
       </Tabs>
 
 
@@ -106,4 +120,3 @@ export default async function FundsPage() {
     </div>
   );
 }
-

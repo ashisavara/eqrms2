@@ -126,7 +126,7 @@ export default async function FundsPage() {
                             <TabsTrigger value="Equity">Equity</TabsTrigger>
                             <TabsTrigger value="Debt">Debt</TabsTrigger>
                             <TabsTrigger value="Hybrid">Hybrid</TabsTrigger>
-                            <TabsTrigger value="Alternatives">Altenatives</TabsTrigger>
+                            <TabsTrigger value="Alternatives">Alternatives</TabsTrigger>
                         </TabsList>
                         <TabsContent value="Equity">
                            <div className="flex flex-wrap gap-3 mb-4">

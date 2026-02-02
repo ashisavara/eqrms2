@@ -29,7 +29,8 @@ export default async function EditBlogPage({ params }: { params: Promise<{ id: s
         body: blogData.body || "",
         featured_image: blogData.featured_image || "",
         status: blogData.status || "",
-        category: blogData.category || ""
+        category: blogData.category || "",
+        slug: blogData.slug || ""
     };
 
     return (

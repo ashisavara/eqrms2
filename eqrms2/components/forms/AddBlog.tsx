@@ -27,7 +27,8 @@ export function AddBlogForm() {
         body: "",
         featured_image: "",
         status: "",
-        category: ""
+        category: "",
+        slug: ""
     };
 
     const { control, handleSubmit } = useForm<BlogValues>({
@@ -103,7 +104,7 @@ export function AddBlogForm() {
 
             </div>
             
-            
+            <TextInput name="slug" label="Slug" control={control} placeholder="Enter blog slug" />
             <ResizableTextArea name="body" label="Body" control={control} />
             
             

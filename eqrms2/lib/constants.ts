@@ -372,7 +372,8 @@ export const MASTER_OPTIONS = {
   blogStatus: [
     "Draft",
     "Published",
-    "Archived"
+    "Archived",
+    "RMS Only"
   ],
 
   // Blog Category

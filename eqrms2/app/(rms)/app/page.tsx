@@ -196,7 +196,7 @@ export default function RMSLandingPage() {
       {/* RMS Page Content */}
       <PageTitle 
         title="IME RMS (Research Management Solution)" 
-        caption="The 1st tool every to give you direct access to detailed rating rationales on investment funds." 
+        caption="The 1st tool ever to give you direct access to detailed rating rationales on investment funds." 
       />
       
       <Section className="py-6">

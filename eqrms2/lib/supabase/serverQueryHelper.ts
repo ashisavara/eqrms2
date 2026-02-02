@@ -296,7 +296,7 @@ export async function getPublicBlogSlugs(): Promise<Array<{ slug: string }>> {
     const { data, error } = await supabase
       .from('blogs')
       .select('slug')
-      .eq('status', 'published'); // Only published blogs
+      .eq('status', 'Published'); // Only published blogs
     
     if (error) {
       console.error('Error fetching public blog slugs:', error);
@@ -376,7 +376,8 @@ export async function getStaticBlog(slug: string): Promise<blogDetail | null> {
     table: "blogs",
     columns: "*",
     filters: [
-      (query) => query.eq("slug", slug)
+      (query) => query.eq("slug", slug),
+      (query) => query.eq("status", "Published")
     ]
   });
 }

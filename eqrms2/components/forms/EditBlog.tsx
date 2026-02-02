@@ -28,7 +28,8 @@ export function EditBlogForm({
         body: initialData?.body || "",
         featured_image: initialData?.featured_image || "",
         status: initialData?.status || "",
-        category: initialData?.category || ""
+        category: initialData?.category || "",
+        slug: initialData?.slug || ""
     };
 
     const { control, handleSubmit } = useForm<BlogValues>({
@@ -104,7 +105,7 @@ export function EditBlogForm({
 
             </div>
             
-            
+            <TextInput name="slug" label="Slug" control={control} placeholder="Enter blog slug" />
             <ResizableTextArea name="body" label="Body" control={control} />
             
             
