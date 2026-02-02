@@ -10,11 +10,11 @@ export const columns: ColumnDef<blogDetail>[] = [
     size: 300,
     cell: ({ row }) => {
       const title = row.original.title;
-      const blogId = row.original.id;
+      const slug = row.original.slug;
       return title ? (
         <div className="text-left">
           <Link 
-            href={`/internal/public-site/blog/${blogId}`}
+            href={`/recommendations/${slug}`}
             className="blue-hyperlink"
           >
             {title}
