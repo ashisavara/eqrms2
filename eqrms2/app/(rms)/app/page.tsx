@@ -196,18 +196,18 @@ export default function RMSLandingPage() {
       {/* RMS Page Content */}
       <PageTitle 
         title="IME RMS App (Research Management Solution)" 
-        caption="The 1st tool ever to reveal the detailed rating rationales behind fund recommendations." 
+        caption="Access the 1st tool ever that reveals detailed fund rating rationales" 
       />
-      
       <Section className="py-6">
         <div className="ime-grid-2col">
           <div>
-          <Card className="w-full max-w-md">
+            <h4 className='text-2xl font-bold text-blue-800 hidden md:block text-center'>The IME RMS App</h4>
+          <h4 className="text-xl font-bold text-gray-700 hidden md:block text-center mb-6">Get direct access to expert insights</h4>
+          <Card className="w-full max-w-sm mx-auto">
         <CardHeader className="text-center">
-        <CardTitle className="text-xl font-bold text-gray-700">
-            IME RMS App
+        <CardTitle className="text-base font-bold text-gray-700">
+            Sign-up/Login
           </CardTitle>
-          <p className="text-sm font-bold text-gray-700">Login (or Sign-up) for direct access to the insights of IME's central research team on investment funds & investment options.</p>
         </CardHeader>
         
         <CardContent className="space-y-6">

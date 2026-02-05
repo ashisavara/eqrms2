@@ -17,7 +17,7 @@ export default function HomePage() {
         <div>
             <div className="flex flex-col md:flex-row bg-blue-950">
                 <div className="min-w-[400px] w-full md:w-1/4 px-6 flex flex-col justify-center">
-                    <h2 className="bg-blue-50 mt-12 text-blue-950 text-center'">A Research-First Investments Firm</h2>
+                    <h2 className="bg-blue-950 text-white text-center !pb-0 !mb-6">A Research-First Investments Firm</h2>
                     <p className="text-white text-center">
                         Specialised Investment Solutions for Families, Retirees, NRIs, Ultra-HNIs, Family Offices and Corporate Treasuries.
                     </p> 
