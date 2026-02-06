@@ -68,7 +68,7 @@ export default function ImeDigitalDisruptionPage() {
 
             <Section className="bg-gray-100 !py-12">
                 <h2 className="bg-gray-100">Learn More</h2>
-                <YouTube url="https://www.youtube.com/watch?v=qjVzeMROG14" />
+                <YouTube url="https://www.youtube.com/watch?v=th8i3XYMXo8" />
             </Section>
 
 
