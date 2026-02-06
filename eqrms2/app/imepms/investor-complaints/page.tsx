@@ -7,7 +7,7 @@ export default function InvestorComplaintsPage() {
         <PageTitle 
             title="Investor Complaints"
         />
-        <h2 className="mt-10">Data for month ending Dec-25</h2>
+        <h2 className="mt-10">Data for month ending Jan-26</h2>
         <table className="w-full border-collapse border border-gray-300 mt-6">
           <thead>
             <tr className="bg-gray-100">
@@ -115,6 +115,14 @@ export default function InvestorComplaintsPage() {
               <tr>
                   <td className="border border-gray-300 p-2">6</td>
                   <td className="border border-gray-300 p-2">Dec-25</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+              </tr>
+              <tr>
+                  <td className="border border-gray-300 p-2">7</td>
+                  <td className="border border-gray-300 p-2">Jan-26</td>
                   <td className="border border-gray-300 p-2">0</td>
                   <td className="border border-gray-300 p-2">0</td>
                   <td className="border border-gray-300 p-2">0</td>
