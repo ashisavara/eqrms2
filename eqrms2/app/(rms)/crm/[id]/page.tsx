@@ -14,11 +14,14 @@ import { DigitalAdsDetail } from "@/types/digital-ads-detail";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
 import { AddDigitalAd } from "@/components/forms/AddDigitalAd";
 import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import TableCalls from "../sales/TableCalls";
+import { CallsDetail } from "@/types/calls-detail";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [lead, Meetings,Followups, Deals, leadDigitalAds, digitalAdOptions] = await Promise.all([
+    const [lead, Meetings,Followups, Deals, leadDigitalAds, digitalAdOptions, Calls] = await Promise.all([
         supabaseSingleRead<LeadsTagging>({
             table: "view_leads_tagcrm",
             columns: "*",  
@@ -54,9 +57,13 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                 (query) => query.eq('lead_id', id)
             ]
         }),
-        fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign")
-    ]);
-
+        fetchOptions<string,string>("lead_tag_digital_ads","id","digital_campaign"),
+    supabaseListRead<CallsDetail>({
+        table: "frejun_call_logs",
+        columns: "candidate_number, candidate_name, lead_id, status, call_start_time, call_duration, recording_url, link",
+        filters: [(query) => query.eq('lead_id', id)],
+    }),
+]);
     if (!lead) {
         return <div>Lead not found</div>;
     }
@@ -184,9 +191,18 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                         </span>
                     ))}
                 </div>
-                <h3>Interactions</h3>
-                <TableInteractions data={Meetings} leadsData={[lead]} />
-                
+                <Tabs defaultValue="interactions" className="ime-tabs">
+                    <TabsList className="w-full">
+                            <TabsTrigger value="interactions">Interactions</TabsTrigger>
+                            <TabsTrigger value="calls">Calls</TabsTrigger>
+                    </TabsList>
+                        <TabsContent value="interactions">
+                            <TableInteractions data={Meetings} leadsData={[lead]} />
+                        </TabsContent>
+                        <TabsContent value="calls">
+                            <TableCalls data={Calls} />
+                        </TabsContent>
+                </Tabs>
             </div>
             
         </div>
