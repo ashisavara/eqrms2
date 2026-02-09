@@ -7,6 +7,7 @@ import { generateAmcSEO } from '@/lib/seo/helpers/amc';
 import type { Metadata } from 'next';
 import RmaCta from "@/components/uiComponents/rma-cta";
 import PageTitle from "@/components/uiComponents/page-title";
+import { PublicAmcRatingUpgrade } from "@/components/uiComponents/rating-rationales";
 
 
 // Generate static params for all published PMS AMCs
@@ -55,10 +56,10 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
         return (
             <div>
             <PageTitle title={amc.amc_name} caption="Our view on their team, the pedigree, the funds & investment philosophy followed." />
-            <div className="p-5 max-w-5xl mx-auto">
+            <div className="px-5 max-w-5xl mx-auto">
             <h2 className="mt-6 mb-0">IME's Review of {amc.amc_name}</h2>
                 <div className="border-box !mt-0 ime-fund-view-box">
-                    
+                <PublicAmcRatingUpgrade />
                     <p className="font-semibold border-b border-gray-300">AMC View</p>
                     <p>{amc.amc_view}</p>
                     <p className="font-semibold pt-6 border-b border-gray-300">AMC Pedigree</p>

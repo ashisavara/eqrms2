@@ -10,6 +10,7 @@ import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { FundRatingSnapshot, FundRatingSnapshotUpgrade, FundRatingRationale, FundRatingRationaleUpgrade } from "@/components/uiComponents/rating-rationales";
+import { EstDutyExposureRating } from "@/components/conditional-formatting";
 
 export const dynamic = 'force-dynamic';
 
@@ -59,11 +60,12 @@ export default async function FundPage({ params }: PageProps) {
             <div className="whitespace-nowrap">
               {fund.fund_aum != null && (
                 <>
-                  AUM: {fund.structure_id === 5 ? `$ ${fund.fund_aum} mn` : `Rs. ${fund.fund_aum} cr`}|
+                  <b>AUM:</b> {fund.structure_id === 5 ? `$ ${fund.fund_aum} mn` : `Rs. ${fund.fund_aum} cr`} |
                 </>
               )}
             </div>
-            <div className="whitespace-nowrap"> Open: {fund.open_for_subscription}  | </div>
+            <div className="whitespace-nowrap"> <b>Open:</b> {fund.open_for_subscription} </div>
+            {fund.structure_id === 5 && (<> | <b>Estate Duty Exposure:</b> <EstDutyExposureRating rating={fund.estate_duty_exposure as string}> {fund.estate_duty_exposure} </EstDutyExposureRating> | </>)}
             {can(userRoles, 'rms', 'edit_rms') ? 
               <div className="whitespace-nowrap">
                 <span>Edit: </span>
@@ -79,15 +81,16 @@ export default async function FundPage({ params }: PageProps) {
                     <EditAmcDueDilButton amcData={fund} amcId={fund.amc_id} />
                   </>
                 )}
-              {can(userRoles, 'rms', 'view_all_funds') && fund.mkt_material_link && fund.mkt_material_link.trim() !== "" && (
-                <>
-                  <a href={fund.mkt_material_link} target="_blank" className="blue-hyperlink"> Presentations</a>
-                </>
-              )}
+              
             </div>
             :
             null
             }
+            {can(userRoles, 'rms', 'view_all_funds') && fund.mkt_material_link && fund.mkt_material_link.trim() !== "" && (
+                <>
+                  <a href={fund.mkt_material_link} target="_blank" className="blue-hyperlink"> Presentations</a>
+                </>
+              )}
         </div>
       <div>
         <Tabs defaultValue="rating_snapshot" className="w-full mx-auto mt-6 text-sm">

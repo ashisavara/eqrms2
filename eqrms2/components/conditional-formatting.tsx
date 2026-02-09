@@ -574,3 +574,26 @@ export function StatusRating({ rating, children }: { rating: string; children: R
     </div>
   );
 }
+
+
+/**
+ * Text-based rating container for Estate Duty Exposure 
+ */
+export function EstDutyExposureRating({ rating, children }: { rating: string; children: React.ReactNode }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'N': 5,
+      'Y': 1,
+    };
+    
+    return ratingMap[textRating] || 3;
+  };
+
+  const numericRating = getNumericRating(rating);
+  
+  return (
+    <div className={`px-1 py-0 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {children}
+    </div>
+  );
+}

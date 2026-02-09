@@ -6,6 +6,7 @@ import { FlexRms2Col } from "@/components/grids/flex-rms-2col";
 import { UpgradeIcon } from "@/components/uiComponents/upgrade-icon";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import { fundsUpdateSchema } from "@/types/forms";
 
 // Component for users WITH permissions - Rating Snapshot
 export function FundRatingSnapshot({ fund }: { fund: RmsFundAmc }) {
@@ -448,3 +449,87 @@ export function AmcRatingRationaleUpgrade() {
   );
 }
 
+
+
+// Component for users WITHOUT permissions - Rating Snapshot (Upgrade version)
+// See FundRatingSnapshot for the version with permissions
+export function PublicFundRatingUpgrade() {
+  return (
+    <div>
+      <div className="text-sm">
+        <SimpleTable 
+          headers={[{label:"Fund Rating"},{label:"Strategy Rating"},{label:"Performance Rating"}]}
+          body={[
+            {value:<UpgradeIcon clickThroughPath="free-trial" />},
+            {value:<UpgradeIcon clickThroughPath="free-trial" />},
+            {value:<UpgradeIcon clickThroughPath="free-trial" />}
+          ]}
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-400"></div>
+        <div className="w-full mt-2 text-xs">
+          <FlexRms2Col label="Recommendation">
+            <UpgradeIcon clickThroughPath="free-trial" />
+          </FlexRms2Col>
+          <FlexRms2Col label="Strategy Definition">
+            <UpgradeIcon clickThroughPath="free-trial" />
+          </FlexRms2Col>
+          <FlexRms2Col label="5yr Performance">
+            <UpgradeIcon clickThroughPath="free-trial" />
+          </FlexRms2Col>
+          <FlexRms2Col label="LT Performance">
+            <UpgradeIcon clickThroughPath="free-trial" />
+          </FlexRms2Col>
+          <FlexRms2Col label="Strategy Desc">
+            <UpgradeIcon clickThroughPath="free-trial" />
+          </FlexRms2Col>
+        </div>
+      </div>
+      </div>
+  );
+}
+
+
+export function PublicAmcRatingUpgrade() {
+  return (
+    <>
+      <div className="text-sm">
+        <SimpleTable 
+          headers={[{label:"AMC Rating"},{label:"Pedigree Rating"},{label:"Team Rating"},{label:"Philosophy Rating"}]}
+          body={[
+            {value: <UpgradeIcon clickThroughPath="free-trial" />},
+            {value: <UpgradeIcon clickThroughPath="free-trial" />},
+            {value: <UpgradeIcon clickThroughPath="free-trial" />},
+            {value: <UpgradeIcon clickThroughPath="free-trial" />}
+          ]}
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-4 pt-4 border-t border-gray-200">
+          <div>
+            <FlexRms2Col label="AMC Pedigree">
+              <UpgradeIcon clickThroughPath="free-trial" />
+            </FlexRms2Col>
+            <FlexRms2Col label="Team Pedigree">
+              <UpgradeIcon clickThroughPath="free-trial" />
+            </FlexRms2Col>
+            <FlexRms2Col label="FM Churn Risk">
+              <UpgradeIcon clickThroughPath="free-trial" />
+            </FlexRms2Col>
+            <FlexRms2Col label="AMC Maturity">
+              <UpgradeIcon clickThroughPath="free-trial" />
+            </FlexRms2Col>
+          </div>
+          <div>
+            <FlexRms2Col label="Philosphy Name">
+              <UpgradeIcon clickThroughPath="free-trial" />
+            </FlexRms2Col>
+            <FlexRms2Col label="Inv Philosophy">
+              <UpgradeIcon clickThroughPath="free-trial" />
+            </FlexRms2Col>
+            <FlexRms2Col label="Investment Team">
+              <UpgradeIcon clickThroughPath="free-trial" />
+            </FlexRms2Col>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

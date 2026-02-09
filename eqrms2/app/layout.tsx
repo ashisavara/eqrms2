@@ -74,9 +74,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           type="text/javascript"
           src="https://d3mkw6s8thqya7.cloudfront.net/integration-plugin.js"
           id="aisensy-wa-widget"
-          widget-id="aaaoj6"
+          widget-id="aaax8f"
         >
-        </script>
+        </script> 
       </head>
       <body className={`${geistSans.className} antialiased`} suppressHydrationWarning>
         {/* Google Tag Manager (noscript) */}

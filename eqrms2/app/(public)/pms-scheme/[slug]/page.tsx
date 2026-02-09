@@ -5,6 +5,7 @@ import { generateFundSEO } from '@/lib/seo/helpers/fund';
 import type { Metadata } from 'next';
 import RmaCta from "@/components/uiComponents/rma-cta";
 import PageTitle from "@/components/uiComponents/page-title";
+import { PublicFundRatingUpgrade, PublicAmcRatingUpgrade } from "@/components/uiComponents/rating-rationales";
 
 // Generate static params for all published PMS schemes
 export async function generateStaticParams() {
@@ -49,10 +50,11 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
         return (
             <div>
                 <PageTitle title={pmsScheme.fund_name} caption="Our view on the fund, the AMC, the strategy, the performance & the investment team." />
-            <div className="p-5 max-w-5xl mx-auto">
+            <div className="px-2 md:px-5 max-w-5xl mx-auto">
                 
                 <h2 className="mt-6 mb-0">IME's Review of {pmsScheme.fund_name}</h2>
                 <div className="border-box !mt-0 ime-fund-view-box">
+                <PublicFundRatingUpgrade />
                     <p className="font-semibold border-b border-gray-300">View on the Fund</p>
                     <p>{pmsScheme.investment_view}</p>
                     <p className="font-semibold pt-6 border-b border-gray-300">Strategy</p>
@@ -65,9 +67,16 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                     </>
                     )}
                 </div>
+                <h2>Trailing Performance</h2>
+                {pmsScheme.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: pmsScheme.trailing_perf_html }} />}
+                <h2>Investment team</h2>
+                {pmsScheme.amc_fm_html && <div className="px-4 md:px-6" dangerouslySetInnerHTML={{ __html: pmsScheme.amc_fm_html }} />}
+
 
                 <h2 className="mt-6 mb-0">IME's Review of {pmsScheme.amc_name}</h2>
+                
                 <div className="border-box !mt-0 ime-fund-view-box">
+                <PublicAmcRatingUpgrade />
                     
                     <p className="font-semibold border-b border-gray-300">View on AMC</p>
                     <p>{pmsScheme.amc_view}</p>
@@ -83,10 +92,7 @@ export default async function PmsSchemePage({ params }: { params: Promise<{ slug
                 </div>
                 {pmsScheme.fund_body && <div className="rms-body" dangerouslySetInnerHTML={{ __html: pmsScheme.fund_body }} />}
                 {pmsScheme.amc_body && <div className="rms-body" dangerouslySetInnerHTML={{ __html: pmsScheme.amc_body }} />}
-                <h2>Trailing Performance</h2>
-                {pmsScheme.trailing_perf_html && <div dangerouslySetInnerHTML={{ __html: pmsScheme.trailing_perf_html }} />}
-                <h2>Investment team</h2>
-                {pmsScheme.amc_fm_html && <div className="px-4 md:px-6" dangerouslySetInnerHTML={{ __html: pmsScheme.amc_fm_html }} />}
+                
                 <div className="py-12">
                     <h2>Experience the benefits of working with a 'research-first' investments firm</h2>
                     <RmaCta />
