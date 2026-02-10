@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { FinCalculatorDetail } from "@/types/fin-calculator-detail";
+import { CalculatorListItem } from "./calculators-config";
 import Link from "next/link";
 import PageTitle from "@/components/uiComponents/page-title";
 
 interface FinCalculatorClientProps {
-  finCalculator: FinCalculatorDetail[];
+  finCalculator: CalculatorListItem[];
 }
 
 export default function FinCalculatorClient({ finCalculator }: FinCalculatorClientProps) {
@@ -21,14 +21,14 @@ export default function FinCalculatorClient({ finCalculator }: FinCalculatorClie
 
   // Get unique categories from financial calculators
   const categories = useMemo(() => {
-    const uniqueCategories = Array.from(new Set(finCalculator.map(calc => calc.category).filter(Boolean)));
+    const uniqueCategories = Array.from(new Set(finCalculator.map((calc) => calc.category).filter(Boolean)));
     return uniqueCategories.sort();
   }, [finCalculator]);
 
   // Filter financial calculators based on selected category and search term
   const filteredCalculators = useMemo(() => {
-    return finCalculator.filter(calculator => {
-      const matchesCategory = selectedCategory === 'all' || calculator.category === selectedCategory;
+    return finCalculator.filter((calculator) => {
+      const matchesCategory = selectedCategory === "all" || calculator.category === selectedCategory;
       const matchesSearch = calculator.title.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
     });
@@ -83,8 +83,8 @@ export default function FinCalculatorClient({ finCalculator }: FinCalculatorClie
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 center-items">
           {filteredCalculators.map((calculator) => (
-            <Link 
-              key={calculator.calculator_id} 
+            <Link
+              key={calculator.slug}
               href={`/financial-calculator/${calculator.slug}`}
               className="group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
             >

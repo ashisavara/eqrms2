@@ -1,16 +1,7 @@
-import { FinCalculatorDetail } from "@/types/fin-calculator-detail";
-import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
+import { CALCULATORS_LIST } from "./calculators-config";
 import FinCalculatorClient from "./FinCalculatorClient";
 
-export default async function FinCalculatorPage() {
-  const finCalculator = await supabaseListRead<FinCalculatorDetail>({
-    table: "fin_calculators",
-    columns: "*",
-    filters: [
-      (query) => query.order('calculator_id', { ascending: false })
-    ],
-  });
-
-  return <FinCalculatorClient finCalculator={finCalculator} />;
+export default function FinCalculatorPage() {
+  return <FinCalculatorClient finCalculator={CALCULATORS_LIST} />;
 }
 
