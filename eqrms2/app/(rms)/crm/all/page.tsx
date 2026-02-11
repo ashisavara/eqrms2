@@ -88,7 +88,7 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
     // Fetch the actual table data with server-side filtering/sorting/pagination
     serverSideQuery<LeadsTagging>({
       table: "view_leads_tagcrm",
-      columns: "lead_name,days_followup,days_since_last_contact,importance,wealth_level,lead_progression,lead_summary,lead_source,lead_type,rm_name,lead_id,last_contact_date,followup_date",
+      columns: "*",
       filters,
       search,
       searchColumns: ['lead_name', 'lead_summary', 'rm_name', 'lead_source', 'lead_type', 'lead_progression'], // Which columns to search in
