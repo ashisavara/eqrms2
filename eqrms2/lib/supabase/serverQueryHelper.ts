@@ -607,29 +607,47 @@ export async function revalidatePaths(paths: string[]): Promise<{ success: boole
   }
 }
 
-// Convenience function for blog revalidation
-export async function revalidateBlog(slug: string): Promise<{ success: boolean; error?: string }> {
-  return revalidatePaths([`/blogs/${slug}`, '/blogs']);
+// ISR revalidation by type + slug (matches /api/revalidate-isr). Not exported so this
+// "use server" file only exports async functions (Next.js requirement).
+const ISR_TYPES = [
+  "webinar",
+  "whitepaper",
+  "blog",
+  "media-interview",
+  "investment-query",
+  "pms-amc",
+  "pms-scheme",
+] as const;
+
+type IsrType = (typeof ISR_TYPES)[number];
+
+function pathsForIsrType(type: IsrType, slug: string): string[] {
+  switch (type) {
+    case "webinar":
+      return [`/webinars/${slug}`, "/webinars"];
+    case "whitepaper":
+      return [`/whitepapers/${slug}`, "/whitepapers"];
+    case "blog":
+      return [`/blogs/${slug}`, "/blogs"];
+    case "media-interview":
+      return [`/media-interview/${slug}`, "/media-interview"];
+    case "investment-query":
+      return [`/investment-query/${slug}`, "/investment-query"];
+    case "pms-amc":
+      return [`/pms-amc/${slug}`, "/pms-amc"];
+    case "pms-scheme":
+      return [`/pms-scheme/${slug}`, "/pms-scheme"];
+    default:
+      return [];
+  }
 }
 
-// Convenience function for media interview revalidation
-export async function revalidateMediaInterview(slug: string): Promise<{ success: boolean; error?: string }> {
-  return revalidatePaths([`/media-interview/${slug}`, '/media-interview']);
-}
-
-// Convenience function for investment query revalidation
-export async function revalidateInvestmentQuery(slug: string): Promise<{ success: boolean; error?: string }> {
-  return revalidatePaths([`/investment-query/${slug}`, '/investment-query']);
-}
-
-// Convenience function for PMS AMC revalidation
-export async function revalidatePmsAmc(slug: string): Promise<{ success: boolean; error?: string }> {
-  return revalidatePaths([`/pms-amc/${slug}`, '/pms-amc']);
-}
-
-// Convenience function for PMS scheme revalidation
-export async function revalidatePmsScheme(slug: string): Promise<{ success: boolean; error?: string }> {
-  return revalidatePaths([`/pms-scheme/${slug}`, '/pms-scheme']);
+export async function revalidateIsr(
+  type: IsrType,
+  slug: string
+): Promise<{ success: boolean; error?: string }> {
+  const paths = pathsForIsrType(type, slug.trim());
+  return paths.length ? revalidatePaths(paths) : { success: false, error: "Invalid type or slug" };
 }
 
 // Upload image to Supabase Storage (server-side)
