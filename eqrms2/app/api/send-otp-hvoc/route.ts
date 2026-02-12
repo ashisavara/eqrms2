@@ -127,6 +127,23 @@ export async function POST(req: NextRequest) {
 
     const ip_address = req.headers.get('x-forwarded-for') || 'unknown'
 
+    // Read affiliate cookie (same as verify-otp): aff_rf stores { rf, utm_source?, ... }
+    let affiliate_lead_id: number | null = null
+    let affiliate_ref_meta: string | null = null
+    const affCookie = req.cookies.get('aff_rf')
+    if (affCookie?.value) {
+      try {
+        const aff = JSON.parse(affCookie.value) as { rf?: string; [k: string]: unknown }
+        if (aff?.rf) {
+          const rfInt = Number.parseInt(String(aff.rf), 10)
+          if (Number.isFinite(rfInt)) affiliate_lead_id = rfInt
+        }
+        affiliate_ref_meta = affCookie.value
+      } catch (e) {
+        console.warn('[send-otp-hvoc] Failed to parse affiliate cookie:', e)
+      }
+    }
+
     // Rate limit per phone_number
     const supabaseAdmin = createSupabaseAdmin()
     const { count } = await supabaseAdmin
@@ -152,8 +169,8 @@ export async function POST(req: NextRequest) {
     const otp = randomInt(min, max).toString()
     const expires_at = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000).toISOString()
 
-    // Persist OTP to database with otp_lead_name and hvoc
-    const { error: insertErr } = await supabaseAdmin.from('otp_hvoc').insert({
+    // Persist OTP to database with otp_lead_name, hvoc, and optional affiliate fields from cookie
+    const insertPayload: Record<string, unknown> = {
       phone_number,
       otp_code: otp,
       expires_at,
@@ -162,7 +179,11 @@ export async function POST(req: NextRequest) {
       device_id,
       otp_lead_name: lead_name,
       hvoc: hvoc,
-    })
+    }
+    if (affiliate_lead_id != null) insertPayload.affiliate_lead_id = affiliate_lead_id
+    if (affiliate_ref_meta != null) insertPayload.affiliate_ref_meta = affiliate_ref_meta
+
+    const { error: insertErr } = await supabaseAdmin.from('otp_hvoc').insert(insertPayload)
     if (insertErr) {
       console.error(insertErr)
       return NextResponse.json({ error: 'Failed to save OTP' }, { status: 500 })
