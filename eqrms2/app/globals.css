@@ -230,7 +230,7 @@
   }
   
   h2 {
-    @apply  text-base md:text-xl text-center font-bold mt-2 mb-2 bg-blue-50 rounded-md text-gray-600 py-3;
+    @apply  text-base md:text-xl text-center font-bold mt-2 mb-2 bg-blue-50 rounded-md text-gray-600 !py-2;
   }
 
   div.ime-blog-page h3 {

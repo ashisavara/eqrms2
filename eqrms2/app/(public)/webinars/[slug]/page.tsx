@@ -38,6 +38,17 @@ export async function generateMetadata({
   return {
     title: `${webinar.webinar_name || "Webinar"} | IME Capital`,
     description: webinar.webinar_summary || undefined,
+    openGraph: {
+      title: `${webinar.webinar_name || "Webinar"} | IME Capital`,
+      description: webinar.webinar_summary || undefined,
+      images: webinar.webinar_img ? [{ url: webinar.webinar_img }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${webinar.webinar_name || "Webinar"} | IME Capital`,
+      description: webinar.webinar_summary || undefined,
+      images: webinar.webinar_img ? [webinar.webinar_img] : undefined,
+    },
   };
 }
 
@@ -88,19 +99,19 @@ export default async function WebinarPage({ params }: PageProps) {
         <div className="ime-grid-2col">
           <div>
             {webinar.webinar_img && (
-            <img src={webinar.webinar_img} alt={webinar.webinar_name ?? ""} className="w-full h-auto rounded-lg shadow-sm" />
+            <img src={webinar.webinar_img} alt={webinar.webinar_name ?? ""} className="w-full p-6 h-auto rounded-lg shadow-sm border-2 border-gray-200" />
           )}
           </div>
           <div>
             {webinar.webinar_summary && (
             <div
-              className="border-b-2 border-gray-200 pb-6 mb-6"
+              className="p-2"
               dangerouslySetInnerHTML={{ __html: webinar.webinar_summary }}
             />
             )}
           
           
-          <h3 className="text-center">Webinar Sign-up</h3>
+          <h3 className="text-center !mt-4">Webinar Sign-up</h3>
           {webinar.otp_hidden_content && (
           <OtpConditionalVisibility
             hvoc={`webinar--${webinar.webinar_name ?? webinar.webinar_id}`}
@@ -112,6 +123,23 @@ export default async function WebinarPage({ params }: PageProps) {
                 __html: webinar.otp_hidden_content ?? "",
               }}
             />
+            <div className="flex flex-wrap gap-3 mt-4">
+              <a
+                href={`/api/webinar-calendar/${webinar.slug}?format=google`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-md bg-blue-800 px-4 py-2 text-sm font-medium text-white hover:bg-blue-900 transition-colors"
+              >
+                Add to Google Calendar
+              </a>
+              <a
+                href={`/api/webinar-calendar/${webinar.slug}`}
+                className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Add to Other Calendars
+              </a>
+            </div>
+            <p className="text-sm text-gray-500">You should also receive a WhatsApp message with the login details shortly (during working hours).</p>
           </OtpConditionalVisibility>
         )}
         </div>
