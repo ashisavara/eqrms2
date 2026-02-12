@@ -15,7 +15,11 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  // Helper function to truncate text
+  const stripHtml = (html: string | null | undefined): string => {
+    if (!html) return "";
+    return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  };
+
   const truncateText = (text: string, maxLength: number = 150): string => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength).trim() + '...';
@@ -123,7 +127,7 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
                 
                 {/* Body Preview */}
                 <p className="text-sm text-center text-gray-600 line-clamp-3 mt-2">
-                  {truncateText(blog.body)}
+                  {truncateText(stripHtml(blog.body))}
                 </p>
               </div>
             </Link>

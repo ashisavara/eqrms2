@@ -14,6 +14,11 @@ import { OtpConditionalVisibility } from "@/components/uiComponents/otp-conditio
 import YouTube from "@/components/uiComponents/youtube";
 import TeamProfileBox from "@/components/uiComponents/team-profile-box";
 
+function stripHtml(html: string | null): string {
+  if (!html) return "";
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export async function generateStaticParams() {
   const webinars = await supabaseStaticListRead<{ slug: string }>({
     table: "academy_webinar",
@@ -35,18 +40,19 @@ export async function generateMetadata({
     filters: [(query) => query.eq("slug", slug)],
   });
   if (!webinar) return {};
+  const description = stripHtml(webinar.webinar_summary) || undefined;
   return {
     title: `${webinar.webinar_name || "Webinar"} | IME Capital`,
-    description: webinar.webinar_summary || undefined,
+    description,
     openGraph: {
       title: `${webinar.webinar_name || "Webinar"} | IME Capital`,
-      description: webinar.webinar_summary || undefined,
+      description,
       images: webinar.webinar_img ? [{ url: webinar.webinar_img }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title: `${webinar.webinar_name || "Webinar"} | IME Capital`,
-      description: webinar.webinar_summary || undefined,
+      description,
       images: webinar.webinar_img ? [webinar.webinar_img] : undefined,
     },
   };
