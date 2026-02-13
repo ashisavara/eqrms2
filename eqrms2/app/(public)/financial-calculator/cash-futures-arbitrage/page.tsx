@@ -5,6 +5,15 @@ import PageTitle from "@/components/uiComponents/page-title";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ChartContainer } from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from "recharts";
+
+const BAR_COLOR_POSITIVE = "hsl(142, 56%, 42%)";
+const BAR_COLOR_NEGATIVE = "hsl(var(--destructive))";
+
+const CHART_CONFIG = {
+  gain: { label: "Gain / Loss", color: BAR_COLOR_POSITIVE },
+};
 
 export default function ArbitrageReturnPage() {
   const [stockPrice, setStockPrice] = useState(1500);
@@ -45,6 +54,15 @@ export default function ArbitrageReturnPage() {
       annualisedPct,
     };
   }, [stockPrice, futurePrice, closingPrice, marginPct]);
+
+  const gainChartData = useMemo(
+    () => [
+      { name: "Gain on buy stock", gain: calc.buyStock.gainLoss },
+      { name: "Gain on sell future", gain: calc.sellFuture.gainLoss },
+      { name: "Gain on total", gain: calc.totalGain },
+    ],
+    [calc.buyStock.gainLoss, calc.sellFuture.gainLoss, calc.totalGain]
+  );
 
   return (
     <div>
@@ -186,6 +204,39 @@ export default function ArbitrageReturnPage() {
                 Annualised Return: {calc.annualisedPct.toFixed(2)}%
               </p>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mt-6">
+          <CardContent className="p-6">
+            <h3 className="text-lg font-semibold mb-4">Gain / Loss (Rs.)</h3>
+            <ChartContainer config={CHART_CONFIG} className="h-[280px] w-full">
+              <BarChart
+                data={gainChartData}
+                margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(v) => String(v)}
+                />
+                <Bar dataKey="gain" radius={[4, 4, 0, 0]}>
+                  {gainChartData.map((entry, index) => (
+                    <Cell
+                      key={index}
+                      fill={entry.gain >= 0 ? BAR_COLOR_POSITIVE : BAR_COLOR_NEGATIVE}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>

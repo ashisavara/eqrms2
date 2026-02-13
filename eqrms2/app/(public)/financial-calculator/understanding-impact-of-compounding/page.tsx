@@ -115,8 +115,8 @@ export default function PowerOfCompoundingPage() {
                     />
                   </div>
                   <div className="text-sm text-muted-foreground space-y-1 pt-2">
-                    <p>Equity Savings {equitySavingsPct.toFixed(1)}%</p>
-                    <p>Agg Hybrid {aggHybridPct.toFixed(1)}%</p>
+                    <p>Equity Savings (33% equity) {equitySavingsPct.toFixed(1)}%</p>
+                    <p>Agg Hybrid (66% equity) {aggHybridPct.toFixed(1)}%</p>
                   </div>
                 </div>
               </div>

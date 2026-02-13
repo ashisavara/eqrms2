@@ -31,6 +31,7 @@ function sipTotalInvested(
   return annual * (Math.pow(1 + s, years) - 1) / s;
 }
 
+// SIP assumed at start of each month: contribution in month m grows for (months - m) periods
 function sipFutureValue(
   monthlyAmount: number,
   stepUpPct: number,
@@ -44,7 +45,7 @@ function sipFutureValue(
   for (let m = 0; m < months; m++) {
     const yearIndex = Math.floor(m / 12);
     const contribution = monthlyAmount * Math.pow(1 + stepUpPct / 100, yearIndex);
-    fv += contribution * Math.pow(1 + rMonthly, months - 1 - m);
+    fv += contribution * Math.pow(1 + rMonthly, months - m);
   }
   return fv;
 }

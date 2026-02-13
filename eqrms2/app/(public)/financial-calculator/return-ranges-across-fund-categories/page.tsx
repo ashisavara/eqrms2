@@ -35,7 +35,7 @@ export default function FundCategoriesComparisonPage() {
     debtMf: 20,
     conservativeHybrid: 30,
     equitySavings: 10,
-    aggressiveHybrid: 40,
+    aggressiveHybrid: 30,
     equityMf: 10,
   });
 

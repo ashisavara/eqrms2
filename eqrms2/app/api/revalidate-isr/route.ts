@@ -11,7 +11,7 @@
  *
  * 1) Revalidate by type + slug (one content piece + its list page):
  *
- *    curl -X POST https://your-domain.com/api/revalidate-isr \
+ *    curl -X POST https://imecapital.in/api/revalidate-isr \
  *      -H "Content-Type: application/json" \
  *      -d '{"secret":"YOUR_REVALIDATE_SECRET","type":"webinar","slug":"ai-trade"}'
  *

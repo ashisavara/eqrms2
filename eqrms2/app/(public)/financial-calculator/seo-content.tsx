@@ -136,6 +136,7 @@ const SEO_CONTENT: Record<string, SeoContentBlock> = {
     overview: [
       "Feeder funds invest in an overseas fund. Your INR outcome depends on both the underlying fund performance and currency movement.",
       "This calculator breaks the return into asset appreciation and currency impact so you can see where gains/losses came from.",
+      "Please note, returns assumed here are absolute (and not annualised return), and this calculator is primarily meant to help demonstrate how feeder funds give you both currency & economic diversification. "
     ],
     howToUse: [
       "Enter INR investment, FX rate at investment and redemption, and USD fund return/NAV inputs.",

@@ -17,10 +17,14 @@ function profitSharingPct(
   hurdlePct: number,
   catchUp: boolean
 ): number {
+  // Profit share applies only when fund return is strictly greater than hurdle (not >=)
+  if (fundReturnPct <= hurdlePct) return 0;
   if (catchUp) {
+    // Catch-up on: profit share on total returns
     return (profitSharePct / 100) * fundReturnPct;
   }
-  const excess = Math.max(0, fundReturnPct - hurdlePct);
+  // Catch-up off: profit share on returns above hurdle only
+  const excess = fundReturnPct - hurdlePct;
   return (profitSharePct / 100) * excess;
 }
 
