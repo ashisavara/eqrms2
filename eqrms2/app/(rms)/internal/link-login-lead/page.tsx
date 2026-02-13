@@ -1,17 +1,18 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { supabaseListRead } from '@/lib/supabase/serverQueryHelper';
-import { createClient } from '@/lib/supabase/server';
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { UnlinkedLoginsTableClient } from './UnlinkedLoginsTableClient';
 import { SearchLoginProfilesClient } from './SearchLoginProfilesClient';
 import { SearchLeadsClient } from './SearchLeadsClient';
 import { UnlinkedGroupsData } from './UnlinkedGroupsData';
-import { LoginProfile, LoginProfileWithoutRoles } from './types';
+import { TableOtpHvoc } from './TableOtpHvoc';
+import { LoginProfile } from './types';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AddLeadButton } from '@/components/forms/AddLeads';
 import { fetchOptions } from '@/lib/supabase/serverQueryHelper';
+import type { OtpHvocDetail } from '@/types/otp-hvoc-detail';
 
 
 // Link Login to Lead functionality
@@ -48,13 +49,19 @@ async function UnlinkedLoginsData() {
 
 export default async function LinkLoginLeadPage() {
   const userRoles = await getUserRoles();
-  
-  // Check permission first
+
   if (!can(userRoles, 'internal', 'link_login_lead')) {
-    redirect('/uservalidation'); // or wherever you want to send them
+    redirect('/uservalidation');
   }
 
-  const referralPartnerOptions = await fetchOptions<string, string>("view_referral_partner","lead_name","lead_name");
+  const [referralPartnerOptions, otpHvocData] = await Promise.all([
+    fetchOptions<string, string>("view_referral_partner", "lead_name", "lead_name"),
+    supabaseListRead<OtpHvocDetail>({
+      table: "v_otp_hvoc",
+      columns: "*",
+      filters: [(q) => q.order("created_at", { ascending: false })],
+    }),
+  ]);
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -72,7 +79,7 @@ export default async function LinkLoginLeadPage() {
             <TabsTrigger value="link_login_lead">Link Login Lead</TabsTrigger>
             <TabsTrigger value="search_login">Search Login</TabsTrigger>
             <TabsTrigger value="search_leads">Search Leads</TabsTrigger>
-            <TabsTrigger value="investment_team">Unlinked Groups</TabsTrigger>
+            <TabsTrigger value="otp_hvoc">OTP HVOC</TabsTrigger>
      </TabsList>
           <TabsContent value="link_login_lead">
             <AddLeadButton referralPartnerOptions={referralPartnerOptions} />
@@ -91,15 +98,6 @@ export default async function LinkLoginLeadPage() {
             <p className="helper-text">
               <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 24886(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Ratnakar Shetty), 26505(Ashi Admin), 25970(Ankita Singh), 25436(Ankita Singh)
             </p>
-
-          </TabsContent>
-          <TabsContent value="search_login">
-            <SearchLoginProfilesClient userRoles={userRoles} />
-          </TabsContent>
-          <TabsContent value="search_leads">
-            <SearchLeadsClient />
-          </TabsContent>
-          <TabsContent value="investment_team">
             <Suspense 
               fallback={
                 <div className="flex items-center justify-center py-8">
@@ -112,6 +110,15 @@ export default async function LinkLoginLeadPage() {
             >
               <UnlinkedGroupsData />
             </Suspense>
+          </TabsContent>
+          <TabsContent value="search_login">
+            <SearchLoginProfilesClient userRoles={userRoles} />
+          </TabsContent>
+          <TabsContent value="search_leads">
+            <SearchLeadsClient />
+          </TabsContent>
+          <TabsContent value="otp_hvoc">
+            <TableOtpHvoc data={otpHvocData ?? []} />
           </TabsContent>  
     </Tabs>
 
