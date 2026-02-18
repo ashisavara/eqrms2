@@ -55,6 +55,10 @@ export default function RMSLandingPage() {
       setStatus('Please enter a phone number')
       return
     }
+    if (!isValidE164(phone)) {
+      setStatus('Please enter a valid phone number with country code (e.g., +91XXXXXXXXXX). OTPs are not sent if country code is mising)')
+      return
+    }
 
     setIsLoading(true)
     setStatus('Sending OTP...')
@@ -243,7 +247,7 @@ export default function RMSLandingPage() {
                   <Button 
                     onClick={sendOtp} 
                     className="w-full"
-                    disabled={!isValidE164(phone) || isLoading}
+                    disabled={phone.replace(/\D/g, '').length < 7 || isLoading}
                   >
                     {isLoading ? 'Sending...' : 'Send OTP (WhatsApp)'}
                   </Button>

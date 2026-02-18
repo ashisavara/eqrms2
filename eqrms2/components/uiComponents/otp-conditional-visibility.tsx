@@ -43,7 +43,7 @@ export function OtpConditionalVisibility({ children, hvoc }: OtpConditionalVisib
     }
 
     if (!isValidE164(phone)) {
-      setStatus('Please enter a valid phone number with country code (e.g., +91XXXXXXXXXX)')
+      setStatus('Please enter a valid phone number with the full country code (e.g. +91XXXXXXXXXX). OTPs are not sent if country code is mising)')
       return
     }
 
@@ -144,7 +144,7 @@ export function OtpConditionalVisibility({ children, hvoc }: OtpConditionalVisib
           />
           <Button 
             onClick={sendOtp}
-            disabled={!name.trim() || !isValidE164(phone) || isLoading}
+            disabled={!name.trim() || !phone.trim() || isLoading}
             className="w-full"
           >
             {isLoading ? 'Sending...' : 'Send OTP (WhatsApp)'}
