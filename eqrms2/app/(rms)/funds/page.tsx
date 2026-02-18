@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic';
 export default async function FundsPage() {
   const userRoles = await getUserRoles();
 
-  const [funds, mfAmc, pmsAmc, globalAmc, blogs] = await Promise.all([
+  const [funds, mfAmc, pmsAmc, globalAmc,sifAmc, blogs] = await Promise.all([
     supabaseListRead<RmsFundsScreener>({
       table: "view_rms_funds_screener",
       columns: "fund_id,fund_name,fund_rating,fund_performance_rating,amc_name,amc_rating,asset_class_name,category_name,cat_long_name,structure_name,open_for_subscription, estate_duty_exposure,us_investors,one_yr,three_yr,five_yr,since_inception,slug",
@@ -49,16 +49,26 @@ export default async function FundsPage() {
         (query) => query.order('amc_rating', { ascending: false })
       ]
     }),
-    supabaseListRead<AMC>({
-      table: "rms_amc",
-      columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
-      filters: [
-        (query) => query.eq('open_for_distribution', ['Y']),
-        (query) => query.eq('structure', ['Global AMC']),
-        (query) => query.gt('amc_rating', 2),
-        (query) => query.order('amc_rating', { ascending: false })
-      ]
-    }),
+      supabaseListRead<AMC>({
+        table: "rms_amc",
+        columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
+        filters: [
+          (query) => query.eq('open_for_distribution', ['Y']),
+          (query) => query.eq('structure', ['Global AMC']),
+          (query) => query.gt('amc_rating', 2),
+          (query) => query.order('amc_rating', { ascending: false })
+        ]
+      }),
+      supabaseListRead<AMC>({
+        table: "rms_amc",
+        columns: "id, amc_name, structure, amc_rating, amc_size_rating, amc_pedigree_rating, amc_team_rating, amc_philosophy_rating, open_for_distribution, us_investor_tagging, aum, slug ",
+        filters: [
+          (query) => query.eq('open_for_distribution', ['Y']),
+          (query) => query.eq('structure', ['SIF']),
+          (query) => query.gt('amc_rating', 2),
+          (query) => query.order('amc_rating', { ascending: false })
+        ]
+      }),
     supabaseListRead<blogDetail>({
       table: "blogs",
       columns: "*",
@@ -94,6 +104,7 @@ export default async function FundsPage() {
                           <TabsTrigger value="MF">MF</TabsTrigger>
                           <TabsTrigger value="PMS/AIF">PMS/AIF</TabsTrigger>
                           <TabsTrigger value="Global">Global</TabsTrigger>
+                          <TabsTrigger value="SIF">SIF</TabsTrigger>
                       </TabsList>
                       <TabsContent value="MF">
                         <TableAmcScreen data={mfAmc} userRoles={userRoles} />
@@ -104,6 +115,9 @@ export default async function FundsPage() {
                       </TabsContent>
                       <TabsContent value="Global">
                         <TableAmcScreen data={globalAmc} userRoles={userRoles} />
+                      </TabsContent>
+                      <TabsContent value="SIF">
+                        <TableAmcScreen data={sifAmc} userRoles={userRoles} />
                       </TabsContent>
                   </Tabs>
                 </TabsContent>
