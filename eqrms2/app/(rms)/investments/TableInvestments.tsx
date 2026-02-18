@@ -202,9 +202,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                   formatter={(value) => `${value.toFixed(1)}`}
                 />
             </div>
-            <div className="flex">
-            <div className="mt-2">
-              
+            <div className="mt-6 w-full max-w-6xl mx-auto px-2">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <PieChart 
                 table={table} 
@@ -244,8 +242,7 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
                 title="Advisor"
               />
             </div>
-          </div>
-          </div>
+            </div>
 
           </TabsContent>
           

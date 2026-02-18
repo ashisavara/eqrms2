@@ -181,7 +181,8 @@ export const MASTER_OPTIONS = {
     "Lack of Team Depth",
     "Unproven Team Credentials",
     "Limited FM Experience",
-    "Recent Team Churn"
+    "Recent Team Churn",
+    "NA (Passive funds)"
   ],
   
   amcInvPhilosophyDefTag: [
@@ -206,7 +207,8 @@ export const MASTER_OPTIONS = {
     "Low (Large ESOP)",
     "Moderate (AMC-driven)",
     "High (Risk of churn)",
-    "V High (FM-dependence)"
+    "V High (FM-dependence)",
+    "Low (Passive funds)"
   ],
   
   amcPedigreeTag: [

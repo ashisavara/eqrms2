@@ -52,7 +52,8 @@ export default async function TopFundListPublic({ fundIds }: TopFundListPublicPr
     table: 'v_public_rms_fund_top_list_data',
     columns: '*',
     filters: [
-      (query) => query.in('fund_id', fundIdsArray)
+      (query) => query.in('fund_id', fundIdsArray),
+      (query) => query.order('fund_rating', { ascending: false })
     ]
   });
 
