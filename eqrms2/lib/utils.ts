@@ -43,6 +43,37 @@ export function formatDate(value: Date | string | number | null | undefined): st
 }
 
 /**
+ * Formats a date/timestamp into "DD-MMM-YY HH:mm" format (e.g., "18-Feb-26 14:35")
+ *
+ * @param value - Date object, string timestamp, number timestamp, or null/undefined
+ * @returns Formatted date-time string or empty string if invalid/null
+ *
+ * @example
+ * formatDatetime("2026-02-18T14:35:13.660625+00:00") // "18-Feb-26 14:35"
+ * formatDatetime(null) // ""
+ */
+export function formatDatetime(value: Date | string | number | null | undefined): string {
+  if (!value) return '';
+
+  try {
+    const date = value instanceof Date ? value : new Date(value);
+
+    if (isNaN(date.getTime())) return '';
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear().toString().slice(-2);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
+  } catch (error) {
+    console.warn('Invalid date format:', value);
+    return '';
+  }
+}
+
+/**
  * Converts a Date object to YYYY-MM-DD format using local timezone
  * This prevents timezone issues when saving dates to the database
  * 

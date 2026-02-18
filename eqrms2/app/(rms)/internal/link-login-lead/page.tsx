@@ -8,7 +8,9 @@ import { SearchLoginProfilesClient } from './SearchLoginProfilesClient';
 import { SearchLeadsClient } from './SearchLeadsClient';
 import { UnlinkedGroupsData } from './UnlinkedGroupsData';
 import { TableOtpHvoc } from './TableOtpHvoc';
+import { TableOtpLogin } from './TableOtpLogin';
 import { LoginProfile } from './types';
+import type { OtpLoginDetail } from '@/types/otp-login-detail';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AddLeadButton } from '@/components/forms/AddLeads';
 import { fetchOptions } from '@/lib/supabase/serverQueryHelper';
@@ -54,13 +56,18 @@ export default async function LinkLoginLeadPage() {
     redirect('/uservalidation');
   }
 
-  const [referralPartnerOptions, otpHvocData] = await Promise.all([
+  const [referralPartnerOptions, otpHvocData, otpLogin] = await Promise.all([
     fetchOptions<string, string>("view_referral_partner", "lead_name", "lead_name"),
-    supabaseListRead<OtpHvocDetail>({
-      table: "v_otp_hvoc",
-      columns: "*",
-      filters: [(q) => q.order("created_at", { ascending: false })],
-    }),
+      supabaseListRead<OtpHvocDetail>({
+        table: "v_otp_hvoc",
+        columns: "*",
+        filters: [(q) => q.order("created_at", { ascending: false })],
+      }),
+      supabaseListRead<OtpLoginDetail>({
+        table: "otp_requests",
+        columns: "phone_number, otp_code, created_at, used",
+        filters: [(q) => q.order("created_at", { ascending: false })],
+      }),
   ]);
 
   return (
@@ -80,6 +87,7 @@ export default async function LinkLoginLeadPage() {
             <TabsTrigger value="search_login">Search Login</TabsTrigger>
             <TabsTrigger value="search_leads">Search Leads</TabsTrigger>
             <TabsTrigger value="otp_hvoc">OTP HVOC</TabsTrigger>
+            <TabsTrigger value="otp_login">OTP Login</TabsTrigger>
      </TabsList>
           <TabsContent value="link_login_lead">
             <AddLeadButton referralPartnerOptions={referralPartnerOptions} />
@@ -118,8 +126,14 @@ export default async function LinkLoginLeadPage() {
             <SearchLeadsClient />
           </TabsContent>
           <TabsContent value="otp_hvoc">
+          <p className="helper-text">
+              <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 24886(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Ratnakar Shetty), 26505(Ashi Admin), 25970(Ankita Singh), 25436(Ankita Singh)
+            </p>
             <TableOtpHvoc data={otpHvocData ?? []} />
-          </TabsContent>  
+          </TabsContent> 
+          <TabsContent value="otp_login">
+            <TableOtpLogin data={otpLogin ?? []} />
+          </TabsContent>
     </Tabs>
 
     </div>

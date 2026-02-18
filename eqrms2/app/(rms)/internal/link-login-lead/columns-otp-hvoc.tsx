@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { OtpHvocDetail } from "@/types/otp-hvoc-detail";
-import { formatDate } from "@/lib/utils";
+import { formatDatetime } from "@/lib/utils";
 
 export const columnsOtpHvoc: ColumnDef<OtpHvocDetail>[] = [
   {
@@ -11,7 +11,7 @@ export const columnsOtpHvoc: ColumnDef<OtpHvocDetail>[] = [
   {
     accessorKey: "created_at",
     header: "Created at",
-    cell: ({ getValue }) => formatDate(getValue() as Date | string | null | undefined),
+    cell: ({ getValue }) => formatDatetime(getValue() as Date | string | null | undefined),
   },
   {
     accessorKey: "otp_lead_name",
