@@ -23,8 +23,8 @@ const DEFAULT_COUNTRY_CODE = process.env.DEFAULT_COUNTRY_CODE || '+91'
 
 // AI Sensy configuration
 const AI_SENSY_API_URL = 'https://backend.aisensy.com/campaign/t1/api/v2'
-const AI_SENSY_CAMPAIGN_NAME = 'otp_rms'
-const AI_SENSY_USER_NAME = 'IME Capital Otp'
+const AI_SENSY_CAMPAIGN_NAME = 'RMS OTP Login'
+const AI_SENSY_USER_NAME = 'IME Capital Pvt Ltd.'
 
 // Function to send OTP via AI Sensy WhatsApp API
 async function sendWhatsAppOTP(phoneNumber: string, otpCode: string, deviceId?: string) {
