@@ -10,6 +10,7 @@ import { AddLeadButton } from "@/components/forms/AddLeads";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import Link from "next/link";
 
 export default async function CrmPage() {
     const userRoles = await getUserRoles();
@@ -71,7 +72,7 @@ export default async function CrmPage() {
                         <TabsTrigger value="mis">MIS</TabsTrigger>
                 </TabsList>
                     <TabsContent value="crm">
-                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} /> 
+                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} /> | <Link href="/crm/tags" className="blue-hyperlink">Tags</Link> | <Link href="/crm/sales" className="blue-hyperlink">Phone view</Link>
                         <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} 
                         wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} 
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 
