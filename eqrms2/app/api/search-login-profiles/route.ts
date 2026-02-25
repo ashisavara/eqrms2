@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseListRead } from '@/lib/supabase/serverQueryHelper';
-import { LoginProfileWithRoles } from '../../(rms)/internal/link-login-lead/types';
+import { createClient } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,26 +12,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Build filters based on search type
-    const filters = [];
-    
-    if (searchType === 'phone') {
-      filters.push((query: any) => query.ilike('phone_number', `%${searchTerm.trim()}%`));
-    } else if (searchType === 'name') {
-      filters.push((query: any) => query.ilike('lead_name', `%${searchTerm.trim()}%`));
-    }
+    const supabase = await createClient();
 
-    // Add limit filter
-    filters.push((query: any) => query.limit(limit));
-
-    // Search the v_login_profile_with_roles view
-    const results = await supabaseListRead<LoginProfileWithRoles>({
-      table: 'v_login_profile_with_roles',
-      columns: '*',
-      filters
+    const { data, error } = await supabase.rpc('search_login', {
+      p_phone: searchType === 'phone' ? searchTerm.trim() : null,
+      p_name:  searchType === 'name'  ? searchTerm.trim() : null,
+      p_limit: limit
     });
 
-    return NextResponse.json({ data: results || [] });
+    if (error) {
+      console.error('search_login RPC error:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      });
+      return NextResponse.json(
+        { error: `Search function error: ${error.message}`, code: error.code },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ data: data || [] });
   } catch (error) {
     console.error('Search API error:', error);
     return NextResponse.json(

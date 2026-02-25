@@ -104,7 +104,7 @@ export default async function LinkLoginLeadPage() {
               <UnlinkedLoginsData />
             </Suspense>
             <p className="helper-text">
-              <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 24886(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Ratnakar Shetty), 26505(Ashi Admin), 25970(Ankita Singh), 25436(Ankita Singh)
+              <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Shetty), 26505(Ashi Admin), 25970(Ankita Singh)
             </p>
             <Suspense 
               fallback={
@@ -127,7 +127,7 @@ export default async function LinkLoginLeadPage() {
           </TabsContent>
           <TabsContent value="otp_hvoc">
           <p className="helper-text">
-              <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 24886(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Ratnakar Shetty), 26505(Ashi Admin), 25970(Ankita Singh), 25436(Ankita Singh)
+              <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Ratnakar Shetty), 26505(Ashi Admin), 25970(Ankita Singh)
             </p>
             <TableOtpHvoc data={otpHvocData ?? []} />
           </TabsContent> 
