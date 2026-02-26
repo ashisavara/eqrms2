@@ -265,6 +265,26 @@ export async function searchRmsFundsWithDetails(
   });
 }
 
+// Get unlinked login profiles via security_definer RPC (bypasses RLS on login_profile)
+export async function getUnlinkedLogins(): Promise<Array<{
+  uuid: string;
+  phone_number: string;
+  lead_name: string | null;
+  created_at: string;
+  affiliate_lead_id: number | null;
+  user_role_name: string | null;
+}>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc('get_unlinked_logins');
+
+  if (error) {
+    console.error("Error fetching unlinked logins:", error);
+    throw error;
+  }
+
+  return data || [];
+}
+
 // Get unlinked client groups (groups with no login profiles)
 export async function getUnlinkedClientGroups(): Promise<Array<{
   group_id: number;

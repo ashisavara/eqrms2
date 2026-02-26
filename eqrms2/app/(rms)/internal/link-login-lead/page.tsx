@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
-import { supabaseListRead } from '@/lib/supabase/serverQueryHelper';
+import { supabaseListRead, getUnlinkedLogins } from '@/lib/supabase/serverQueryHelper';
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { UnlinkedLoginsTableClient } from './UnlinkedLoginsTableClient';
@@ -22,12 +22,7 @@ import type { OtpHvocDetail } from '@/types/otp-hvoc-detail';
 // Server component to fetch unlinked login profiles
 async function UnlinkedLoginsData() {
   try {
-    // Use the v_unlinked_logins view with correct column names
-    const unlinkedLogins = await supabaseListRead<LoginProfile>({
-      table: 'v_unlinked_logins',
-      columns: 'uuid, phone_number, lead_name, created_at,affiliate_lead_id, user_role_name',
-      filters: []
-    });
+    const unlinkedLogins = await getUnlinkedLogins();
 
     return <UnlinkedLoginsTableClient data={unlinkedLogins || []} />;
   } catch (error) {
