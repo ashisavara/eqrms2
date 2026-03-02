@@ -20,7 +20,9 @@ export default async function RoleExpiring() {
   return (
     <div className="bg-red-500 text-white p-2 rounded-md mb-2 text-center">
         {roleData?.user_role_name_id === 7 && (
-        <p className="my-1 text-sm">You currently have complimentary trial access to all IME RMS features, including support from a dedicated Private Banker for your financial plan, investment mandate, and portfolio review. After the trial, you can still access the app, but premium features (IME ratings and editing of plans/investments) will be disabled. Your trial expires on <span className="font-bold">15-Jan-26. </span></p>
+        <p className="my-1 text-sm">
+          You currently have complimentary trial access to all IME RMS features, including support from a dedicated Private Banker for your financial plan, investment mandate, and portfolio review. After the trial, you can still access the app, but premium features (IME ratings and editing of plans/investments) will be disabled. Your trial expires on <span className="font-bold">{formatDate(roleData.expires_on)}.</span>
+        </p>
         )}  
     </div>
   );

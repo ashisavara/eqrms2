@@ -59,5 +59,5 @@ export default function TableFundScreen({ data, userRoles }: { data: RmsFundsScr
       ? [{ column: "fund_rating", title: "Rating", placeholder: "Rating" }, ...baseFilters]
       : baseFilters;
     
-      return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} />;
+      return <ReactTableWrapper table={table} className="text-xs text-center" filters={filters} emptyText="No recommended funds found." />;
     }
