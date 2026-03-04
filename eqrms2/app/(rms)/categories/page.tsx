@@ -174,6 +174,9 @@ export default async function FundsPage() {
                     </Tabs>
                 </TabsContent>  
                 <TabsContent value="global">
+                    <LessonSheet lessonId={10} lessonName="Benefits of International Investing" courseTitle="International Investing" />
+                    <LessonSheet lessonId={11} lessonName="Why 100% exposure to India is not recommended" courseTitle="International Investing" />
+                    <LessonSheet lessonId={12} lessonName="International Investing - Routes" courseTitle="International Investing" />
                     <Tabs defaultValue="Global-Equity" className="w-full mx-auto mt-2">
                         <TabsList className="w-full">
                             <TabsTrigger value="Global-Equity">Global-Equity</TabsTrigger>
