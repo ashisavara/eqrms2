@@ -7,6 +7,7 @@ import { AddDealButton } from "@/components/forms/AddDeals";
 import { AddInteractionButton } from "@/components/forms/AddInteractions";
 import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
 import ToggleVisibility from "@/components/uiComponents/toggle-visibility";
+import { AddMeetingNoteButton } from "@/components/forms/AddMeetingNote";
 
 export const createColumns = (): ColumnDef<LeadsTagging>[] => [
     {
@@ -19,8 +20,9 @@ export const createColumns = (): ColumnDef<LeadsTagging>[] => [
                 <ToggleVisibility toggleText="Edit" className="text-xs text-green-700 hover:underline hover:font-bold">
                     <EditLeadsButton leadData={row.original} leadId={row.original.lead_id} />
                     <AddDealButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
-                    <AddInteractionButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
                     <AddFollowUpButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
+                    <AddInteractionButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
+                    <AddMeetingNoteButton relLeadId={row.original.lead_id} initialLeadData={row.original} />
                 </ToggleVisibility>
                 </div>
         }

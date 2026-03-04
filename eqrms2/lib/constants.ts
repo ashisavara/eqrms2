@@ -30,11 +30,13 @@ export const MASTER_OPTIONS = {
     "0) No Contact",
     "1) Contact Initiated",
     "2) Initial Discussion",
+    "2) RMS Demo",
     "3) Inv Consultation",
-    "3) Ex-Client",
+    "3) Mandate + Review",
     "4) Deal Indicated",
     "5) Documentation",
-    "6) Client"
+    "6) Client",
+    "3) Ex-Client"
   ],
   
   wealthLevel: [
@@ -320,16 +322,14 @@ export const MASTER_OPTIONS = {
   ],
   
   interactionTag: [
-    "0) Not Interested",
-    "0) Not Suitable",
-    "0) Wrong Number",
-    "1) Cut Call",
-    "1) No Answer",
-    "1) Switched Off",
-    "2) Call Later",
-    "2) Follow-up Call",
-    "3) Pitched",
-    "4) Consultation Booked"
+    "Info Sent",
+    "IME Pitch",
+    "Pdt Pitch",
+    "HVOC Pitch",
+    "RMS Demo",
+    "Consultation Booked",
+    "Call Later",
+    "Others"
   ],
   
   interactionChannelTag: [

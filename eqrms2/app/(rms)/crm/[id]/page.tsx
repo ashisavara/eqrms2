@@ -17,6 +17,7 @@ import { AddFollowUpButton } from "@/components/forms/AddFollowUp";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import TableCalls from "../sales/TableCalls";
 import { CallsDetail } from "@/types/calls-detail";
+import { AddMeetingNoteButton } from "@/components/forms/AddMeetingNote";
 
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -111,8 +112,9 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             <ToggleVisibility toggleText="Edit">
                                 <EditLeadsButton leadData={lead} leadId={lead.lead_id} />
                                 <AddDealButton relLeadId={lead.lead_id} initialLeadData={lead} />
-                                <AddInteractionButton relLeadId={lead.lead_id} initialLeadData={lead} />
                                 <AddFollowUpButton relLeadId={lead.lead_id} initialLeadData={lead} />
+                                <AddInteractionButton relLeadId={lead.lead_id} initialLeadData={lead} />
+                                <AddMeetingNoteButton relLeadId={lead.lead_id} initialLeadData={lead} />
                                 <AddDigitalAd 
                                 leadId={lead.lead_id} 
                                 digitalAdOptions={digitalAdOptions} 

@@ -223,7 +223,7 @@ export function ToggleGroupInput({
   hiddenLabel?: boolean;
 }) {
   return (
-    <div className={className || "space-y-2"}>
+    <div className={className || "space-y-1"}>
       {!hiddenLabel && <Label className="font-bold">{label}</Label>}
       <Controller
         name={name}
@@ -243,7 +243,7 @@ export function ToggleGroupInput({
                     field.onChange(value || "");
                   }
                 }}
-                className={cn(toggleGroupClassName || "justify-start gap-2 flex-wrap", hasError && "outline outline-1 outline-red-500 rounded-md")}
+                className={cn(toggleGroupClassName || "justify-start gap-1 flex-wrap", hasError && "outline outline-1 outline-red-500 rounded-md")}
                 aria-invalid={hasError}
                 aria-describedby={hasError ? errId : undefined}
               >

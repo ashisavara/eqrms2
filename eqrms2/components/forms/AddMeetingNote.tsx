@@ -52,7 +52,7 @@ function extractLeadFields(formData: MeetingNoteValues) {
 }
 
 // Internal form component
-function AddInteractionForm({
+function AddMeetingNoteForm({
   onSuccess, 
   relLeadId,
   initialLeadData
@@ -77,7 +77,7 @@ function AddInteractionForm({
     // Interaction fields (empty for new interaction)
     interaction_channel: "",
     interaction_tag: "",
-    interaction_type: "Interaction",
+    interaction_type: "Meeting",
     meeting_name: "",
     meeting_notes: "",
     meeting_summary: "",
@@ -169,25 +169,19 @@ function AddInteractionForm({
         
         
         
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 min-w-5">
+        <div className="grid grid-cols-3 gap-4">
           <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
-          </div>
-          <div className="flex-15">
-            <ToggleGroupInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} itemClassName="ime-choice-chips" />
-          </div>      
-         
-        </div>
-        
-
-          
+          <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
+          <div className="flex justify-end">
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Creating...' : 'Create Interaction & Update Lead'}
+            </Button>
+          </div>     
+        </div>         
         
         <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
         
         <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
-        <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Creating...' : 'Create Interaction & Update Lead'}
-            </Button>
       </div>
 
       {/* Section 2: Update Lead Details (Optional) */}
@@ -210,7 +204,7 @@ function AddInteractionForm({
 }
 
 // Main component that exports the button and handles sheet state
-export function AddInteractionButton({ 
+export function AddMeetingNoteButton({ 
   relLeadId,
   initialLeadData
 }: { 
@@ -225,7 +219,7 @@ export function AddInteractionButton({
         onClick={() => setShowAddSheet(true)}
         className="cursor-pointer flex items-center w-full p-2 hover:bg-gray-100 rounded"
       >
-        <Handshake className="w-4 h-4 mr-2" /> Add Interaction
+        <Handshake className="w-4 h-4 mr-2" /> Add Meeting
       </span>
 
       {/* Add Sheet */}
@@ -236,7 +230,7 @@ export function AddInteractionButton({
               <SheetTitle>Add New Interaction</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
-              <AddInteractionForm
+              <AddMeetingNoteForm
                 onSuccess={() => setShowAddSheet(false)}
                 relLeadId={relLeadId}
                 initialLeadData={initialLeadData}

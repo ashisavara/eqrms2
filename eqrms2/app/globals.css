@@ -46,7 +46,7 @@
 
   /* Choice Chips Styling with high specificity */
   .ime-choice-chips[data-slot="toggle-group-item"] {
-    @apply !rounded-full !border !border-gray-300 !px-4 !py-2 !min-w-fit !whitespace-nowrap;
+    @apply !rounded-full !border !border-gray-300 !px-2.5 !py-1.5 !h-auto !min-w-fit !whitespace-nowrap;
     @apply hover:!bg-gray-100 hover:!border-gray-400;
     @apply data-[state=on]:!bg-blue-600 data-[state=on]:!text-white data-[state=on]:!border-blue-600 data-[state=on]:hover:!bg-blue-700;
     @apply !transition-all !duration-200;
