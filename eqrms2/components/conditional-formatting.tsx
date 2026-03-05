@@ -262,6 +262,7 @@ export function RmsFundFmChurnRiskRating({ rating }: { rating: string }) {
       'Nil (FM-Founder)': 5,
       'Low (Depth in team)': 4,
       'Low (Large ESOP)': 4,
+      'Low (Passive funds)': 3,
       'Moderate (AMC-driven)': 3,
       'High (Risk of churn)': 2,
       'V High (FM-dependence)': 1,

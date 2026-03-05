@@ -263,7 +263,7 @@ export const MeetingNoteSchema = z.object({
   interaction_type: z.string().trim().min(1, 'Required'),
   meeting_name: z.string().trim().min(1, 'Required'),
   meeting_notes: z.string(),
-  meeting_summary: z.string(),
+  meeting_summary: z.string().trim().min(1, 'Required'),
   show_to_client: z.coerce.boolean(),
 
   //lead fields
