@@ -166,24 +166,9 @@ function AddInteractionForm({
 
       {/* Section 1: Interaction Details */}
       <div className="space-y-4">
-        
-        
-        
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 min-w-5">
           <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
-          </div>
-          <div className="flex-15">
-            <ToggleGroupInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} itemClassName="ime-choice-chips" />
-          </div>      
-         
-        </div>
-        
-
-          
-        
-        <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
-        
+            <ToggleGroupInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} itemClassName="ime-choice-chips" /> 
+        <TextInput name="meeting_summary" label="Meeting Summary" control={control} />    
         <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
         <Button type="submit" disabled={isLoading}>
               {isLoading ? 'Creating...' : 'Create Interaction & Update Lead'}

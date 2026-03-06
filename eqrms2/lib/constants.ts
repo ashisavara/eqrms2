@@ -322,14 +322,18 @@ export const MASTER_OPTIONS = {
   ],
   
   interactionTag: [
-    "Info Sent",
-    "IME Pitch",
-    "Pdt Pitch",
-    "HVOC Pitch",
-    "RMS Demo",
-    "Consultation Booked",
-    "Call Later",
-    "Others"
+    "0) Call Later",
+    "0) Basic Pitch",
+    "1) Detail Pitch",
+    "2) RMS Demo",
+    "2) Consultation Booked",
+    "3) RMS Account",
+    "4) Consultation Done",
+    "4) Portfolio Review",
+    "4) Inv Mandate",
+    "5) Recommendations",
+    "6) Deal Indicated",
+    "7) Documentation",
   ],
   
   interactionChannelTag: [

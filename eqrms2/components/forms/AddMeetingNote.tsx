@@ -174,11 +174,11 @@ function AddMeetingNoteForm({
           <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
           <div className="flex justify-end">
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Creating...' : 'Create Interaction & Update Lead'}
+              {isLoading ? 'Creating...' : 'Create Meeting & Update Lead'}
             </Button>
           </div>     
         </div>         
-        
+        <ToggleGroupInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} itemClassName="ime-choice-chips" /> 
         <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
         
         <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
@@ -227,7 +227,7 @@ export function AddMeetingNoteButton({
         <Sheet open={true} onOpenChange={() => setShowAddSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Add New Interaction</SheetTitle>
+              <SheetTitle>Add New Meeting</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <AddMeetingNoteForm
