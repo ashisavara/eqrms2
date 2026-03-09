@@ -13,6 +13,7 @@ import { supabaseInsertRow, supabaseUpdateRow } from "@/lib/supabase/serverQuery
 import { toLocalDateString } from "@/lib/utils";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 import { Handshake } from "lucide-react";
+import { CrmHelperText } from "@/components/uiComponents/crm-helper-text";
 
 // Field extraction arrays
 const INTERACTION_FIELDS = [
@@ -63,6 +64,7 @@ function AddMeetingNoteForm({
 }) {
   // Get options from context (all options available in MasterOptionsContext)
   const masterOptions = useMasterOptions();
+  const interestOptions = transformToValueLabel(masterOptions.interest);
   const importanceOptions = transformToValueLabel(masterOptions.importance);
   const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
@@ -85,6 +87,7 @@ function AddMeetingNoteForm({
     
     // Lead fields (pre-populated from current lead data)
     followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
+    interest: initialLeadData?.interest ?? null,
     importance: initialLeadData?.importance ?? null,
     lead_progression: initialLeadData?.lead_progression ?? null,
     wealth_level: initialLeadData?.wealth_level ?? null,
@@ -172,18 +175,17 @@ function AddMeetingNoteForm({
         <div className="grid grid-cols-3 gap-4">
           <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
           <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
-          <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Creating...' : 'Create Meeting & Update Lead'}
-            </Button>
-          </div>     
-        </div>         
+          <DatePicker name="followup_date" label="Follow-up Date" control={control} />   
+        </div>   
+        <CrmHelperText />      
         <ToggleGroupInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} itemClassName="ime-choice-chips" /> 
         <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
         
         <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
       </div>
-
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Creating...' : 'Create Meeting & Update Lead'}
+            </Button>
       {/* Section 2: Update Lead Details (Optional) */}
       <div className="space-y-4 bg-gray-50 p-4 rounded-md">
         <h3 className="text-lg font-bold text-green-600 border-b pb-2">Update Lead Details (Optional)</h3>
@@ -192,11 +194,12 @@ function AddMeetingNoteForm({
           <TextInput name="lead_summary" label="Lead Summary" control={control} />
         </div>
         
-        <div className="grid grid-cols-4 gap-4 mt-0">
-          <DatePicker name="followup_date" label="Follow-up Date" control={control} />
-          <SelectInput name="importance" label="Importance" control={control} options={importanceOptions} />
-          <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
-          <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
+        <div>
+          <ToggleGroupInput name="interest" label="Interest (if can assess)" control={control} options={interestOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+          
+          <ToggleGroupInput name="importance" label="Importance/Urgency" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+          <ToggleGroupInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+          <ToggleGroupInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
         </div>
       </div>
     </form>

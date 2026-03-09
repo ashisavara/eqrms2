@@ -13,6 +13,7 @@ import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 import { Pencil } from "lucide-react";
+import { CrmHelperText } from "@/components/uiComponents/crm-helper-text";
 
 // Internal form component
 function EditLeadsForm({ 
@@ -26,6 +27,7 @@ function EditLeadsForm({
 }) {
   // Get options from context (static options)
   const masterOptions = useMasterOptions();
+  const interestOptions = transformToValueLabel(masterOptions.interest);
   const importanceOptions = transformToValueLabel(masterOptions.importance);
   const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
@@ -39,6 +41,7 @@ function EditLeadsForm({
     lead_name: initialData.lead_name ?? "",
     last_contact_date: initialData.last_contact_date ? new Date(initialData.last_contact_date) : null,
     followup_date: initialData.followup_date ? new Date(initialData.followup_date) : null,
+    interest: initialData.interest ?? "",
     importance: initialData.importance ?? "",
     lead_progression: initialData.lead_progression ?? "",
     lead_source: initialData.lead_source ?? "",
@@ -138,6 +141,7 @@ function EditLeadsForm({
         lead_name: data.lead_name,
         last_contact_date: toLocalDateString(data.last_contact_date),
         followup_date: toLocalDateString(data.followup_date),
+        interest: data.interest,
         importance: data.importance,
         lead_progression: data.lead_progression,
         lead_source: data.lead_source,
@@ -195,9 +199,10 @@ function EditLeadsForm({
         <DatePicker name="followup_date" label="Follow-up Date" control={control} />
       </div>
       <TextInput name="lead_summary" label="Lead Summary" control={control} />
-      
+      <CrmHelperText />
       <div className="bg-gray-100 p-4">
-        <ToggleGroupInput name="importance" label="Importance" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+        <ToggleGroupInput name="interest" label="Interest (if can assess)" control={control} options={interestOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+        <ToggleGroupInput name="importance" label="Importance/Urgency" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
 
           <ToggleGroupInput
             name="wealth_level"
@@ -218,8 +223,8 @@ function EditLeadsForm({
             itemClassName="ime-choice-chips"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectInput name="primary_rm_uuid" label="Primary Responsibility" control={control} options={primaryRmOptions} />
-            <SelectInput name="service_rm_uuid" label="Secondary Responsibility" control={control} options={primaryRmOptions} />
+            <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
+            <SelectInput name="service_rm_uuid" label="Support RM" control={control} options={primaryRmOptions} />
           </div>
       </div>
       {/* Categorization Fields with Options */}
@@ -278,6 +283,7 @@ export function EditLeadsButton({
     lead_name: leadData.lead_name ?? "",
     last_contact_date: leadData.last_contact_date ? new Date(leadData.last_contact_date) : null,
     followup_date: leadData.followup_date ? new Date(leadData.followup_date) : null,
+    interest: leadData.interest ?? "",
     importance: leadData.importance ?? "",
     lead_progression: leadData.lead_progression ?? "",
     lead_source: leadData.lead_source ?? "",

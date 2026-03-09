@@ -14,6 +14,7 @@ import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
+import { CrmHelperText } from "@/components/uiComponents/crm-helper-text";
 
 // Field extraction arrays
 const INTERACTION_FIELDS = [
@@ -59,6 +60,7 @@ function EditInteractionForm(
     {
     // Get options from context (all options available in MasterOptionsContext)
     const masterOptions = useMasterOptions();
+    const interestOptions = transformToValueLabel(masterOptions.interest);
     const importanceOptions = transformToValueLabel(masterOptions.importance);
     const leadProgressionOptions = transformToValueLabel(masterOptions.leadProgression);
     const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
@@ -80,6 +82,7 @@ function EditInteractionForm(
       
       // Lead fields (pre-populated from current lead data)
       followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
+      interest: initialLeadData?.interest ?? null,
       importance: initialLeadData?.importance ?? null,
       lead_progression: initialLeadData?.lead_progression ?? null,
       wealth_level: initialLeadData?.wealth_level ?? null,
@@ -149,55 +152,50 @@ function EditInteractionForm(
     });
 
     return (
-        <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
+        <form onSubmit={onSubmit} className="w-full p-4">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
+            <CrmHelperText />
 
             {/* Section 1: Interaction Details */}
             <div className="space-y-4">
-                <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Interaction Details</h3>
-                <p className="bg-red-100 p-2 text-xs"><span className="font-bold">Interaction Type Guide:</span> 
-                (a) FOLLOW-UPS: You reaching out to a client with no response back yet .. no meeting name/summary/notes needed
-                (b) INTERACTIONS: Where client & you have intereacted ... meeting name & summary required
-                (c) MEETINGS: notes on the more detailed disccussion with the client ... typically consultations, portfolio discussions etc
-                </p>
-                
-                <div className="grid grid-cols-3 gap-4">
-                  <TextInput name="meeting_name" label="Meeting Name" control={control} /> 
-                  <ToggleGroupInput name="interaction_type" label="Interaction Type" control={control} options={interactionTypeOptions} className="ime-choice-chips" />      
-                  <BooleanToggleInput name="show_to_client" label="Show to Client" control={control} />
+
+
+                <div className="grid grid-cols-2 gap-4">
+                  <TextInput name="meeting_name" label="Meeting Name" control={control} />   
+                  <DatePicker name="followup_date" label="Follow-up Date" control={control} />
                 </div>
-                
-                <div className="grid grid-cols-3 gap-4">
-                  <SelectInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} />
-                  <SelectInput name="interaction_channel" label="Interaction Channel" control={control} options={interactionChannelOptions} />
-                </div>
+            
+              
+                <ToggleGroupInput name="interaction_tag" label="Interaction Tag" control={control} options={interactionTagOptions} itemClassName="ime-choice-chips" /> 
                 
                 <TextInput name="meeting_summary" label="Meeting Summary" control={control} />
                 
                 <ResizableTextArea name="meeting_notes" label="Meeting Notes" control={control} />
             </div>
 
+            <Button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Saving...' : 'Save Interaction & Update Lead'}
+                </Button>
+
+
             {/* Section 2: Update Lead Details (Optional) */}
-            <div className="space-y-4">
+            <div className="space-y-4 mt-6 border-t-2 bg-gray-100 p-4">
                 <h3 className="text-lg font-bold text-blue-600 border-b pb-2">Update Lead Details (Optional)</h3>
                 
                 <div className="mb-5">
                   <TextInput name="lead_summary" label="Lead Summary" control={control} />
                 </div>
                 
-                <div className="grid grid-cols-4 gap-4 mt-0">
-                  <DatePicker name="followup_date" label="Follow-up Date" control={control} />
-                  <SelectInput name="importance" label="Importance" control={control} options={importanceOptions} />
-                  <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
-                  <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
+                <div>
+                  <ToggleGroupInput name="interest" label="Interest (if can assess)" control={control} options={interestOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+                  <ToggleGroupInput name="importance" label="Importance/Urgency" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+                  <ToggleGroupInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
+                  <ToggleGroupInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
                 </div>
             </div>
 
-            <div className="flex justify-end">
-                <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Saving...' : 'Save Interaction & Update Lead'}
-                </Button>
-            </div>
+
+          
         </form>
     );
 }
@@ -235,6 +233,7 @@ export function EditInteractionButton({
     
     // Lead fields (will be pre-populated in the form)
     followup_date: null,
+    interest: null,
     importance: null,
     lead_progression: null,
     wealth_level: null,

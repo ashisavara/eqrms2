@@ -12,6 +12,7 @@ import { toast, Toaster } from "sonner";
 import { supabaseInsertRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
+import { CrmHelperText } from "@/components/uiComponents/crm-helper-text";
 
 // Internal form component
 function AddLeadForm({ 
@@ -28,6 +29,7 @@ function AddLeadForm({
   const leadSourceOptions = transformToValueLabel(masterOptions.leadSource);
   const leadTypeOptions = transformToValueLabel(masterOptions.leadType);
   const wealthLevelOptions = transformToValueLabel(masterOptions.wealthLevel);
+  const interestOptions = transformToValueLabel(masterOptions.interest);
   // primaryRm is already in value-label format, no transformation needed
   const primaryRmOptions = masterOptions.primaryRm.map(item => ({ value: item.value, label: item.label }));
   const router = useRouter();
@@ -39,6 +41,7 @@ function AddLeadForm({
     last_contact_date: null,
     followup_date: null,
     importance: "",
+    interest: "",
     lead_progression: "",
     lead_source: "",
     lead_type: "",
@@ -77,6 +80,7 @@ function AddLeadForm({
         last_contact_date: toLocalDateString(data.last_contact_date),
         followup_date: toLocalDateString(data.followup_date),
         importance: data.importance,
+        interest: data.interest,
         lead_progression: data.lead_progression,
         lead_source: data.lead_source,
         lead_type: data.lead_type,
@@ -126,17 +130,18 @@ function AddLeadForm({
         <DatePicker name="followup_date" label="Follow-up Date" control={control} />
       </div>
       <TextInput name="lead_summary" label="Lead Summary" control={control} />
-      
-      <div className="bg-gray-100 p-4">
+      <CrmHelperText />
+      <div className="bg-gray-100 p-4 space-y-2">
+      <ToggleGroupInput name="interest" label="Interest" control={control} options={interestOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
         <ToggleGroupInput name="importance" label="Importance" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
 
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-4 gap-4 ">
           <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
           <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
-          <SelectInput name="primary_rm_uuid" label="Primary Responsibility" control={control} options={primaryRmOptions} />
-          <SelectInput name="service_rm_uuid" label="Secondary Responsibility" control={control} options={primaryRmOptions} />
+          <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
+          <SelectInput name="service_rm_uuid" label="Support RM" control={control} options={primaryRmOptions} />
           <SelectInput name="referral_partner" label="Referral Partner" control={control} options={referralPartnerOptions} />
         </div>
       </div>

@@ -25,6 +25,13 @@ export const MASTER_OPTIONS = {
     "0) Avoid",
     "2) Not Set"
   ],
+
+  interest: [
+    "0) Nil",
+    "1) Low",
+    "2) Medium",
+    "3) High"
+  ],
   
   leadProgression: [
     "0) No Contact",
@@ -32,7 +39,6 @@ export const MASTER_OPTIONS = {
     "2) Initial Discussion",
     "2) RMS Demo",
     "3) Inv Consultation",
-    "3) Mandate + Review",
     "4) Deal Indicated",
     "5) Documentation",
     "6) Client",
@@ -322,18 +328,14 @@ export const MASTER_OPTIONS = {
   ],
   
   interactionTag: [
-    "0) Call Later",
-    "0) Basic Pitch",
-    "1) Detail Pitch",
+    "0) Basic",
+    "1) Detail",
     "2) RMS Demo",
-    "2) Consultation Booked",
-    "3) RMS Account",
-    "4) Consultation Done",
-    "4) Portfolio Review",
-    "4) Inv Mandate",
-    "5) Recommendations",
-    "6) Deal Indicated",
-    "7) Documentation",
+    "2) Booking",
+    "3) Consultation",
+    "4) Deal",
+    "5) Documentation",
+    "6) Servicing"
   ],
   
   interactionChannelTag: [
@@ -341,9 +343,7 @@ export const MASTER_OPTIONS = {
     "Email",
     "Phone",
     "LinkedIn",
-    "In-person",
-    "Others",
-    "Zoom"
+    "Others"
   ],
 
   // Rating Systems

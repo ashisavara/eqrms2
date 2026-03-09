@@ -232,6 +232,7 @@ export const LeadsTaggingSchema = z.object({
   subs_imecapital: z.coerce.boolean().nullable(),
   subs_imepms: z.coerce.boolean().nullable(),
   referral_partner: z.string().nullable(),
+  interest: z.string().nullable(),
 });
 
 export type LeadsTaggingValues = z.infer<typeof LeadsTaggingSchema>;
@@ -272,6 +273,7 @@ export const MeetingNoteSchema = z.object({
   lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
   lead_summary: z.string().nullable(),
+  interest: z.string().nullable(),
 });
 
 export type MeetingNoteValues = z.infer<typeof MeetingNoteSchema>;

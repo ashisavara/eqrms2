@@ -44,4 +44,5 @@ export type LeadsTagging = {
     referral_partner?: string;
     phone_e164?: string;
     login_phone_number?: string;
+    interest?: string;
 };
