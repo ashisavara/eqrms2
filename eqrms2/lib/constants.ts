@@ -35,11 +35,11 @@ export const MASTER_OPTIONS = {
   
   leadProgression: [
     "0) No Contact",
-    "1) Contact Initiated",
-    "2) Initial Discussion",
+    "1) Basic",
+    "2) Detail",
     "2) RMS Demo",
-    "3) Inv Consultation",
-    "4) Deal Indicated",
+    "3) Consultation",
+    "4) Deal",
     "5) Documentation",
     "6) Client",
     "3) Ex-Client"

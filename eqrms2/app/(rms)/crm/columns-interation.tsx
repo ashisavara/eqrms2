@@ -43,13 +43,13 @@ export const createColumns = (
         </div>
         );
     }},
-    { accessorKey: "rm_name", header: "Created By", size:150, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
+    { accessorKey: "rm_name", header: "Created By", size:150, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left text-xs">{getValue() as string}</p>},
     { accessorKey: "lead_name", header: "Lead", size:150, cell: ({ row }) => {
-        return <div className="text-left">
-            <Link href={`/crm/${row.original.rel_lead_id}`} className="text-blue-500 hover:text-blue-800 hover:font-bold !text-left hover:underline">{row.original.lead_name} </Link> 
+        return <div className="text-left  text-xs">
+            <Link href={`/crm/${row.original.rel_lead_id}`} className="text-blue-500 hover:text-blue-800 hover:font-bold !text-left hover:underline  text-sm">{row.original.lead_name} </Link> 
             </div>
     }},
-    { accessorKey: "meeting_summary", header: "Summary", size:800, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left">{getValue() as string}</p>},
+    { accessorKey: "meeting_summary", header: "Summary", size:800, cell: ({ getValue }) => getValue() == null ? null : <p className="text-left text-xs">{getValue() as string}</p>},
     {accessorKey: "interaction_tag", header: "Tag", meta: { isFilterOnly: true },filterFn: "arrIncludesSome",},
     {accessorKey: "interaction_channel", header: "Channel", meta: { isFilterOnly: true },filterFn: "arrIncludesSome",},
     {accessorKey: "answered", header: "Answered", meta: { isFilterOnly: true },filterFn: "arrIncludesSome",},
