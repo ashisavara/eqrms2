@@ -35,14 +35,14 @@ export const MASTER_OPTIONS = {
   
   leadProgression: [
     "0) No Contact",
-    "1) Basic",
-    "2) Detail",
+    "0) Basic",
+    "1) Detail",
     "2) RMS Demo",
-    "3) Consultation",
-    "4) Deal",
-    "5) Documentation",
-    "6) Client",
-    "3) Ex-Client"
+    "3) Booking",
+    "4) Consultation",
+    "5) Deal",
+    "6) Documentation",
+    "7) Client"
   ],
   
   wealthLevel: [
@@ -331,11 +331,11 @@ export const MASTER_OPTIONS = {
     "0) Basic",
     "1) Detail",
     "2) RMS Demo",
-    "2) Booking",
-    "3) Consultation",
-    "4) Deal",
-    "5) Documentation",
-    "6) Servicing"
+    "3) Booking",
+    "4) Consultation",
+    "5) Deal",
+    "6) Documentation",
+    "7) Client Servicing"
   ],
   
   interactionChannelTag: [
