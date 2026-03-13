@@ -80,7 +80,9 @@ export default function TableCrm({
     });
 
     const filters = [
+        { column: "followup_overdue", title: "Overdue", placeholder: "Overdue" },
         { column: "importance", title: "Importance", placeholder: "Importance" },
+        { column: "interest", title: "Interest", placeholder: "Interest" },
         { column: "lead_progression", title: "Lead Stage", placeholder: "Lead Stage" },
         { column: "lead_source", title: "Lead Source", placeholder: "Lead Source" },
         { column: "lead_type", title: "Lead Type", placeholder: "Lead Type" },

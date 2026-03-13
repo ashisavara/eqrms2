@@ -1,7 +1,7 @@
 "use client";
 
 import { ServerTablePage, ServerTablePageConfig } from "@/components/server-table";
-import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating, CrmFollowupNumberRating } from "@/components/conditional-formatting";
+import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating, CrmFollowupNumberRating, CrmInterestRating } from "@/components/conditional-formatting";
 import {LeadsTagging} from "@/types/lead-detail";
 import Link from "next/link";
 import { EditLeadsButton } from "@/components/forms/EditLeads";
@@ -15,7 +15,9 @@ import { AddMeetingNoteButton } from "@/components/forms/AddMeetingNote";
 interface LeadsTableProps {data: LeadsTagging[];
   pagination: { currentPage: number; totalPages: number; hasNextPage: boolean; hasPreviousPage: boolean; pageSize: number; totalCount: number; };
   filterOptions: {
+    followup_overdue: any[]; 
     importance: any[]; 
+    interest: any[];
     lead_progression: any[]; 
     lead_source: any[]; 
     lead_type: any[]; 
@@ -31,7 +33,9 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
   const config: ServerTablePageConfig<LeadsTagging> = { basePath: '/crm/all',
     
   tableStateConfig: { filterKeys: [
+    'followup_overdue',
     'importance',
+    'interest',
     'lead_progression',
     'lead_source',
     'lead_type',
@@ -42,7 +46,9 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
     defaultPageSize:100  },
     
     filterConfigs: [
+      { key: 'followup_overdue', title: 'Overdue ', placeholder: 'Overdue ', options: filterOptions.followup_overdue },
       { key: 'importance', title: 'Importance ', placeholder: 'Importance ', options: filterOptions.importance },
+      { key: 'interest', title: 'Interest ', placeholder: 'Interest ', options: filterOptions.interest },
       { key: 'lead_progression', title: 'Progression ', placeholder: 'Progression ', options: filterOptions.lead_progression },
       { key: 'lead_source', title: 'Source ', placeholder: 'Source ', options: filterOptions.lead_source },
       { key: 'lead_type', title: 'Type ', placeholder: 'Type ', options: filterOptions.lead_type },
@@ -55,6 +61,7 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
       { value: 'days_followup', label: 'Days Followup ' },
       { value: 'days_since_last_contact', label: 'Days Last Contact ' },
       { value: 'importance', label: 'Importance ' },
+      { value: 'interest', label: 'Interest ' },
       { value: 'wealth_level', label: 'Wealth ' },
       { value: 'lead_progression', label: 'Progression ' },
       { value: 'lead_summary', label: 'Summary ' },
@@ -65,7 +72,7 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
 
     searchPlaceholder: 'Search leads ... ',
 
-    searchColumns: ['lead_name', 'lead_summary', 'rm_name', 'lead_source', 'lead_type', 'lead_progression'],
+    searchColumns: ['lead_name', 'lead_summary', 'interest', 'rm_name', 'lead_source', 'lead_type', 'lead_progression'],
 
     columns: [
       { 
@@ -81,6 +88,15 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
               <AddInteractionButton relLeadId={row.lead_id} initialLeadData={row} />
               <AddMeetingNoteButton relLeadId={row.lead_id} initialLeadData={row} />
             </ToggleVisibility>
+          </div>
+        )
+      },
+      { 
+        key: 'followup_overdue', 
+        header: 'Overdue', 
+        render: (value) => (
+          <div className="w-[70px] text-center">
+            {value === true ? <span className="text-red-800 bg-red-200 px-2 py-0.5 rounded text-xs font-semibold">Overdue</span> : ""}
           </div>
         )
       },
@@ -106,6 +122,15 @@ export default function LeadsTable({ data, pagination, filterOptions, filterConf
         key: 'importance', 
         header: 'Importance', 
         render: (value) => (<div className="w-[80px] text-center"><CrmImportanceRating rating={value ?? ""} /></div>)
+      },
+      { 
+        key: 'interest',
+        header: 'Interest',
+        render: (value) => (
+          <div className="w-[80px] truncate text-center">
+            <CrmInterestRating rating={value ?? ""} />
+          </div>
+        )
       },
       { 
         key: 'wealth_level', 

@@ -86,6 +86,25 @@ export function CoverageRating({ rating }: { rating: string }) {
   );
 }
 
+export function CrmInterestRating({ rating }: { rating: string }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      '3) High': 5,
+      '2) Medium': 3,
+      '1) Low': 2,
+      '0) Nil': 1
+    }; 
+    return ratingMap[textRating] || 0;
+  };
+  const numericRating = getNumericRating(rating); 
+  return (
+    <span className={`px-1 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {rating}
+    </span>
+  );
+}
+
+
 export function CrmImportanceRating({ rating }: { rating: string }) {
   const getNumericRating = (textRating: string): number => {
     const ratingMap: Record<string, number> = {

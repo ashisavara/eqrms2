@@ -10,7 +10,9 @@ interface PageProps {
 function parseSearchParams(params: { [key: string]: string | string[] | undefined }) {
   // 🔍 FILTERS: Define which URL parameters should be treated as filters
   const filterKeys = [
+    'followup_overdue',
     'importance',
+    'interest',
     'lead_progression',
     'lead_source',
     'lead_type',
@@ -23,7 +25,10 @@ function parseSearchParams(params: { [key: string]: string | string[] | undefine
   filterKeys.forEach(key => {
     const value = params[key];
     if (value) {
-      if (key.includes('rating') || key.includes('_id')) {
+      if (key === 'followup_overdue') {
+        const arr = Array.isArray(value) ? value : [value];
+        filters[key] = arr.map(v => String(v).toLowerCase() === 'true');
+      } else if (key.includes('rating') || key.includes('_id')) {
         // Convert numeric fields to numbers .. can add other keys that need to be treated as numbers here
         filters[key] = Array.isArray(value) ? value.map(Number) : [Number(value)];
       } else {
@@ -66,7 +71,9 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
   // This tells the system where to fetch filter options from
   // IMP NUMBER COLUMNS MAY NEED SEPERATE TREATMENT .. SEE FUND_RATING IN FUNDS ALL
   const filterConfig = {
+        followup_overdue: { table: 'view_leads_tagcrm', valueCol: 'followup_overdue', labelCol: 'followup_overdue' },
         importance: { table: 'view_leads_tagcrm', valueCol: 'importance', labelCol: 'importance' },
+        interest: { table: 'view_leads_tagcrm', valueCol: 'interest', labelCol: 'interest' },
         lead_progression: { table: 'view_leads_tagcrm', valueCol: 'lead_progression', labelCol: 'lead_progression' },
         lead_source: { table: 'view_leads_tagcrm', valueCol: 'lead_source', labelCol: 'lead_source' },
         lead_type: { table: 'view_leads_tagcrm', valueCol: 'lead_type', labelCol: 'lead_type' },
@@ -78,7 +85,9 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
   const [filterOptions, tableData, aggregationResult] = await Promise.all([
     // Fetch all filter dropdown options
     getMultipleFilterOptions([
+        'followup_overdue',
         'importance',
+        'interest',
         'lead_progression',
         'lead_source',
         'lead_type',
@@ -91,7 +100,7 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
       columns: "*",
       filters,
       search,
-      searchColumns: ['lead_name', 'lead_summary', 'rm_name', 'lead_source', 'lead_type', 'lead_progression'], // Which columns to search in
+      searchColumns: ['lead_name', 'lead_summary', 'interest', 'rm_name', 'lead_source', 'lead_type', 'lead_progression'], // Which columns to search in
       pagination,
       sorting,
       staticFilters: [] // Add any always-applied filters here (e.g., status='active')
@@ -129,7 +138,9 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
         totalCount: tableData.totalCount
       }}
       filterOptions={filterOptions as {
+        followup_overdue: any[]; 
         importance: any[]; 
+        interest: any[];
         lead_progression: any[]; 
         lead_source: any[]; 
         lead_type: any[]; 
@@ -139,6 +150,7 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
       searchColumns={[
         'lead_name',
         'lead_summary',
+        'interest',
         'rm_name',
         'lead_source',
         'lead_type',

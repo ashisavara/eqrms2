@@ -1,7 +1,7 @@
 "use client";
 
 import { ServerTablePage, ServerTablePageConfig } from "@/components/server-table";
-import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmFollowupNumberRating } from "@/components/conditional-formatting";
+import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmFollowupNumberRating, CrmInterestRating } from "@/components/conditional-formatting";
 import { LeadsTagging } from "@/types/lead-detail";
 import Link from "next/link";
 import { EditLeadsButton } from "@/components/forms/EditLeads";
@@ -22,7 +22,9 @@ interface LeadsTableProps {
     totalCount: number;
   };
   filterOptions: {
+    followup_overdue: { value: string; label: string }[];
     importance: { value: string; label: string }[];
+    interest: { value: string; label: string }[];
     lead_progression: { value: string; label: string }[];
     lead_source: { value: string; label: string }[];
     lead_type: { value: string; label: string }[];
@@ -46,12 +48,14 @@ export default function LeadsTable({
   const config: ServerTablePageConfig<LeadsTagging> = {
     basePath: "/crm/tags",
     tableStateConfig: {
-      filterKeys: ["importance", "lead_progression", "lead_source", "lead_type", "wealth_level", "rm_name", "digital_campaign"],
+      filterKeys: ["followup_overdue", "importance", "interest", "lead_progression", "lead_source", "lead_type", "wealth_level", "rm_name", "digital_campaign"],
       defaultSort: { column: "days_followup", direction: "asc" },
       defaultPageSize: 100,
     },
     filterConfigs: [
+      { key: "followup_overdue", title: "Overdue ", placeholder: "Overdue ", options: filterOptions.followup_overdue },
       { key: "importance", title: "Importance ", placeholder: "Importance ", options: filterOptions.importance },
+      { key: "interest", title: "Interest ", placeholder: "Interest ", options: filterOptions.interest },
       { key: "lead_progression", title: "Progression ", placeholder: "Progression ", options: filterOptions.lead_progression },
       { key: "lead_source", title: "Source ", placeholder: "Source ", options: filterOptions.lead_source },
       { key: "lead_type", title: "Type ", placeholder: "Type ", options: filterOptions.lead_type },
@@ -64,6 +68,7 @@ export default function LeadsTable({
       { value: "days_followup", label: "Days Followup " },
       { value: "days_since_last_contact", label: "Days Last Contact " },
       { value: "importance", label: "Importance " },
+      { value: "interest", label: "Interest " },
       { value: "wealth_level", label: "Wealth " },
       { value: "lead_progression", label: "Progression " },
       { value: "lead_summary", label: "Summary " },
@@ -72,7 +77,7 @@ export default function LeadsTable({
       { value: "rm_name", label: "RM " },
     ],
     searchPlaceholder: "Search leads ... ",
-    searchColumns: ["lead_name", "lead_summary", "rm_name", "lead_source", "lead_type", "lead_progression"],
+    searchColumns: ["lead_name", "lead_summary", "interest", "rm_name", "lead_source", "lead_type", "lead_progression"],
     columns: [
       {
         key: "lead_name",
@@ -89,6 +94,15 @@ export default function LeadsTable({
               <AddInteractionButton relLeadId={row.lead_id} initialLeadData={row} />
               <AddMeetingNoteButton relLeadId={row.lead_id} initialLeadData={row} />
             </ToggleVisibility>
+          </div>
+        ),
+      },
+      {
+        key: "followup_overdue",
+        header: "Overdue",
+        render: (value) => (
+          <div className="w-[70px] text-center">
+            {value === true ? <span className="text-red-800 bg-red-200 px-2 py-0.5 rounded text-xs font-semibold">Overdue</span> : ""}
           </div>
         ),
       },
@@ -116,6 +130,15 @@ export default function LeadsTable({
         render: (value) => (
           <div className="w-[80px] text-center">
             <CrmImportanceRating rating={value ?? ""} />
+          </div>
+        ),
+      },
+      {
+        key: "interest",
+        header: "Interest",
+        render: (value) => (
+          <div className="w-[80px] text-center">
+            <CrmInterestRating rating={value ?? ""} />
           </div>
         ),
       },

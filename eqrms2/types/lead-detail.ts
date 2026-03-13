@@ -45,4 +45,5 @@ export type LeadsTagging = {
     phone_e164?: string;
     login_phone_number?: string;
     interest?: string;
+    followup_overdue?: boolean;
 };

@@ -49,7 +49,7 @@ import { createClient } from "./server";
 
 // Types for server-side querying
 export interface ServerSideFilters {
-  [key: string]: string | string[] | number | number[] | boolean | null;
+  [key: string]: string | string[] | number | number[] | boolean | boolean[] | null;
 }
 
 export interface ServerSidePagination {
@@ -248,14 +248,17 @@ export async function getFilterOptions(
       ];
     }
 
-    // Use the mapping to get the correct table and columns
+    // Boolean columns: only exclude null (neq('', value) can exclude false)
+    const isBooleanColumn = column === 'followup_overdue';
     const data = await supabaseListRead({
       table,
       columns: `${valueCol}, ${labelCol}`,
-      filters: [
-        (query) => query.not(valueCol, 'is', null),
-        (query) => query.neq(valueCol, ''),
-      ]
+      filters: isBooleanColumn
+        ? [(query) => query.not(valueCol, 'is', null)]
+        : [
+            (query) => query.not(valueCol, 'is', null),
+            (query) => query.neq(valueCol, ''),
+          ],
     });
 
     // Get unique values and sort them

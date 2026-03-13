@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { LeadsTagging } from "@/types/lead-detail";
 import Link from "next/link";
-import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating, CrmFollowupNumberRating } from "@/components/conditional-formatting";
+import { CrmImportanceRating, CrmWealthRating, CrmProgressionRating, CrmLeadSourceRating, CrmFollowupNumberRating, CrmInterestRating } from "@/components/conditional-formatting";
 import { EditLeadsButton } from "@/components/forms/EditLeads";
 import { AddDealButton } from "@/components/forms/AddDeals";
 import { AddInteractionButton } from "@/components/forms/AddInteractions";
@@ -27,6 +27,21 @@ export const createColumns = (): ColumnDef<LeadsTagging>[] => [
                 </div>
         }
     }, 
+    {
+        accessorKey: "followup_overdue",
+        header: "Overdue",
+        filterFn: "arrIncludesSome",
+        size: 80,
+        cell: ({ row }) => {
+            const val = row.original.followup_overdue;
+            const isOverdue = val === true;
+            return (
+                <div className="text-xs">
+                    {isOverdue ? <span className="text-red-800 bg-red-200 px-2 py-1 rounded-md font-semibold">Overdue</span> : ""}
+                </div>
+            );
+        },
+    },
     {
         accessorKey: "phone_e164",
         header: "Phone",
@@ -56,6 +71,15 @@ export const createColumns = (): ColumnDef<LeadsTagging>[] => [
             return <div className="text-xs"><CrmImportanceRating rating={row.original.importance ?? ""} /></div>
         },
         size:80
+    },
+    {
+        accessorKey: "interest",
+        header: "Interest",
+        filterFn: "arrIncludesSome",
+        cell: ({ row }) => {
+            return <div className="text-xs"><CrmInterestRating rating={row.original.interest ?? ""} /></div>
+        },
+        size: 80
     },
     {
         accessorKey: "wealth_level",

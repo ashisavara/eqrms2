@@ -11,7 +11,9 @@ interface PageProps {
 
 function parseSearchParams(params: { [key: string]: string | string[] | undefined }) {
   const filterKeys = [
+    "followup_overdue",
     "importance",
+    "interest",
     "lead_progression",
     "lead_source",
     "lead_type",
@@ -20,11 +22,14 @@ function parseSearchParams(params: { [key: string]: string | string[] | undefine
     "digital_campaign",
   ];
 
-  const filters: Record<string, string[] | number[]> = {};
+  const filters: Record<string, string[] | number[] | boolean[]> = {};
   filterKeys.forEach((key) => {
     const value = params[key];
     if (value) {
-      if (key.includes("rating") || key.includes("_id")) {
+      if (key === "followup_overdue") {
+        const arr = Array.isArray(value) ? value : [value];
+        filters[key] = arr.map((v) => String(v).toLowerCase() === "true");
+      } else if (key.includes("rating") || key.includes("_id")) {
         filters[key] = Array.isArray(value) ? value.map(Number) : [Number(value)];
       } else {
         filters[key] = Array.isArray(value) ? value : [value];
@@ -53,7 +58,9 @@ export default async function TagsCrmPage({ searchParams }: PageProps) {
   const supabase = await createClient();
 
   const filterConfig = {
+    followup_overdue: { table: TABLE_VIEW, valueCol: "followup_overdue", labelCol: "followup_overdue" },
     importance: { table: TABLE_VIEW, valueCol: "importance", labelCol: "importance" },
+    interest: { table: TABLE_VIEW, valueCol: "interest", labelCol: "interest" },
     lead_progression: { table: TABLE_VIEW, valueCol: "lead_progression", labelCol: "lead_progression" },
     lead_source: { table: TABLE_VIEW, valueCol: "lead_source", labelCol: "lead_source" },
     lead_type: { table: TABLE_VIEW, valueCol: "lead_type", labelCol: "lead_type" },
@@ -64,7 +71,7 @@ export default async function TagsCrmPage({ searchParams }: PageProps) {
 
   const [filterOptions, tableData, aggregationResult] = await Promise.all([
     getMultipleFilterOptions(
-      ["importance", "lead_progression", "lead_source", "lead_type", "wealth_level", "rm_name", "digital_campaign"],
+      ["followup_overdue", "importance", "interest", "lead_progression", "lead_source", "lead_type", "wealth_level", "rm_name", "digital_campaign"],
       filterConfig
     ),
     serverSideQuery<LeadsTagging>({
@@ -72,7 +79,7 @@ export default async function TagsCrmPage({ searchParams }: PageProps) {
       columns: "*",
       filters,
       search,
-      searchColumns: ["lead_name", "lead_summary", "rm_name", "lead_source", "lead_type", "lead_progression"],
+      searchColumns: ["lead_name", "lead_summary", "interest", "rm_name", "lead_source", "lead_type", "lead_progression"],
       pagination,
       sorting,
       staticFilters: [],
@@ -108,7 +115,9 @@ export default async function TagsCrmPage({ searchParams }: PageProps) {
         totalCount: tableData.totalCount,
       }}
       filterOptions={filterOptions as {
+        followup_overdue: { value: string; label: string }[];
         importance: { value: string; label: string }[];
+        interest: { value: string; label: string }[];
         lead_progression: { value: string; label: string }[];
         lead_source: { value: string; label: string }[];
         lead_type: { value: string; label: string }[];
@@ -117,7 +126,7 @@ export default async function TagsCrmPage({ searchParams }: PageProps) {
         digital_campaign: { value: string; label: string }[];
       }}
       filterConfig={filterConfig}
-      searchColumns={["lead_name", "lead_summary", "rm_name", "lead_source", "lead_type", "lead_progression"]}
+      searchColumns={["lead_name", "lead_summary", "interest", "rm_name", "lead_source", "lead_type", "lead_progression"]}
       aggregations={aggregations}
     />
     </div>
