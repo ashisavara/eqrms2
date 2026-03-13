@@ -210,7 +210,6 @@ export const LeadsTaggingSchema = z.object({
   last_contact_date: z.coerce.date().nullable(),
   followup_date: z.coerce.date().nullable(),
   importance: z.string().min(1, "Importance is required"),
-  lead_progression: z.string().min(1, "Lead progression is required"),
   lead_source: z.string().min(1, "Lead source is required"),
   lead_type: z.string().min(1, "Lead type is required"),
   wealth_level: z.string().min(1, "Wealth level is required"),
@@ -245,7 +244,6 @@ export const LeadsTagShortSchema = z.object({
   last_contact_date: z.coerce.date().nullable(),
   followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
-  lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
   lead_summary: z.string().nullable(),
 });
@@ -270,7 +268,6 @@ export const MeetingNoteSchema = z.object({
   //lead fields
   followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
-  lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
   lead_summary: z.string().nullable(),
   interest: z.string().nullable(),
@@ -292,7 +289,6 @@ export const FollowUpSchema = z.object({
   //lead fields
   followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
-  lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
   lead_summary: z.string().nullable(),
 });
@@ -317,7 +313,6 @@ export const DealsSchema = z.object({
   //lead fields
   followup_date: z.coerce.date().nullable(),
   importance: z.string().nullable(),
-  lead_progression: z.string().nullable(),
   wealth_level: z.string().nullable(),
   lead_summary: z.string().nullable(),
 });

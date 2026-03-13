@@ -43,7 +43,6 @@ function EditLeadsForm({
     followup_date: initialData.followup_date ? new Date(initialData.followup_date) : null,
     interest: initialData.interest ?? "",
     importance: initialData.importance ?? "",
-    lead_progression: initialData.lead_progression ?? "",
     lead_source: initialData.lead_source ?? "",
     lead_type: initialData.lead_type ?? "",
     wealth_level: initialData.wealth_level ?? "",
@@ -143,7 +142,6 @@ function EditLeadsForm({
         followup_date: toLocalDateString(data.followup_date),
         interest: data.interest,
         importance: data.importance,
-        lead_progression: data.lead_progression,
         lead_source: data.lead_source,
         lead_type: data.lead_type,
         wealth_level: data.wealth_level,
@@ -213,15 +211,6 @@ function EditLeadsForm({
             toggleGroupClassName="gap-2 flex-wrap"
             itemClassName="ime-choice-chips"
           />
-          <ToggleGroupInput
-            name="lead_progression"
-            label="Lead Stage"
-            control={control}
-            options={leadProgressionOptions}
-            valueType="string"
-            toggleGroupClassName="gap-2 flex-wrap"
-            itemClassName="ime-choice-chips"
-          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
             <SelectInput name="service_rm_uuid" label="Support RM" control={control} options={primaryRmOptions} />
@@ -285,7 +274,6 @@ export function EditLeadsButton({
     followup_date: leadData.followup_date ? new Date(leadData.followup_date) : null,
     interest: leadData.interest ?? "",
     importance: leadData.importance ?? "",
-    lead_progression: leadData.lead_progression ?? "",
     lead_source: leadData.lead_source ?? "",
     lead_type: leadData.lead_type ?? "",
     wealth_level: leadData.wealth_level ?? "",
