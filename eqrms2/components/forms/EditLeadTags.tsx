@@ -19,7 +19,6 @@ function EditLeadTagsForm({
   id,  // lead_id
   onSuccess,
   importanceOptions,
-  leadProgressionOptions,
   wealthLevelOptions,
   leadName,
   country_code,
@@ -29,7 +28,6 @@ function EditLeadTagsForm({
   id: number;  
   onSuccess?: () => void;
   importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
   leadName: string;
   country_code: string;
@@ -41,7 +39,6 @@ function EditLeadTagsForm({
     last_contact_date: initialData.last_contact_date ? new Date(initialData.last_contact_date) : null,
     followup_date: initialData.followup_date ? new Date(initialData.followup_date) : null,
     importance: initialData.importance ?? "",
-    lead_progression: initialData.lead_progression ?? "",
     wealth_level: initialData.wealth_level ?? "",
     lead_summary: initialData.lead_summary ?? "",
   };
@@ -99,7 +96,6 @@ function EditLeadTagsForm({
       <div>
           <ToggleGroupInput name="importance" label="Importance" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips mb-5" />
           <ToggleGroupInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips mb-5" />
-          <ToggleGroupInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions}  valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips mb-5"/>
       </div>
 
       
@@ -114,7 +110,6 @@ export function EditLeadTagsButton({
   leadData,
   leadId,  
   importanceOptions,
-  leadProgressionOptions,
   wealthLevelOptions,
   leadName,
   country_code,
@@ -123,7 +118,6 @@ export function EditLeadTagsButton({
   leadData: any;
   leadId: number;  
   importanceOptions: { value: string; label: string }[];
-  leadProgressionOptions: { value: string; label: string }[];
   wealthLevelOptions: { value: string; label: string }[];
   leadName: string;
   country_code: string;
@@ -135,12 +129,11 @@ export function EditLeadTagsButton({
     console.error('leadId is required but not provided');
   }
 
-  // Convert lead data to LeadsTaggingValues format
+  // Convert lead data to LeadsTagShortValues format
   const leadUpdateData: LeadsTagShortValues = {
     last_contact_date: leadData.last_contact_date ?? null,
     followup_date: leadData.followup_date ?? null,
     importance: leadData.importance ?? "",
-    lead_progression: leadData.lead_progression ?? "",
     wealth_level: leadData.wealth_level ?? "",
     lead_summary: leadData.lead_summary ?? "",
   };
@@ -167,7 +160,6 @@ export function EditLeadTagsButton({
                 id={leadId}  
                 onSuccess={() => setShowEditSheet(false)}
                 importanceOptions={importanceOptions}
-                leadProgressionOptions={leadProgressionOptions}
                 wealthLevelOptions={wealthLevelOptions}
                 leadName={leadName}
                 country_code={country_code}

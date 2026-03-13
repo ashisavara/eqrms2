@@ -20,10 +20,10 @@ const DEAL_FIELDS = [
   'deal_stage', 'deal_segment', 'total_deal_aum', 'deal_summary'
 ] as const;
 
-const LEAD_FIELDS = [
+const LEAD_FIELDS: readonly (keyof DealsValues)[] = [
   'lead_summary', 'followup_date',
-  'importance', 'wealth_level', 'lead_progression'
-] as const;
+  'importance', 'wealth_level'
+];
 
 // Field extraction functions
 function extractDealFields(formData: DealsValues) {
@@ -86,7 +86,6 @@ function AddDealForm({
     // Lead fields (pre-populated from current lead data)
     followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
     importance: initialLeadData?.importance ?? null,
-    lead_progression: initialLeadData?.lead_progression ?? null,
     wealth_level: initialLeadData?.wealth_level ?? null,
     lead_summary: initialLeadData?.lead_summary ?? null,
   };
@@ -197,7 +196,6 @@ function AddDealForm({
           <DatePicker name="followup_date" label="Follow-up Date" control={control} />
           <SelectInput name="importance" label="Importance" control={control} options={importanceOptions} />
           <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
-          <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
         </div>
       </div>
 

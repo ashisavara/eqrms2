@@ -25,7 +25,7 @@ const INTERACTION_FIELDS = [
 
 const LEAD_FIELDS = [
   'lead_summary', 'followup_date',
-  'importance', 'wealth_level', 'lead_progression'
+  'importance', 'wealth_level'
 ] as const;
 
 // Field extraction functions
@@ -84,7 +84,6 @@ function EditInteractionForm(
       followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
       interest: initialLeadData?.interest ?? null,
       importance: initialLeadData?.importance ?? null,
-      lead_progression: initialLeadData?.lead_progression ?? null,
       wealth_level: initialLeadData?.wealth_level ?? null,
       lead_summary: initialLeadData?.lead_summary ?? null,
     };
@@ -190,7 +189,6 @@ function EditInteractionForm(
                   <ToggleGroupInput name="interest" label="Interest (if can assess)" control={control} options={interestOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
                   <ToggleGroupInput name="importance" label="Importance/Urgency" control={control} options={importanceOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
                   <ToggleGroupInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
-                  <ToggleGroupInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} valueType="string" toggleGroupClassName="gap-2 flex-wrap" itemClassName="ime-choice-chips" />
                 </div>
             </div>
 
@@ -235,7 +233,6 @@ export function EditInteractionButton({
     followup_date: null,
     interest: null,
     importance: null,
-    lead_progression: null,
     wealth_level: null,
     lead_summary: null,
   };

@@ -21,7 +21,7 @@ const INTERACTION_FIELDS = [
 
 const LEAD_FIELDS = [
   'lead_summary', 'followup_date',
-  'importance', 'wealth_level', 'lead_progression'
+  'importance', 'wealth_level'
 ] as const;
 
 // Field extraction functions
@@ -77,7 +77,6 @@ function AddFollowUpForm({
     // Lead fields (pre-populated from current lead data)
     followup_date: initialLeadData?.followup_date ? new Date(initialLeadData.followup_date) : null,
     importance: initialLeadData?.importance ?? null,
-    lead_progression: initialLeadData?.lead_progression ?? null,
     wealth_level: initialLeadData?.wealth_level ?? null,
     lead_summary: initialLeadData?.lead_summary ?? null,
   };
@@ -176,7 +175,6 @@ function AddFollowUpForm({
           <DatePicker name="followup_date" label="Follow-up Date" control={control} />
           <SelectInput name="importance" label="Importance" control={control} options={importanceOptions} />
           <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
-          <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
         </div>
       </div>
 

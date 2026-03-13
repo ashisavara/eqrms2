@@ -42,7 +42,6 @@ function AddLeadForm({
     followup_date: null,
     importance: "",
     interest: "",
-    lead_progression: "",
     lead_source: "",
     lead_type: "",
     wealth_level: "",
@@ -81,7 +80,6 @@ function AddLeadForm({
         followup_date: toLocalDateString(data.followup_date),
         importance: data.importance,
         interest: data.interest,
-        lead_progression: data.lead_progression,
         lead_source: data.lead_source,
         lead_type: data.lead_type,
         wealth_level: data.wealth_level,
@@ -137,7 +135,6 @@ function AddLeadForm({
 
         <div className="grid grid-cols-4 gap-4 ">
           <SelectInput name="wealth_level" label="Wealth" control={control} options={wealthLevelOptions} />
-          <SelectInput name="lead_progression" label="Lead Stage" control={control} options={leadProgressionOptions} />
           <SelectInput name="lead_source" label="Lead Source" control={control} options={leadSourceOptions} />
           <SelectInput name="lead_type" label="Lead Type" control={control} options={leadTypeOptions} />
           <SelectInput name="primary_rm_uuid" label="Primary RM" control={control} options={primaryRmOptions} />
