@@ -89,8 +89,8 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
             </div>
             <div>
               <SimpleTable
-              headers={[{ label: "Coverage"},{ label: "Sector"},{ label: "Industry"},{ label: "Sector Stance"},{ label: "Edit"}]}
-              body={[{ value: <CoverageRating rating={company.coverage}/>},{ value: company.sector_name},{ value: company.industry },{ value: company.sector_name},{ value: can(userRoles, 'eqrms', 'edit_companies') ? <Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link> : <span className="text-gray-400">-</span> }]}
+              headers={[{ label: "Coverage"},{ label: "Sector"},{ label: "Industry"},{ label: "Notion"},{ label: "Edit"}]}
+              body={[{ value: <CoverageRating rating={company.coverage}/>},{ value: company.sector_name},{ value: company.industry },{ value: company.notion_link ? <a href={company.notion_link} className="text-blue-600 underline hover:text-blue-800" target="_blank">Notion</a> : <span className="text-gray-400"></span>},{ value: can(userRoles, 'eqrms', 'edit_companies') ? <Link href={`/companies/${company.company_id}/edit`} className="text-blue-600 underline hover:text-blue-800">Edit</Link> : <span className="text-gray-400">-</span> }]}
               />
             </div>
           </div>

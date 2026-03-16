@@ -78,4 +78,5 @@ export type Company = {
   catalysts: string;
   hidden: string;
   financials: string;
+  notion_link: string;
 };
