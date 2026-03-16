@@ -72,7 +72,7 @@ export default async function CrmPage() {
                         <TabsTrigger value="mis">MIS</TabsTrigger>
                 </TabsList>
                     <TabsContent value="crm">
-                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} /> | <Link href="/crm/tags" className="blue-hyperlink">Tags</Link> | <Link href="/crm/sales" className="blue-hyperlink">Phone view</Link>
+                        <AddLeadButton referralPartnerOptions={referralPartnerOptions} /> | <Link href="/crm/tags" className="blue-hyperlink">Tags</Link> | <Link href="/crm/sales" className="blue-hyperlink">Phone view</Link> | <a href="https://www.notion.so/Pvt-Bankers-32355ec789e180808598e32163f8a364" className="blue-hyperlink" target="_blank">Resources</a>
                         <TableCrm data={leads} importanceOptions={importanceOptions} leadProgressionOptions={leadProgressionOptions} 
                         wealthLevelOptions={wealthLevelOptions} dealEstClosureOptions={dealEstClousureOptions} 
                         dealStageOptions={dealStageOptions} dealSegmentOptions={dealSegmentOptions} interactionChannelOptions={interactionChannelOptions} 

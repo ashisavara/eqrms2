@@ -12,40 +12,23 @@ export default async function Page() {
 
   return (
     <main>
-      <div className="pageHeadingBox"><h1>Documentation</h1></div>
-      <Tabs defaultValue="documentation" className="w-full mx-auto mt-6 text-sm">
+      <div className="pageHeadingBox"><h1 className="text-white">Documentation</h1></div>
+      <Tabs defaultValue="newDoc" className="w-full mx-auto mt-6 text-sm">
         <TabsList className="w-full">
-          <TabsTrigger value="documentation">Documentation</TabsTrigger>
-          <TabsTrigger value="mktmaterial">Mkt Material</TabsTrigger>
+          <TabsTrigger value="newDoc">Documentation</TabsTrigger>
           <TabsTrigger value="pmsaif">PMS-AIF</TabsTrigger>
           <TabsTrigger value="fundcomparisons">Fund Comparisons</TabsTrigger>
         </TabsList>
-        <TabsContent value="documentation">
-            <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
-                <iframe 
-                src="https://coda.io/embed/Bnen8d1pZ1/_suA_SeFp?viewMode=embedplay&hideSections=true" 
-                style={{ width:1800, height:1000, maxWidth: '100%' }} 
-                allow="fullscreen"
-                />
-            </div>
-        </TabsContent>
-        <TabsContent value="mktmaterial">
-            <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
-                <iframe 
-                src="https://coda.io/embed/R5UZH6vtl1/_su80T6pZ?viewMode=embedplay" 
-                style={{ width:1800, height:1000, maxWidth: '100%' }} 
-                allow="fullscreen"
-                />
-            </div>
+        <TabsContent value="newDoc">
+          <div className="w-full mx-auto" style={{ aspectRatio: '16 / 9' }}>
+          <iframe src="https://bush-juniper-c4a.notion.site/ebd//32055ec789e18000a954e4320f5246c9" className="w-full h-full" allowFullScreen={true} />
+          </div>
+
         </TabsContent>
         <TabsContent value="pmsaif">
-            <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
-                <iframe 
-                src="https://coda.io/embed/L-jmocDPu-/_sugrIsir?viewMode=embedplay" 
-                style={{ width:1800, height:1000, maxWidth: '100%' }} 
-                allow="fullscreen"
-                />
-            </div>
+        <div className="w-full mx-auto" style={{ aspectRatio: '16 / 9' }}>
+        <iframe src="https://bush-juniper-c4a.notion.site/ebd//32255ec789e1805a8cc6eb6e26220521" className="w-full h-full" allowFullScreen={true} />
+        </div>
         </TabsContent>
         <TabsContent value="fundcomparisons">
           <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
@@ -63,6 +46,8 @@ export default async function Page() {
           </div>
 
         </TabsContent>
+        
+
     </Tabs>
       
     </main>
