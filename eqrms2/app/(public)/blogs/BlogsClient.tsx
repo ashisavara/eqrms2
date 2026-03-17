@@ -9,9 +9,10 @@ import PageTitle from "@/components/uiComponents/page-title";
 
 interface BlogsClientProps {
   blogs: blogDetail[];
+  basePath?: string;
 }
 
-export default function BlogsClient({ blogs }: BlogsClientProps) {
+export default function BlogsClient({ blogs, basePath = "/blogs" }: BlogsClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -98,7 +99,7 @@ export default function BlogsClient({ blogs }: BlogsClientProps) {
           {filteredBlogs.map((blog) => (
             <Link 
               key={blog.id} 
-              href={`/blogs/${blog.slug}`}
+              href={`${basePath}/${blog.slug}`}
               className="group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
             >
               {/* Featured Image */}

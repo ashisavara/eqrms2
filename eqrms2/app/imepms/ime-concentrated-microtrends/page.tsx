@@ -5,6 +5,7 @@ import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import Section from "@/components/uiComponents/section";
 import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
 import YouTube from "@/components/uiComponents/youtube";
+import { Button } from "@/components/ui/button";
 
 export default function ImeConcentratedMicrotrendsPage() {
     return (
@@ -82,6 +83,14 @@ How do Microtrends differ from Macro-trends, Sectoral or Thematic Funds?">
         
             <Section className="bg-gray-100 !py-12">
                 <h2 className="bg-gray-100">Learn More</h2>
+                <div className="flex items-center justify-center mb-6 gap-6">
+                <Button>
+                <a href="https://drive.google.com/file/d/1oTCFFDZQGWYL_KijnqJ4Aipp_kU1qups/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Presentation</a>
+                </Button>
+                <Button>
+                <a href="https://drive.google.com/file/d/1boOPv7bIeCXxpaaJEDTT8x7Tez0vdYd0/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Factsheet</a>
+                </Button>
+                </div>
                 <YouTube url="https://www.youtube.com/watch?v=sQ-DAxyXXBM" />
             </Section>
 

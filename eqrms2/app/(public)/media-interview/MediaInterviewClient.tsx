@@ -10,9 +10,10 @@ import { Button } from "@/components/ui/button";
 
 interface MediaInterviewClientProps {
   mediaInterview: MediaInterviewDetail[];
+  basePath?: string;
 }
 
-export default function MediaInterviewClient({ mediaInterview }: MediaInterviewClientProps) {
+export default function MediaInterviewClient({ mediaInterview, basePath = "/media-interview" }: MediaInterviewClientProps) {
   const [selectedPublication, setSelectedPublication] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -123,7 +124,7 @@ export default function MediaInterviewClient({ mediaInterview }: MediaInterviewC
                   </span>
                 </div>
                 {/* Title */}
-                <Link href={`/media-interview/${interview.slug}`}>
+                <Link href={`${basePath}/${interview.slug}`}>
                   <h3 className="text-base !text-center font-semibold blue-hyperlink mt-2 mb-2">
                     {interview.title}
                   </h3>

@@ -402,6 +402,40 @@ export async function getStaticBlog(slug: string): Promise<blogDetail | null> {
   });
 }
 
+// Get PMS blog slugs for static generation (blogs_pms table)
+export async function getPmsBlogSlugs(): Promise<Array<{ slug: string }>> {
+  try {
+    const supabase = createAnonymousClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const { data, error } = await supabase
+      .from('blogs_pms')
+      .select('slug')
+      .eq('status', 'Published');
+    if (error) {
+      console.error('Error fetching PMS blog slugs:', error);
+      return [];
+    }
+    return data || [];
+  } catch (error) {
+    console.error('Error in getPmsBlogSlugs:', error);
+    return [];
+  }
+}
+
+// Get a single PMS blog for static generation
+export async function getStaticPmsBlog(slug: string): Promise<blogDetail | null> {
+  return await supabaseStaticSingleRead<blogDetail>({
+    table: "blogs_pms",
+    columns: "*",
+    filters: [
+      (query) => query.eq("slug", slug),
+      (query) => query.eq("status", "Published")
+    ]
+  });
+}
+
 // Get public media interview slugs for static generation
 export async function getPublicMediaInterviewSlugs(): Promise<Array<{ slug: string }>> {
   try {

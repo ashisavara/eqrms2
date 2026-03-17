@@ -3,6 +3,7 @@ import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import Section from "@/components/uiComponents/section";
 import SectionTextHighlight from "@/components/uiComponents/section-text-highlight";
 import YouTube from "@/components/uiComponents/youtube";
+import { Button } from "@/components/ui/button";
 
 export default function ImeDigitalDisruptionPage() {
     return (
@@ -68,6 +69,14 @@ export default function ImeDigitalDisruptionPage() {
 
             <Section className="bg-gray-100 !py-12">
                 <h2 className="bg-gray-100">Learn More</h2>
+                <div className="flex items-center justify-center mb-6 gap-6">
+                <Button>
+                <a href="https://drive.google.com/file/d/1l9CkW4VaKZcfmfNNf7ycUs3ImplTebv8/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Presentation</a>
+                </Button>
+                <Button>
+                <a href="https://drive.google.com/file/d/1Yjw3UXBaaJ_H671jmsDmL8YyGb8Ixenh/view?usp=sharing" target="_blank" rel="noopener noreferrer">Factsheet</a>
+                </Button>
+                </div>
                 <YouTube url="https://www.youtube.com/watch?v=th8i3XYMXo8" />
             </Section>
 

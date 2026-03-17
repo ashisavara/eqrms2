@@ -26,6 +26,7 @@ const menuItems = [
       { label: "About us", href: "/imepms/about-us" },
       { label: "Investment Philosophy", href: "/imepms/ime-twin-engine-framework" },
       { label: "Investment Process", href: "/imepms/investment-processes" },
+      { label: "Downloads", href: "/imepms/pms-downloads" },
     ],
   },
   {

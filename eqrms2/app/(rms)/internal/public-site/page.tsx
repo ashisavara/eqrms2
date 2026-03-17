@@ -7,6 +7,7 @@ export default function PublicSitePage() {
             <p className="blue-hyperlink"><Link href="/internal/public-site/blog">Blog</Link></p>
             <p className="blue-hyperlink"><Link href="/internal/public-site/media-interview">Media Interview</Link></p>
             <p className="blue-hyperlink"><Link href="/internal/public-site/investment-query">Investment Query</Link></p>
+            <p className="blue-hyperlink"><Link href="/internal/public-site/pmsblog">PMS Blog</Link></p>
             
         </div>
     );
