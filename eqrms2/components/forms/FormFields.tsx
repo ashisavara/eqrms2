@@ -210,7 +210,8 @@ export function ToggleGroupInput({
   toggleGroupClassName,
   itemClassName,
   valueType = "string",
-  hiddenLabel = false
+  hiddenLabel = false,
+  helperText
 }: { 
   name: string; 
   label: string; 
@@ -221,10 +222,14 @@ export function ToggleGroupInput({
   itemClassName?: string;
   valueType?: "string" | "number";
   hiddenLabel?: boolean;
+  helperText?: string;
 }) {
   return (
     <div className={className || "space-y-1"}>
       {!hiddenLabel && <Label className="font-bold">{label}</Label>}
+      {helperText && (
+        <p className="helper-text">{helperText}</p>
+      )}
       <Controller
         name={name}
         control={control}
@@ -275,7 +280,8 @@ export function MultiToggleGroupInput({
   options,
   className,
   toggleGroupClassName,
-  itemClassName
+  itemClassName,
+  helperText
 }: { 
   name: string; 
   label: string; 
@@ -284,10 +290,14 @@ export function MultiToggleGroupInput({
   className?: string;
   toggleGroupClassName?: string;
   itemClassName?: string;
+  helperText?: string;
 }) {
   return (
     <div className={className || "space-y-2"}>
       <Label className="font-bold">{label}</Label>
+      {helperText && (
+        <p className="helper-text">{helperText}</p>
+      )}
       <Controller
         name={name}
         control={control}

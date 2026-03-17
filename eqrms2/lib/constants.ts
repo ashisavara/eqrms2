@@ -409,9 +409,21 @@ export const MASTER_OPTIONS = {
 
   financialProductsInvestedIn: ["FD","Bonds","MF","PMS","AIF","Global","Real Estate","Insurance"],
 
-  netWorth: ["0-50 lakhs","50 lakhs - 2 cr","2 - 10 cr",">10 cr"],
+  netWorth: ["0-50 lakhs","50 lakhs - 2 cr","2 - 10 cr","10-25 cr",">25 cr"],
+
+  yrsInvesting: ["0-2 years","2-5 years","5-10 years","10-15 years","15+ years"],
+
+  pastAdvisor: ["Own Research","Friends & Family","Large WM Firm","Boutique WM Firm","Independent Financial Advisors","Tech Platform","Others"],
+
+  finPlanQuality: ["Do not Need","Not Built One","Basic Financial Plan","Needs Review","Upto date & Comprehensive Financial Plan"],
 
   hearImeCapital: ["IME Employee","IME Client","FB/Instagram","LinkedIn","YouTube","IME Website","Others"],
+
+  finGoalsPlanFor: ["Retirement","Child's Education","Child's Marriage","Child's Corpus","Home Purchase","Contingency Fund","Piggybank Fund","Others"],
+
+  liquidityRequirements: ["<1 yr","1-3 yrs","3-7 yrs",">7 yrs"],
+
+  comfortSpecificProducts: ["Locked-in (3-5 yrs)","Locked-in (5+ yrs)","Complex Pdts","Boutique Managers","New Funds/Categories"],
 
   investmentQuery:[
     "International","Fixed Income","NRI","Equity","Fixed Income","Alternatives","Unlisted","IME","Advice"

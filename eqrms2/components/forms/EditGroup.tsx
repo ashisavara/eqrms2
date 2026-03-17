@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { EditGroupSchema, EditGroupValues } from "@/types/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextInput, ResizableTextArea, DatePicker, SelectInput, SwitchInput } from "./FormFields";
+import { TextInput, ResizableTextArea, DatePicker, SelectInput, SwitchInput, MultiToggleGroupInput, ToggleGroupInput } from "./FormFields";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { useRouter } from "next/navigation";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Internal form component
 function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValues | null, id: number, onSuccess: () => void}) {
@@ -27,13 +28,20 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
         last_review_date: initialData?.last_review_date || null,
         investments_background: initialData?.investments_background || null,
         investments_purpose: initialData?.investments_purpose || null,
-        investment_recommendations: initialData?.investment_recommendations || null,
         background_done: initialData?.background_done ?? null,
         risk_profile_done: initialData?.risk_profile_done ?? null,
         fin_plan_done: initialData?.fin_plan_done ?? null,
         inv_plan_done: initialData?.inv_plan_done ?? null,
         shortlisting_done: initialData?.shortlisting_done ?? null,
-        google_sheet_link: initialData?.google_sheet_link ?? null
+        google_sheet_link: initialData?.google_sheet_link ?? null,
+        pdts_invested_in: initialData?.pdts_invested_in ?? null,
+        yrs_investing: initialData?.yrs_investing ?? null,
+        quantum_of_inv: initialData?.quantum_of_inv ?? null,
+        past_advisor: initialData?.past_advisor ?? null,
+        fin_plan_quality: initialData?.fin_plan_quality ?? null,
+        fin_goals: initialData?.fin_goals ?? null,
+        pdt_comfort: initialData?.pdt_comfort ?? null,
+        portfolio_liquidity_req: initialData?.portfolio_liquidity_req ?? null
     };
 
     const { control, handleSubmit} = useForm<EditGroupValues>({
@@ -63,51 +71,79 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
     });
 
     return (
-        <form onSubmit={onSubmit} className="w-full p-4 space-y-4">
+        <form onSubmit={onSubmit} className="w-full p-4 space-y-4 ime-mandate-form">
             <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <SwitchInput name="background_done" label="Background" control={control} />
                 <SwitchInput name="risk_profile_done" label="Risk Profile" control={control} />
                 <SwitchInput name="fin_plan_done" label="Fin Plan" control={control} />
                 <SwitchInput name="inv_plan_done" label="Inv Plan" control={control} />
                 <SwitchInput name="shortlisting_done" label="Shortlisting" control={control} />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <TextInput name="mandate_name" label="Mandate Name" control={control} />
-                <SelectInput
-                  name="rp_override"
-                  label="Risk Profile"
-                  control={control}
-                  options={transformToValueLabel(masterOptions.riskProfile)}
-                />
-                <DatePicker name="last_review_date" label="Last Review Date" control={control} />
-            </div>
-            <TextInput name="one_line_objective" label="One Line Objective" control={control} 
-              helperText="What these investments mean for you? The emotional or core purpose of what money well managed does for you?"/>
-            <ResizableTextArea 
-              name="investments_background" 
-              label="Investor Background" 
-              control={control}
-              helperText="Past experience with investments - types of experience, what worked, what didn't work, problems experienced, etc."
-            />
-            <ResizableTextArea name="investments_purpose" label="Investments Purpose" control={control}
-              helperText="Key goals or objectives that you desire from your investments." />
-            <ResizableTextArea name="inv_plan" label="Investment Plan" control={control} 
-              helperText="Asset Allocation, Other Mandate Requirements, Funding of Goals, Lumpsum vs Staggered, Dos & Donts etc."/>
-            <ResizableTextArea name="investment_recommendations" label="Investment Recommendations" control={control} 
-              helperText="Core Investment Recommendations"/>
-            <ResizableTextArea name="other_mandate_details" label="To Dos" control={control} 
-             helperText="Action Plan & Tasks"/>
-             <TextInput name="google_sheet_link" label="Google Sheet Link" control={control} />
-            
-            <div className="flex justify-end">
+                <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
                     {isLoading ? 'Saving...' : 'Save'}
                 </Button>
             </div>
+            </div>
+            <Tabs defaultValue="background" className="w-full">
+            <TabsList className="w-full">
+              <TabsTrigger value="background">Background</TabsTrigger>
+              <TabsTrigger value="finplan">Objectives</TabsTrigger>
+              <TabsTrigger value="investments">Investments</TabsTrigger>
+            </TabsList>
+              <TabsContent value="background">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TextInput name="mandate_name" label="Mandate Name" control={control} />
+                <DatePicker name="last_review_date" label="Last Review Date" control={control} />
+            </div>
+                <div className="grid grid-cols-1 gap-4 mt-4">
+                <ToggleGroupInput
+                  name="rp_override"
+                  label="Risk Profile"
+                  control={control}
+                  options={transformToValueLabel(masterOptions.riskProfile)}
+                  itemClassName="ime-choice-chips"
+                />
+                <ToggleGroupInput name="yrs_investing" label="Years of investment experience" control={control} options={transformToValueLabel(masterOptions.yrsInvesting)}  itemClassName="ime-choice-chips" />
+              <MultiToggleGroupInput name="pdts_invested_in" label="Products you have invested in (Multi-Select)" control={control} options={transformToValueLabel(masterOptions.financialProductsInvestedIn)}  itemClassName="ime-choice-chips"  />
+              <ToggleGroupInput name="quantum_of_inv" label="Existing Financial Assets" control={control} options={transformToValueLabel(masterOptions.netWorth)}  itemClassName="ime-choice-chips" />
+              <ToggleGroupInput name="past_advisor" label="Past Advisor (What has been the primary driver of your investment decisions?)" control={control} options={transformToValueLabel(masterOptions.pastAdvisor)}  itemClassName="ime-choice-chips" />
+              <ResizableTextArea 
+                name="investments_background" 
+                label="Investor Background" 
+                control={control}
+                helperText="Past experience with investments - types of experience, what worked, what didn't work, problems experienced, etc."
+              />
+              </div>
+              </TabsContent>
+              <TabsContent value="finplan">
+              <div className="grid grid-cols-1 gap-4">
+              <MultiToggleGroupInput name="liquidity_req" label="When are funds likely to be required? (Muti-select | Choose all that apply)" control={control} options={transformToValueLabel(masterOptions.liquidityRequirements)} itemClassName="ime-choice-chips" />
+            <ToggleGroupInput name="fin_plan_quality" label="What is the Quality of your existing Financial Plan?" control={control} options={transformToValueLabel(masterOptions.finPlanQuality)}  itemClassName="ime-choice-chips" />
+            <MultiToggleGroupInput name="fin_goals" label="Fin Goals (Muti-select | Choose all that apply)" control={control} options={transformToValueLabel(masterOptions.finGoalsPlanFor)} itemClassName="ime-choice-chips" />
+            
+            <TextInput name="one_line_objective" label="One Line Objective" control={control} 
+              helperText="What these investments mean for you? The emotional or core purpose of what money well managed does for you?"/>
+            
+            <ResizableTextArea name="investments_purpose" label="Investments Purpose" control={control}
+              helperText="Key goals or objectives that you desire from your investments." />
+              </div>
+              </TabsContent>
+              <TabsContent value="investments">
+              <div className="grid grid-cols-1 gap-4">
+                <MultiToggleGroupInput name="comfort_specific_products" label="Comfort Specific Products" control={control} options={transformToValueLabel(masterOptions.comfortSpecificProducts)} itemClassName="ime-choice-chips" />
+            <ResizableTextArea name="inv_plan" label="Investment Plan" control={control} 
+              helperText="Asset Allocation, Other Mandate Requirements, Funding of Goals, Lumpsum vs Staggered, Dos & Donts etc."/>
+            <ResizableTextArea name="other_mandate_details" label="To Dos" control={control} 
+             helperText="Action Plan & Tasks"/>
+             <TextInput name="google_sheet_link" label="Google Sheet Link" control={control} />
+</div>
+              </TabsContent>
+            </Tabs>
         </form>
     );
 }
+
 
 // Main component that exports the button and handles sheet state
 export function EditGroupButton({ 
@@ -133,13 +169,20 @@ export function EditGroupButton({
     last_review_date: groupData.last_review_date ? new Date(groupData.last_review_date) : null,
     investments_background: groupData.investments_background ?? null,
     investments_purpose: groupData.investments_purpose ?? null,
-    investment_recommendations: groupData.investment_recommendations ?? null,
     background_done: groupData.background_done ?? null,
     risk_profile_done: groupData.risk_profile_done ?? null,
     fin_plan_done: groupData.fin_plan_done ?? null,
     inv_plan_done: groupData.inv_plan_done ?? null,
     shortlisting_done: groupData.shortlisting_done ?? null,
-    google_sheet_link: groupData.google_sheet_link ?? null
+    google_sheet_link: groupData.google_sheet_link ?? null,
+    pdts_invested_in: groupData.pdts_invested_in ?? null,
+    yrs_investing: groupData.yrs_investing ?? null,
+    quantum_of_inv: groupData.quantum_of_inv ?? null,
+    past_advisor: groupData.past_advisor ?? null,
+    fin_plan_quality: groupData.fin_plan_quality ?? null,
+    fin_goals: groupData.fin_goals ?? null,
+    pdt_comfort: groupData.pdt_comfort ?? null,
+    portfolio_liquidity_req: groupData.portfolio_liquidity_req ?? null
   };
 
   return (
@@ -156,7 +199,7 @@ export function EditGroupButton({
         <Sheet open={true} onOpenChange={() => setShowEditSheet(false)}>
           <SheetContent className="!w-400px md:!w-650px !max-w-[90vw]">
             <SheetHeader>
-              <SheetTitle>Edit Group Details</SheetTitle>
+              <SheetTitle>Edit Mandate</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto max-h-[calc(100vh-100px)]">
               <EditGroupForm

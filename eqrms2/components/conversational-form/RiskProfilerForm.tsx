@@ -1,5 +1,31 @@
 "use client";
 
+/**
+ * RiskProfilerForm
+ *
+ * A conversational (one-question-at-a-time) risk profiler that runs inside a Sheet.
+ * Used to collect risk-profile answers for a group, compute scores, and save them
+ * to the mandate.
+ *
+ * What it does
+ * - Opens as a right-side Sheet; loads existing mandate data for the given groupId.
+ * - Renders questions from riskProfiler.config one at a time, with a progress bar.
+ * - Supports conditional visibility: only questions whose conditions match current
+ *   form values are shown (getVisibleQuestions).
+ * - Validates the current question on "Next" before advancing; shows errors inline.
+ * - After the last question, shows a summary (RiskProfilerSummary) with computed
+ *   scores and a confirm button to submit.
+ * - On submit, sends answers and scores via submitRiskProfiler and can close the
+ *   sheet and call onComplete.
+ *
+ * Main features
+ * - One-question-at-a-time flow with Next/Previous and optional Cancel.
+ * - Dynamic Zod schema built from config questions for validation.
+ * - Load existing data on open; reset form and index when sheet closes.
+ * - Summary step with score display, Confirm (submit) and Edit (back to questions).
+ * - Loading state while fetching mandate data; error state if no visible questions.
+ */
+
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
