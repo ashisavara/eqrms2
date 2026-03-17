@@ -187,29 +187,34 @@ export default async function MandatePage() {
                       </MandateBox>
                   </div>
                   <MandateBox heading="One Line Objective">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.one_line_objective || ""}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.one_line_objective || "-"}</ReactMarkdown>
                   </MandateBox>
                   
                   <MandateBox heading="Investor Background">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_background || ""}</ReactMarkdown>
+                    <p><span className="font-bold"> Products Invested In: </span> {groupData.pdts_invested_in || "_______________"}</p>
+                    <p><span className="font-bold"> Years of Investment Experience: </span> {groupData.yrs_investing || "_______________"}</p>
+                    <p><span className="font-bold"> Quantum of Investment: </span> {groupData.quantum_of_inv || "_______________"}</p>
+                    <p><span className="font-bold"> Past Advisor: </span> {groupData.past_advisor || "_______________"}</p>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_background || "-"}</ReactMarkdown>
                   </MandateBox>
                   
                   <MandateBox heading="Investments Purpose">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_purpose || ""}</ReactMarkdown>
+                    <p><span className="font-bold"> Portfolio Liquidity Requirements: </span> {groupData.portfolio_liquidity_req || "_______________"}</p>
+                    <p><span className="font-bold"> Fin Plan Quality: </span> {groupData.fin_plan_quality || "_______________"}</p>
+                    <p><span className="font-bold"> Fin Goals: </span> {groupData.fin_goals || "_______________"}</p>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investments_purpose || "-"}</ReactMarkdown>
                   </MandateBox>
                       
                   <MandateBox heading="Investment Plan">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.inv_plan || ""}</ReactMarkdown>
+                    <p><span className="font-bold"> Comfort Specific Products: </span> {groupData.pdt_comfort || "____________"} </p>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.inv_plan || "-"}</ReactMarkdown>
                   </MandateBox>
-                  
-                  <MandateBox heading="Investment Recommendations">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.investment_recommendations || ""}</ReactMarkdown>
-                  </MandateBox>
+                
                   
                   <MandateBox heading="To-Dos">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.other_mandate_details || ""}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{groupData.other_mandate_details || "-"}</ReactMarkdown>
                   </MandateBox>
-                  
+
                   <MandateBox heading="Shortlisted Universe">
                     <div>
                       <p>Use the <Link href="/funds" className="blue-hyperlink">RMS</Link> to add your favourite structures, asset classes, and categories.</p>

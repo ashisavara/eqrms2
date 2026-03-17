@@ -596,14 +596,18 @@ export const EditGroupSchema = z.object({
   inv_plan_done: z.boolean().nullable(),
   shortlisting_done: z.boolean().nullable(),
   google_sheet_link: z.string().nullable(),
-  pdts_invested_in: z.string().nullable(),
+  // Stored as comma-separated text in DB, but UI uses multi-select chips (string[])
+  pdts_invested_in: z.union([z.string(), z.array(z.string())]).nullable(),
   yrs_investing: z.string().nullable(),
   quantum_of_inv: z.string().nullable(),
   past_advisor: z.string().nullable(),
   fin_plan_quality: z.string().nullable(),
-  fin_goals: z.string().nullable(),
-  pdt_comfort: z.string().nullable(),
-  portfolio_liquidity_req: z.string().nullable(),
+  // Stored as comma-separated text in DB, but UI uses multi-select chips (string[])
+  fin_goals: z.union([z.string(), z.array(z.string())]).nullable(),
+  // Stored as comma-separated text in DB, but UI uses multi-select chips (string[])
+  pdt_comfort: z.union([z.string(), z.array(z.string())]).nullable(),
+  // Stored as comma-separated text in DB, but UI uses multi-select chips (string[])
+  portfolio_liquidity_req: z.union([z.string(), z.array(z.string())]).nullable(),
 });
 
 export type EditGroupValues = z.infer<typeof EditGroupSchema>;

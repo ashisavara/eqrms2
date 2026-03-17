@@ -13,6 +13,20 @@ import { useRouter } from "next/navigation";
 import { useMasterOptions, transformToValueLabel } from "@/lib/contexts/MasterOptionsContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+function parseCsv(value: unknown): string[] {
+  if (Array.isArray(value)) return value.map(String).map((v) => v.trim()).filter(Boolean);
+  if (typeof value !== "string") return [];
+  return value
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean);
+}
+
+function toCsv(value: unknown): string | null {
+  const arr = parseCsv(value);
+  return arr.length ? arr.join(", ") : null;
+}
+
 // Internal form component
 function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValues | null, id: number, onSuccess: () => void}) {
     const [isLoading, setIsLoading] = useState(false);
@@ -39,9 +53,9 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
         quantum_of_inv: initialData?.quantum_of_inv ?? null,
         past_advisor: initialData?.past_advisor ?? null,
         fin_plan_quality: initialData?.fin_plan_quality ?? null,
-        fin_goals: initialData?.fin_goals ?? null,
-        pdt_comfort: initialData?.pdt_comfort ?? null,
-        portfolio_liquidity_req: initialData?.portfolio_liquidity_req ?? null
+        fin_goals: parseCsv(initialData?.fin_goals),
+        pdt_comfort: parseCsv(initialData?.pdt_comfort),
+        portfolio_liquidity_req: parseCsv(initialData?.portfolio_liquidity_req),
     };
 
     const { control, handleSubmit} = useForm<EditGroupValues>({
@@ -52,7 +66,14 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await supabaseUpdateRow('client_group', 'group_id', id, data);
+            const payload = {
+              ...data,
+              pdts_invested_in: toCsv(data.pdts_invested_in),
+              fin_goals: toCsv(data.fin_goals),
+              pdt_comfort: toCsv(data.pdt_comfort),
+              portfolio_liquidity_req: toCsv(data.portfolio_liquidity_req),
+            };
+            await supabaseUpdateRow('client_group', 'group_id', id, payload);
             
             if (typeof window !== "undefined") {
                 toast.success("Group updated successfully!");
@@ -118,7 +139,7 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
               </TabsContent>
               <TabsContent value="finplan">
               <div className="grid grid-cols-1 gap-4">
-              <MultiToggleGroupInput name="liquidity_req" label="When are funds likely to be required? (Muti-select | Choose all that apply)" control={control} options={transformToValueLabel(masterOptions.liquidityRequirements)} itemClassName="ime-choice-chips" />
+              <MultiToggleGroupInput name="portfolio_liquidity_req" label="When are funds likely to be required? (Muti-select | Choose all that apply)" control={control} options={transformToValueLabel(masterOptions.liquidityRequirements)} itemClassName="ime-choice-chips" />
             <ToggleGroupInput name="fin_plan_quality" label="What is the Quality of your existing Financial Plan?" control={control} options={transformToValueLabel(masterOptions.finPlanQuality)}  itemClassName="ime-choice-chips" />
             <MultiToggleGroupInput name="fin_goals" label="Fin Goals (Muti-select | Choose all that apply)" control={control} options={transformToValueLabel(masterOptions.finGoalsPlanFor)} itemClassName="ime-choice-chips" />
             
@@ -131,7 +152,7 @@ function EditGroupForm({initialData, id, onSuccess}: {initialData: EditGroupValu
               </TabsContent>
               <TabsContent value="investments">
               <div className="grid grid-cols-1 gap-4">
-                <MultiToggleGroupInput name="comfort_specific_products" label="Comfort Specific Products" control={control} options={transformToValueLabel(masterOptions.comfortSpecificProducts)} itemClassName="ime-choice-chips" />
+                <MultiToggleGroupInput name="pdt_comfort" label="Comfort Specific Products" control={control} options={transformToValueLabel(masterOptions.comfortSpecificProducts)} itemClassName="ime-choice-chips" />
             <ResizableTextArea name="inv_plan" label="Investment Plan" control={control} 
               helperText="Asset Allocation, Other Mandate Requirements, Funding of Goals, Lumpsum vs Staggered, Dos & Donts etc."/>
             <ResizableTextArea name="other_mandate_details" label="To Dos" control={control} 
@@ -180,9 +201,9 @@ export function EditGroupButton({
     quantum_of_inv: groupData.quantum_of_inv ?? null,
     past_advisor: groupData.past_advisor ?? null,
     fin_plan_quality: groupData.fin_plan_quality ?? null,
-    fin_goals: groupData.fin_goals ?? null,
-    pdt_comfort: groupData.pdt_comfort ?? null,
-    portfolio_liquidity_req: groupData.portfolio_liquidity_req ?? null
+    fin_goals: parseCsv(groupData.fin_goals),
+    pdt_comfort: parseCsv(groupData.pdt_comfort),
+    portfolio_liquidity_req: parseCsv(groupData.portfolio_liquidity_req),
   };
 
   return (

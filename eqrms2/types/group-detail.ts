@@ -35,12 +35,19 @@ export type GroupDetail = {
   last_review_date: Date | string | null;
   investments_background: string | null;
   investments_purpose: string | null;
-  investment_recommendations: string | null;
   background_done: boolean | null;
   risk_profile_done: boolean | null;
   fin_plan_done: boolean | null;
   inv_plan_done: boolean | null;
   shortlisting_done: boolean | null;
   google_sheet_link: string | null;
+  pdts_invested_in: string | null;
+  yrs_investing: string | null;
+  quantum_of_inv: string | null;
+  past_advisor: string | null;
+  fin_plan_quality: string | null;
+  fin_goals: string | null;
+  pdt_comfort: string | null;
+  portfolio_liquidity_req: string | null;
 };
 
