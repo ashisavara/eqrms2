@@ -3,6 +3,7 @@ export type FavStructure = {
     group_id: number;
     structure_id: number;
     structure_name: string;
+    structure_slug?: string;
     group_name: string;
 }
 
@@ -11,6 +12,7 @@ export type FavAssetClass = {
     group_id: number;
     asset_class_id: number;
     asset_class_name: string;
+    asset_class_slug?: string;
     group_name: string;
 }
 
@@ -19,6 +21,7 @@ export type FavCategory = {
     group_id: number;
     category_id: number;
     cat_name: string;
+    slug?: string;
     group_name: string;
     one_yr: number;
     three_yr: number;

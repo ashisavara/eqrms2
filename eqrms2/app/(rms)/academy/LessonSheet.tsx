@@ -47,7 +47,7 @@ export function LessonSheet({
     <>
       <span 
         onClick={handleOpen} 
-        className="inline-flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity border border-gray-300 hover:border-2 hover:border-blue-800 rounded-md p-1"
+        className="inline-flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity border border-gray-300 hover:border-2 hover:border-blue-800 rounded-md p-1 mr-4 mt-2"
       >
         <span className="flex-shrink-0 w-4 h-3 bg-red-600 rounded flex items-center justify-center">
           <Play className="w-2 h-2 text-white ml-1" fill="white" />

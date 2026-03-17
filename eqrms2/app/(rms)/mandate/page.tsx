@@ -217,29 +217,70 @@ export default async function MandatePage() {
 
                   <MandateBox heading="Shortlisted Universe">
                     <div>
-                      <p>Use the <Link href="/funds" className="blue-hyperlink">RMS</Link> to add your favourite structures, asset classes, and categories.</p>
+                      {(!groupData.rp_override || groupData.rp_override.trim() === "") ? (
+                        <p>
+                          <b>Recommendations based on Risk-profile:</b> Please add/select a risk-profile to see recommendations.
+                        </p>
+                      ) : (
+                        <>
+                          <p>
+                            {(groupData.rp_override.toLowerCase().includes("conservative") || groupData.rp_override.toLowerCase().includes("very conservative")) && (
+                              <Link href="/categories/conservative">
+                                <button type="button" className="blue-hyperlink px-3 py-1 rounded border bg-blue-600 text-white hover:bg-blue-700 transition">{groupData.rp_override} Shortlist</button>
+                              </Link>
+                            )}
+                            {groupData.rp_override.toLowerCase().includes("balanced") && (
+                              <Link href="/categories/balanced">
+                                <button type="button" className="blue-hyperlink px-3 py-1 rounded border bg-blue-600 text-white hover:bg-blue-700 transition">{groupData.rp_override} Shortlist</button>
+                              </Link>
+                            )}
+                            {(groupData.rp_override.toLowerCase().includes("aggressive") || groupData.rp_override.toLowerCase().includes("very aggressive")) && (
+                              <Link href="/categories/aggressive">
+                                <button type="button" className="blue-hyperlink px-3 py-1 rounded border bg-blue-600 text-white hover:bg-blue-700 transition">{groupData.rp_override} Shortlist</button>
+                              </Link>
+                            )}
+                          </p>
+                        </>
+                      )}
+                      <p><Link href="/categories">
+                                <button type="button" className="blue-hyperlink px-3 py-1 rounded border bg-blue-600 text-white hover:bg-blue-700 transition">Entire Universe</button>
+                              </Link> </p>
+                              </div>
+                      <div className="mt-4">
                       <span className="font-bold">Favourite Structures: </span>
                       {favStructure.map((structure, idx) => (
                           <span key={structure.fav_structure_id}>
-                              {structure.structure_name}
+                              {structure.structure_slug ? (
+                                  <Link href={`/structure/${structure.structure_slug}`} className="blue-hyperlink hover:underline">{structure.structure_name}</Link>
+                              ) : (
+                                  structure.structure_name
+                              )}
                               {idx < favStructure.length - 1 && " | "}
                           </span>
                       ))}
                     </div>
-                    <div>
+                    <div className="mt-4">
                       <span className="font-bold">Favourite Asset Classes: </span>
                       {favAssetClass.map((assetClass, idx) => (
                           <span key={assetClass.fav_asset_class_id}>
-                              {assetClass.asset_class_name}
+                              {assetClass.asset_class_slug ? (
+                                  <Link href={`/assetclass/${assetClass.asset_class_slug}`} className="blue-hyperlink hover:underline">{assetClass.asset_class_name}</Link>
+                              ) : (
+                                  assetClass.asset_class_name
+                              )}
                               {idx < favAssetClass.length - 1 && " | "}
                           </span>
                       ))}
                     </div>
-                    <div>
+                    <div className="mt-4">
                       <span className="font-bold">Favourite Categories: </span>
                       {favCategory.map((category, idx) => (
                           <span key={category.fav_category_id}>
-                              {category.cat_name}
+                              {category.slug ? (
+                                  <Link href={`/categories/${category.slug}`} className="blue-hyperlink hover:underline">{category.cat_name}</Link>
+                              ) : (
+                                  category.cat_name
+                              )}
                               {idx < favCategory.length - 1 && " | "}
                           </span>
                       ))}
