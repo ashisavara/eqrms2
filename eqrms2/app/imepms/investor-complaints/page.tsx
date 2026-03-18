@@ -1,4 +1,5 @@
 import PageTitle from "@/components/uiComponents/page-title";
+import Link from "next/link";
 
 export default function InvestorComplaintsPage() {
   return (
@@ -7,6 +8,8 @@ export default function InvestorComplaintsPage() {
         <PageTitle 
             title="Investor Complaints"
         />
+        | <Link href="https://scores.sebi.gov.in/" className="text-blue-500">SCORES</Link>
+        | <Link href="https://smartodr.in/login" className="text-blue-500">Investor Complaints</Link> 
         <h2 className="mt-10">Data for month ending Feb-26</h2>
         <table className="w-full border-collapse border border-gray-300 mt-6">
           <thead>
