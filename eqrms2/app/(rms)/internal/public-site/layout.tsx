@@ -10,7 +10,7 @@ export default async function PublicSiteLayout({
   const userRoles = await getUserRoles();
   
   // Check permission for internal public-site access
-  if (!can(userRoles, 'internal', 'link_login_lead')) {
+  if (!can(userRoles, 'internal', 'view')) {
     redirect('/uservalidation');
   }
 
