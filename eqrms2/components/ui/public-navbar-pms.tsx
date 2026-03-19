@@ -26,7 +26,6 @@ const menuItems = [
       { label: "About us", href: "/imepms/about-us" },
       { label: "Investment Philosophy", href: "/imepms/ime-twin-engine-framework" },
       { label: "Investment Process", href: "/imepms/investment-processes" },
-      { label: "Downloads", href: "/imepms/pms-downloads" },
     ],
   },
   {
@@ -34,8 +33,17 @@ const menuItems = [
     href: "#",
     subItems: [
       { label: "IME Digital Disruption", href: "/imepms/ime-digital-disruption" },
-      { label: "IME Concentrated Microtrends", href: "/imepms/ime-concentrated-microtrends" },
+      { label: "IME Concentrated Microtrends", href: "/imepms/ime-concentrated-microtrends"},
       { label: "IME Bespoke Strategies", href: "/imepms/ime-bespoke-strategies" },
+    ],
+  },
+  {
+    label: "Resources",
+    href: "#",
+    subItems: [
+      { label: "Blog", href: "/imepms/blog" },
+      { label: "Media", href: "/imepms/media"},
+      { label: "Downloads", href: "/imepms/pms-downloads" },
     ],
   },
 ];

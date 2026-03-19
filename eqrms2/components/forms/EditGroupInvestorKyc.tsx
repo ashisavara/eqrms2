@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { TextInput, ResizableTextArea, BooleanToggleInput, DatePicker } from "./FormFields";
+import { TextInput, ResizableTextArea, BooleanToggleInput, DatePicker, SelectInput } from "./FormFields";
+import { MASTER_OPTIONS } from "@/lib/constants";
 import { toast, Toaster } from "sonner";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
 import { toLocalDateString } from "@/lib/utils";
@@ -131,12 +132,12 @@ function EditGroupInvestorKycForm({
 
       {/* Profile */}
       <div className="border-t pt-2 grid grid-cols-2 md:grid-cols-3 gap-3">
-        <TextInput name="marital_status" label="Marital Status" control={control} />
-        <TextInput name="gender" label="Gender" control={control} />
+        <SelectInput name="marital_status" label="Marital Status" control={control} options={MASTER_OPTIONS.maritalStatus.map(v => ({ value: v, label: v }))} valueType="string" />
+        <SelectInput name="gender" label="Gender" control={control} options={MASTER_OPTIONS.gender.map(v => ({ value: v, label: v }))} valueType="string" />
         <TextInput name="networth" label="Net Worth" control={control} />
-        <TextInput name="annual_income" label="Annual Income" control={control} />
-        <TextInput name="wealth_source" label="Wealth Source" control={control} />
-        <TextInput name="occupation_type" label="Occupation Type" control={control} />
+        <SelectInput name="annual_income" label="Annual Income" control={control} options={MASTER_OPTIONS.annualIncome.map(v => ({ value: v, label: v }))} valueType="string" />
+        <SelectInput name="wealth_source" label="Wealth Source" control={control} options={MASTER_OPTIONS.sourceOfWealth.map(v => ({ value: v, label: v }))} valueType="string" />
+        <SelectInput name="occupation_type" label="Occupation Type" control={control} options={MASTER_OPTIONS.occupationalDetails.map(v => ({ value: v, label: v }))} valueType="string" />
         <TextInput name="mother_name" label="Mother's Name" control={control} />
         <TextInput name="city_birth" label="City of Birth" control={control} />
         <TextInput name="country_birth" label="Country of Birth" control={control} />
@@ -145,9 +146,9 @@ function EditGroupInvestorKycForm({
       {/* India documentation */}
       <div className="border-t pt-2 grid grid-cols-2 md:grid-cols-4 gap-3">
         <BooleanToggleInput name="poa_india_bool" label="POA India" control={control} />
-        <TextInput name="poa_india_type" label="POA India Type" control={control} />
+        <SelectInput name="poa_india_type" label="POA India Type" control={control} options={MASTER_OPTIONS.poaType.map(v => ({ value: v, label: v }))} valueType="string" />
         <BooleanToggleInput name="bank_proof_bool" label="Bank Proof" control={control} />
-        <TextInput name="bank_proof_type" label="Bank Proof Type" control={control} />
+        <SelectInput name="bank_proof_type" label="Bank Proof Type" control={control} options={MASTER_OPTIONS.bankProofType.map(v => ({ value: v, label: v }))} valueType="string" />
       </div>
 
       {/* Nominees */}

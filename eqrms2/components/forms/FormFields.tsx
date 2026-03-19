@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import TextareaAutosize from 'react-textarea-autosize';
 import { format } from "date-fns"; // Comment out the DatePicker import
 import { Calendar } from "@/components/ui/calendar"; // Comment out the DatePicker import
@@ -696,6 +697,55 @@ export function BooleanToggleInput({
 }
 
 // Switch input field (for boolean toggle)
+export function CheckboxInput({
+  name,
+  label,
+  control,
+  helperText,
+  className,
+  disabled,
+}: {
+  name: string;
+  label: string;
+  control: Control<any>;
+  helperText?: string;
+  className?: string;
+  disabled?: boolean;
+}) {
+  return (
+    <div className={className || "space-y-2"}>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field, fieldState }) => {
+          const hasError = !!fieldState.error;
+          const errId = `${name}-error`;
+          return (
+            <>
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id={name}
+                  checked={field.value || false}
+                  onCheckedChange={field.onChange}
+                  disabled={disabled}
+                  aria-invalid={hasError}
+                  aria-describedby={hasError ? errId : undefined}
+                  className={cn(hasError && "ring-2 ring-red-500")}
+                />
+                <div className="flex flex-col">
+                  <Label htmlFor={name} className="font-normal leading-snug cursor-pointer">{label}</Label>
+                  {helperText && <p className="helper-text">{helperText}</p>}
+                </div>
+              </div>
+              <FormErrorMessage error={fieldState.error as any} id={errId} />
+            </>
+          );
+        }}
+      />
+    </div>
+  );
+}
+
 export function SwitchInput({ 
   name, 
   label, 

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { TextInput, SwitchInput, MultiToggleGroupInput, ToggleGroupInput } from "./FormFields";
+import { TextInput, SwitchInput, CheckboxInput, MultiToggleGroupInput, ToggleGroupInput } from "./FormFields";
 import { toast } from "sonner";
 import { EditLoginProfileSchema, EditLoginProfileValues, EditLoginProfileUpdatePayload } from "@/types/forms";
 import { MASTER_OPTIONS } from "@/lib/constants";
@@ -274,11 +274,13 @@ export function EditLoginProfile({
       />
       </div>
 
-      <SwitchInput 
-        name="client_confirmation" 
-        label="I confirm that I am not a financial advisor, and I am willing to be contacted by IME to understand their services." 
-        control={control} 
+      <div className="font-semibold bg-gray-100 p-2 rounded-md">
+      <CheckboxInput
+        name="client_confirmation"
+        label="I confirm that I am not a financial advisor, and I am willing to be contacted by IME to understand their services."
+        control={control}
       />
+      </div>
 
       {can(userRoles, 'internal', 'link_login_lead') && (
         <div className="border-b border-gray-200 pb-6">

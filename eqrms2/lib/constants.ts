@@ -259,7 +259,7 @@ export const MASTER_OPTIONS = {
   ],
   
   fundPerformanceAsOf: [
-    "Performance as of: 31-Jan-26 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses (some AIF returns are post-tax). Global fund returns are in USD or in the funds currency"
+    "Performance as of: 28-Feb-26 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses (some AIF returns are post-tax). Global fund returns are in USD or in the funds currency"
   ],
   
   openForSubscriptionTag: [
@@ -435,6 +435,17 @@ export const MASTER_OPTIONS = {
   course: [
     "Financial Planning",
     "Investment Mandate",],
+
+
+  //kyc
+  poaType: ["OVD - Aadhar","OVD - Passport","OVD - Driving License","OVD - Voters ID"],
+  maritalStatus: ["Unmarried","Married","Others"],
+  bankProofType: ["Cheque Copy","Bank Statement"],
+  gender: ["Male","Female","Others"],
+  annualIncome: ["Upto 5 lakhs","5-10 lakhs","10-25 lakhs","25-50 lakhs","50 lakhs - 1 cr","1-10 cr",">10 cr"],
+  occupationalDetails: ["Service (Pvt)","Service (Public)","Self-employed","Professional","Business","Housewife","Retired","Agriculture/Farming","Student","Others"],
+  sourceOfWealth: ["Salary","Business","Gift","Rental Income","Prize Money","Royalty","Savings", "Others" ],
+
 } as const;
 
 // Type definitions for TypeScript support
