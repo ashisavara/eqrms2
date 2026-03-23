@@ -187,9 +187,11 @@ export default async function FundsPage() {
                         <TabsContent value="Global-Equity">
                             <h3 className="ime-table-heading"> Trailing Returns </h3>
                             <TableCategories data={GlobalEqcategory} columnType="summary" userRoles={userRoles} />
+                            <PerformanceFootnote />
                             <div className="hidden md:block">
                               <h3 className="ime-table-heading mt-6"> Annual Returns </h3>
                               <TableCategories data={GlobalEqcategory} columnType="annual" userRoles={userRoles} />
+                              <PerformanceFootnote />
                             </div>
                         </TabsContent>
                         <TabsContent value="Global-Others">

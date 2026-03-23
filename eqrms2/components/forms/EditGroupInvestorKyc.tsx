@@ -104,6 +104,12 @@ function EditGroupInvestorKycForm({
     <form onSubmit={handleSubmit(onSubmit)} className="w-full px-4 pt-3 pb-2 text-xs space-y-3">
       <Toaster position="top-center" toastOptions={{ className: "!bg-green-100 !text-green-900" }} />
 
+      <div className="border-box text-sm">
+        <p>**PAN:** Clearly visible | self-attested | 3 copies if bank account, else 2  </p>
+        <p>**PoA:** Documents accepted - Aadhaar, Passport, Voter ID, Driving LicenseBefore proceeding we must note that in case of E-Aadhaar green tick must be validated, smart card is not allowed and ensure  that Passport & Driving License has not been expired.</p>
+        <p>**Bank Proof: Cheque** (name printed on cheque) | **Account Statement** (not more than 3m old)</p>
+      </div>
+
       {/* Core */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         <TextInput name="investor_name" label="Investor Name" control={control} />
