@@ -426,7 +426,7 @@ export const MASTER_OPTIONS = {
   comfortSpecificProducts: ["Locked-in (3-5 yrs)","Locked-in (5+ yrs)","Complex Pdts","Boutique Managers","New Funds/Categories"],
 
   investmentQuery:[
-    "International","Fixed Income","NRI","Equity","Fixed Income","Alternatives","Unlisted","IME","Advice"
+    "International","Fixed Income","NRI","Equity","Fixed Income","Alternatives","Unlisted","IME","Advice","PMS AIF"
   ],
 
   // Academy Lesson

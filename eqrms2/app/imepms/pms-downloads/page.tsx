@@ -40,7 +40,17 @@ export default function ImeBespokeStrategiesPage() {
                 <a href="https://drive.google.com/file/d/1boOPv7bIeCXxpaaJEDTT8x7Tez0vdYd0/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Factsheet</a>
                 </Button>
                 </div>
-            
+
+                <h2>Funding Your Account</h2>
+                <div className="border-box">
+                <p>Please note, you can fund your PMS account via a NEFT/RTGS transfer to the PMS bank account. Please connect with your private banker for these details.</p>
+                <p>Payments can also be made via UPI using IME's SEBI-approved official UPI ID - imeportfolio.pms@validhdfc </p>
+                <div className="flex justify-center">
+                  <div className="w-32 flex justify-center">
+                    <img src="https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/imepms/ime-pms-qrcode.jpeg" alt="IME UPI Code" />
+                  </div>
+                </div>
+                </div>
             
     
         </Section>
