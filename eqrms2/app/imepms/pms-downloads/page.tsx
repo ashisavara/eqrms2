@@ -28,7 +28,7 @@ export default function ImeBespokeStrategiesPage() {
                 <a href="https://drive.google.com/file/d/1l9CkW4VaKZcfmfNNf7ycUs3ImplTebv8/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Presentation</a>
                 </Button>
                 <Button>
-                <a href="https://drive.google.com/file/d/1Yjw3UXBaaJ_H671jmsDmL8YyGb8Ixenh/view?usp=sharing" target="_blank" rel="noopener noreferrer">Factsheet</a>
+                <a href="https://drive.google.com/file/d/1xeEfP-_wYuEqz7hRuCmlTrT26dApoqn4/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Factsheet</a>
                 </Button>
                 </div>
                 <h2>IME Concentrated Microtrends</h2>
@@ -37,7 +37,7 @@ export default function ImeBespokeStrategiesPage() {
                 <a href="https://drive.google.com/file/d/1oTCFFDZQGWYL_KijnqJ4Aipp_kU1qups/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Presentation</a>
                 </Button>
                 <Button>
-                <a href="https://drive.google.com/file/d/1boOPv7bIeCXxpaaJEDTT8x7Tez0vdYd0/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Factsheet</a>
+                <a href="https://drive.google.com/file/d/1wm0LYPGoV-pgi59OB9ZweNdrD0x3Y9Tx/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Factsheet</a>
                 </Button>
                 </div>
 
