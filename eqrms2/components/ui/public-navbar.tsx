@@ -100,7 +100,7 @@ export function PublicNavBar() {
             {/* Create Account Button */}
             <div className="flex-shrink-0">
               <Button asChild>
-                <Link href="/app">Access IME RMS</Link>
+                <Link href="/app">IME RMS</Link>
               </Button>
             </div>
           </div>

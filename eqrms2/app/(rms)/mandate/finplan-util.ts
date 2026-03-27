@@ -1,6 +1,178 @@
+import { addMonths } from "date-fns";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { Investments } from "@/types/investment-detail";
 import { SipDetail } from "@/types/sip-detail";
+
+/** One point per calendar year (AUM at end of December, Rs. lakh). */
+export type ProjectedAumPoint = { year: number; aum: number };
+
+/** Combined chart row: projected AUM line + aggregated FV goal bars (Rs. lakh). */
+export type CombinedFinPlanChartPoint = {
+  year: number;
+  yearLabel: string;
+  aum: number;
+  /** Sum of `fv_goals` for all goals with this calendar year as goal_date. */
+  fvGoals: number;
+};
+
+const DEFAULT_HORIZON_YEARS_NO_GOALS = 30;
+
+function goalCalendarYearMap(finGoals: FinGoalsDetail[]): Map<number, number> {
+  const map = new Map<number, number>();
+  finGoals.forEach((g) => {
+    map.set(g.goal_id, new Date(g.goal_date).getFullYear());
+  });
+  return map;
+}
+
+function resolveGoalYear(goalId: number | null | undefined, goalYearById: Map<number, number>): number | undefined {
+  if (goalId == null || !Number.isFinite(goalId)) return undefined;
+  return goalYearById.has(goalId) ? goalYearById.get(goalId) : undefined;
+}
+
+/**
+ * Year-wise projected total AUM (investments + SIP corpus) on calendar-year boundaries.
+ * Simulates month-by-month from the start of the current month through December of the end year.
+ */
+export function buildProjectedAumByCalendarYear(
+  finGoals: FinGoalsDetail[],
+  investments: Investments[],
+  sips: SipDetail[]
+): ProjectedAumPoint[] {
+  const goalYearById = goalCalendarYearMap(finGoals);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const startYear = today.getFullYear();
+
+  const maxGoalYear =
+    finGoals.length > 0
+      ? Math.max(...finGoals.map((g) => new Date(g.goal_date).getFullYear()))
+      : startYear - 1;
+
+  let endYear = Math.max(startYear, maxGoalYear);
+  if (finGoals.length === 0) {
+    endYear = startYear + DEFAULT_HORIZON_YEARS_NO_GOALS;
+  }
+
+  if (investments.length === 0 && sips.length === 0) {
+    return [];
+  }
+
+  type InvSim = { balance: number; monthlyR: number; goalYear: number | undefined };
+  type SipSim = {
+    balance: number;
+    monthsLeft: number;
+    monthlyPaymentLakh: number;
+    monthlyR: number;
+    goalYear: number | undefined;
+  };
+
+  const invState: InvSim[] = investments.map((inv) => ({
+    balance: inv.cur_amt || 0,
+    monthlyR: ((inv.exp_return || 0) / 100) / 12,
+    goalYear: resolveGoalYear(inv.goal_id, goalYearById),
+  }));
+
+  const sipState: SipSim[] = sips.map((sip) => ({
+    balance: 0,
+    monthsLeft: Math.max(0, sip.months_left || 0),
+    monthlyPaymentLakh: (sip.sip_amount || 0) / 100000,
+    monthlyR: ((sip.exp_return || 0) / 100) / 12,
+    goalYear: resolveGoalYear(sip.goal_id, goalYearById),
+  }));
+
+  const results: ProjectedAumPoint[] = [];
+  let cursor = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  while (true) {
+    const y = cursor.getFullYear();
+    const m = cursor.getMonth();
+    if (y > endYear) break;
+
+    for (const inv of invState) {
+      if (inv.goalYear !== undefined && y >= inv.goalYear) {
+        inv.balance = 0;
+      }
+    }
+    for (const s of sipState) {
+      if (s.goalYear !== undefined && y >= s.goalYear) {
+        s.balance = 0;
+      }
+    }
+
+    for (const inv of invState) {
+      if (inv.goalYear !== undefined && y >= inv.goalYear) continue;
+      inv.balance *= 1 + inv.monthlyR;
+    }
+
+    for (const s of sipState) {
+      if (s.goalYear !== undefined && y >= s.goalYear) continue;
+      s.balance *= 1 + s.monthlyR;
+      if (s.monthsLeft > 0) {
+        s.balance += s.monthlyPaymentLakh;
+        s.monthsLeft -= 1;
+      }
+    }
+
+    const total =
+      invState.reduce((acc, inv) => acc + inv.balance, 0) + sipState.reduce((acc, s) => acc + s.balance, 0);
+
+    if (m === 11) {
+      results.push({ year: y, aum: total });
+    }
+
+    if (y === endYear && m === 11) break;
+
+    cursor = addMonths(cursor, 1);
+  }
+
+  return results;
+}
+
+/** Sums `fv_goals` by calendar year of `goal_date` (Rs. lakh). */
+export function aggregateFvGoalsByGoalCalendarYear(finGoals: FinGoalsDetail[]): Map<number, number> {
+  const map = new Map<number, number>();
+  finGoals.forEach((g) => {
+    const y = new Date(g.goal_date).getFullYear();
+    map.set(y, (map.get(y) ?? 0) + (g.fv_goals || 0));
+  });
+  return map;
+}
+
+/**
+ * Aligns projected AUM points with aggregated FV goals per calendar year for a combined bar + line chart.
+ * When there are no investment/SIP rows, still builds a year range from the current year through the latest goal year (AUM = 0).
+ */
+export function mergeAumWithFvGoalsByYear(
+  aumSeries: ProjectedAumPoint[],
+  finGoals: FinGoalsDetail[]
+): CombinedFinPlanChartPoint[] {
+  const fvByYear = aggregateFvGoalsByGoalCalendarYear(finGoals);
+  const startYear = new Date().getFullYear();
+
+  if (aumSeries.length === 0) {
+    if (finGoals.length === 0) return [];
+    const maxGoalYear = Math.max(...finGoals.map((g) => new Date(g.goal_date).getFullYear()));
+    const endY = Math.max(startYear, maxGoalYear);
+    const out: CombinedFinPlanChartPoint[] = [];
+    for (let y = startYear; y <= endY; y++) {
+      out.push({
+        year: y,
+        yearLabel: String(y),
+        aum: 0,
+        fvGoals: fvByYear.get(y) ?? 0,
+      });
+    }
+    return out;
+  }
+
+  return aumSeries.map((p) => ({
+    year: p.year,
+    yearLabel: String(p.year),
+    aum: p.aum,
+    fvGoals: fvByYear.get(p.year) ?? 0,
+  }));
+}
 
 /**
  * Step 1: Calculate years to goal

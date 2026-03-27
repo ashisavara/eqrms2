@@ -74,7 +74,7 @@ export default async function AmcPage({ params }: PageProps) {
           {(can(userRoles,'rms','view_all_funds')) && (
             <>
             {AMC.mkt_material_link && AMC.mkt_material_link.trim() !== "" && (
-              <a href={AMC.mkt_material_link} target="_blank" className="blue-hyperlink"> Presentations</a>
+              <a href={AMC.mkt_material_link} target="_blank" className="text-white blue-hyperlink"> | Presentations</a>
             )}
             </>
           )}

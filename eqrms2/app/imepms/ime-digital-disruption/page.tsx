@@ -74,7 +74,7 @@ export default function ImeDigitalDisruptionPage() {
                 <a href="https://drive.google.com/file/d/1l9CkW4VaKZcfmfNNf7ycUs3ImplTebv8/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Presentation</a>
                 </Button>
                 <Button>
-                <a href="https://drive.google.com/file/d/1Yjw3UXBaaJ_H671jmsDmL8YyGb8Ixenh/view?usp=sharing" target="_blank" rel="noopener noreferrer">Factsheet</a>
+                <a href="https://drive.google.com/file/d/1xeEfP-_wYuEqz7hRuCmlTrT26dApoqn4/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Factsheet</a>
                 </Button>
                 </div>
                 <YouTube url="https://www.youtube.com/watch?v=th8i3XYMXo8" />

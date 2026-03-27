@@ -5,7 +5,12 @@ import { MultiSelectFilter } from "@/components/data-table/MultiSelectFilter";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { Investments } from "@/types/investment-detail";
 import { SipDetail } from "@/types/sip-detail";
-import { orchestrateCalculations } from "./finplan-util";
+import {
+  buildProjectedAumByCalendarYear,
+  mergeAumWithFvGoalsByYear,
+  orchestrateCalculations,
+} from "./finplan-util";
+import FinPlanAumProjectionChart from "./FinPlanAumProjectionChart";
 import TableFinPlan from "./TableFingoals";
 import TableInvFinPlan from "./TableInvFinPlan";
 import TableSipFinPlan from "./TableSipFinPlan";
@@ -67,6 +72,21 @@ export default function FinPlanClientWrapper({
     );
   }, [calculatedData.calculatedSips, selectedGoals]);
 
+  const projectedAumSeries = useMemo(
+    () =>
+      buildProjectedAumByCalendarYear(
+        filteredFinGoals,
+        filteredInvestmentFinPlan,
+        filteredSipFinGoals
+      ),
+    [filteredFinGoals, filteredInvestmentFinPlan, filteredSipFinGoals]
+  );
+
+  const finPlanChartData = useMemo(
+    () => mergeAumWithFvGoalsByYear(projectedAumSeries, filteredFinGoals),
+    [projectedAumSeries, filteredFinGoals]
+  );
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-bold pt-2">Financial Planning</h3>
@@ -103,12 +123,16 @@ export default function FinPlanClientWrapper({
             formatter={(value) => `${value.toFixed(1)}`}
           />
         </div>
+        <div className="border-box my-4 p-4">
+        <FinPlanAumProjectionChart data={finPlanChartData} />
+        </div>
         
         <TableFinPlan data={filteredFinGoals} />
         <p className="helper-text"><span className="font-bold">Note: </span> <br/> - All values in Rs. lakh - apart from SIP (Rs.), Achieved (%), Yrs to goal (years) | PV (Present Value), FV (Future Value) | 
         <br/>- FV Goal, FV Inv & Pending Amt represent the goal cost, value of investments and the shortfall as on the goal date. Lumpsum Req & SIP Req are the amounts required to meet this shortfall. |
         <br/>- Key Assumptions - FV Inv (LT category returns), PV Goal (inflation), Lumpsum Req & SIP Req (rate of return chosen to fund the goal)
         <br/>- Shortfalls in near-term goals can lead to exaggerated SIP Req due to a lack of time to fund the goals. These are best funded via lumpsums.  
+        <br/>- The year wise chart has the following imp assumptions - (a) Goal-linked investments and SIPs are treated as fully redeemed from the first month of the goal's calendar year; (b) unlinked positions keep growing at each investments expected return until the chart horizon.(c) FV Goal (bars): represents the total future value of goals coming due in a particular year. All investments linked to that goal are assumed to be redeemed in that year - with an assumption that excess value gets spent, and any shortfalls for the goal are managed by the investor - by either spending less, taking a loan or funding from some other source.
         </p>
         <div className="mt-6 hidden md:block">
           <TableGoalDesc data={filteredFinGoals} />
