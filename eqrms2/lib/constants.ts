@@ -159,6 +159,7 @@ export const MASTER_OPTIONS = {
     { value: "8b4d186e-6ab3-43ae-b719-034f6ea50f82", label: "Manisha Ravindran" },
     { value: "bccf827f-03c9-4472-94cb-bc4ee094463f", label: "Shagun Luthra" },
     { value: "7b679d91-fea4-4dca-b6b6-ba513529af07", label: "Ananya Bhadauria" },
+    { value: "2f75eabd-b45d-486d-bb3a-82617353aa43", label: "Dev Bhuta" },
   ] as const,
 
   primaryResonsibility: [
@@ -259,7 +260,7 @@ export const MASTER_OPTIONS = {
   ],
   
   fundPerformanceAsOf: [
-    "Performance as of: 28-Feb-26 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses (some AIF returns are post-tax). Global fund returns are in USD or in the funds currency"
+    "Performance as of: 28-Feb-26 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses (some AIF returns are post-tax). Global fund returns are in USD or in the funds currency. Category return ranges are only for illustrative purposes and are indicative of broad longer-term return averages in a category - this is not meant to be indicative of future or potential returns, and substantial year on year deviations are likely"
   ],
   
   openForSubscriptionTag: [
@@ -438,6 +439,9 @@ export const MASTER_OPTIONS = {
 
 
   //kyc
+  investorType: ["Individual","NRI","Non-Individual","Foriegner","Others"],
+  kycStatus: ["Validated","Verified","On-Hold/Rejected"],
+  kra: ["CAMS","CVL","NDML","NSE/Dotex","Karvy"],
   poaType: ["OVD - Aadhar","OVD - Passport","OVD - Driving License","OVD - Voters ID"],
   maritalStatus: ["Unmarried","Married","Others"],
   bankProofType: ["Cheque Copy","Bank Statement"],

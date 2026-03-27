@@ -113,9 +113,21 @@ function EditGroupInvestorKycForm({
       {/* Core */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         <TextInput name="investor_name" label="Investor Name" control={control} />
-        <TextInput name="investor_type" label="Investor Type" control={control} />
-        <TextInput name="kyc_status" label="KYC Status" control={control} />
-        <TextInput name="kra" label="KRA" control={control} />
+        <SelectInput name="investor_type" label="Investor Type" control={control} options={MASTER_OPTIONS.investorType.map(v => ({ value: v, label: v }))} valueType="string" />
+        <SelectInput
+          name="kyc_status"
+          label="KYC Status"
+          control={control}
+          options={MASTER_OPTIONS.kycStatus.map(v => ({ value: v, label: v }))}
+          valueType="string"
+        />
+        <SelectInput
+          name="kra"
+          label="KRA"
+          control={control}
+          options={MASTER_OPTIONS.kra.map(v => ({ value: v, label: v }))}
+          valueType="string"
+        />
         <TextInput name="drive_link" label="Drive Link" control={control} />
       </div>
 
@@ -128,7 +140,7 @@ function EditGroupInvestorKycForm({
       </div>
 
       {/* Contact & PAN */}
-      <div className="border-t pt-2 grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="border-t-2 border-blue-800 pt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
         <TextInput name="reg_email" label="Registered Email" control={control} />
         <TextInput name="phone_number" label="Phone Number" control={control} />
         <TextInput name="client_name_pan" label="Client Name (PAN)" control={control} />
@@ -137,7 +149,7 @@ function EditGroupInvestorKycForm({
       </div>
 
       {/* Profile */}
-      <div className="border-t pt-2 grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="border-t-2 border-blue-800 pt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
         <SelectInput name="marital_status" label="Marital Status" control={control} options={MASTER_OPTIONS.maritalStatus.map(v => ({ value: v, label: v }))} valueType="string" />
         <SelectInput name="gender" label="Gender" control={control} options={MASTER_OPTIONS.gender.map(v => ({ value: v, label: v }))} valueType="string" />
         <TextInput name="networth" label="Net Worth" control={control} />
@@ -150,7 +162,7 @@ function EditGroupInvestorKycForm({
       </div>
 
       {/* India documentation */}
-      <div className="border-t pt-2 grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="border-t-2 border-blue-800 pt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
         <BooleanToggleInput name="poa_india_bool" label="POA India" control={control} />
         <SelectInput name="poa_india_type" label="POA India Type" control={control} options={MASTER_OPTIONS.poaType.map(v => ({ value: v, label: v }))} valueType="string" />
         <BooleanToggleInput name="bank_proof_bool" label="Bank Proof" control={control} />
@@ -158,7 +170,7 @@ function EditGroupInvestorKycForm({
       </div>
 
       {/* Nominees */}
-      <div className="border-t pt-2 grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="border-t-2 border-blue-800 pt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
         <TextInput name="prime_nominee_name" label="Primary Nominee Name" control={control} />
         <TextInput name="prime_nominee_id" label="Primary Nominee ID" control={control} />
         <TextInput name="prime_nominee_relation" label="Primary Nominee Relation" control={control} />
@@ -166,7 +178,7 @@ function EditGroupInvestorKycForm({
       <ResizableTextArea name="other_nominees" label="Other Nominees" control={control} />
 
       {/* Overseas / NRI */}
-      <div className="border-t pt-2 grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="border-t-2 border-blue-800 pt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
         <BooleanToggleInput name="poa_overseas_bool" label="POA Overseas" control={control} />
         <TextInput name="poa_overseas_type" label="POA Overseas Type" control={control} />
         <TextInput name="tax_id" label="Tax ID" control={control} />
@@ -180,7 +192,7 @@ function EditGroupInvestorKycForm({
       <ResizableTextArea name="citizenship_tin_details" label="Citizenship / TIN Details" control={control} />
 
       {/* Comments */}
-      <div className="border-t pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="border-t-2 border-blue-800 pt-6 grid grid-cols-1 md:grid-cols-2 gap-3">
         <ResizableTextArea name="comments_internal" label="Comments (Internal)" control={control} />
         <ResizableTextArea name="comments_client_facing" label="Comments (Client-facing)" control={control} />
       </div>

@@ -20,7 +20,7 @@ export default async function FundsPage() {
   const [Eqcategory, Debtcategory, Hybridcategory, Altcategory, GlobalEqcategory, GlobalDebtcategory, DomesticAssetClass, GlobalAssetClass, DomesticStructure, GlobalStructure] = await Promise.all([
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile, return_range",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Equity'),  
@@ -29,7 +29,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile, return_range",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Debt'),  
@@ -38,7 +38,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile, return_range",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Hybrid'),  
@@ -47,7 +47,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile, return_range",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Alternatives'),  
@@ -56,7 +56,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile, return_range",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.eq('asset_class_name', 'Global - Equity'),  
@@ -65,7 +65,7 @@ export default async function FundsPage() {
     }),
     supabaseListRead<Category>({
       table: "view_rms_category",
-      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile",
+      columns: "category_id, cat_name, slug, asset_class_name, one_yr, three_yr, five_yr, cat_summary, rms_show, cy_1, cy_2, cy_3, cy_4, cy_5, cy_6, cy_7, cy_8, cy_9, cy_10, category_stance, category_risk_profile, return_range",
       filters: [
         (query) => query.eq('rms_show', true),
         (query) => query.in('asset_class_name', ['Global - Debt', 'Global - Alt']),  

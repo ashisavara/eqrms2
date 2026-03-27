@@ -26,9 +26,15 @@ export default function BlogsClient({ blogs, basePath = "/blogs" }: BlogsClientP
     return text.substring(0, maxLength).trim() + '...';
   };
 
-  const getImageSrc = (featuredImage: string | null): string => {
-    if (featuredImage) return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog/${featuredImage}`;
-    return 'https://hyxycvugnnzjydwscmas.supabase.co/storage/v1/object/public/pages/ime-logo.png';
+  // Must match [slug]/page.tsx: `.../blog${featured_image}` — not `.../blog/${...}`.
+  // If the DB stores a leading slash (e.g. "/file.png"), `blog/` + "/file.png" becomes "blog//file.png" and images fail.
+  const getImageSrc = (featuredImage: string | null | undefined): string => {
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const fallback =
+      `${base ?? "https://hyxycvugnnzjydwscmas.supabase.co"}/storage/v1/object/public/pages/ime-logo.png`;
+    if (!featuredImage || !base) return fallback;
+    const path = featuredImage.startsWith("/") ? featuredImage : `/${featuredImage}`;
+    return `${base}/storage/v1/object/public/blog${path}`;
   };
 
   // Get unique categories from blogs

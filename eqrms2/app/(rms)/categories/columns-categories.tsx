@@ -132,6 +132,16 @@ export const createColumns = (userRoles: string | null): ColumnDef<Category>[] =
     },
   },
   {
+    accessorKey: "return_range",
+    header: "Return Range",  
+    size: 100,
+    cell: ({ getValue }) => {
+      const value = getValue();
+      if (value == null) return null;
+      return <div>{value as string}</div>;
+    },
+  },
+  {
     accessorKey: "cat_summary",
     header: "Summary",  
     size: 800,
