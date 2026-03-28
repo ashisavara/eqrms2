@@ -56,5 +56,13 @@ export type GroupDetail = {
   ret_inflation_pct: number | null;
   ret_yield_post_retirement_pct: number | null;
   ret_corpus_exp_return_corpus_build: number | null;
+  target_equity_pct: number | null;
+  target_debt_pct: number | null;
+  target_hybrid_pct: number | null;
+  target_real_estate_pct: number | null;
+  target_alternatives_pct: number | null;
+  target_global_equity_pct: number | null;
+  target_global_debt_pct: number | null;
+  target_global_alternatives_pct: number | null;
 };
 

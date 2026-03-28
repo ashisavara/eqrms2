@@ -26,6 +26,7 @@ import MandateBox from "@/components/uiComponents/mandate-box";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import { LessonSheet } from "@/app/(rms)/academy/LessonSheet";
 import UserLog from "@/components/rms/UserLog";
+import { EditAssetAllocationButton } from "@/components/forms/EditAssetAllocation";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -161,7 +162,7 @@ export default async function MandatePage() {
               <LessonSheet lessonId={2} lessonName="Importance of your Investment Mandate" courseTitle="Investment Mandate" />
                 { can(userRoles, 'mandate', 'edit_mandate') && (
                   <EditGroupButton groupData={groupData} groupId={groupId} />
-                )} | { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} />)} |
+                )} | { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} />)} | { can(userRoles, 'mandate', 'edit_mandate') && (<EditAssetAllocationButton groupData={groupData} groupId={groupId} />)} |
                   { groupData.google_sheet_link && (<a href={groupData.google_sheet_link} target="_blank" rel="noopener noreferrer" className="blue-hyperlink"> Google Sheet Link
                   </a>
                 )}

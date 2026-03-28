@@ -653,6 +653,47 @@ export const EditGroupSchema = z.object({
 
 export type EditGroupValues = z.infer<typeof EditGroupSchema>;
 
+// -------------------
+// EDIT ASSET ALLOCATION
+// -------------------
+const targetAllocationNumberField = z.preprocess(
+  (value) => value === "" || value == null ? 0 : value,
+  z.coerce.number().int().min(0).max(100)
+);
+
+export const EditAssetAllocationSchema = z
+  .object({
+    target_equity_pct: targetAllocationNumberField,
+    target_debt_pct: targetAllocationNumberField,
+    target_hybrid_pct: targetAllocationNumberField,
+    target_real_estate_pct: targetAllocationNumberField,
+    target_alternatives_pct: targetAllocationNumberField,
+    target_global_equity_pct: targetAllocationNumberField,
+    target_global_debt_pct: targetAllocationNumberField,
+    target_global_alternatives_pct: targetAllocationNumberField,
+  })
+  .superRefine((data, ctx) => {
+    const total =
+      data.target_equity_pct +
+      data.target_debt_pct +
+      data.target_hybrid_pct +
+      data.target_real_estate_pct +
+      data.target_alternatives_pct +
+      data.target_global_equity_pct +
+      data.target_global_debt_pct +
+      data.target_global_alternatives_pct;
+
+    if (total !== 100) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Target allocation total must equal 100%. Current total is ${total}%.`,
+        path: ["target_equity_pct"],
+      });
+    }
+  });
+
+export type EditAssetAllocationValues = z.infer<typeof EditAssetAllocationSchema>;
+
 
 // -------------------
 // Edit LoginProfile
