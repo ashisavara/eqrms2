@@ -163,8 +163,12 @@ export default async function MandatePage() {
                 { can(userRoles, 'mandate', 'edit_mandate') && (
                   <EditGroupButton groupData={groupData} groupId={groupId} />
                 )} | { can(userRoles, 'mandate', 'edit_mandate') && (<RiskProfilerButton groupId={groupId} />)} | { can(userRoles, 'mandate', 'edit_mandate') && (<EditAssetAllocationButton groupData={groupData} groupId={groupId} />)} |
-                  { groupData.google_sheet_link && (<a href={groupData.google_sheet_link} target="_blank" rel="noopener noreferrer" className="blue-hyperlink"> Google Sheet Link
-                  </a>
+                <Link href="/mandate/whiteboard" className="blue-hyperlink">Whiteboard</Link>
+                { groupData.google_sheet_link && (
+                  <>
+                    {" | "}
+                    <a href={groupData.google_sheet_link} target="_blank" rel="noopener noreferrer" className="blue-hyperlink"> Google Sheet Link</a>
+                  </>
                 )}
               </div>
               <MandateBox heading="Progress">

@@ -1,4 +1,6 @@
 // Type definition for client_group table (formerly investment_mandate fields)
+import { JsonValue } from "./user-log";
+
 export type GroupDetail = {
   group_id: number;
   created_at: string;
@@ -64,5 +66,7 @@ export type GroupDetail = {
   target_global_equity_pct: number | null;
   target_global_debt_pct: number | null;
   target_global_alternatives_pct: number | null;
+  excalidraw_json: JsonValue | null;
+  excalidraw_updated_at: string | null;
 };
 
