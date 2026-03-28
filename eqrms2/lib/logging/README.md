@@ -1,6 +1,8 @@
 # RMS User Logging (Concise)
 
-This logging system writes one page-view row to `public.user_logs` from server-rendered RMS pages.
+This logging system writes rows to `public.user_logs` from:
+- page views/events (`UserLog` / `logUserPageView`)
+- DB mutations (`supabaseInsertRow`, `supabaseUpdateRow`, `supabaseDeleteRow`)
 
 ## How to use
 
@@ -36,10 +38,25 @@ import UserLog from "@/components/rms/UserLog";
 3. Logger fetches identity + group + page path
 4. Logger inserts row using `supabaseInsertRow("user_logs", row)`
 
+For DB mutations, write helpers auto-log operation and payload metadata (`mutation_payload`).  
+`entity_title` / `entity_slug` are auto-inferred from payload fields (for example `title`, `name`, `fund_name`, `slug`) when present.  
+Optional semantic metadata can still be passed via helper options to override inference:
+
+```ts
+supabaseUpdateRow(
+  "rms_funds",
+  "fund_id",
+  123,
+  { fund_name: "New Name" },
+  { audit: { entityTitle: "Fund ABC", pagePath: "/funds/abc", doNotLog: false } }
+);
+```
+
 ## Safety behavior
 
 - Skips logging if user is `guest`/`no_role` or `user_id` is missing
 - Errors are swallowed with `console.error` (page should not break)
+- Helper-level mutation logging can be skipped per call with `audit.doNotLog: true`
 
 ## Route checklist
 

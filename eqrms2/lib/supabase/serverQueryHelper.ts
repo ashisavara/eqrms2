@@ -3,6 +3,9 @@
 import { createClient } from "./server"; // Make sure this is your server-side client
 import { createClient as createAnonymousClient } from '@supabase/supabase-js';
 import { blogDetail } from "@/types/blog-detail";
+import { getCachedSessionIdentity } from "@/lib/auth/getUserRoles";
+import { getCurrentGroupId, getCurrentGroupName } from "@/lib/auth/serverGroupMandate";
+import { JsonValue, MutationAuditMeta, MutationOperation, UserLogInsert } from "@/types/user-log";
 
 // Get current user from JWT token (server-side)
 export async function getCurrentUser(): Promise<{ id: string; email?: string } | null> {
@@ -63,6 +66,198 @@ type QueryOptions = {
   filters?: ((query: any) => any)[];
 };
 
+export type SupabaseMutationLogOptions = {
+  audit?: MutationAuditMeta;
+};
+
+const MUTATION_SENSITIVE_KEYS = new Set([
+  "password",
+  "otp",
+  "token",
+  "access_token",
+  "refresh_token",
+  "authorization",
+  "api_key",
+  "secret",
+]);
+
+function redactForAudit(value: unknown): JsonValue {
+  if (value === undefined) return null;
+  if (
+    value === null ||
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => redactForAudit(item));
+  }
+
+  if (typeof value === "object") {
+    const output: Record<string, JsonValue> = {};
+    Object.entries(value as Record<string, unknown>).forEach(([key, nested]) => {
+      output[key] = MUTATION_SENSITIVE_KEYS.has(key.toLowerCase()) ? "[REDACTED]" : redactForAudit(nested);
+    });
+    return output;
+  }
+
+  return String(value);
+}
+
+function inferEntityId(
+  operation: MutationOperation,
+  matchValue: string | number | undefined,
+  audit?: MutationAuditMeta
+): number | null {
+  if (audit?.entityId != null) return audit.entityId;
+  if (operation === "Insert") return null;
+  return typeof matchValue === "number" ? matchValue : null;
+}
+
+function pickFirstString(values: unknown[]): string | null {
+  for (const value of values) {
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (trimmed) return trimmed;
+    }
+  }
+  return null;
+}
+
+function inferFieldFromPayload(payload: unknown, prioritizedKeys: string[]): string | null {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return null;
+  const record = payload as Record<string, unknown>;
+
+  const exactValues = prioritizedKeys.map((key) => record[key]);
+  const exactMatch = pickFirstString(exactValues);
+  if (exactMatch) return exactMatch;
+
+  const lowerKeyEntries = Object.entries(record).map(([key, value]) => [key.toLowerCase(), value] as const);
+  const fuzzyValues: unknown[] = [];
+
+  lowerKeyEntries.forEach(([key, value]) => {
+    if (prioritizedKeys.includes(key)) {
+      fuzzyValues.push(value);
+      return;
+    }
+
+    if (
+      key.endsWith("_name") ||
+      key.endsWith("_title") ||
+      key.endsWith("_slug") ||
+      key === "name" ||
+      key === "title" ||
+      key === "slug" ||
+      key === "subject"
+    ) {
+      fuzzyValues.push(value);
+    }
+  });
+
+  return pickFirstString(fuzzyValues);
+}
+
+function inferEntityTitleFromPayload(payload: unknown): string | null {
+  return inferFieldFromPayload(payload, [
+    "title",
+    "name",
+    "fund_name",
+    "group_name",
+    "lead_name",
+    "investor_name",
+    "amc_name",
+    "cat_name",
+    "asset_class_name",
+    "structure_name",
+    "company_name",
+    "ime_name",
+    "blog_title",
+    "lesson_name",
+    "webinar_title",
+    "whitepaper_title",
+    "query_title",
+    "goal_description",
+  ]);
+}
+
+function inferEntitySlugFromPayload(payload: unknown): string | null {
+  return inferFieldFromPayload(payload, ["slug", "fund_slug", "amc_slug", "asset_class_slug", "structure_slug"]);
+}
+
+function buildDeleteMutationPayload(
+  matchKey: string,
+  matchValue: string | number,
+  additionalFilters?: unknown
+): Record<string, unknown> {
+  const payload: Record<string, unknown> = { [matchKey]: matchValue };
+
+  if (
+    additionalFilters &&
+    typeof additionalFilters === "object" &&
+    !Array.isArray(additionalFilters)
+  ) {
+    Object.assign(payload, additionalFilters as Record<string, unknown>);
+  }
+
+  return payload;
+}
+
+async function insertMutationAuditLog({
+  table,
+  operation,
+  matchKey,
+  matchValue,
+  mutationPayload,
+  options,
+}: {
+  table: string;
+  operation: MutationOperation;
+  matchKey?: string;
+  matchValue?: string | number;
+  mutationPayload?: unknown;
+  options?: SupabaseMutationLogOptions;
+}): Promise<void> {
+  if (table === "user_logs") return;
+  if (options?.audit?.doNotLog) return;
+
+  try {
+    const identity = await getCachedSessionIdentity();
+    if (identity.userRole === "guest" || identity.userRole === "no_role") return;
+    if (!identity.userId) return;
+
+    const groupId = await getCurrentGroupId();
+    const groupName = await getCurrentGroupName();
+    const segment = options?.audit?.segment || `${operation}:${table}`;
+    const inferredTitle = inferEntityTitleFromPayload(mutationPayload);
+    const inferredSlug = inferEntitySlugFromPayload(mutationPayload);
+
+    const row: UserLogInsert = {
+      user_id: identity.userId,
+      user_role: identity.userRole,
+      user_name: identity.userName,
+      group_id: groupId,
+      group_name: groupName,
+      segment,
+      entity_id: inferEntityId(operation, matchValue, options?.audit),
+      entity_slug: options?.audit?.entitySlug ?? inferredSlug,
+      entity_title: options?.audit?.entityTitle ?? inferredTitle,
+      page_path: options?.audit?.pagePath ?? null,
+      mutation_payload: redactForAudit(mutationPayload),
+    };
+
+    const supabase = await createClient();
+    const { error } = await supabase.from("user_logs").insert(row);
+    if (error) {
+      console.error("Mutation audit log insert error:", error);
+    }
+  } catch (error) {
+    console.error("Mutation audit logging failed:", error);
+  }
+}
+
 // Fetch a single row from Supabase (server-side)
 export async function supabaseSingleRead<T = any>({ table, columns = "*", filters = [] }: QueryOptions): Promise<T | null> {
   const supabase = await createClient();
@@ -102,7 +297,8 @@ export async function supabaseUpdateRow<T>(
   table: string,
   matchKey: string,
   matchValue: string | number,
-  updateData: T
+  updateData: T,
+  options?: SupabaseMutationLogOptions
 ): Promise<void> {
   const supabase = await createClient(); // from ./server
   const { error } = await supabase
@@ -114,12 +310,22 @@ export async function supabaseUpdateRow<T>(
     console.error("Supabase error:", error);
     throw error;
   }
+
+  await insertMutationAuditLog({
+    table,
+    operation: "Update",
+    matchKey,
+    matchValue,
+    mutationPayload: updateData,
+    options,
+  });
 }
 
 // Insert a single row into Supabase (server-side)
 export async function supabaseInsertRow<T>(
   table: string,
-  insertData: T
+  insertData: T,
+  options?: SupabaseMutationLogOptions
 ): Promise<void> {
   const supabase = await createClient(); // from ./server
   const { error } = await supabase
@@ -130,6 +336,13 @@ export async function supabaseInsertRow<T>(
     console.error("Supabase error:", error);
     throw error;
   }
+
+  await insertMutationAuditLog({
+    table,
+    operation: "Insert",
+    mutationPayload: insertData,
+    options,
+  });
 }
 
 // Delete rows from Supabase (server-side)
@@ -137,7 +350,8 @@ export async function supabaseDeleteRow<T>(
   table: string,
   matchKey: string,
   matchValue: string | number,
-  additionalFilters?: T
+  additionalFilters?: T,
+  options?: SupabaseMutationLogOptions
 ): Promise<void> {
   const supabase = await createClient(); // from ./server
   let query = supabase.from(table).delete().eq(matchKey, matchValue);
@@ -154,6 +368,15 @@ export async function supabaseDeleteRow<T>(
     console.error("Supabase error:", error);
     throw error;
   }
+
+  await insertMutationAuditLog({
+    table,
+    operation: "Delete",
+    matchKey,
+    matchValue,
+    mutationPayload: buildDeleteMutationPayload(matchKey, matchValue, additionalFilters),
+    options,
+  });
 }
 
 // Utility function to fetch and map options for select, radio, or checkbox inputs
