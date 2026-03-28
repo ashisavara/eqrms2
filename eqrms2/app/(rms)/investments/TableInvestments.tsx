@@ -41,6 +41,16 @@ interface TableInvestmentsProps {
   investorOptions: { value: string; label: string }[];
   userRoles: string;
   portfolioReallocationThoughts?: string;
+  targetAllocations?: {
+    target_equity_pct: number | null;
+    target_debt_pct: number | null;
+    target_hybrid_pct: number | null;
+    target_real_estate_pct: number | null;
+    target_alternatives_pct: number | null;
+    target_global_equity_pct: number | null;
+    target_global_debt_pct: number | null;
+    target_global_alternatives_pct: number | null;
+  };
   groupId: number | null;
   favFunds?: RmsFundsScreener[];
   favStructure?: FavStructure[];
@@ -49,7 +59,7 @@ interface TableInvestmentsProps {
   catPerformance?: Category[];
 }
 
-export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, groupId, favFunds = [], favStructure = [], favAssetClass = [], favCategory = [], catPerformance = [] }: TableInvestmentsProps) {
+export default function TableInvestments({ data, sipData = [], stpData = [], investorOptions, userRoles, portfolioReallocationThoughts, targetAllocations, groupId, favFunds = [], favStructure = [], favAssetClass = [], favCategory = [], catPerformance = [] }: TableInvestmentsProps) {
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(createColumns(userRoles), 'fund_name');
   
@@ -142,6 +152,49 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
       filteredData.filter(item => item.amt_change != null && item.amt_change !== 0), 
       [filteredData]
     );
+
+    const snapshotRows = useMemo(() => [
+      { label: "Total Purchase", value: `Rs. ${(aggregations.pur_amt || 0).toFixed(1)} lakh`, valueClassName: "" },
+      { label: "Current Value", value: `Rs. ${(aggregations.cur_amt || 0).toFixed(1)} lakh`, valueClassName: "" },
+      {
+        label: "Total Gain/Loss",
+        value: `Rs. ${(aggregations.gain_loss || 0).toFixed(1)} lakh`,
+        valueClassName: (aggregations.gain_loss || 0) > 0 ? "text-green-700" : (aggregations.gain_loss || 0) < 0 ? "text-red-700" : "",
+      },
+      { label: "Total SIP", value: sipTotal.toFixed(1), valueClassName: "" },
+      { label: "Total STP", value: stpTotal.toFixed(1), valueClassName: "" },
+    ], [aggregations.gain_loss, aggregations.cur_amt, aggregations.pur_amt, sipTotal, stpTotal]);
+
+    const allocationComparisonRows = useMemo(() => {
+      const targetByAssetClass: { name: string; target: number }[] = [
+        { name: "Equity", target: targetAllocations?.target_equity_pct ?? 0 },
+        { name: "Debt", target: targetAllocations?.target_debt_pct ?? 0 },
+        { name: "Hybrid", target: targetAllocations?.target_hybrid_pct ?? 0 },
+        { name: "Real Estate", target: targetAllocations?.target_real_estate_pct ?? 0 },
+        { name: "Alternatives", target: targetAllocations?.target_alternatives_pct ?? 0 },
+        { name: "Global - Equity", target: targetAllocations?.target_global_equity_pct ?? 0 },
+        { name: "Global - Debt", target: targetAllocations?.target_global_debt_pct ?? 0 },
+        { name: "Global - Alt", target: targetAllocations?.target_global_alternatives_pct ?? 0 },
+      ];
+
+      const totalCurrent = filteredData.reduce((sum, row) => sum + (row.cur_amt || 0), 0);
+      const actualByAssetClass = filteredData.reduce<Record<string, number>>((acc, row) => {
+        const key = row.asset_class_name || "";
+        if (!key) return acc;
+        acc[key] = (acc[key] || 0) + (row.cur_amt || 0);
+        return acc;
+      }, {});
+
+      return targetByAssetClass
+        .map((row) => {
+          const currentAmt = actualByAssetClass[row.name] || 0;
+          const actual = totalCurrent > 0 ? Math.round((currentAmt / totalCurrent) * 100) : 0;
+          const target = Math.round(row.target);
+          const deviation = actual - target;
+          return { ...row, target, actual, deviation };
+        })
+        .filter((row) => row.target > 0 || row.actual > 0);
+    }, [filteredData, targetAllocations]);
     
     return (
       <div className="space-y-4">
@@ -173,35 +226,65 @@ export default function TableInvestments({ data, sipData = [], stpData = [], inv
             <TabsTrigger value="reallocations">Reallocation</TabsTrigger>
           </TabsList>
           <TabsContent value="allocations">
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
-              <AggregateCard 
-                title="Total Purchase" 
-                value={aggregations.pur_amt || 0}
-                formatter={(value) => `Rs. ${value.toFixed(1)} lakh`}
-              />
-              <AggregateCard 
-                title="Current Value" 
-                value={aggregations.cur_amt || 0}
-                formatter={(value) => `Rs. ${value.toFixed(1)} lakh`}
-                className="bg-blue-100"
-              />
-              <AggregateCard 
-                title="Total Gain/Loss" 
-                value={aggregations.gain_loss || 0}
-                formatter={(value) => `Rs. ${value.toFixed(1)} lakh`}
-                className={aggregations.gain_loss >= 0 ? "bg-green-200" : "bg-red-200"}
-              />
-              <AggregateCard 
-                  title="Total SIP" 
-                  value={sipTotal}
-                  formatter={(value) => `${value.toFixed(1)}`}
-                />
-                <AggregateCard 
-                  title="Total STP" 
-                  value={stpTotal}
-                  formatter={(value) => `${value.toFixed(1)}`}
-                />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto mt-6">
+            <div className="rounded-lg border">
+              <div className="px-4 py-1 border-b bg-gray-200">
+                <h3 className="font-semibold text-center">Portfolio Snapshot</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <tbody>
+                    {snapshotRows.map((row) => (
+                      <tr key={row.label} className="border-t">
+                        <td className="p-2">{row.label}</td>
+                        <td className={`p-2 text-right font-medium ${row.valueClassName}`}>{row.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
+
+            <div className="rounded-lg border">
+              <div className="px-4 py-1 border-b bg-gray-200">
+                <h3 className="font-semibold text-center">Target vs Actual Allocation</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-muted/40">
+                      <th className="text-left p-2 font-medium">Asset Class</th>
+                      <th className="text-right p-2 font-medium">Target %</th>
+                      <th className="text-right p-2 font-medium">Actual %</th>
+                      <th className="text-right p-2 font-medium">Deviation %</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allocationComparisonRows.length > 0 ? (
+                      allocationComparisonRows.map((row) => (
+                        <tr key={row.name} className="border-t">
+                          <td className="p-2">{row.name}</td>
+                          <td className="p-2 text-right">{row.target}%</td>
+                          <td className="p-2 text-right">{row.actual}%</td>
+                          <td className={`p-2 text-right font-medium ${row.deviation > 0 ? "text-green-700" : row.deviation < 0 ? "text-red-700" : "text-muted-foreground"}`}>
+                            {row.deviation > 0 ? `+${row.deviation}%` : `${row.deviation}%`}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="p-3 text-center text-muted-foreground">
+                          No target or actual allocation data available for current filters.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <p className="px-4 py-2 text-xs text-muted-foreground">Actual values are based on current filters.</p>
+            </div>
+          </div>
+
             <div className="mt-6 w-full max-w-6xl mx-auto px-2">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <PieChart 

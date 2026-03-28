@@ -9,6 +9,18 @@ import { FavFunds, FavCategory, FavStructure, FavAssetClass } from "@/types/favo
 import { RmsFundsScreener } from "@/types/funds-detail";
 import { Category } from "@/types/category-detail";
 
+type GroupAllocationTarget = {
+  portfolio_reallocation_thoughts: string | null;
+  target_equity_pct: number | null;
+  target_debt_pct: number | null;
+  target_hybrid_pct: number | null;
+  target_real_estate_pct: number | null;
+  target_alternatives_pct: number | null;
+  target_global_equity_pct: number | null;
+  target_global_debt_pct: number | null;
+  target_global_alternatives_pct: number | null;
+};
+
 
 // Function to process raw investment data and update existing fields with calculated values
 function processInvestmentData(rawData: any[]): any[] {
@@ -100,9 +112,10 @@ export default async function InvestmentsPage() {
         (query) => query.eq("group_id", groupId)
       ], 
     }),
-    supabaseSingleRead({
+    supabaseSingleRead<GroupAllocationTarget>({
       table: "client_group",
-      columns: "portfolio_reallocation_thoughts",
+      columns:
+        "portfolio_reallocation_thoughts,target_equity_pct,target_debt_pct,target_hybrid_pct,target_real_estate_pct,target_alternatives_pct,target_global_equity_pct,target_global_debt_pct,target_global_alternatives_pct",
       filters: [
         (query) => query.eq("group_id", groupId)
       ],
@@ -161,7 +174,17 @@ export default async function InvestmentsPage() {
             stpData={stp} 
             investorOptions={investorOptions} 
             userRoles={userRoles}
-            portfolioReallocationThoughts={portfolioReallocationThoughts?.portfolio_reallocation_thoughts}
+            portfolioReallocationThoughts={portfolioReallocationThoughts?.portfolio_reallocation_thoughts ?? undefined}
+            targetAllocations={portfolioReallocationThoughts ? {
+              target_equity_pct: portfolioReallocationThoughts.target_equity_pct,
+              target_debt_pct: portfolioReallocationThoughts.target_debt_pct,
+              target_hybrid_pct: portfolioReallocationThoughts.target_hybrid_pct,
+              target_real_estate_pct: portfolioReallocationThoughts.target_real_estate_pct,
+              target_alternatives_pct: portfolioReallocationThoughts.target_alternatives_pct,
+              target_global_equity_pct: portfolioReallocationThoughts.target_global_equity_pct,
+              target_global_debt_pct: portfolioReallocationThoughts.target_global_debt_pct,
+              target_global_alternatives_pct: portfolioReallocationThoughts.target_global_alternatives_pct,
+            } : undefined}
             groupId={groupId}
             favFunds={favFunds}
             favStructure={favStructure}
