@@ -11,6 +11,7 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from "next/link";
+import UserLog from '@/components/rms/UserLog';
 
 export default async function CrmPage() {
     const userRoles = await getUserRoles();
@@ -63,7 +64,7 @@ export default async function CrmPage() {
 
     return (
         <div className="px-4 py-0">
-            
+            <UserLog segment="crm" entityTitle="CRM" pagePath="/crm" entitySlug="crm" />
             <Tabs defaultValue="crm" className="w-full mx-auto mt-6 text-sm">
                 <TabsList className="w-full">
                         <TabsTrigger value="crm">CRM</TabsTrigger>

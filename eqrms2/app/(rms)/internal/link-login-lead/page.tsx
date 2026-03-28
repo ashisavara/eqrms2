@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AddLeadButton } from '@/components/forms/AddLeads';
 import { fetchOptions } from '@/lib/supabase/serverQueryHelper';
 import type { OtpHvocDetail } from '@/types/otp-hvoc-detail';
+import UserLog from '@/components/rms/UserLog';
 
 
 // Link Login to Lead functionality
@@ -67,6 +68,7 @@ export default async function LinkLoginLeadPage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
+      <UserLog segment="internal" entityTitle="Link Login Lead" pagePath="/internal/link-login-lead" entitySlug="internal-link-login-lead" />
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Link Login to Lead</h1>
         <p className="helper-text">

@@ -10,6 +10,7 @@ import { TableStructure } from "@/app/(rms)/structure/TableStructure";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import { LessonSheet } from "@/app/(rms)/academy/LessonSheet";
 import Link from "next/link";
+import UserLog from '@/components/rms/UserLog';
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
@@ -61,6 +62,7 @@ export default async function FundsPage() {
 
   return (
     <div>
+      <UserLog segment="funds" entityTitle="Aggressive Categories" pagePath="/categories/aggressive" entitySlug="categories-aggressive" />
       <RmsPageTitle 
                 title="Aggressive Investor Recommendations" 
                 caption="Shortlisted asset classes, categories & structures for Aggressive investors" 

@@ -7,6 +7,7 @@ import { supabaseSingleRead } from '@/lib/supabase/serverQueryHelper';
 import { useMDXComponents } from '@/mdx-components';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import UserLog from '@/components/rms/UserLog';
 
 export const dynamic = 'force-dynamic';
 
@@ -45,6 +46,7 @@ export default async function PmsBlogDetailPage({ params }: { params: Promise<{ 
 
         return (
             <div className="max-w-4xl mx-auto ime-blog-pag px-6 md:px-0 pt-5">
+                <UserLog segment="internal-public-site" entityId={blogId} entitySlug={blog.slug ?? null} entityTitle={blog.title ?? null} pagePath="/internal/public-site/pmsblog/[id]" />
                 <div className="mb-4 flex justify-end">
                     <Link href={`/internal/public-site/pmsblog/edit/${blogId}`}>
                         <Button variant="outline" className="bg-blue-500 hover:bg-blue-600 text-white">

@@ -123,6 +123,7 @@ export default function FinPlanClientWrapper({
             formatter={(value) => `${value.toFixed(1)}`}
           />
         </div>
+        
         <div className="border-box my-4 p-4">
         <FinPlanAumProjectionChart data={finPlanChartData} />
         </div>

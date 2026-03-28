@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation';
 import TableSales from "./TableSales";
 import TableInteractions from "../TableInteractions";
 import TableCalls from "./TableCalls";
+import UserLog from '@/components/rms/UserLog';
 
 export default async function CrmPage() {
     const userRoles = await getUserRoles();
@@ -48,7 +49,7 @@ export default async function CrmPage() {
 
     return (
         <div className="px-4 py-0">
-            
+            <UserLog segment="crm" entityTitle="CRM Sales" pagePath="/crm/sales" entitySlug="crm-sales" />
             <Tabs defaultValue="crm" className="w-full mx-auto mt-6 text-sm">
                 <TabsList className="w-full">
                         <TabsTrigger value="crm">CRM</TabsTrigger>

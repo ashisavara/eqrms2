@@ -18,7 +18,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import TableCalls from "../sales/TableCalls";
 import { CallsDetail } from "@/types/calls-detail";
 import { AddMeetingNoteButton } from "@/components/forms/AddMeetingNote";
-
+import UserLog from '@/components/rms/UserLog';
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -104,6 +104,7 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
     
     return (
         <div className="ime-crm-detail-page px-4 py-2">
+            <UserLog segment="crm" entityId={Number(id)} entityTitle={lead.lead_name ?? null} pagePath="/crm/[id]" />
             <div className="bg-gray-200 p-4">
                 <div className="grid grid-cols-2 gap-4 text-left">
                     <div className="text-left">

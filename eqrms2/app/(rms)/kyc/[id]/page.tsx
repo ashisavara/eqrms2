@@ -5,6 +5,7 @@ import { getUserRoles } from "@/lib/auth/getUserRoles";
 import { can } from "@/lib/permissions";
 import { redirect } from "next/navigation";
 import { EditGroupInvestorKycButton } from "@/components/forms/EditGroupInvestorKyc";
+import UserLog from '@/components/rms/UserLog';
 
 export const dynamic = "force-dynamic";
 
@@ -61,6 +62,7 @@ export default async function KycInvestorPage({ params }: { params: Promise<{ id
 
   return (
     <div className="px-4 py-3 text-xs space-y-4">
+      <UserLog segment="kyc" entityId={Number(id)} entityTitle={investor.investor_name ?? null} pagePath="/kyc/[id]" />
       <div className="pageHeadingBox mb-2 flex items-center justify-between">
         <h1 className="text-white text-sm">
           KYC – {investor.investor_name}{" "}

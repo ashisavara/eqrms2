@@ -8,6 +8,7 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import { PerformanceFootnote } from "@/components/ui/performance-footnote";
+import UserLog from '@/components/rms/UserLog';
 
 interface PageProps {
     params: Promise<{slug:string}>;
@@ -41,6 +42,7 @@ export default async function AssetClassPage({params}: PageProps) {
 
     return (
         <div>
+            <UserLog segment="assetclass" entityId={assetClass.asset_class_id} entitySlug={slug} entityTitle={assetClass.asset_class_name ?? null} pagePath="/assetclass/[slug]" />
             <div className="pageHeadingBox">
                 <div className="flex flex-col items-center">
                     <div className="flex items-center gap-4">

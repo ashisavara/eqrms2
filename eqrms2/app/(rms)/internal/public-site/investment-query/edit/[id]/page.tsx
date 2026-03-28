@@ -2,6 +2,7 @@ import { EditInvestmentQueryForm } from "@/components/forms/EditInvestmentQuery"
 import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
 import { InvQueryDetail } from "@/types/inv-query-detail";
 import { notFound } from "next/navigation";
+import UserLog from '@/components/rms/UserLog';
 
 export default async function EditInvestmentQueryPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -33,6 +34,7 @@ export default async function EditInvestmentQueryPage({ params }: { params: Prom
 
     return (
         <div>
+            <UserLog segment="internal-public-site" entityId={queryId} entitySlug={investmentQueryData.slug ?? null} entityTitle={investmentQueryData.title ?? null} pagePath="/internal/public-site/investment-query/edit/[id]" />
             <EditInvestmentQueryForm initialData={initialData} id={queryId} />
         </div>
     );

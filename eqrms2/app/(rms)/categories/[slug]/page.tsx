@@ -11,6 +11,7 @@ import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 import { RmsCategoryStanceRating } from "@/components/conditional-formatting";
+import UserLog from '@/components/rms/UserLog';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -46,6 +47,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
   return (
     <div>
+        <UserLog segment="categories" entityId={category.category_id} entitySlug={slug} entityTitle={category.cat_name ?? null} pagePath="/categories/[slug]" />
         <div className="pageHeadingBox">
             <div className="flex items-center justify-center gap-4 mb-4">
                 <h1 className="text-gray-50">{category.cat_name}</h1>

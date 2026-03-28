@@ -6,6 +6,7 @@ import { supabaseSingleRead } from '@/lib/supabase/serverQueryHelper';
 import { blogDetail } from "@/types/blog-detail";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { useMDXComponents } from '@/mdx-components';
+import UserLog from '@/components/rms/UserLog';
 
 // Force dynamic rendering - no caching for RMS pages
 export const dynamic = 'force-dynamic';
@@ -50,6 +51,7 @@ export default async function RecommendationPage({ params }: PageProps) {
 
     return (
         <div className="max-w-4xl mx-auto ime-blog-page px-6 md:px-0 pt-5">
+            <UserLog segment="recommendations" entityId={blog.id} entitySlug={slug} entityTitle={blog.title ?? null} pagePath="/recommendations/[slug]" />
             {/* Featured Image */}
             {blog.featured_image && (
                 <div className="mb-8">

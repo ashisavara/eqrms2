@@ -9,6 +9,7 @@ import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import { AmcRatingSnapshot, AmcRatingSnapshotUpgrade, AmcRatingRationale, AmcRatingRationaleUpgrade } from "@/components/uiComponents/rating-rationales";
+import UserLog from '@/components/rms/UserLog';
 
 // Force dynamic rendering to prevent static generation issues with dynamic data
 export const dynamic = 'force-dynamic';
@@ -53,6 +54,7 @@ export default async function AmcPage({ params }: PageProps) {
 
   return (
     <div>
+        <UserLog segment="amc" entityId={AMC.id} entitySlug={slug} entityTitle={AMC.amc_name ?? null} pagePath="/amc/[slug]" />
         <div className="pageHeadingBox">
           <h1 className="text-gray-50">{AMC.amc_name}</h1>
           {AMC.structure}

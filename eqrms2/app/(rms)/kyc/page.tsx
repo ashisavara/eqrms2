@@ -11,6 +11,7 @@ import { AddAcOnboardButton } from "@/components/forms/AddAcOnboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 
 export default async function TicketsPage() {
   const userRoles = await getUserRoles();
@@ -56,6 +57,7 @@ export default async function TicketsPage() {
 
   return (
     <div>
+        <UserLog segment="internal" entityTitle="KYC" pagePath="/kyc" entitySlug="kyc" />
         <div className="pageHeadingBox"><h1 className="text-white">Ticketing</h1></div>
         <div className="px-6">
         <Tabs defaultValue="kyc" className="w-full mx-auto mt-6 text-sm">

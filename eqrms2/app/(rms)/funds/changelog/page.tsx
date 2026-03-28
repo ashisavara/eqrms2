@@ -4,6 +4,7 @@ import { RmsChangelog } from "@/types/rms-changelog-detail";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 
 export default async function CompaniesPage() {
   const userRoles = await getUserRoles();
@@ -25,6 +26,7 @@ export default async function CompaniesPage() {
 
   return (
     <div>
+      <UserLog segment="rms" entityTitle="Fund Changelog" pagePath="/funds/changelog" entitySlug="funds-changelog" />
       <h1 className="text-2xl font-bold m-1">ChangeLog</h1>
       <TableRmsChangeLog data={changeLog}/>
     </div>

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { supabaseSingleRead } from '@/lib/supabase/serverQueryHelper';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import UserLog from '@/components/rms/UserLog';
 
 // Force dynamic rendering for internal pages
 export const dynamic = 'force-dynamic';
@@ -32,6 +33,7 @@ export default async function InvestmentQueryPage({ params }: { params: Promise<
 
         return (
             <div className="max-w-4xl mx-auto px-6 md:px-0 pt-5">
+                <UserLog segment="internal-public-site" entityId={queryId} entitySlug={investmentQuery.slug ?? null} entityTitle={investmentQuery.title ?? null} pagePath="/internal/public-site/investment-query/[id]" />
                 {/* Edit Button */}
                 <div className="mb-4 flex justify-end">
                     <Link href={`/internal/public-site/investment-query/edit/${queryId}`}>

@@ -1,6 +1,7 @@
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 
 export default async function Page() {
   const userRoles = await getUserRoles();
@@ -10,6 +11,8 @@ export default async function Page() {
   }
 
   return (
+    <>
+      <UserLog segment="internal" entityTitle="IME View" pagePath="/ime-view" entitySlug="ime-view" />
     <div className="w-full max-w-screen-2xl mx-auto" style={{ aspectRatio: '16 / 9' }}>
         <iframe 
         src="https://coda.io/embed/vkfdhO_kCG/_suNs9GEZ?hideSections=true " 
@@ -17,6 +20,7 @@ export default async function Page() {
         allow="fullscreen"
         />
     </div>
+    </>
   );
 }
 

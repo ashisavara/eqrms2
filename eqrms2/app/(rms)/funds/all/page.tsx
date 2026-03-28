@@ -4,6 +4,7 @@ import FundsTableClient from "./FundsTableClient";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 
 // ================================================================
 // 🎯 SERVER-SIDE TABLE TEMPLATE WITH ITERATIVE FILTERING
@@ -131,6 +132,7 @@ export default async function AllFundsPage({ searchParams }: PageProps) {
   // while the server component handles data fetching and URL parsing
   return (
     <div className="p-6">
+    <UserLog segment="rms" entityTitle="All Funds" pagePath="/funds/all" entitySlug="funds-all" />
     <h1>All Fund Screener</h1>
     <FundsTableClient
       data={tableData.data}

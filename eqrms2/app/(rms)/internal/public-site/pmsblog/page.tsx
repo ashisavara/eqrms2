@@ -3,6 +3,7 @@ import { blogDetail } from "@/types/blog-detail";
 import TablePmsBlog from "./TablePmsBlog";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import UserLog from '@/components/rms/UserLog';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,7 @@ export default async function PmsBlogPage() {
 
   return (
     <div className="p-4">
+      <UserLog segment="internal" entityTitle="PMS Blog" pagePath="/internal/public-site/pmsblog" entitySlug="internal-pmsblog" />
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">PMS Blogs</h1>
         <Link href="/internal/public-site/pmsblog/add">

@@ -2,6 +2,7 @@ import { EditMediaInterviewForm } from "@/components/forms/EditMediaInterview";
 import { supabaseSingleRead } from "@/lib/supabase/serverQueryHelper";
 import { MediaInterviewDetail } from "@/types/media-interview-detail";
 import { notFound } from "next/navigation";
+import UserLog from '@/components/rms/UserLog';
 
 export default async function EditMediaInterviewPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -43,6 +44,7 @@ export default async function EditMediaInterviewPage({ params }: { params: Promi
 
     return (
         <div>
+            <UserLog segment="internal-public-site" entityId={interviewId} entitySlug={mediaInterviewData.slug ?? null} entityTitle={mediaInterviewData.title ?? null} pagePath="/internal/public-site/media-interview/edit/[id]" />
             <EditMediaInterviewForm initialData={initialData} id={interviewId} />
         </div>
     );

@@ -10,6 +10,7 @@ import { PerformanceFootnote } from "@/components/ui/performance-footnote";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import { blogDetail } from "@/types/blog-detail";
 import TableRecommendationBlog from "../recommendations/RecommendationTable";
+import UserLog from '@/components/rms/UserLog';
 
 // Force dynamic rendering to prevent static generation issues with AMC data
 export const dynamic = 'force-dynamic';
@@ -82,6 +83,7 @@ export default async function FundsPage() {
 
   return (
     <div>
+      <UserLog segment="funds" entityTitle="Funds" pagePath="/funds" entitySlug="funds" />
       <RmsPageTitle 
                 title="IME RMS" 
                 caption="Direct access to IME Central Research Team's insights across funds, AMC's, asset classes, categories & more." 

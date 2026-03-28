@@ -3,6 +3,7 @@ import { InvQueryDetail } from "@/types/inv-query-detail";
 import TableInvestmentQuery from "./TableInvestmentQuery";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import UserLog from '@/components/rms/UserLog';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -18,6 +19,7 @@ export default async function InvestmentQueryPage() {
 
   return (
     <div className="p-4">
+      <UserLog segment="internal" entityTitle="Investment Query" pagePath="/internal/public-site/investment-query" entitySlug="internal-investment-query" />
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Investment Queries</h1>
         <Link href="/internal/public-site/investment-query/add">

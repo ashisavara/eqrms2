@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 
 export default async function Page() {
   const userRoles = await getUserRoles();
@@ -12,6 +13,7 @@ export default async function Page() {
 
   return (
     <main>
+      <UserLog segment="internal" entityTitle="Documentation" pagePath="/internal/documents" entitySlug="internal-documents" />
       <div className="pageHeadingBox"><h1 className="text-white">Documentation</h1></div>
       <Tabs defaultValue="newDoc" className="w-full mx-auto mt-6 text-sm">
         <TabsList className="w-full">

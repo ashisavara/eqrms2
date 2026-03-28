@@ -13,6 +13,7 @@ import { can } from '@/lib/permissions';
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { redirect } from "next/navigation";
+import UserLog from '@/components/rms/UserLog';
 
 export default async function AcademyPage() {
   const userRoles = await getUserRoles();
@@ -50,6 +51,7 @@ export default async function AcademyPage() {
 
   return (
     <div>
+      <UserLog segment="blogs" entityTitle="Academy" pagePath="/academy" entitySlug="academy" />
       <div className="pageHeadingBox">
       <RmsPageTitle 
                 title="IME Academy" 

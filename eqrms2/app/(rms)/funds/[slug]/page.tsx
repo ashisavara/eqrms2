@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { FundRatingSnapshot, FundRatingSnapshotUpgrade, FundRatingRationale, FundRatingRationaleUpgrade } from "@/components/uiComponents/rating-rationales";
 import { EstDutyExposureRating } from "@/components/conditional-formatting";
+import UserLog from '@/components/rms/UserLog';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,6 +43,7 @@ export default async function FundPage({ params }: PageProps) {
 
   return (
     <div className="ime-funds-page">
+      <UserLog segment="funds" entityId={fund.fund_id} entitySlug={slug} entityTitle={fund.fund_name ?? null} pagePath="/funds/[slug]" />
       <div>
         <div className="flex items-center justify-center gap-4 p-4 bg-blue-950">
           <h1 className="text-2xl font-bold text-white">{fund.fund_name}</h1>

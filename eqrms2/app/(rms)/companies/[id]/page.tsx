@@ -13,6 +13,7 @@ import { RatingDisplay,CompQualityRating, NumberRating, ComGrowthNumberRating, C
 import { getUserRoles } from "@/lib/auth/getUserRoles";
 import { can } from "@/lib/permissions";
 import { redirect } from "next/navigation";
+import UserLog from '@/components/rms/UserLog';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,6 +53,7 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
 
   return (
         <div className="ime-company-page">
+          <UserLog segment="companies" entityId={Number(id)} entityTitle={company.ime_name ?? null} pagePath="/companies/[id]" />
           <div className="pageHeadingBox">
             <h1 className="text-white">{company.ime_name}</h1>
           </div>

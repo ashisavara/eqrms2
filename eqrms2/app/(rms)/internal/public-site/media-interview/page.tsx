@@ -3,6 +3,7 @@ import { MediaInterviewDetail } from "@/types/media-interview-detail";
 import TableMediaInterview from "./TableMediaInterview";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import UserLog from '@/components/rms/UserLog';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -18,6 +19,7 @@ export default async function MediaInterviewPage() {
 
   return (
     <div className="p-4">
+      <UserLog segment="internal" entityTitle="Media Interview" pagePath="/internal/public-site/media-interview" entitySlug="internal-media-interview" />
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Media Interviews</h1>
         <Link href="/internal/public-site/media-interview/add">

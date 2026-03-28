@@ -6,6 +6,7 @@ import { FavouriteHeart } from "@/components/ui/favourite-heart";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 
 interface PageProps {
     params: Promise<{slug:string}>;
@@ -45,6 +46,7 @@ export default async function StructurePage({params}: PageProps) {
 
     return (
         <div>
+            <UserLog segment="structure" entityId={structure.structure_id} entitySlug={slug} entityTitle={structure.structure_name ?? null} pagePath="/structure/[slug]" />
             <div className="pageHeadingBox">
                 <div className="flex flex-col items-center">
                     <div className="flex items-center gap-4 mt-4">

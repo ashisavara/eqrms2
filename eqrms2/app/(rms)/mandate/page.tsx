@@ -25,6 +25,7 @@ import { MandateProgressBar } from "@/components/mandate/MandateProgressBar";
 import MandateBox from "@/components/uiComponents/mandate-box";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
 import { LessonSheet } from "@/app/(rms)/academy/LessonSheet";
+import UserLog from "@/components/rms/UserLog";
 
 export default async function MandatePage() {
   const userRoles = await getUserRoles();
@@ -39,12 +40,15 @@ export default async function MandatePage() {
     // If no group selected, show message
   if (!groupId) {
     return (
-      <div>
-        <h1 className="text-2xl font-bold mb-4">Group Details</h1>
-        <p className="text-muted-foreground">
-          Please select a group using the "Select Group" button to view details.
-        </p>
-      </div>
+      <>
+        <UserLog segment="mandate" entityTitle="Investment Mandate" pagePath="/mandate" entitySlug="mandate" />
+        <div>
+          <h1 className="text-2xl font-bold mb-4">Group Details</h1>
+          <p className="text-muted-foreground">
+            Please select a group using the "Select Group" button to view details.
+          </p>
+        </div>
+      </>
     );
   }
 
@@ -123,7 +127,12 @@ export default async function MandatePage() {
   ])
 
   if (!groupData) {
-    return <div className="p-4">Group not found</div>;
+    return (
+      <>
+        <UserLog segment="mandate" entityId={groupId} entityTitle="Investment Mandate" pagePath="/mandate" entitySlug="mandate" />
+        <div className="p-4">Group not found</div>
+      </>
+    );
   }
 
   const goalOptionsForm = finGoals.map(goal => ({
@@ -133,6 +142,7 @@ export default async function MandatePage() {
 
   return (
     <GoalOptionsProvider goalOptions={goalOptionsForm}>
+      <UserLog segment="mandate" entityTitle="Investment Mandate" pagePath="/mandate" entitySlug="mandate" />
       <div className="mandatePage">
       <RmsPageTitle 
                 title="Investment Mandate" 

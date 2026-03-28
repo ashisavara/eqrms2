@@ -17,6 +17,7 @@ import { getJWTGroupMandate } from "@/lib/auth/getUserRoles";
 // Constants
 const STORAGE_KEY = 'ime_group_selected';
 const GROUP_COOKIE = 'ime_group_id';
+const GROUP_NAME_COOKIE = 'ime_group_name';
 const FAVOURITES_STORAGE_PREFIX = 'ime_group_favourites_';
 
 // Helper functions for localStorage + cookies
@@ -30,6 +31,7 @@ const saveToStorage = (group: Group) => {
       // Save to cookies (for server access)
       const cookieOptions = 'path=/; max-age=31536000; SameSite=Lax'; // 1 year expiry
       document.cookie = `${GROUP_COOKIE}=${group.id}; ${cookieOptions}`;
+      document.cookie = `${GROUP_NAME_COOKIE}=${encodeURIComponent(group.name)}; ${cookieOptions}`;
     }
   } catch (error) {
     console.warn('Failed to save group to storage:', error);
@@ -62,6 +64,7 @@ const clearStorage = () => {
       
       // Clear cookies by setting them to expire
       document.cookie = `${GROUP_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      document.cookie = `${GROUP_NAME_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     }
   } catch (error) {
     console.warn('Failed to clear group from storage:', error);

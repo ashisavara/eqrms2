@@ -2,6 +2,7 @@ import { serverSideQuery, getMultipleFilterOptions } from "@/lib/supabase/server
 import { LeadsTagging } from "@/types/lead-detail";
 import { createClient } from "@/lib/supabase/server";
 import LeadsTable from "./TableCrmAll";
+import UserLog from '@/components/rms/UserLog';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -127,6 +128,8 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
   }
 
   return (
+    <>
+    <UserLog segment="crm" entityTitle="CRM All Leads" pagePath="/crm/all" entitySlug="crm-all" />
     <LeadsTable     
       data={tableData.data}
       pagination={{
@@ -158,5 +161,6 @@ export default async function AllCrmPage({ searchParams }: PageProps) {
         ]}
       aggregations={aggregations} // ✨ NEW: Pass aggregation data
     />
+    </>
   );
 }

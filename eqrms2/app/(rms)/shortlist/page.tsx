@@ -12,6 +12,7 @@ import { TableCategories } from "@/app/(rms)/categories/TableCategories";
 import TableFundScreen from "@/app/(rms)/funds/TableFundScreen";
 import { FundAmcComparison } from "@/components/uiComponents/fund-amc-comparison";
 import RmsPageTitle from "@/components/uiComponents/rms-page-title";
+import UserLog from '@/components/rms/UserLog';
 
 
 export default async function InvestmentsPage() {
@@ -30,6 +31,7 @@ export default async function InvestmentsPage() {
   if (!groupId) {
     return (
       <div>
+        <UserLog segment="investments" entityTitle="Shortlist" pagePath="/shortlist" entitySlug="shortlist" />
         <h1 className="text-2xl font-bold mb-4">Investments</h1>
         <p className="text-muted-foreground">
           Please select a group using the "Select Group" button to view investments.
@@ -89,6 +91,7 @@ export default async function InvestmentsPage() {
 
   return (
     <div>
+        <UserLog segment="investments" entityId={groupId} entityTitle="Shortlist" pagePath="/shortlist" entitySlug="shortlist" />
         <RmsPageTitle 
                 title="Shortlist" 
                 caption="Your shortlisted asset classes, categories, investment structures & funds." 

@@ -4,6 +4,7 @@ import TableInvestments  from "./TableInvestments";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 import { FavFunds, FavCategory, FavStructure, FavAssetClass } from "@/types/favourite-detail";
 import { RmsFundsScreener } from "@/types/funds-detail";
 import { Category } from "@/types/category-detail";
@@ -61,6 +62,7 @@ export default async function InvestmentsPage() {
   if (!groupId) {
     return (
       <div>
+        <UserLog segment="investments" entityTitle="Investments" pagePath="/investments" entitySlug="investments" />
         <h1 className="text-2xl font-bold mb-4">Investments</h1>
         <p className="text-muted-foreground">
           Please select a group using the "Select Group" button to view investments.
@@ -151,6 +153,7 @@ export default async function InvestmentsPage() {
 
   return (
     <div>
+          <UserLog segment="investments" entityId={groupId} entityTitle="Investments" pagePath="/investments" entitySlug="investments" />
 
           <TableInvestments 
             data={investments} 

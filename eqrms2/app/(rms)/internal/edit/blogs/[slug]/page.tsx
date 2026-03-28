@@ -1,6 +1,7 @@
 import { supabaseSingleRead } from '@/lib/supabase/serverQueryHelper';
 import { EditBlogForm } from './EditBlogForm';
 import { blogDetail } from '@/types/blog-detail';
+import UserLog from '@/components/rms/UserLog';
 
 export default async function EditBlogPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -22,5 +23,10 @@ export default async function EditBlogPage({ params }: { params: Promise<{ slug:
     );
   }
 
-  return <EditBlogForm initialData={blog} />;
+  return (
+    <>
+      <UserLog segment="internal-edit-blogs" entityId={blog.id} entitySlug={slug} entityTitle={blog.title ?? null} pagePath="/internal/edit/blogs/[slug]" />
+      <EditBlogForm initialData={blog} />
+    </>
+  );
 }

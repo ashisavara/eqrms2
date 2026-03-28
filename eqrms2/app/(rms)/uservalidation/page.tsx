@@ -5,6 +5,7 @@ import { EditLoginProfileValues } from '@/types/forms';
 import { redirect } from 'next/navigation';
 import { WhatsAppButton } from './WhatsAppButton';
 import { getUserRoles } from '@/lib/auth/getUserRoles';
+import UserLog from '@/components/rms/UserLog';
 
 export default async function UserValidation() {
   // Get current user UUID
@@ -53,6 +54,7 @@ export default async function UserValidation() {
     // Show validation failed message with WhatsApp button
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <UserLog segment="auth" entityTitle="User Validation" pagePath="/uservalidation" entitySlug="uservalidation" />
         <div className="container mx-auto max-w-md">
           <Card>
             <CardHeader>
@@ -92,6 +94,7 @@ export default async function UserValidation() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <UserLog segment="auth" entityTitle="User Validation" pagePath="/uservalidation" entitySlug="uservalidation" />
       <div className="container mx-auto max-w-4xl py-2">
         <Card>
           <CardHeader>

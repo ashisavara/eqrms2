@@ -2,6 +2,7 @@ import { serverSideQuery, getMultipleFilterOptions } from "@/lib/supabase/server
 import { LeadsTagging } from "@/types/lead-detail";
 import { createClient } from "@/lib/supabase/server";
 import LeadsTable from "./TableCrmTags";
+import UserLog from '@/components/rms/UserLog';
 
 const TABLE_VIEW = "v_lead_tags";
 
@@ -103,6 +104,7 @@ export default async function TagsCrmPage({ searchParams }: PageProps) {
 
   return (
     <div className="p-4">
+        <UserLog segment="crm" entityTitle="CRM Tags" pagePath="/crm/tags" entitySlug="crm-tags" />
         <p>Note: need to create a new aggregation RPC function for the tag table. this still uses the all table which is why aggregations are not working correctly.</p>
     <LeadsTable
       data={tableData.data}

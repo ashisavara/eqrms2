@@ -7,6 +7,7 @@ import { SectorValues } from "@/types/forms";
 import { getUserRoles } from '@/lib/auth/getUserRoles';
 import { can } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
+import UserLog from '@/components/rms/UserLog';
 
 export default async function CompaniesPage() {
   // Fetch data server-side
@@ -38,6 +39,7 @@ export default async function CompaniesPage() {
 
   return (
     <div className="px-6">
+      <UserLog segment="eqrms" entityTitle="Companies" pagePath="/companies" entitySlug="companies" />
       <Tabs defaultValue="companies" className="w-full mx-auto mt-6 text-sm">
             <TabsList className="w-full">
                   <TabsTrigger value="companies">ValScreen</TabsTrigger>
