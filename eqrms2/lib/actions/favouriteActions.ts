@@ -4,6 +4,48 @@ import { getCurrentGroupId } from "@/lib/auth/serverGroupMandate";
 import { supabaseListRead } from "@/lib/supabase/serverQueryHelper";
 import { createClient } from "@/lib/supabase/server";
 import { EntityType, FavouritesData, FAVOURITES_CONFIG } from "@/types/favourites-detail";
+import { logUserPageView } from "@/lib/logging/logUserPageView";
+
+const FAVOURITE_ENTITY_TITLES: Record<EntityType, string> = {
+  categories: "Favourite Category",
+  funds: "Favourite Fund",
+  asset_class: "Favourite Asset Class",
+  structure: "Favourite Structure",
+};
+
+const FAVOURITE_ENTITY_META = {
+  categories: { table: "rms_category", idColumn: "category_id", slugColumn: "slug", titleColumn: "cat_name" },
+  funds: { table: "view_rms_funds_amc", idColumn: "fund_id", slugColumn: "slug", titleColumn: "fund_name" },
+  asset_class: { table: "rms_asset_class", idColumn: "asset_class_id", slugColumn: "asset_class_slug", titleColumn: "asset_class_name" },
+  structure: { table: "rms_structure", idColumn: "structure_id", slugColumn: "structure_slug", titleColumn: "structure_name" },
+} as const;
+
+async function getFavouriteEntityMetadata(
+  entityType: EntityType,
+  entityId: number
+): Promise<{ slug: string | null; title: string | null }> {
+  try {
+    const supabase = await createClient();
+    const meta = FAVOURITE_ENTITY_META[entityType];
+    const columns = `${meta.slugColumn}, ${meta.titleColumn}`;
+    const { data, error } = await supabase
+      .from(meta.table)
+      .select(columns)
+      .eq(meta.idColumn, entityId)
+      .maybeSingle();
+
+    if (error || !data) {
+      return { slug: null, title: null };
+    }
+
+    return {
+      slug: (data?.[meta.slugColumn as keyof typeof data] as string | null) ?? null,
+      title: (data?.[meta.titleColumn as keyof typeof data] as string | null) ?? null,
+    };
+  } catch {
+    return { slug: null, title: null };
+  }
+}
 
 /**
  * Load all favourites for the current group
@@ -76,6 +118,7 @@ export async function addFavourite(entityType: EntityType, entityId: number): Pr
 
   const config = FAVOURITES_CONFIG[entityType];
   const supabase = await createClient();
+  const metadata = await getFavouriteEntityMetadata(entityType, entityId);
 
   const insertData = {
     group_id: groupId,
@@ -95,6 +138,13 @@ export async function addFavourite(entityType: EntityType, entityId: number): Pr
     console.error(`Error adding favourite ${entityType}:`, error);
     throw error;
   }
+
+  await logUserPageView({
+    segment: "FavouriteAdd",
+    entityId,
+    entitySlug: metadata.slug || entityType,
+    entityTitle: metadata.title || metadata.slug || FAVOURITE_ENTITY_TITLES[entityType],
+  });
 }
 
 /**
@@ -109,6 +159,7 @@ export async function removeFavourite(entityType: EntityType, entityId: number):
 
   const config = FAVOURITES_CONFIG[entityType];
   const supabase = await createClient();
+  const metadata = await getFavouriteEntityMetadata(entityType, entityId);
 
   const { error } = await supabase
     .from(config.table)
@@ -120,6 +171,13 @@ export async function removeFavourite(entityType: EntityType, entityId: number):
     console.error(`Error removing favourite ${entityType}:`, error);
     throw error;
   }
+
+  await logUserPageView({
+    segment: "FavouriteRemove",
+    entityId,
+    entitySlug: metadata.slug || entityType,
+    entityTitle: metadata.title || metadata.slug || FAVOURITE_ENTITY_TITLES[entityType],
+  });
 }
 
 /**

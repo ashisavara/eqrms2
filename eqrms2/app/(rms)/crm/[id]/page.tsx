@@ -19,11 +19,13 @@ import TableCalls from "../sales/TableCalls";
 import { CallsDetail } from "@/types/calls-detail";
 import { AddMeetingNoteButton } from "@/components/forms/AddMeetingNote";
 import UserLog from '@/components/rms/UserLog';
+import { UserLogDetail } from "@/types/user-log";
+import TableUserLogs from "../TableUserLogs";
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const [lead, Meetings,Followups, Deals, leadDigitalAds, digitalAdOptions, Calls] = await Promise.all([
-        supabaseSingleRead<LeadsTagging>({
+        supabaseSingleRead<LeadsTagging & { lead_supabase_id?: string | null }>({
             table: "view_leads_tagcrm",
             columns: "*",  
             filters: [
@@ -68,6 +70,16 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
     if (!lead) {
         return <div>Lead not found</div>;
     }
+
+    const userLogs = lead.lead_supabase_id
+      ? await supabaseListRead<UserLogDetail>({
+          table: "user_logs",
+          columns: "log_id, user_id, user_role, user_name, group_id, group_name, event_timestamp, segment, entity_id, entity_slug, entity_title, page_path",
+          filters: [
+            (query) => query.eq("user_id", lead.lead_supabase_id).order("event_timestamp", { ascending: false }),
+          ],
+        })
+      : [];
 
     const hasLeadDigitalAds = leadDigitalAds.length > 0;
 
@@ -197,10 +209,14 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                 <Tabs defaultValue="interactions" className="ime-tabs">
                     <TabsList className="w-full">
                             <TabsTrigger value="interactions">Interactions</TabsTrigger>
+                            <TabsTrigger value="user-logs">User Logs</TabsTrigger>
                             <TabsTrigger value="calls">Calls</TabsTrigger>
                     </TabsList>
                         <TabsContent value="interactions">
                             <TableInteractions data={Meetings} leadsData={[lead]} />
+                        </TabsContent>
+                        <TabsContent value="user-logs">
+                            <TableUserLogs data={userLogs} />
                         </TabsContent>
                         <TabsContent value="calls">
                             <TableCalls data={Calls} />

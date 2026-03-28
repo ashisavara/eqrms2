@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { logUserPageView } from '@/lib/logging/logUserPageView'
 
 // Server action for checking user authentication (replaces supabase.auth.getUser)
 export async function getUserServerAction() {
@@ -28,6 +29,13 @@ export async function verifyOtpServerAction(tokenHash: string) {
     if (error) {
       return { error: error.message, data: null }
     }
+
+    await logUserPageView({
+      segment: 'Login',
+      entitySlug: 'login',
+      entityTitle: 'User Login',
+      pagePath: '/app',
+    })
     
     return { data, error: null }
   } catch (error) {
@@ -39,6 +47,13 @@ export async function verifyOtpServerAction(tokenHash: string) {
 // Server action for logging out (replaces supabase.auth.signOut)
 export async function logoutServerAction() {
   try {
+    await logUserPageView({
+      segment: 'Logout',
+      entitySlug: 'logout',
+      entityTitle: 'User Logout',
+      pagePath: '/app',
+    })
+
     const supabase = await createClient()
     const { error } = await supabase.auth.signOut()
     
@@ -56,6 +71,13 @@ export async function logoutServerAction() {
 // Server action for logging out from ChangeGroup component
 export async function logoutFromChangeGroupAction() {
   try {
+    await logUserPageView({
+      segment: 'Logout',
+      entitySlug: 'logout',
+      entityTitle: 'User Logout',
+      pagePath: '/app',
+    })
+
     const supabase = await createClient()
     const { error } = await supabase.auth.signOut()
     

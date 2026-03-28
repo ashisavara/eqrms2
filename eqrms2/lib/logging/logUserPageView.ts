@@ -23,7 +23,24 @@ function stripTrailingSlash(pathname: string): string {
   return pathname;
 }
 
-async function resolvePagePath(pagePath?: string | null): Promise<string | null> {
+function resolveDynamicPagePathTemplate(input: LogUserPageViewInput): string | null {
+  if (!input.pagePath || input.pagePath.trim() === '') return null;
+
+  let path = input.pagePath.trim();
+  if (!path.includes('[')) return path;
+
+  if (path.includes('[slug]') && input.entitySlug) {
+    path = path.replaceAll('[slug]', input.entitySlug);
+  }
+
+  if (path.includes('[id]') && input.entityId != null) {
+    path = path.replaceAll('[id]', String(input.entityId));
+  }
+
+  return path;
+}
+
+async function resolvePagePath(input: LogUserPageViewInput): Promise<string | null> {
   const h = await headers();
   const forwardedProto = h.get('x-forwarded-proto');
   const forwardedHost = h.get('x-forwarded-host');
@@ -36,8 +53,9 @@ async function resolvePagePath(pagePath?: string | null): Promise<string | null>
     return `${protocol}://${host}${stripTrailingSlash(normalizedPath)}`;
   };
 
-  if (pagePath && pagePath.trim() !== '') {
-    const trimmed = pagePath.trim();
+  const resolvedTemplatePath = resolveDynamicPagePathTemplate(input);
+  if (resolvedTemplatePath) {
+    const trimmed = resolvedTemplatePath;
     if (isAbsoluteHttpUrl(trimmed)) return trimmed;
     return buildFullUrl(trimmed);
   }
@@ -47,6 +65,9 @@ async function resolvePagePath(pagePath?: string | null): Promise<string | null>
 
   const headerPathname = h.get('x-pathname');
   if (headerPathname && headerPathname.trim() !== '') return buildFullUrl(headerPathname.trim());
+
+  const referer = h.get('referer');
+  if (referer && referer.trim() !== '') return referer.trim();
 
   return host ? `${protocol}://${host}` : null;
 }
@@ -62,7 +83,7 @@ export async function logUserPageView(input: LogUserPageViewInput): Promise<void
 
     const groupId = await getCurrentGroupId();
     const groupName = await getCurrentGroupName();
-    const resolvedPagePath = await resolvePagePath(input.pagePath);
+    const resolvedPagePath = await resolvePagePath(input);
 
     const row: UserLogInsert = {
       user_id: identity.userId,

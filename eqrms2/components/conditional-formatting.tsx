@@ -597,6 +597,46 @@ export function StatusRating({ rating, children }: { rating: string; children: R
 
 
 /**
+ * Text-based rating container for User Logs stage
+ */
+export function UserLogRating({ rating, children }: { rating: string; children: React.ReactNode }) {
+  const getNumericRating = (textRating: string): number => {
+    const ratingMap: Record<string, number> = {
+      'FavouriteAdd': 4,
+      'FavouriteRemove': 2,
+      'Login': 5,
+      'Logout': 5,
+      'funds': 3,
+      'categories': 3,
+      'asset_classes': 3,
+      'structures': 3,
+      'mandates': 3,
+      'investments': 3,
+      'shortlist': 3,
+      'crm': 3,
+      'internal': 3,
+      'rms': 3,
+      'dashboard': 3,
+      'reports': 3,
+      'settings': 3,
+      'users': 3,
+      'roles': 3,
+    };
+    
+    return ratingMap[textRating] || 3;
+  };
+
+  const numericRating = getNumericRating(rating);
+  
+  return (
+    <div className={`px-2 py-1 rounded font-medium text-center ${getRatingStyles(numericRating)}`}>
+      {children}
+    </div>
+  );
+}
+
+
+/**
  * Text-based rating container for Estate Duty Exposure 
  */
 export function EstDutyExposureRating({ rating, children }: { rating: string; children: React.ReactNode }) {

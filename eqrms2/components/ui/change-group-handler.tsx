@@ -154,7 +154,7 @@ export function ChangeGroupHandler() {
 
             <div className='text-sm'>
               <SearchButton />
-              {can(userRoles, 'crm', 'view_leads') && (<> <a href="/crm" className='blue-hyperlink'> CRM</a> | </>)}
+              {can(userRoles, 'crm', 'view_leads') && (<> <a href="/crm" className='blue-hyperlink'> CRM</a> | <a href="/logs" className='blue-hyperlink'> Logs | </a></>)}
               {can(userRoles, 'rms', 'view_all_funds') && (<> <a href="/funds/all" className='blue-hyperlink'> All Funds</a> | </>)}
               {can(userRoles, 'eqrms', 'view_companies') && (<> <a href="/companies" className='blue-hyperlink'> Val Screen</a> | </>)}
               {can(userRoles, 'internal', 'view') && (<> <a href="/kyc" className='blue-hyperlink'> KYC AC Onboarding</a> | </>)}
