@@ -559,13 +559,19 @@ export function DatePicker({
   label, 
   control,
   placeholder = "Pick a date",
-  showClearButton = true
+  showClearButton = true,
+  fromMonth,
+  toMonth,
+  disabled
 }: { 
   name: string; 
   label: string; 
   control: Control<any>;
   placeholder?: string;
   showClearButton?: boolean;
+  fromMonth?: Date;
+  toMonth?: Date;
+  disabled?: (date: Date) => boolean;
 }) {
   return (
     <div className="space-y-2">
@@ -601,11 +607,12 @@ export function DatePicker({
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={field.onChange}
+                    disabled={disabled}
                     // @ts-ignore - These props work but TypeScript definitions may be outdated
                     initialFocus
                     captionLayout="dropdown"
-                    fromMonth={new Date(2020, 0)}
-                    toMonth={new Date(2100, 11)}
+                    fromMonth={fromMonth ?? new Date(2020, 0)}
+                    toMonth={toMonth ?? new Date(2100, 11)}
                   />
                 </PopoverContent>
               </Popover>

@@ -304,6 +304,8 @@ export default async function MandatePage() {
                 investmentFinPlanData={investmentFinPlan} 
                 sipFinGoalsData={sipFinGoals}
                 userRoles={userRoles}
+                groupId={groupId}
+                groupData={groupData}
               />
             </TabsContent>
             <TabsContent value="meetingnotes">

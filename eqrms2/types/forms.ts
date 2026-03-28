@@ -389,6 +389,47 @@ export const FinGoalsSchema = z.object({
 
  export type FinGoalsValues = z.infer<typeof FinGoalsSchema>;
 
+// ----------------------
+// RETIREMENT ASSUMPTIONS FORM
+// -----------------------
+const retirementNumberField = (min: number, max: number, integer = false) =>
+  z.preprocess(
+    (value) => value === "" || value == null ? null : value,
+    integer
+      ? z.coerce.number().int().min(min).max(max).nullable()
+      : z.coerce.number().min(min).max(max).nullable()
+  );
+
+export const RetirementAssumptionsSchema = z
+  .object({
+    ret_primary_investor_dob: z.preprocess(
+      (value) => value === "" || value == null ? null : value,
+      z.coerce.date().nullable()
+    ),
+    ret_retirement_age: retirementNumberField(18, 100, true),
+    ret_lifespan: retirementNumberField(18, 110, true),
+    ret_current_annual_exp_lakhs: retirementNumberField(0, 100000),
+    ret_inflation_pct: retirementNumberField(0, 20),
+    ret_yield_post_retirement_pct: retirementNumberField(0, 20),
+    ret_corpus_exp_return_corpus_build: retirementNumberField(0, 20),
+  })
+  .refine((data) => {
+    if (data.ret_primary_investor_dob == null) return true;
+    return data.ret_primary_investor_dob <= new Date();
+  }, {
+    message: "Date of birth must be in the past",
+    path: ["ret_primary_investor_dob"],
+  })
+  .refine((data) => {
+    if (data.ret_lifespan == null || data.ret_retirement_age == null) return true;
+    return data.ret_lifespan >= data.ret_retirement_age;
+  }, {
+    message: "Lifespan must be greater than or equal to Retirement Age",
+    path: ["ret_lifespan"],
+  });
+
+export type RetirementAssumptionsValues = z.infer<typeof RetirementAssumptionsSchema>;
+
 
 // -------------------
 // LINK INV TO GOALS 

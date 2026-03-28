@@ -16,21 +16,27 @@ import TableInvFinPlan from "./TableInvFinPlan";
 import TableSipFinPlan from "./TableSipFinPlan";
 import TableGoalDesc from "./TableGoalDesc";
 import { AddFinGoalsButton } from "@/components/forms/AddFinGoals";
+import { EditRetirementAssumptionsButton } from "@/components/forms/EditRetirementAssumptions";
 import { can } from '@/lib/permissions';
 import { AggregateCard } from "@/components/ui/aggregate-card";
+import { GroupDetail } from "@/types/group-detail";
 
 interface FinPlanClientWrapperProps {
   finGoalsData: FinGoalsDetail[];
   investmentFinPlanData: Investments[];
   sipFinGoalsData: SipDetail[];
   userRoles: string;
+  groupId: number;
+  groupData: GroupDetail;
 }
 
 export default function FinPlanClientWrapper({ 
   finGoalsData, 
   investmentFinPlanData, 
   sipFinGoalsData,
-  userRoles
+  userRoles,
+  groupId,
+  groupData,
 }: FinPlanClientWrapperProps) {
   
   // State for selected goals filter
@@ -103,7 +109,11 @@ export default function FinPlanClientWrapper({
           />
         </div>
         { can(userRoles, 'investments', 'add_edit_financial_goals') && (
-        <AddFinGoalsButton />)}
+          <>
+            <AddFinGoalsButton />
+            <EditRetirementAssumptionsButton groupId={groupId} groupData={groupData} />
+          </>
+        )}
       </div>
 
       {/* Financial Goals Table */}
@@ -128,7 +138,7 @@ export default function FinPlanClientWrapper({
         <FinPlanAumProjectionChart data={finPlanChartData} />
         </div>
         
-        <TableFinPlan data={filteredFinGoals} />
+        <TableFinPlan data={filteredFinGoals} groupId={groupId} groupData={groupData} />
         <p className="helper-text"><span className="font-bold">Note: </span> <br/> - All values in Rs. lakh - apart from SIP (Rs.), Achieved (%), Yrs to goal (years) | PV (Present Value), FV (Future Value) | 
         <br/>- FV Goal, FV Inv & Pending Amt represent the goal cost, value of investments and the shortfall as on the goal date. Lumpsum Req & SIP Req are the amounts required to meet this shortfall. |
         <br/>- Key Assumptions - FV Inv (LT category returns), PV Goal (inflation), Lumpsum Req & SIP Req (rate of return chosen to fund the goal)

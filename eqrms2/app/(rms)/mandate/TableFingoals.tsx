@@ -2,12 +2,14 @@
 
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { ReactTableWrapper } from "@/components/data-table/ReactTableWrapper";
-import { columns } from "../mandate/columns-finplan";
+import { getFinPlanColumns } from "../mandate/columns-finplan";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { useAutoSorting } from "@/lib/hooks/useAutoSorting";
 import { useResponsiveColumns } from "@/lib/hooks/useResponsiveColumns";
+import { GroupDetail } from "@/types/group-detail";
 
-export default function TableFinPlan({ data }: { data: FinGoalsDetail[] }) {
+export default function TableFinPlan({ data, groupId, groupData }: { data: FinGoalsDetail[]; groupId: number; groupData: GroupDetail }) {
+  const columns = getFinPlanColumns(groupId, groupData);
   // ✅ Use responsive columns helper
   const { responsiveColumns } = useResponsiveColumns(columns, 'goal_name');
   

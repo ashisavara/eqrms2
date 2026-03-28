@@ -49,5 +49,12 @@ export type GroupDetail = {
   fin_goals: string | null;
   pdt_comfort: string | null;
   portfolio_liquidity_req: string | null;
+  ret_primary_investor_dob: Date | string | null;
+  ret_retirement_age: number | null;
+  ret_lifespan: number | null;
+  ret_current_annual_exp_lakhs: number | null;
+  ret_inflation_pct: number | null;
+  ret_yield_post_retirement_pct: number | null;
+  ret_corpus_exp_return_corpus_build: number | null;
 };
 

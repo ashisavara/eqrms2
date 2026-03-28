@@ -16,4 +16,5 @@ export type FinGoalsDetail = {
     sip_req: number,
     yrs_to_goal: number,
     goal_ach: number,
+    is_retirement_corpus?: boolean | null,
 };

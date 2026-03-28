@@ -1,13 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";  
-import Link from "next/link";
 import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditFinGoalsButton } from "@/components/forms/EditFinancialGoals";
-import { PencilIcon } from "lucide-react";
+import { EditRetirementAssumptionsButton } from "@/components/forms/EditRetirementAssumptions";
 import SimpleTable from "@/components/tables/singleRowTable";
 import { GoalAchievementRating, YearsToGoalRating } from "@/components/conditional-formatting";
+import { GroupDetail } from "@/types/group-detail";
 
-export const columns: ColumnDef<FinGoalsDetail>[] = [
+export function getFinPlanColumns(groupId: number, groupData: GroupDetail): ColumnDef<FinGoalsDetail>[] {
+return [
     { 
         accessorKey: "goal_name", 
         header: "Goal Name",
@@ -34,11 +35,15 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
                 // Desktop view - show as normal table cell
                 return (
                     <div className="text-left">
-                        <EditFinGoalsButton goalData={row.original} goalId={row.original.goal_id}>
-                            <span className="blue-hyperlink">
-                                {row.original.goal_name}
-                            </span>
-                        </EditFinGoalsButton>
+                        {row.original.is_retirement_corpus ? (
+                            <EditRetirementAssumptionsButton groupId={groupId} groupData={groupData}>
+                                <span className="blue-hyperlink">{row.original.goal_name}</span>
+                            </EditRetirementAssumptionsButton>
+                        ) : (
+                            <EditFinGoalsButton goalData={row.original} goalId={row.original.goal_id}>
+                                <span className="blue-hyperlink">{row.original.goal_name}</span>
+                            </EditFinGoalsButton>
+                        )}
                     </div>
                 );
             }
@@ -59,6 +64,7 @@ export const columns: ColumnDef<FinGoalsDetail>[] = [
     { accessorKey: "lumpsum_req", header: "Lumpsum Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" },
     { accessorKey: "sip_req", header: "SIP Req", size:80, cell: ({ getValue }) => (getValue() as number)?.toFixed(0) || "" }
 ];
+}
 
 
 
