@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { NumberInput } from "./FormFields";
 import { EditAssetAllocationSchema, EditAssetAllocationValues } from "@/types/forms";
 import { supabaseUpdateRow } from "@/lib/supabase/serverQueryHelper";
+import { z } from "zod";
 
 const allocationFields: { name: keyof EditAssetAllocationValues; label: string }[] = [
   { name: "target_equity_pct", label: "Equity (%)" },
@@ -23,15 +24,20 @@ const allocationFields: { name: keyof EditAssetAllocationValues; label: string }
 ];
 
 function getTotal(values: EditAssetAllocationValues) {
+  const toNumber = (value: unknown) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
   return (
-    values.target_equity_pct +
-    values.target_debt_pct +
-    values.target_hybrid_pct +
-    values.target_real_estate_pct +
-    values.target_alternatives_pct +
-    values.target_global_equity_pct +
-    values.target_global_debt_pct +
-    values.target_global_alternatives_pct
+    toNumber(values.target_equity_pct) +
+    toNumber(values.target_debt_pct) +
+    toNumber(values.target_hybrid_pct) +
+    toNumber(values.target_real_estate_pct) +
+    toNumber(values.target_alternatives_pct) +
+    toNumber(values.target_global_equity_pct) +
+    toNumber(values.target_global_debt_pct) +
+    toNumber(values.target_global_alternatives_pct)
   );
 }
 
@@ -46,12 +52,16 @@ function EditAssetAllocationForm({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { control, handleSubmit, watch } = useForm<EditAssetAllocationValues>({
+  const { control, handleSubmit, watch } = useForm<
+    z.input<typeof EditAssetAllocationSchema>,
+    unknown,
+    EditAssetAllocationValues
+  >({
     defaultValues: initialData,
     resolver: zodResolver(EditAssetAllocationSchema),
   });
 
-  const watchedValues = watch();
+  const watchedValues = watch() as EditAssetAllocationValues;
   const total = useMemo(() => getTotal(watchedValues), [watchedValues]);
   const remaining = 100 - total;
   const isValidTotal = total === 100;
