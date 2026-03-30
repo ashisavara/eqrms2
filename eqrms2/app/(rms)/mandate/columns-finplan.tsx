@@ -3,6 +3,7 @@ import { FinGoalsDetail } from "@/types/fin-goals-detail";
 import { isMobileView } from "@/lib/hooks/useResponsiveColumns";
 import { EditFinGoalsButton } from "@/components/forms/EditFinancialGoals";
 import { EditRetirementAssumptionsButton } from "@/components/forms/EditRetirementAssumptions";
+import { DeleteGoalButton } from "@/components/forms/DeleteGoal";
 import SimpleTable from "@/components/tables/singleRowTable";
 import { GoalAchievementRating, YearsToGoalRating } from "@/components/conditional-formatting";
 import { GroupDetail } from "@/types/group-detail";
@@ -40,9 +41,16 @@ return [
                                 <span className="blue-hyperlink">{row.original.goal_name}</span>
                             </EditRetirementAssumptionsButton>
                         ) : (
-                            <EditFinGoalsButton goalData={row.original} goalId={row.original.goal_id}>
-                                <span className="blue-hyperlink">{row.original.goal_name}</span>
-                            </EditFinGoalsButton>
+                            <div className="flex items-center">
+                                <EditFinGoalsButton goalData={row.original} goalId={row.original.goal_id}>
+                                    <span className="blue-hyperlink">{row.original.goal_name}</span>
+                                </EditFinGoalsButton>
+                                <DeleteGoalButton
+                                    goalId={row.original.goal_id}
+                                    goalName={row.original.goal_name}
+                                    isRetirementCorpus={row.original.is_retirement_corpus}
+                                />
+                            </div>
                         )}
                     </div>
                 );

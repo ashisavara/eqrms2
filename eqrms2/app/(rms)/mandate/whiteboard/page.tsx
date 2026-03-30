@@ -43,13 +43,6 @@ export default async function MandateWhiteboardPage() {
 
   return (
     <>
-      <UserLog
-        segment="mandate:whiteboard"
-        entityId={groupId}
-        entityTitle="Mandate Whiteboard"
-        pagePath="/mandate/whiteboard"
-        entitySlug="mandate-whiteboard"
-      />
       <div>
         <MandateWhiteboardClient groupId={groupId} initialScene={initialScene} initialUpdatedAt={initialUpdatedAt} />
       </div>
