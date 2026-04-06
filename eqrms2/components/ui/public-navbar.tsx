@@ -28,6 +28,7 @@ const menuItems = [
       { label: "Expertise", href: "/expertise" },
       { label: "Transparency", href: "/rms" },
       { label: "Customisation", href: "/client-dedication" },
+      { label: "Portfolio Review", href: "/portfolio-review" },
     ],
   },
   {
