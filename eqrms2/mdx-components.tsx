@@ -7,6 +7,8 @@ import InfoCard from '@/components/uiBlocks/InfoCard'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 import TopFundListPublic from '@/components/uiBlocks/TopFundListPublic'
 import TopFundAutoPublic from '@/components/uiBlocks/TopFundAutoPublic'
+import BlogCategorySpotlight from '@/components/uiBlocks/BlogCategorySpotlight'
+import IMEMethodologyBlock from '@/components/uiBlocks/IMEMethodologyBlock'
  
 const components: MDXComponents = {
   AlertBox,
@@ -20,6 +22,8 @@ const components: MDXComponents = {
   AccordionContent,
   TopFundListPublic,
   TopFundAutoPublic,
+  BlogCategorySpotlight,
+  IMEMethodologyBlock,
   // Add more global MDX components here
 }
  

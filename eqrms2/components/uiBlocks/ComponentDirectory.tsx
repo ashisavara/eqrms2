@@ -65,6 +65,22 @@ const mdxComponents = [
     props: [
       { name: 'filters', required: true, description: 'Array of filter functions for querying funds' }
     ]
+  },
+  {
+    name: 'BlogCategorySpotlight',
+    props: [
+      { name: 'categorySlug', required: true, description: 'rms_category.slug (e.g. small-cap, mid-cap)' },
+      { name: 'heading', optional: true },
+      { name: 'showAnnualReturns', optional: true }
+    ]
+  },
+  {
+    name: 'IMEMethodologyBlock',
+    props: [
+      { name: 'productType', options: ['mf', 'pms', 'aif', 'global', 'default'] },
+      { name: 'showHeading', optional: true },
+      { name: 'className', optional: true }
+    ]
   }
 ];
 
@@ -95,6 +111,14 @@ export function ComponentDirectorySheet() {
     // Special case for TopFundAutoPublic
     if (component.name === 'TopFundAutoPublic') {
       return `<TopFundAutoPublic filters={[(query) => query.eq('cat_name', 'Mid Cap'), (query) => query.eq('structure_name', 'PMS'), (query) => query.gt('fund_rating', 3)]} />`;
+    }
+
+    if (component.name === 'BlogCategorySpotlight') {
+      return `<BlogCategorySpotlight categorySlug="small-cap" />`;
+    }
+
+    if (component.name === 'IMEMethodologyBlock') {
+      return `<IMEMethodologyBlock productType="mf" />`;
     }
 
     const propsString = component.props
