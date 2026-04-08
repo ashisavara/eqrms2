@@ -44,6 +44,8 @@ const menuItems = [
       { label: "Blog", href: "/imepms/blog" },
       { label: "Media", href: "/imepms/media"},
       { label: "Downloads", href: "/imepms/pms-downloads" },
+      { label: "Disclosures", href: "/imepms/disclosures" },
+      { label: "Complaints", href: "/imepms/investor-complaints" },
     ],
   },
 ];

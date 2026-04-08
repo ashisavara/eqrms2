@@ -4,13 +4,13 @@ import Link from "next/link";
 export default function InvestorComplaintsPage() {
   return (
     <div>
-      <div className="mb-12">
+      <div className="mb-12 p-6">
         <PageTitle 
             title="Investor Complaints"
-        />
+        /> Complaints: You can email our Compliance Officer at compliance@imepms.in for any complaints that you may have.
         | <Link href="https://scores.sebi.gov.in/" className="text-blue-500">SCORES</Link>
         | <Link href="https://smartodr.in/login" className="text-blue-500">ODR</Link> 
-        <h2 className="mt-10">Data for month ending Feb-26</h2>
+        <h2 className="mt-10">Data for month ending Mar-26</h2>
         <table className="w-full border-collapse border border-gray-300 mt-6">
           <thead>
             <tr className="bg-gray-100">
@@ -134,6 +134,14 @@ export default function InvestorComplaintsPage() {
               <tr>
                   <td className="border border-gray-300 p-2">8</td>
                   <td className="border border-gray-300 p-2">Feb-26</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+                  <td className="border border-gray-300 p-2">0</td>
+              </tr>
+              <tr>
+                  <td className="border border-gray-300 p-2">9</td>
+                  <td className="border border-gray-300 p-2">Mar-26</td>
                   <td className="border border-gray-300 p-2">0</td>
                   <td className="border border-gray-300 p-2">0</td>
                   <td className="border border-gray-300 p-2">0</td>
