@@ -258,6 +258,10 @@ export async function middleware(request: NextRequest) {
   if (requiresAuth) {
     let supabaseResponse = NextResponse.next({ request });
     
+    // Compute cookie domain ONCE, shared by setAll and cleanup logic
+    const onProdDomain = host.endsWith(".imecapital.in") || host === "imecapital.in";
+    const cookieDomain = onProdDomain ? ".imecapital.in" : undefined;
+    
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -271,12 +275,6 @@ export async function middleware(request: NextRequest) {
               request.cookies.set(name, value),
             );
             
-            // Determine cookie domain for cross-subdomain persistence
-            const host = request.headers.get("host") || "";
-            const onProdDomain = host.endsWith(".imecapital.in") || host === "imecapital.in";
-            const cookieDomain = onProdDomain ? ".imecapital.in" : undefined;
-            
-            // Update response with cross-subdomain cookies
             supabaseResponse = NextResponse.next({ request });
             cookiesToSet.forEach(({ name, value, options }) => {
               supabaseResponse.cookies.set(name, value, {
@@ -298,10 +296,35 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/app";
-      // Store original URL for post-login redirect
       url.searchParams.set('redirectTo', pathname);
       const res = NextResponse.redirect(url);
-      return applyAffCookie(request, res, affPayload);
+      const finalRes = applyAffCookie(request, res, affPayload);
+
+      // Clean up stale Supabase auth cookies on BOTH domain scopes.
+      // This prevents ghost cookies (from a previous domain mismatch between
+      // middleware and server actions) from interfering with the next login.
+      // Uses direct header manipulation because the cookies API is keyed by
+      // name only and can't delete the same cookie on two different domains.
+      const sbCookieNames = [...new Set(
+        request.cookies.getAll()
+          .filter(c => c.name.startsWith('sb-'))
+          .map(c => c.name)
+      )];
+
+      for (const name of sbCookieNames) {
+        if (cookieDomain) {
+          finalRes.headers.append(
+            'Set-Cookie',
+            `${name}=; Path=/; Max-Age=0; Domain=${cookieDomain}; SameSite=Lax`
+          );
+        }
+        finalRes.headers.append(
+          'Set-Cookie',
+          `${name}=; Path=/; Max-Age=0; SameSite=Lax`
+        );
+      }
+
+      return finalRes;
     }
 
 

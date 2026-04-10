@@ -21,6 +21,13 @@ export async function getUserServerAction() {
 export async function verifyOtpServerAction(tokenHash: string) {
   try {
     const supabase = await createClient()
+
+    // Clear any stale session before creating a new one.
+    // This ensures the SDK doesn't carry over expired tokens from a
+    // previous session, which could result in domain-mismatched cookies
+    // coexisting with the new session cookies.
+    await supabase.auth.signOut({ scope: 'local' })
+
     const { data, error } = await supabase.auth.verifyOtp({ 
       token_hash: tokenHash, 
       type: 'email' 
