@@ -260,7 +260,7 @@ export const MASTER_OPTIONS = {
   ],
   
   fundPerformanceAsOf: [
-    "Performance as of: 28-Feb-26 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses (some AIF returns are post-tax). Global fund returns are in USD or in the funds currency. Category return ranges are only for illustrative purposes and are indicative of broad longer-term return averages in a category - this is not meant to be indicative of future or potential returns, and substantial year on year deviations are likely"
+    "Performance as of: 31-Mar-26 (returns >1yr are annualised returns). Returns are pre-tax returns, post all fees & expenses (some AIF returns are post-tax). Global fund returns are in USD or in the funds currency. Category return ranges are only for illustrative purposes and are indicative of broad longer-term return averages in a category - this is not meant to be indicative of future or potential returns, and substantial year on year deviations are likely"
   ],
   
   openForSubscriptionTag: [
