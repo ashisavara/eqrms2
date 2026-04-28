@@ -9,6 +9,7 @@ import { SearchLeadsClient } from './SearchLeadsClient';
 import { UnlinkedGroupsData } from './UnlinkedGroupsData';
 import { TableOtpHvoc } from './TableOtpHvoc';
 import { TableOtpLogin } from './TableOtpLogin';
+import { UnvalidatedAccountsTableClient } from './UnvalidatedAccountsTableClient';
 import { LoginProfile } from './types';
 import type { OtpLoginDetail } from '@/types/otp-login-detail';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -19,6 +20,28 @@ import UserLog from '@/components/rms/UserLog';
 
 
 // Link Login to Lead functionality
+
+// Server component to fetch accounts pending validation (user_role_name_id = 12)
+async function UnvalidatedAccountsData({ userRoles }: { userRoles: string | null }) {
+  try {
+    const { supabaseListRead } = await import('@/lib/supabase/serverQueryHelper');
+    const data = await supabaseListRead({
+      table: 'v_login_profile_with_roles',
+      columns: '*',
+      filters: [(q: any) => q.eq('user_role_name_id', 12).order('created_at', { ascending: false })],
+    });
+    return <UnvalidatedAccountsTableClient data={data ?? []} userRoles={userRoles} />;
+  } catch (error) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-600">Error loading unvalidated accounts</p>
+        <p className="text-sm text-gray-600 mt-1">
+          {error instanceof Error ? error.message : 'Unknown error occurred'}
+        </p>
+      </div>
+    );
+  }
+}
 
 // Server component to fetch unlinked login profiles
 async function UnlinkedLoginsData() {
@@ -100,9 +123,10 @@ export default async function LinkLoginLeadPage() {
             >
               <UnlinkedLoginsData />
             </Suspense>
-            <p className="helper-text">
+            <p className="helper-text mb-6">
               <b>Affiliate Keys:</b> 25969(Deepak Jayakumar), 25968(Maneesh Gupta), 25272(Paresh Vaish), 25967(Srini P), 25550(Shagun Luthra), 24420(Himani Shetty), 26505(Ashi Admin), 25970(Ankita Singh)
             </p>
+            <h2 className="mt-6">Unlinked Client Groups</h2>
             <Suspense 
               fallback={
                 <div className="flex items-center justify-center py-8">
@@ -114,6 +138,19 @@ export default async function LinkLoginLeadPage() {
               }
             >
               <UnlinkedGroupsData />
+            </Suspense>
+            <h2>Unvalidated Accounts</h2>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                    <p className="text-sm text-gray-600">Loading unvalidated accounts...</p>
+                  </div>
+                </div>
+              }
+            >
+              <UnvalidatedAccountsData userRoles={userRoles} />
             </Suspense>
           </TabsContent>
           <TabsContent value="search_login">

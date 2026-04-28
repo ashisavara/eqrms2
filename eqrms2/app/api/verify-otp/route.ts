@@ -24,6 +24,29 @@ function aliasEmailFromPhone(phone: string, domain: string): string {
   return `p${digits}@${domain}`
 }
 
+/**
+ * POST /api/verify-otp
+ *
+ * Verifies a WhatsApp OTP and returns a Supabase magic-link token_hash that the
+ * client uses to establish a real session via `supabase.auth.verifyOtp`.
+ *
+ * Flow:
+ *  1. Validate request — normalize phone number, require otp_code.
+ *  2. Read affiliate cookie (`aff_rf`) if present, to attach to new-user metadata.
+ *  3. Look up a matching, unused, non-expired OTP row in `otp_requests`, then
+ *     immediately mark it as used to prevent replay attacks.
+ *  4. Call the `find_user_by_phone` SQL RPC to check whether an auth user already
+ *     exists for this phone number.
+ *       - Existing user  → reuse the email already on their account.
+ *       - New user       → derive a shadow alias email from the phone digits
+ *                          (e.g. `p919876543210@wa-login.local`).
+ *  5. Call `auth.admin.generateLink({ type: 'magiclink', email, options: { data } })`:
+ *       - For a new user, Supabase implicitly creates the auth account and stores the
+ *         metadata (phone_number, login_via, default_role, affiliate UTM fields).
+ *       - For an existing user, `data` is null so their metadata is left unchanged.
+ *  6. Return the `token_hash` (plus `is_existing_user` / `user_created` flags) to
+ *     the client so it can call `supabase.auth.verifyOtp` and get a session.
+ */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()

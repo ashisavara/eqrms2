@@ -18,12 +18,17 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import TableCalls from "../sales/TableCalls";
 import { CallsDetail } from "@/types/calls-detail";
 import { AddMeetingNoteButton } from "@/components/forms/AddMeetingNote";
+import { CreateAccountButton } from "@/components/forms/CreateAccountButton";
 import UserLog from '@/components/rms/UserLog';
 import { UserLogDetail } from "@/types/user-log";
 import TableUserLogs from "../TableUserLogs";
+import { getUserRoles } from '@/lib/auth/getUserRoles';
+import { can } from '@/lib/permissions';
 
 export default async function CrmDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    const userRoles = await getUserRoles();
+
     const [lead, Meetings,Followups, Deals, leadDigitalAds, digitalAdOptions, Calls] = await Promise.all([
         supabaseSingleRead<LeadsTagging & { lead_supabase_id?: string | null }>({
             table: "view_leads_tagcrm",
@@ -162,14 +167,17 @@ export default async function CrmDetailPage({ params }: { params: Promise<{ id: 
                             {lead.referral_partner ? <span className="font-bold">Referral Partner: {lead.referral_partner} </span> :""}
                         </p>
                         <p>
-                            <span className="font-bold">Login Profile:</span><span> {lead.login_phone_number} | {lead.user_role_name} |  {formatDate(lead.expires_on)} </span> 
-                            
-                            
+                            <span className="font-bold">Login Profile:</span><span> {lead.login_phone_number} | {lead.user_role_name} |  {formatDate(lead.expires_on)} </span>
+                        {can(userRoles, 'internal', 'link_login_lead') && !lead.login_phone_number && lead.phone_e164 && (
+                            <CreateAccountButton phoneE164={lead.phone_e164 ?? ""} />
+                        )}
                         </p>
-                        <p className="text-sm italic">{lead.lead_summary}</p>
                     </div>
                 </div>
+                <p className="text-sm italic">{lead.lead_summary}</p>
             </div> 
+
+            
             <div className="mt-5">
                 <p className="text-sm">{lead.lead_background}</p>
                     {Deals.length > 0 ? (
