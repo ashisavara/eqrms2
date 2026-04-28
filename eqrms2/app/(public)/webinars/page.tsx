@@ -2,7 +2,7 @@ import type { AcademyWebinarDetail } from "@/types/webinar-detail";
 import { supabaseStaticListRead } from "@/lib/supabase/serverQueryHelper";
 import WebinarsClient from "./WebinarsClient";
 
-export const revalidate = 604800;
+export const revalidate = 3600;
 
 export default async function WebinarsPage() {
   const webinars = await supabaseStaticListRead<AcademyWebinarDetail>({
